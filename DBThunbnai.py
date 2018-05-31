@@ -103,7 +103,7 @@ class DBThunbnails(QWidget):
 	# signal
 	signalthunchgt = pyqtSignal(int)		# select thunbnail
 	signalthunadds = pyqtSignal(int)		# add thunbnails
-	signalthubuild = pyqtSignal(float, str)		# build thunbnails
+	signalthubuild = pyqtSignal(float, str)	# build thunbnails
 	
 	def __init__(self, parent, sizetn, lintn):
 		super(DBThunbnails, self).__init__(parent)
@@ -117,17 +117,18 @@ class DBThunbnails(QWidget):
 		self.thunwidth = self.getTotalWidth(self.thunbsize)
 		self.thunmaxco = self.getTotalColumns(sizetn)
 		self.thunmaxli = lintn
+		self.stopbuild = False
+		self.isbuilder = False
 		self.currow = 0
 		self.curcol = 0
 		
 		self.setMinimumSize(QSize((self.thunmaxco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
 		self.scrollArea = QScrollArea()
 		self.scrollArea.setContentsMargins(0, 0, 0, 0)
-		self.scrollArea.setSizeIncrement(QSize(self.thunwidth, self.thunwidth))
 		self.scrollArea.scrollContentsBy(self.thunwidth, self.thunwidth)
 		self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 		self.scrollArea.setMinimumSize(QSize((self.thunmaxco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
-		
+		self.scrollArea.setSizeIncrement(QSize(self.thunwidth, self.thunwidth))
 		self.gridthunbnails = QGridLayout()
 		self.gridthunbnails.setContentsMargins(thunspace, thunspace, thunspace, thunspace)
 		self.gridthunbnails.setSpacing(0)
@@ -161,6 +162,8 @@ class DBThunbnails(QWidget):
 		
 	def addthunbails(self, listthunbnails, sizetn=None,  new=True, deb=0, fin=100, total=9999):
 		"""Build thunbails. list = [md5, id, labelname] or list = [image]."""
+		self.stopbuild = False
+		self.isbuilder = True
 		# init grid
 		if new:
 			self.delThunbails()
@@ -178,6 +181,9 @@ class DBThunbnails(QWidget):
 		end = min(len(listthunbnails)+deb, fin)
 		for row in range(deb, end):
 			thundesc = listthunbnails[cpt]
+			if self.stopbuild:
+				self.isbuilder = False
+				break
 			# 2 modes : list or pathcover
 			if isinstance(thundesc, list):
 				# build cover b64 from md5
@@ -193,7 +199,7 @@ class DBThunbnails(QWidget):
 			self.gridthunbnails.addWidget(label, self.currow, self.curcol)
 			# signal gauge
 			#qDebug('onAddThunbnail EMIT add '+str(self.thunbncur))
-			self.signalthubuild.emit(cpt/len(listthunbnails), 'Create thunbnails')
+			self.signalthubuild.emit((cpt/(len(listthunbnails) + deb))*100, 'Create thunbnails')
 			cpt += 1
 			# position
 			self.curcol += 1
@@ -209,7 +215,8 @@ class DBThunbnails(QWidget):
 			self.gridthunbnails.addWidget(label, self.currow, self.curcol)
 		if new:
 			self.thunbncur = 0
-		self.signalthubuild.emit(1, 'end Create thunbnails')
+		self.signalthubuild.emit(100, 'end Create thunbnails')
+		self.isbuilder = False
 	
 	def delThunbails(self):
 		"""Remove thunbnails."""
@@ -228,12 +235,14 @@ class DBThunbnails(QWidget):
 	@pyqtSlot()
 	def resizeEvent(self, event):
 		"""Widget size move."""
-		self.replaceThunbnails(None)
+		self.replaceThunbnails(self.parent.sizeTN)
 		
 	def replaceThunbnails(self, sizetn=None):
 		"""Replace Thunbails."""
 		numCov = self.getTotalThunbnails()
 		if numCov > 1:
+			self.stopbuild = False
+			self.isbuilder = True
 			thunoldco = self.thunmaxco
 			if sizetn is not None:
 				self.thunwidth = self.getTotalWidth(sizetn)
@@ -243,6 +252,9 @@ class DBThunbnails(QWidget):
 			self.thunmaxco = self.getTotalColumns(sizetn)
 			curRow = curCol = oldcurRow = oldcurCol = 0
 			for row in range(numCov):
+				if self.stopbuild:
+					self.isbuilder = False
+					break
 				if self.gridthunbnails.itemAtPosition(oldcurRow, oldcurCol) != 0:
 					# capture and clear label gridlayout
 					layoutitem = self.gridthunbnails.takeAt(0)
@@ -258,7 +270,7 @@ class DBThunbnails(QWidget):
 					# replace
 					self.gridthunbnails.addWidget(label, curRow, curCol)
 				# position old next
-				oldcurRow += 1
+				oldcurCol += 1
 				if oldcurCol == thunoldco:
 					oldcurCol = 0
 					oldcurRow += 1
@@ -274,7 +286,7 @@ class DBThunbnails(QWidget):
 				curRow -= 1
 			self.currow = curRow
 			self.curcol = curCol
-
+			self.isbuilder = False
 	
 	def selectThunbnail(self, tunhnum):
 		"""Select."""
@@ -282,14 +294,16 @@ class DBThunbnails(QWidget):
 			self.unselectThunbnail(self.thunbncur)
 		if tunhnum <= self.getTotalThunbnails() and tunhnum is not None:
 			self.thunbncur = tunhnum
-			thunitem = self.gridthunbnails.itemAt(tunhnum).widget()
-			thunitem.setStyleSheet("border: 2px solid red;")
-			self.scrollArea.ensureWidgetVisible(thunitem)
+			if self.gridthunbnails.itemAt(tunhnum) is not None:
+				thunitem = self.gridthunbnails.itemAt(tunhnum).widget()
+				thunitem.setStyleSheet("border: 2px solid red;")
+				self.scrollArea.ensureWidgetVisible(thunitem)
 		
 	def unselectThunbnail(self, tunhnum):
 		"""No select."""
-		thunitem = self.gridthunbnails.itemAt(tunhnum).widget()
-		thunitem.setStyleSheet("border: 2px solid white;")
+		if self.gridthunbnails.itemAt(tunhnum) is not None:
+			thunitem = self.gridthunbnails.itemAt(tunhnum).widget()
+			thunitem.setStyleSheet("border: 2px solid white;")
 
 	def onSelectThunbnail(self, tunhnum):
 		"""Select thunbnail, send signal."""

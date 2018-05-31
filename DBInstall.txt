@@ -17,8 +17,9 @@ for Python 3 installation modules for Debian9
 	apt-get install python3-pil
 	apt-get install python3-pil.imagetk
 	pip3 install SIP
-	pip3 install pyqt5 python-qt4-sql
+	pip3 install pyqt5
 	apt-get install libqt5multimedia5-plugins
+	apt-get install libqt5sql5-mysql
 	pip3 install pypyodbc
 	extract /HOMERSTATION/_LossLess/_INVENT/DBAlbums/LIB/fpl_reader-master.zip
 		python3.exe setup.py install
@@ -45,7 +46,7 @@ install network package
 create folder mount
 	Terminal:	su
 	mkdir -p /HOMERSTATION/_LossLess
-	chmod 777 /HOMERSTATION/_LossLess
+	chmod 777 -R /HOMERSTATION/_LossLess
 Create credential File:
 	Terminal:	su
 	mousepad  /home/misterdoubs/.smbhomercred
@@ -57,10 +58,34 @@ Add mount:
 	Terminal:	su
 	mousepad /etc/fstab
 	add line:
-	//192.168.0.250/_LossLess /HOMERSTATION/_LossLess cifs _netdev,users,noauto,users,credentials=/home/misterdoubs/.smbmusiccred
+	//192.168.0.250/_LossLess /HOMERSTATION/_LossLess cifs _netdev,users,noauto,users,credentials=/home/misterdoubs/.smbhomercred
 test:
 	mount /HOMERSTATION/_LossLess/
 """
+
+
+
+RASBERRY PI..........................................
+-------------------------------------------------------------------
+pi comme login
+raspberry comme password
+sudo raspi-config
+sudo apt-get install samba samba-common-bin
+sudo apt-get install mysql-client
+
+apt-cache search pyqt5
+sudo apt-get update
+sudo apt-get upgrade 
+sudo apt-get install python3-pyqt5
+sudo apt-get install libqt5multimedia5-plugins
+sudo apt-get install libqt5sql5-mysql
+
+sudo mkdir -p /HOMERSTATION/_LossLess
+sudo chmod 777 -R /HOMERSTATION/_LossLess
+sudi nano /home/pi/.smbhomercred
+chmod 600 /home/pi/.smbhomercred
+
+sudo mount -t cifs -o username=HomerMusic,password=Mus1c4Me //192.168.0.250/_LossLess /HOMERSTATION/_LossLess
 
 
 

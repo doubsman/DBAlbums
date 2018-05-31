@@ -143,7 +143,7 @@ def execSqlFile(parent, sql_file, nbop):
 	for line in open(sql_file):
 		if line[0:2] == '--':
 			if line[0:3] == '-- ':
-				parent.updateGaugeBar(counter/nbop, "Exec :"+line.replace('--', ''))
+				parent.updateGaugeBar((counter/nbop)*100, "Exec :"+line.replace('--', ''))
 			continue
 		statement = statement + line
 		if len(line) > 2 and line[-2] == ';':
@@ -157,7 +157,7 @@ def execSqlFile(parent, sql_file, nbop):
 				break
 			query.clear
 			statement = ""
-	parent.updateGaugeBar(1)
+	parent.updateGaugeBar(100)
 
 
 def buildTabFromRequest(req):
@@ -244,7 +244,7 @@ def copyDatabaseInvent(parent, db, basename, logname):
 	if dblite.isValid():
 		boolcon = dblite.open()
 		if boolcon:
-			parent.updateGaugeBar(0.05)
+			parent.updateGaugeBar(5)
 			tablename = "DBALBUMS"
 			qDebug('Create '+tablename)
 			reqcreate = "CREATE TABLE DBALBUMS(ID_CD INTEGER PRIMARY KEY AUTOINCREMENT, MD5 TEXT, Family TEXT, " \
@@ -255,7 +255,7 @@ def copyDatabaseInvent(parent, db, basename, logname):
 			reqinsert = "INSERT INTO DBALBUMS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 			reqindexe = "CREATE INDEX DBALBUMS_ndx_Date_Insert ON DBALBUMS(Date_Insert)"
 			copytable(db, dblite, tablename, reqcreate, reqinsert, reqindexe)
-			parent.updateGaugeBar(0.20)
+			parent.updateGaugeBar(15)
 			tablename = "DBTRACKS"
 			qDebug('Create '+tablename)
 			reqcreate = "CREATE TABLE DBTRACKS(ID_CD INT,ID_TRACK INTEGER PRIMARY KEY AUTOINCREMENT, Family TEXT, " \
@@ -266,7 +266,7 @@ def copyDatabaseInvent(parent, db, basename, logname):
 			reqinsert = "INSERT INTO DBTRACKS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )"
 			reqindexe = "CREATE INDEX DBTRACKS_ndx_idcd ON DBTRACKS(ID_CD)"
 			copytable(db, dblite, tablename, reqcreate, reqinsert, reqindexe)
-			parent.updateGaugeBar(0.40)
+			parent.updateGaugeBar(30)
 			tablename = "DBFOOBAR"
 			qDebug('Create '+tablename)
 			reqcreate = "CREATE TABLE {t}(ID_FOO INTEGER PRIMARY KEY AUTOINCREMENT, MD5 TEXT, Name TEXT, Path TEXT, " \
@@ -275,20 +275,20 @@ def copyDatabaseInvent(parent, db, basename, logname):
 			reqinsert = "INSERT INTO {t} VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)".format(t=tablename)
 			reqindexe = "CREATE INDEX DBFOOBAR_ndx_FIL_Track ON DBFOOBAR(FIL_Track)"
 			copytable(db, dblite, tablename, reqcreate, reqinsert, reqindexe)
-			parent.updateGaugeBar(0.60)
+			parent.updateGaugeBar(45)
 			tablename = "DBFOOBOR"
 			qDebug('Create '+tablename)
 			reqcreate = "CREATE TABLE {t}(FIL_Track TEXT, FIL_TrackM TEXT)".format(t=tablename)
 			reqinsert = "INSERT INTO {t} VALUES( ?, ?)".format(t=tablename)
 			copytable(db, dblite, tablename, reqcreate, reqinsert)
-			parent.updateGaugeBar(0.75)
+			parent.updateGaugeBar(60)
 			tablename = "DBCOVERS"
 			qDebug('Create '+tablename)
 			reqcreate = "CREATE TABLE {t}(MD5 TEXT, Cover64 BLOB, MiniCover64 BLOB)".format(t=tablename)
 			reqinsert = "INSERT INTO {t} VALUES( ?, ?, ?)".format(t=tablename)
 			reqindexe = "CREATE UNIQUE INDEX DBCOVERS_ndx_md5 ON DBCOVERS(MD5)"
 			copytable(db, dblite, tablename, reqcreate, reqinsert, reqindexe)
-			parent.updateGaugeBar(0.9)
+			parent.updateGaugeBar(75)
 			tablename = "VW_AUTOCOMPLETION"
 			qDebug('Create '+tablename)
 			reqcreate = "CREATE TABLE {t}(ID_CD INT, Synthax TEXT)".format(t=tablename)
@@ -296,6 +296,6 @@ def copyDatabaseInvent(parent, db, basename, logname):
 			copytable(db, dblite, tablename, reqcreate, reqinsert)
 			# remove database sqlite
 			db.removeDatabase(cnxlite)
-			parent.updateGaugeBar(1)
+			parent.updateGaugeBar(100)
 		else:
 			qDebug('no create', basename)

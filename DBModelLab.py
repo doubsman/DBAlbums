@@ -58,6 +58,7 @@ class ModelDBTable(QSqlTableModel):
 
 
 class ProxyModel(QSortFilterProxyModel):
+	
 	def __init__(self, parent):
 		"""Init proxy model."""
 		super(ProxyModel, self).__init__(parent)
@@ -626,17 +627,19 @@ class MainExempleAbstractTable(QMainWindow):
 		self.mytable.setSortingEnabled(True)
 		self.mytable.setSelectionBehavior(QTableView.SelectRows)
 		self.mytable.clicked.connect(self.onSelect)
-		# height rows
-		self.mytable.verticalHeader().setDefaultSectionSize(20)
+		
 		
 		# abstract model
 		req = getrequest('albumslist', self.modsql)
 		self.model = ModelTableAlbumsABS(self, req)
+		self.model.SortFilterProxy.layoutChanged.connect(self.listChanged)
 		self.mytable.setModel(self.model.SortFilterProxy)
 		
 		# width columns
 		for i in range(len(self.model.A_C_WIDTH)):
 			self.mytable.setColumnWidth(i, self.model.A_C_WIDTH[i])
+		# height rows
+		self.mytable.verticalHeader().setDefaultSectionSize(self.model.C_HEIGHT)
 		
 		self.setCentralWidget(self.mytable)
 		self.show()
@@ -654,6 +657,9 @@ class MainExempleAbstractTable(QMainWindow):
 		print(indexes[0].row())
 		indexes = self.model.SortFilterProxy.mapToSource(indexes[0])
 		print(indexes.row())
+
+	def listChanged(self):
+		print('list change')
 
 	def displayTitle(self):
 		if int(((self.model.SortFilterProxy.cpt_len/60/60)/24)*10)/10 < 1:

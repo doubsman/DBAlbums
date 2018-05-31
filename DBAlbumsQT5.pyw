@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2017, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.5"
+__version__ = "1.52"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -14,7 +14,7 @@ from sys import platform, argv, exit
 from os import path, getcwd, remove, chdir
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont
-from PyQt5.QtCore import (Qt, QDir, QTime, pyqtSlot, QDateTime, QSettings, QtInfoMsg, QObject,
+from PyQt5.QtCore import (Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSettings, QtInfoMsg,
 						QtWarningMsg, QtCriticalMsg, QtFatalMsg, qInstallMessageHandler, qDebug) 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, 
 						QMenu, QCompleter, QStyle)
@@ -23,15 +23,17 @@ from PyQt5.QtMultimedia import QMediaPlayer
 from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
 from DBFunction import (buildCommandPowershell, runCommand, openFolder, centerWidget,
-						displayCounters, displayStars)
-from DBLoadProc import DBloadingGui, ProcessGui
+						displayCounters, displayStars, ThemeColors)
 from DBDatabase import (connectDatabase, getrequest, copyDatabaseInvent, execSqlFile, 
 						buildTabFromRequest, buildFileCover, extractCoverb64)
-from DBModelSql import ModelTableAlbums, ModelTableTracks	# model tables
-from DBArtworks import ArtworksGui, CoverViewGui			# viewer image b64 and hdd
-from DBFoobarpl import DBFOOBAR								# import playlist foobar 2000
-from DBAuPlayer import DBPlayer								# player audio
-from DBThunbnai import DBThunbnails							# thunbnails widget
+from DBLoadProc import DBloadingGui, ProcessGui						# loading et process Gui
+from DBAlbsMini import DBAlbumsQT5Mini								# version mini
+from DBModelAbs import ModelTableAlbumsABS, ModelTableTracksABS		# model tables
+from DBArtworks import ArtworksGui, CoverViewGui					# viewer image b64 and hdd
+from DBFoobarpl import DBFOOBAR										# import playlist foobar 2000
+from DBAuPlayer import DBPlayer										# player audio widget
+from DBThunbnai import DBThunbnails									# thunbnails widget
+from DBDragDrop import QLabeldnd									# Drag'n Drop QLabel cover
 
 
 # ##################################################################
@@ -49,6 +51,8 @@ PWSH_SCRU = path.join(PATH_PROG, 'PS1', "UPDATE_ALBUMS.ps1")
 PWSH_SCRA = path.join(PATH_PROG, 'PS1', "ADD_ALBUMS.ps1")
 FOOB_UPSC = path.join(PATH_PROG, 'SQL', "DBAlbums_FOOBAR_UPADTESCORE.sql")
 RESS_LABS = path.join(PATH_PROG, 'IMG' , 'LAB')
+RESS_ICOS = path.join(PATH_PROG, 'IMG' , 'ICO')
+RESS_LOGO = path.join(PATH_PROG, 'IMG')
 MASKCOVER = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')
 
 
@@ -68,7 +72,6 @@ HEIG_LTAB = int(configini.value('tagrid_nbl'))
 DISP_CJOKER = configini.value('text_joker')
 WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
 UNIX_ICO = path.join(PATH_PROG, 'IMG', configini.value('unix_icone'))
-CDRO_ICO = path.join(PATH_PROG, 'IMG', configini.value('cdro_icone'))
 LOGO_PRG = path.join(PATH_PROG, 'IMG', configini.value('progr_logo'))
 PICM_NCO = path.join(PATH_PROG, 'IMG', configini.value('pict_blank'))
 THUN_DBA = path.join(PATH_PROG, 'IMG', configini.value('picm_endof'))
@@ -129,10 +132,7 @@ def qtmymessagehandler(mode, context, message):
 	print('  {m}: {e}\n'.format(m=mode, e=message))
 
 
-qInstallMessageHandler(qtmymessagehandler)
-
-
-def albumnameextract(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers ):
+def albumnameextract(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers):
 	"""buil label name & album name."""
 	# name + label
 	infoslabel = ""
@@ -157,6 +157,9 @@ def albumnameextract(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers ):
 	infonameal = '<a style="text-decoration:none;color: black;" href="dbfunction://s' + sctxt + '"><b><big>' + infonameal + '</big></b></a>'
 	# label
 	if label != "":
+		if label.find('(')>0:
+			label = label[0:label.find('(')].rstrip()
+		label = label.replace(' - ', ' ')
 		imglabel = RESS_LABS +'/'+ label.replace(' ','_') +'.jpg'
 		if not path.isfile(imglabel):
 			imglabel = None
@@ -174,17 +177,20 @@ def albumnameextract(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers ):
 		infosayear = '<b><big> - <a style="color: black;" href="dbfunction://y'+year+'">' + year + '</a></big></b> '
 	# nb cd
 	if nbcd<6:
-		infosnbcd = '<img style="vertical-align:Bottom;" src="' + CDRO_ICO + '" height="15">'
+		infosnbcd = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'cdrom.png') + '" height="17">'
 		infosnbcd = nbcd*infosnbcd
 	else:
 		infosnbcd = displayCounters(nbcd, 'CD')
+	# folder
+	inffolder =  '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'folder.png') + '" height="17">'
+	inffolder = '<a style="color: black;" href="dbfunction://f">' + inffolder + '</a>'
 	# others
 	infotrack = displayCounters(nbtracks, 'Track')
 	infoduree = displayCounters(nbmin, 'min')
 	infoartco = displayCounters(nbcovers, 'art')
 	if nbcovers>0:
 		infoartco = '<a style="color: black;" href="dbfunction://a">' + infoartco + '</a>'
-	infoshtml = '<span>' + infonameal + infosayear + '</span>' + infosnbcd + '<br/>'
+	infoshtml = '<span>' + infonameal + infosayear + '</span>' + infosnbcd + ' ' + inffolder + '<br/>'
 	if infoslabel != "":
 		if infosaisrc != "":
 			infoshtml += infoslabel + ' • ' + infosaisrc + ' • '
@@ -192,35 +198,6 @@ def albumnameextract(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers ):
 			infoshtml += infoslabel + ' • '
 	infoshtml += infotrack + ' • ' + infoduree + ' • ' + infoartco
 	return infoshtml, imglabel
-
-
-class ThemeColors(QObject):
-	def __init__(self, nametheme):
-		"""init theme list"""
-		super(ThemeColors, self).__init__()
-		self.themes = ['blue', 'green', 'brown', 'grey', 'pink']
-		self.curthe = self.themes.index(nametheme)
-		self.selectTheme(nametheme)
-	
-	def selectTheme(self, nametheme):
-		"""Select theme "http://www.rapidtables.com/web/color/html-color-codes.htm"."""
-		if nametheme == self.themes[0]:
-			self.listcolors = ['lightsteelblue', 'lavender', 'lightgray', 'silver']
-		elif nametheme == self.themes[1]:
-			self.listcolors = ['darkseagreen', 'honeydew', 'lightgray', 'silver']
-		elif nametheme == self.themes[2]:
-			self.listcolors = ['tan', 'papayawhip', 'gainsboro', 'lavender']
-		elif nametheme == self.themes[3]:
-			self.listcolors = ['darkgray', 'azure', 'lightgray', 'silver']
-		elif nametheme == self.themes[4]:
-			self.listcolors = ['rosybrown', 'lavenderblush', 'lightgray', 'silver']
-	
-	def nextTheme(self):
-		"""Next color theme."""
-		self.curthe += 1 
-		self.curthe = self.curthe % len(self.themes)
-		nametheme = self.themes[self.curthe]
-		self.selectTheme(nametheme)
 
 
 # ##################################################################
@@ -234,9 +211,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	HEIG_LHUN = HEIG_LHUN
 	THUN_DIS = THUN_DIS
 	COVE_SIZ = COVE_SIZ
+	TEXT_NCO = TEXT_NCO
 	THEM_COL = THEM_COL
+	C_HEIGHT = 21
 	COEF_ZOOM = 100
-
+	
 	def __init__(self, parent=None):
 		"""Init gui."""
 		super(DBAlbumsMainGui, self).__init__(parent)
@@ -276,11 +255,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.lab_label.setFont(font)
 		self.statusbar.setFont(font)
 
-		# center
+		# center, size
 		centerWidget(self)
-
-		self.setWindowTitle(TITL_PROG)
+		thunnbline = self.HEIG_LHUN
 		self.resize(self.w_main, self.h_main)
+		
+		# menu bar
+		self.setWindowTitle(TITL_PROG)
 		self.setWindowIcon(QIcon(WINS_ICO))
 		
 		# init combos Envt
@@ -289,14 +270,23 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		
 		# buttons
 		self.btn_clearsearch.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
-		self.btn_search.setIcon(self.style().standardIcon(QStyle.SP_FileDialogContentsView))
 		self.btn_notreeview.setIcon(self.style().standardIcon(QStyle.SP_FileDialogListView))
 		self.btn_themecolor.setIcon(self.style().standardIcon(QStyle.SP_DialogResetButton))
+		self.btn_zoomout.setIcon(QIcon(path.join(RESS_ICOS, 'zoomout.png')))
+		self.btn_zoomin.setIcon(QIcon(path.join(RESS_ICOS, 'zoomin.png')))
 		
 		# thunbnails list
-		self.thunbnails = DBThunbnails(self, self.sizeTN, self.HEIG_LHUN)
+		self.thunbnails = DBThunbnails(self, self.sizeTN, thunnbline)
 		self.layout2thunbnails.addWidget(self.thunbnails)
 		
+		# minimize ? height main windows
+		sizescreen = QApplication.primaryScreen()
+		if sizescreen.size().height() < (self.h_main):
+			# one line for thunbnails
+			thunnbline = 1
+			self.resize(self.w_main, self.h_main-self.sizeTN)
+			self.setMinimumSize(self.w_main, self.h_main-self.sizeTN)
+
 		# init scrore
 		self.sli_scorealb.setMaximumSize(16777215, 18)
 		self.sli_scorealb.setMinimum(0)
@@ -312,11 +302,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		# init title album
 		self.lab_album.setOpenLinks(False)
 		
+		# init Qlabel dnd
+		self.labelcover = QLabeldnd(self.framecover, None, self.COVE_SIZ)
+		
 		# tab list no header row
 		self.tbl_albums.verticalHeader().setVisible(False)
-		self.tbl_albums.verticalHeader().setDefaultSectionSize(20)
 		self.tbl_tracks.verticalHeader().setVisible(False)
-		self.tbl_tracks.verticalHeader().setDefaultSectionSize(20)
 		
 		# init player
 		self.playerAudio = DBPlayer()
@@ -327,40 +318,59 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.gaugeBar = QProgressBar(self)
 		self.gaugeBar.setVisible(False)
 		self.gaugeBar.setMinimum(0)
-		self.gaugeBar.setMaximum(1)
+		self.gaugeBar.setMaximum(100)
 		self.statusbar.addPermanentWidget(self.gaugeBar)
 		
+		# popup category
+		self.menuc = QMenu()
+		self.action_UCP = self.menuc.addAction(QIcon(path.join(RESS_ICOS, 'pwr.png')),
+							"Update Category (powershell)...", lambda c=self.com_category.currentText(): self.buildInvent(c))
+		# popup base
+		self.menub = QMenu()
+		self.menub.addAction(self.style().standardIcon(QStyle.SP_MessageBoxInformation),
+							"Show Informations  [F1]", self.showLoadingGui)
+		self.menub.addAction(self.style().standardIcon(QStyle.SP_BrowserReload),
+							"Reload base Albums [F5]", lambda: self.connectEnvt(True))
+		self.action_UBP = self.menub.addAction(QIcon(path.join(RESS_ICOS, 'pwr.png')),
+							"Update Base (powershell)...", self.buildInvent)
+		self.action_CSD = self.menub.addAction(QIcon(path.join(RESS_ICOS, 'sql.png')),
+							"Create sqlite database...", self.createLocalBase)
+		self.action_IFP = self.menub.addAction(QIcon(path.join(RESS_ICOS, 'foo.png')),
+							"Import Foobar Playlists, Update Score...", self.importFoobar)
+		self.menub.addAction(self.style().standardIcon(QStyle.SP_FileDialogDetailedView),
+							"Edit {fin}...".format(fin=FILE__INI), lambda e=EDIT_TEXT, f=FILE__INI: runCommand(e, f))
+		self.menub.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
+							"Open Logs Folder...", lambda flog=LOGS_PROG: openFolder(flog))
+		# popup albums
+		self.menua = QMenu()
+		self.action_VIA = self.menua.addAction(QIcon(path.join(RESS_ICOS, 'art.png')),
+							"View ArtWorks...", self.viewArtworks)
+		self.action_OPF = self.menua.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
+							"Open Folder...", self.getFolder)
+		self.action_EXA = self.menua.addAction(QIcon(path.join(RESS_ICOS, 'exp.png')),
+							"Export Album...", self.exportAlbums)
+		self.action_UAP = self.menua.addAction(QIcon(path.join(RESS_ICOS, 'pwr.png')),
+							"Update Album...", self.updateAlbums)
+		self.action_TAG = self.menua.addAction(QIcon(path.join(RESS_ICOS, 'tag.png')),
+							"Edit Tags (TagScan)...", self.openTagScan)
+
 		# theme color
 		self.curthe = ThemeColors(self.THEM_COL)
 		self.applyTheme()
 		
-		# popup category
-		self.menuc = QMenu()
-		self.action_UCP = self.menuc.addAction("Update Category (powershell)...", lambda c=self.com_category.currentText(): self.buildInvent(c))
-		# popup base
-		self.menub = QMenu()
-		self.menub.addAction("Show Informations  [F1]", self.showLoadingGui)
-		self.menub.addAction("Reload base Albums [F5]", lambda: self.connectEnvt(True))
-		self.action_UBP = self.menub.addAction("Update Base (powershell)...", self.buildInvent)
-		self.action_CSD = self.menub.addAction("Create sqlite database", self.createLocalBase)
-		self.action_IFP = self.menub.addAction("Import Foobar Playlists, Update Score...", self.importFoobar)
-		self.menub.addAction("Edit {fin}...".format(fin=FILE__INI), lambda e=EDIT_TEXT, f=FILE__INI: runCommand(e, f))
-		self.menub.addAction("Open Logs Folder...", lambda flog=LOGS_PROG: openFolder(flog))
-		# popup albums
-		self.menua = QMenu()
-		self.action_VIA = self.menua.addAction("View ArtWorks...", self.viewArtworks)
-		self.action_OPF = self.menua.addAction("Open Folder...", self.getFolder)
-		self.action_EXA = self.menua.addAction("Export Album...", self.exportAlbums)
-		self.action_UAP = self.menua.addAction("Update Album...", self.updateAlbums)
-		self.action_TAG = self.menua.addAction("Edit Tags (TagScan)...", self.openTagScan)
+		# timer Delay action QLineEdit
+		self.m_typingTimer = QTimer(self)
+		self.m_typingTimer.setSingleShot(True)
+		self.m_typingTimer.timeout.connect(self.onFiltersChanged)
 		
 		# link Gui
-		self.lin_search.returnPressed.connect(self.onFiltersChanged)
+		self.lin_search.textChanged.connect(self.onTextEdited)
 		self.btn_clearsearch.clicked.connect(self.clearFilters)
-		self.btn_search.clicked.connect(self.onFiltersChanged)
 		self.chb_searchtracks.clicked.connect(self.onFiltersChanged)
 		self.com_category.setContextMenuPolicy(Qt.CustomContextMenu)
 		self.com_category.customContextMenuRequested.connect(self.popUpCategoryAlbums)
+		self.btn_zoomout.clicked.connect(self.zoomOutThnunnails)
+		self.btn_zoomin.clicked.connect(self.zoomInThnunnails)
 		self.btn_notreeview.clicked.connect(self.noDisplayTab)
 		self.btn_themecolor.clicked.connect(lambda: [self.curthe.nextTheme(), self.applyTheme()])
 		self.com_category.currentIndexChanged.connect(self.onFiltersChanged)
@@ -384,6 +394,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.tbl_tracks.currentChanged = self.onSelectTrackChanged
 		self.lab_album.anchorClicked.connect(self.onAnchorClicked)
 		self.labelcover.mousePressEvent = self.onPressCover
+		self.labelcover.signalcoverchgt.connect(self.updateAlbumsDnd)
 		self.sli_scorealb.valueChanged.connect(self.onModifyScoreAlbum)
 		self.sli_scoretrk.valueChanged.connect(self.onModifyScoreTrack)
 		self.btn_scorealb.clicked.connect(self.onPressButtonEnrScoreAlbum)
@@ -394,12 +405,16 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		if platform == "darwin" or platform == 'linux':
 			self.action_UBP.setEnabled(False)	# Update base powershell
 			self.action_IFP.setEnabled(False)   # Import playlists foobar 2000
-			self.action_UCP.setEnabled(False)	# Update category powershell
 			self.action_UAP.setEnabled(False)	# Update album powershell)
 			self.action_TAG.setEnabled(False)	# TagScan
-
+		self.action_UCP.setEnabled(False)	# Update category powershell
+		
 		# init connect
 		self.connectEnvt()
+
+	def onTextEdited(self, text):
+		"""Limit delay action on text search changed."""
+		self.m_typingTimer.start(500)
 
 	@pyqtSlot()
 	def keyPressEvent(self, event):
@@ -413,28 +428,43 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	@pyqtSlot()
 	def wheelEvent(self, event):
 		degre = event.angleDelta()/4.8 # 120/4.8=25
-		nbstep = 3
 		modifiers = QApplication.keyboardModifiers()
-		oldsizeTN = self.sizeTN
 		if modifiers == Qt.ControlModifier:
 			self.cuzoom += degre.y()
-			self.sizeTN = self.WIDT_PICM * (self.cuzoom/100)
+			self.reDisplayThunbnails()
+	
+	def zoomInThnunnails(self):
+		self.cuzoom += 25
+		self.reDisplayThunbnails()
+	
+	def zoomOutThnunnails(self):
+		self.cuzoom -= 25
+		self.reDisplayThunbnails()
+		
+	def reDisplayThunbnails(self):
+		oldsizeTN = self.sizeTN
+		nbstep = 3
+		self.sizeTN = self.WIDT_PICM * (self.cuzoom/100)
 		# default zoom [...|...]
-		zmin = self.COEF_ZOOM-(nbstep*abs(degre.y()))
-		zmax = self.COEF_ZOOM+(nbstep*abs(degre.y()))
+		zmin = self.COEF_ZOOM-(nbstep*25)
+		zmax = self.COEF_ZOOM+(nbstep*25)
 		if self.cuzoom < zmin or self.cuzoom > zmax:
 			self.cuzoom = self.COEF_ZOOM
 			self.sizeTN = self.WIDT_PICM
+		self.lab_zoom.setText(str(self.cuzoom) +'%')
 		# redisplay zoom thunbnails
 		if self.sizeTN < oldsizeTN:
 			# resize
 			qDebug('ZOOM- replace :' + str(self.cuzoom))
+			self.thunbnails.stopbuild = True
 			self.thunbnails.replaceThunbnails(self.sizeTN)
 		elif self.sizeTN > oldsizeTN:
 			# rebuild
 			qDebug('ZOOM+ rebuild :' + str(self.cuzoom))
 			thunlst = self.tableMdlAlb.builListThunbnails()
-			self.thunbnails.addthunbails(thunlst, self.sizeTN, True, 0, self.thunbnails.getTotalThunbnails(), self.tableMdlAlb.rowCount())
+			#while self.thunbnails.isbuilder:
+			self.thunbnails.stopbuild = True
+			self.thunbnails.addthunbails(thunlst, self.sizeTN, True, 0, self.thunbnails.getTotalThunbnails(), self.tableMdlAlb.SortFilterProxy.rowCount())
 
 	def noDisplayTab(self):
 		"""no disply grid list albums."""
@@ -445,6 +475,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def applyTheme(self):
 		"""Apply color Theme to main Gui."""
+		# main
 		mainstyle = 'QMainWindow{{background-color: {col1};border: 1px solid black;}}' \
 					'QLineEdit{{background-color: {col2};}}' \
 					'QComboBox{{background-color: {col2};}}' \
@@ -453,18 +484,26 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					'QScrollBar:vertical{{width: 14px;}}' \
 					'QScrollBar:horizontal{{height: 14px;}}' \
 					'QTableView{{alternate-background-color: {col3};background-color: {col4};}}' \
-					'QScrollArea{{background-color: {col2};}}' 
+					'QScrollArea{{background-color: {col2};}}' \
+					'QTableView::item:selected{{ background-color:{col5}; color:white;}}'
 		mainstyle = mainstyle.format(col1 = self.curthe.listcolors[0], 
 									col2 = self.curthe.listcolors[1], 
 									col3 = self.curthe.listcolors[2], 
-									col4 = self.curthe.listcolors[3])
+									col4 = self.curthe.listcolors[3],
+									col5 = self.curthe.listcolors[4])
 		self.setStyleSheet(mainstyle)
-		self.tbl_albums.setStyleSheet('QHeaderView::section{{background-color: {col2};border-radius:1px;margin: 2px;padding: 2px;}}'.format(col2 = self.curthe.listcolors[1]))
-		self.tbl_tracks.setStyleSheet('QHeaderView::section{{background-color: {col2};border-radius:1px;margin: 2px;padding: 2px;}}'.format(col2 = self.curthe.listcolors[1]))
-		self.lab_label.setStyleSheet('background-color: {col2};border: 5px solid {col2};border-radius: 10px;'.format(col2 = self.curthe.listcolors[1]))
-		self.lab_album.setStyleSheet('background-color: {col2};border: 5px solid {col2};border-radius: 10px;'.format(col2 = self.curthe.listcolors[1]))
+		# treeview
+		gridstyle = 'QHeaderView::section{{background-color: {col2};border-radius:1px;margin: 1px;padding: 2px;}}'
+		gridstyle = gridstyle.format(col2 = self.curthe.listcolors[1])
+		self.tbl_albums.setStyleSheet(gridstyle)
+		self.tbl_tracks.setStyleSheet(gridstyle)
+		# labels title album
+		labestyle = 'background-color: {col2};border: 5px solid {col2};border-radius: 10px;'
+		labestyle = labestyle.format(col2 = self.curthe.listcolors[1])
+		self.lab_label.setStyleSheet(labestyle)
+		self.lab_album.setStyleSheet(labestyle)
+		# thunnail widget
 		self.thunbnails.scrollAreaWidgetthunbnails.setStyleSheet('background-color: {col2};'.format(col2 = self.curthe.listcolors[1]))
-		self.thunbnails.setStyleSheet('QScrollBar:vertical {width: 14px;} QScrollBar:horizontal {height: 14px;}')
 	
 	def showLoadingGui(self, event=None):
 		"""display splashscreen infos."""
@@ -472,6 +511,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		if self.loadingGui.isVisible():
 			self.loadingGui.hide()
 		else:
+			self.loadingGui.applyTheme()
 			self.loadingGui.show()
 
 	def clearFilters(self):
@@ -494,38 +534,38 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		filtyear = self.com_year.currentText()
 		filtlabl = self.com_label.currentText()
 		filtintk = (self.chb_searchtracks.isChecked())
-		boolchgt = self.tableMdlAlb.setFilter(filttext, filtcate, filtfami, filtyear, filtlabl, filtintk)
-		if boolchgt:
-			# build cumuls
-			self.tbl_albums.resizeColumnsToContents()
-			self.tbl_albums.resizeRowsToContents()
-			self.displayResultSearch()
+		self.tableMdlAlb.SortFilterProxy.updateFilters(filttext, filtcate, filtfami, filtyear, filtlabl, filtintk)
+		if filtcate == DISP_CJOKER:
+			self.action_UCP.setEnabled(False)
+		else:
+			self.action_UCP.setEnabled(True)
 
 	def displayResultSearch(self):
 		"""Build main message status bar."""
+		txt_sch = (self.lin_search.text() if len(self.lin_search.text()) > 0 else 'all')
 		if self.tableMdlAlb.rowCount()==0:
-			message = "Search Result \"{sch}\" : nothing"
+			message = "Search Result \"{sch}\" : nothing".format(sch=txt_sch)
 		else:
-			# build cumuls
-			self.tableMdlAlb.getAlbumsSums()
-			if int(((self.tableMdlAlb.cpt_len/60/60)/24)*10)/10 < 1:
+			if int(((self.tableMdlAlb.SortFilterProxy.cpt_len/60/60)/24)*10)/10 < 1:
 				# seoncd -> Hours
-				txt_len = str(int(((self.tableMdlAlb.cpt_len/60/60))*10)/10) + ' Hours'
+				txt_len = str(int(((self.tableMdlAlb.SortFilterProxy.cpt_len/60/60))*10)/10) + ' Hours'
 			else:
 				# seoncd -> Days
-				txt_len = str(int(((self.tableMdlAlb.cpt_len/60/60)/24)*10)/10) + ' Days'
-			if int(self.tableMdlAlb.cpt_siz/1024) == 0:
-				txt_siz =  str(self.tableMdlAlb.cpt_siz) + ' Mo'
+				txt_len = str(int(((self.tableMdlAlb.SortFilterProxy.cpt_len/60/60)/24)*10)/10) + ' Days'
+			if int(self.tableMdlAlb.SortFilterProxy.cpt_siz/1024) == 0:
+				txt_siz =  str(self.tableMdlAlb.SortFilterProxy.cpt_siz) + ' Mo'
 			else:
-				txt_siz = str(int(self.tableMdlAlb.cpt_siz/1024)) + ' Go'
-			message = "Search Result \"{sch}\" :  {alb} | {trk} | {cds} | {siz} | {dur}".format(alb=displayCounters(self.tableMdlAlb.rowCount(), 'Album'),
-																								cds=displayCounters(self.tableMdlAlb.cpt_cds, 'CD'),
-																								trk=displayCounters(self.tableMdlAlb.cpt_trk, 'Track'),
-																								siz=txt_siz,
-																								dur=txt_len,
-																								sch='{sch}')
-		txt_sch = (self.lin_search.text() if len(self.lin_search.text()) > 0 else 'all')
-		self.maintitle = message.format(sch=txt_sch)
+				txt_siz = str(int(self.tableMdlAlb.SortFilterProxy.cpt_siz/1024)) + ' Go'
+			
+			message = "Search Result \"{sch}\" :  {alb} | {trk} | {cds} | {siz} | {dur}"
+			message = message.format(alb=displayCounters(self.tableMdlAlb.SortFilterProxy.rowCount(), 'Album'),
+									cds=displayCounters(self.tableMdlAlb.SortFilterProxy.cpt_cds, 'CD'),
+									trk=displayCounters(self.tableMdlAlb.SortFilterProxy.cpt_trk, 'Track'),
+									siz=txt_siz,
+									dur=txt_len,
+									sch=txt_sch)
+		
+		self.maintitle = message
 		self.updateStatusBar(self.maintitle)
 
 	def updateStatusBar(self, message, t=0):
@@ -538,17 +578,23 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		if message is not None:
 			self.updateStatusBar(message, t)
 		self.gaugeBar.setValue(purcent)
-		self.update()
-		self.gaugeBar.repaint()
-		if purcent == 1:
+		QApplication.processEvents()
+		if purcent == 100:
 			self.gaugeBar.setVisible(False)
 			self.updateStatusBar(self.maintitle)
 
 	def connectEnvt(self, refresh=False):
 		"""Connect Envt."""
 		if self.envits != self.com_envt.currentText() or refresh:
+			if self.envits != self.com_envt.currentText():
+				self.currow = 0
 			self.envits = self.com_envt.currentText()
-			# clear combos
+			self.setCursor(Qt.WaitCursor)
+			# init search + grids
+			self.lin_search.textChanged.disconnect()
+			self.lin_search.setText('')
+			self.lin_search.textChanged.connect(self.onTextEdited)
+			# init combos
 			self.com_category.currentIndexChanged.disconnect()
 			self.com_family.currentIndexChanged.disconnect()
 			self.com_label.currentIndexChanged.disconnect()
@@ -557,22 +603,18 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.com_family.clear()
 			self.com_label.clear()
 			self.com_year.clear()
+			self.com_category.currentIndexChanged.connect(self.onFiltersChanged)
+			self.com_family.currentIndexChanged.connect(self.onFiltersChanged)
+			self.com_label.currentIndexChanged.connect(self.onFiltersChanged)
+			self.com_year.currentIndexChanged.connect(self.onFiltersChanged)
+			# init scrore
+			self.sli_scorealb.setValue(0)
+			self.sli_scoretrk.setValue(0)
 			# connect
 			boolconnect, self.dbbase, self.modsql, self.rootDk = connectDatabase(self.envits)
 			if not boolconnect:
 				# no connect
 				self.updateStatusBar("Connect Failed, please select other environment...")
-				# init combos
-				self.com_category.addItems([DISP_CJOKER])
-				self.com_family.addItems([DISP_CJOKER])
-				self.com_label.addItems([DISP_CJOKER])
-				self.com_year.addItems([DISP_CJOKER])
-				# cover blank
-				self.coveral = QPixmap(PICM_NCO)
-				self.labelcover.setPixmap(self.coveral)
-				# init scrore
-				self.sli_scorealb.setValue(0)
-				self.sli_scoretrk.setValue(0)
 			else:
 				# mode sqllite, no menu create base
 				if self.modsql == 'sqlite':
@@ -581,6 +623,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.action_CSD.setEnabled(True)
 				# loading splashscreen
 				self.loadingGui = DBloadingGui(self.modsql, TITL_PROG, self)
+				self.loadingGui.show()
 				QApplication.processEvents()
 				# last date modifcation base
 				curdate = QTime.currentTime().toString('hh:mm:ss')
@@ -591,153 +634,120 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				# fill model/tree albums list
 				qDebug('Fill list albums start')
 				req = getrequest('albumslist', self.modsql)
-				self.tableMdlAlb = ModelTableAlbums(self, req)
+				self.tableMdlAlb = ModelTableAlbumsABS(self, req)
 				self.tableMdlAlb.signalthubuild.connect(self.onBuild)
-				self.tableMdlAlb.signallistalbchanged.connect(self.onBuildThunbnails)
-				#self.tableMdlAlb.refresh()
-				#self.tbl_albums.setSortingEnabled(True)
-				# height rows
-				
-				self.tbl_albums.setModel(self.tableMdlAlb)
-				self.tbl_albums.resizeColumnsToContents()
-				self.tbl_albums.resizeRowsToContents()
-				#self.tableMdlAlb.sort(12, Qt.DescendingOrder)
+				self.tableMdlAlb.SortFilterProxy.layoutChanged.connect(self.onListChanged)
+				self.tableMdlAlb.SortFilterProxy.sort(-1)
+				self.tbl_albums.setModel(self.tableMdlAlb.SortFilterProxy)
 				qDebug('Fill list albums end')
+				
+				# size grid
+				for i in range(len(self.tableMdlAlb.A_C_WIDTH)):
+					self.tbl_albums.setColumnWidth(i, self.tableMdlAlb.A_C_WIDTH[i])
+				# height rows
+				self.tbl_albums.verticalHeader().setDefaultSectionSize(self.tableMdlAlb.C_HEIGHT)
+				
 				# data ?
 				if self.tableMdlAlb.rowCount() > 0:
-					# fill combos
-					listcat = self.tableMdlAlb.listcat
-					listcat.sort(reverse=True)
-					listcat = [DISP_CJOKER] + listcat
-					self.com_category.addItems(listcat)
-					listfam = self.tableMdlAlb.listfam
-					listfam = [DISP_CJOKER] + listfam
-					self.com_family.addItems(listfam)
-					listlab = self.tableMdlAlb.listlab
-					listlab.sort(reverse=True)
-					listlab = [DISP_CJOKER] + listlab
-					self.com_label.addItems(listlab)
-					listyea = self.tableMdlAlb.listyea
-					listyea.sort(reverse=True)
-					listyea = [DISP_CJOKER] + listyea
-					self.com_year.addItems(listyea)
-					self.com_category.currentIndexChanged.connect(self.onFiltersChanged)
-					self.com_family.currentIndexChanged.connect(self.onFiltersChanged)
-					self.com_label.currentIndexChanged.connect(self.onFiltersChanged)
-					self.com_year.currentIndexChanged.connect(self.onFiltersChanged)
-					# fill thunbnails
-					qDebug('Fill thunbnails albums start')
-					thunlst = self.tableMdlAlb.builListThunbnails()
-					self.thunbnails.addthunbails(thunlst, self.sizeTN, True, 0, self.THUN_DIS, self.tableMdlAlb.rowCount())
-					qDebug('Fill thunbnails albums end')
+					# fill thunbnails + combos
+					self.onListChanged()
 					# autocompletion list
 					autoList = buildTabFromRequest(getrequest('autocompletion', self.modsql))
 					self.com_autcom = QCompleter(autoList, self.lin_search)
 					self.com_autcom.setCaseSensitivity(Qt.CaseInsensitive)
 					self.lin_search.setCompleter(self.com_autcom)
-					# select default row
-					if not refresh:
-						self.currow = 0
-					self.tbl_albums.selectRow(self.currow)
-					if self.focusWidget() == self.tbl_albums:
-						self.tbl_albums.setFocus()
-					else:
-						self.lin_search.setFocus()
-					# display album
-					self.currow = self.tbl_albums.currentIndex().row()
-					self.displayAlbum()
 					# end loading
 					self.loadingGui.hide()
-				else:
-					# init combos
-					self.com_category.addItems([DISP_CJOKER])
-					self.com_family.addItems([DISP_CJOKER])
-					self.com_label.addItems([DISP_CJOKER])
-					self.com_year.addItems([DISP_CJOKER])
-					# cover blank
-					self.coveral = QPixmap(PICM_NCO)
-					self.labelcover.setPixmap(self.coveral)
-					# init scrore
-					self.sli_scorealb.setValue(0)
-					self.sli_scoretrk.setValue(0)
 				# display title
+				self.setCursor(Qt.ArrowCursor)
 				self.displayResultSearch()
 
 	def displayAlbum(self):
 		"""Display info current select album."""
-		self.curAlb = self.tableMdlAlb.getData(self.currow, 'ID_CD')
-		self.curMd5 = self.tableMdlAlb.getData(self.currow, 'MD5')
-		self.albumname = self.tableMdlAlb.getData(self.currow, 'Name')
-		self.ScoreAlbum = len(self.tableMdlAlb.getData(self.currow, 'Score'))
-		self.pathcover = self.tableMdlAlb.getData(self.currow, 'Cover')
-		self.AlbumPath = self.tableMdlAlb.getData(self.currow, 'Path')
-		# select thunbnail
-		self.thunbnails.selectThunbnail(self.currow)
+		indexes = self.tbl_albums.currentIndex()
+		indexes = self.tableMdlAlb.SortFilterProxy.mapToSource(indexes)
+		if indexes.isValid():
+			self.currow = indexes.row()
+			self.curAlb = self.tableMdlAlb.getData(self.currow, 'ID_CD')
+			self.curMd5 = self.tableMdlAlb.getData(self.currow, 'MD5')
+			self.albumname = self.tableMdlAlb.getData(self.currow, 'Name')
+			self.ScoreAlbum = self.tableMdlAlb.getData(self.currow, 'Score')
+			self.pathcover = self.tableMdlAlb.getData(self.currow, 'Cover')
+			self.AlbumPath = self.tableMdlAlb.getData(self.currow, 'Path')
+			# select thunbnail
+			indexes = self.tbl_albums.currentIndex()
+			self.thunbnails.selectThunbnail(indexes.row())
 
-		# fill tracks
-		if self.chb_searchtracks.isChecked() and self.lin_search.text() != '':
-			searchtxt = self.lin_search.text()
-		else:
-			searchtxt = ''
-		req = (getrequest('trackslist', self.modsql)).format(id=self.curAlb)
-		self.tableMdlTrk = ModelTableTracks(self, searchtxt, req)
-		self.tbl_tracks.setModel(self.tableMdlTrk)
-		self.tbl_tracks.resizeColumnsToContents()
-		self.tbl_tracks.resizeRowsToContents()
-		self.tbl_tracks.horizontalHeader().setStretchLastSection(True)
-		self.tbl_tracks.setSortingEnabled(True)
+			# fill tracks
+			if self.chb_searchtracks.isChecked() and self.lin_search.text() != '':
+				searchtxt = self.lin_search.text()
+			else:
+				searchtxt = ''
+			req = (getrequest('trackslist', self.modsql)).format(id=self.curAlb)
+			self.tableMdlTrk = ModelTableTracksABS(self, searchtxt, req)
+			self.tbl_tracks.setModel(self.tableMdlTrk.SortFilterProxy)
+			self.tbl_tracks.resizeColumnsToContents()
+			self.tbl_tracks.resizeRowsToContents()
+			self.tbl_tracks.horizontalHeader().setStretchLastSection(True)
 
-		# build stats album
-		cpt_len = self.tableMdlTrk.getSum('TAG_length')
-		txt_album, img_lab = albumnameextract(self.albumname,
-									str(self.tableMdlAlb.getData(self.currow, 'Label')),
-									str(self.tableMdlAlb.getData(self.currow, 'ISRC')),
-									str(self.tableMdlAlb.getData(self.currow, 'Year')),
-									int(self.tableMdlAlb.getData(self.currow, 'Qty_CD')),
-									self.tableMdlTrk.rowCount(),
-									int(((cpt_len/60)*10)/10),
-									int(self.tableMdlAlb.getData(self.currow, 'Qty_covers')))
-		# img label
-		if img_lab is not None:
-			plabel = QPixmap(img_lab)
-			self.lab_label.setPixmap(plabel)
-			self.lab_label.setVisible(True)
-		else:
-			self.lab_label.setText('<b>' + self.tableMdlAlb.getData(self.currow, 'Category') + '</b>')
-			#self.lab_label.setVisible(False)
-		
-		# title album
-		self.lab_album.setHtml(txt_album)
+			# build stats album
+			cpt_len = self.tableMdlTrk.getSum('TAG_length')
+			txt_album, img_lab = albumnameextract(self.albumname,
+										str(self.tableMdlAlb.getData(self.currow, 'Label')),
+										str(self.tableMdlAlb.getData(self.currow, 'ISRC')),
+										str(self.tableMdlAlb.getData(self.currow, 'Year')),
+										int(self.tableMdlAlb.getData(self.currow, 'Qty_CD')),
+										self.tableMdlTrk.rowCount(),
+										int(((cpt_len/60)*10)/10),
+										int(self.tableMdlAlb.getData(self.currow, 'Qty_covers')))
+			# img label
+			if img_lab is not None:
+				plabel = QPixmap(img_lab)
+				self.lab_label.setPixmap(plabel)
+				self.lab_label.setVisible(True)
+			else:
+				self.lab_label.setText('<b>' + self.tableMdlAlb.getData(self.currow, 'Category') + '</b>')
+			index = self.com_category.findText(self.tableMdlAlb.getData(self.currow, 'Category'), Qt.MatchFixedString)
+			self.lab_label.mousePressEvent = lambda e, ind=index: self.com_category.setCurrentIndex(ind)
+			self.lab_label.enterEvent = lambda e, cur=Qt.PointingHandCursor: self.setCursor(cur)
+			self.lab_label.leaveEvent = lambda e, cur=Qt.ArrowCursor: self.setCursor(cur)
+					
+			# title album
+			self.lab_album.setHtml(txt_album)
 
-		# fill score album
-		self.sli_scorealb.setValue(self.ScoreAlbum)
-		self.lab_scorealb.setText(displayStars(self.ScoreAlbum, SCOR_ALBUMS))
+			# fill score album
+			self.sli_scorealb.setValue(self.ScoreAlbum)
+			self.lab_scorealb.setText(displayStars(self.ScoreAlbum, SCOR_ALBUMS))
 
-		# fill cover
-		self.coveral = extractCoverb64(self.curMd5, PICM_NCO)
-		self.coveral = self.coveral.scaled(self.COVE_SIZ, self.COVE_SIZ, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
-		self.labelcover.setPixmap(self.coveral)
+			# fill cover
+			if self.pathcover[0:len(self.TEXT_NCO)] == self.TEXT_NCO:
+				self.coveral = QPixmap(PICM_NCO)
+				self.labelcover.updateLabel(self.AlbumPath)
+			else:
+				self.labelcover.updateLabel(None)
+				self.coveral = extractCoverb64(self.curMd5, PICM_NCO)
+			self.coveral = self.coveral.scaled(self.COVE_SIZ, self.COVE_SIZ, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+			self.labelcover.setPixmap(self.coveral)
 
-		# fill play medias only is not playing
-		if self.playerAudio.player.state() != QMediaPlayer.PlayingState:
-			self.curtrk = self.tbl_tracks.currentIndex().row()
-			self.homMed = self.tableMdlTrk.getMedias()
-			self.playerAudio.addMediaslist(self.homMed, self.curtrk)
+			# fill play medias only is not playing
+			if self.playerAudio.player.state() != QMediaPlayer.PlayingState:
+				self.curtrk = self.tbl_tracks.currentIndex().row()
+				self.homMed = self.tableMdlTrk.getMedias()
+				self.playerAudio.addMediaslist(self.homMed, self.curtrk, self.albumname)
+				
+			# init status bar
+			self.updateStatusBar(self.maintitle)
 			
-		# init status bar
-		self.updateStatusBar(self.maintitle)
+			# select track default
+			if self.tableMdlTrk.rowCount() > 0:
+				self.tbl_tracks.selectRow(0)
+				self.curTrk = 0
+			self.displaytrack()
 		
-		# select track default
-		if self.tableMdlTrk.rowCount() > 0:
-			self.tbl_tracks.selectRow(0)
-			self.curTrk = 0
-		self.displaytrack()
-
 	def displaytrack(self):
 		"""Display info current select track."""
 		if self.tableMdlTrk.rowCount() > 0:
-			self.curtrk = self.tbl_tracks.currentIndex().row()
-			self.ScoreTrack = len(self.tableMdlTrk.getData(self.curtrk, 'Score'))
+			self.ScoreTrack = self.tableMdlTrk.getData(self.curtrk, 'Score')
 			self.sli_scoretrk.setEnabled(True)
 			self.lab_scoretrk.setEnabled(True)
 		else:
@@ -757,70 +767,119 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			if self.ScoreAlbum != self.sli_scorealb.value():
 				self.btn_scorealb.setVisible(True)
 				nbselect = len(listrows)
-				if nbselect == 1:
-					self.btn_scorealb.setText('Update')
-				else:
-					self.btn_scorealb.setText('Upd*' + str(nbselect))
+				self.btn_scorealb.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
+				self.btn_scorealb.setText('x' + str(nbselect))
 			else:
 				self.btn_scorealb.setVisible(False)
 
 	def onModifyScoreTrack(self,  event):
 		"""Modify Score Track."""
-		indexes = self.tbl_tracks.selectedIndexes()
-		if len(indexes) > 0:
+		listrows = self.getRowsfromListTracks()
+		if listrows is not None:
 			self.lab_scoretrk.setText(displayStars(self.sli_scoretrk.value(), SCOR_TRACKS))
 			if self.ScoreTrack != self.sli_scoretrk.value():
 				self.btn_scoretrk.setVisible(True)
-				listRows = []
-				for ind in indexes:
-					listRows.append(ind.row())
-				nbselect = len(list(set(listRows)))
-				if nbselect == 1:
-					self.btn_scoretrk.setText('Update')
-				else:
-					self.btn_scoretrk.setText('Upd*' + str(nbselect))
+				nbselect = len(listrows)
+				self.btn_scoretrk.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
+				self.btn_scoretrk.setText('x' + str(nbselect))
 			else:
 				self.btn_scoretrk.setVisible(False)
 
 	def onSelectThunbnail(self, row):
 		"""Reception signal : Select thunbnail."""
-		self.currow = int(row)
 		index = self.tableMdlAlb.index(row, 0)
+		self.tbl_albums.selectRow(index.row())
+		index = self.tbl_albums.currentIndex()
 		self.tbl_albums.scrollTo(index)
-		self.tbl_albums.selectRow(row)
 		self.tbl_albums.setFocus()
 		self.displayAlbum()
 		
 	def onAddThunbnail(self, deb):
 		"""Reception signal : Adds thunbnails."""
 		thunlst = self.tableMdlAlb.builListThunbnails(False, deb, deb*2)
-		self.thunbnails.addthunbails(thunlst, self.sizeTN, False, deb, deb*2, self.tableMdlAlb.rowCount())
+		self.thunbnails.addthunbails(thunlst, self.sizeTN, False, deb, deb*2, self.tableMdlAlb.SortFilterProxy.rowCount())
 
 	def onBuild(self, ratio, text):
 		"""Reception signal : Build Operation."""
 		self.updateGaugeBar(ratio, text)
 
-	def onBuildThunbnails(self, int):
+	def onListChanged(self):
 		"""Reception signal : changed list album."""
-		thunlst = self.tableMdlAlb.builListThunbnails()
-		self.thunbnails.addthunbails(thunlst, self.sizeTN, True, 0, self.THUN_DIS, self.tableMdlAlb.rowCount())
-
+		qDebug('list album changed')
+		# clear combos
+		self.com_category.currentIndexChanged.disconnect()
+		self.com_family.currentIndexChanged.disconnect()
+		self.com_label.currentIndexChanged.disconnect()
+		self.com_year.currentIndexChanged.disconnect()
+		self.com_category.clear()
+		self.com_family.clear()
+		self.com_label.clear()
+		self.com_year.clear()
+		# fill combos
+		listcat = self.tableMdlAlb.SortFilterProxy.listcat
+		listcat.sort(reverse=True)
+		listcat = [DISP_CJOKER] + listcat
+		self.com_category.addItems(listcat)
+		listfam = self.tableMdlAlb.SortFilterProxy.listfam
+		listfam = [DISP_CJOKER] + listfam
+		self.com_family.addItems(listfam)
+		listlab = self.tableMdlAlb.SortFilterProxy.listlab
+		listlab.sort(reverse=True)
+		listlab = [DISP_CJOKER] + listlab
+		self.com_label.addItems(listlab)
+		listyea = self.tableMdlAlb.SortFilterProxy.listyea
+		listyea.sort(reverse=True)
+		listyea = [DISP_CJOKER] + listyea
+		self.com_year.addItems(listyea)
+		# set combo
+		if self.tableMdlAlb.SortFilterProxy.filtcate != '':
+			index = self.com_category.findText(self.tableMdlAlb.SortFilterProxy.filtcate, Qt.MatchFixedString)
+			self.com_category.setCurrentIndex(index)
+		if self.tableMdlAlb.SortFilterProxy.filtfami != '':
+			index = self.com_family.findText(self.tableMdlAlb.SortFilterProxy.filtfami, Qt.MatchFixedString)
+			self.com_family.setCurrentIndex(index)
+		if self.tableMdlAlb.SortFilterProxy.filtyear != '':
+			index = self.com_year.findText(self.tableMdlAlb.SortFilterProxy.filtyear, Qt.MatchFixedString)
+			self.com_year.setCurrentIndex(index)
+		if self.tableMdlAlb.SortFilterProxy.filtlabl != '':
+			index = self.com_label.findText(self.tableMdlAlb.SortFilterProxy.filtlabl, Qt.MatchFixedString)
+			self.com_label.setCurrentIndex(index)
+		self.com_category.currentIndexChanged.connect(self.onFiltersChanged)
+		self.com_family.currentIndexChanged.connect(self.onFiltersChanged)
+		self.com_label.currentIndexChanged.connect(self.onFiltersChanged)
+		self.com_year.currentIndexChanged.connect(self.onFiltersChanged)
+		thunlst = self.tableMdlAlb.builListThunbnails(True, 0, self.THUN_DIS)
+		while self.thunbnails.isbuilder:
+			self.thunbnails.stopbuild = True
+		self.thunbnails.addthunbails(thunlst, self.sizeTN, True, 0, self.THUN_DIS, self.tableMdlAlb.SortFilterProxy.rowCount())
+		# display title
+		self.displayResultSearch()
+		# select default row
+		self.tbl_albums.selectRow(self.currow)
+		if self.focusWidget() == self.tbl_albums:
+			self.tbl_albums.setFocus()
+		else:
+			self.lin_search.setFocus()
+		# display album
+		self.displayAlbum()
+		
 	def onSelectListAlbum(self, event, index=None):
 		"""Select Album."""
 		indexes = self.tbl_albums.selectedIndexes()
-		if len(indexes) > 0 and self.currow != self.tbl_albums.currentIndex().row():
-			self.currow = self.tbl_albums.currentIndex().row()
+		if len(indexes) > 0:
 			self.displayAlbum()
 
 	def onSelectTrackChanged(self, event, indexes=None):
 		"""Select Track."""
 		indexes = self.tbl_tracks.selectedIndexes()
-		if len(indexes) > 0 and self.curtrk != self.tbl_tracks.currentIndex().row():
-			self.curtrk = self.tbl_tracks.currentIndex().row()
-			self.displaytrack()
-			if self.playerAudio.player.state() != QMediaPlayer.PlayingState:
-				self.playerAudio.currentPlaylist.setCurrentIndex(self.curtrk)
-	
+		if len(indexes) > 0:
+			indexes = self.tableMdlTrk.SortFilterProxy.mapToSource(indexes[0])
+			if self.curtrk != indexes.row():
+				self.curtrk = indexes.row()
+				self.displaytrack()
+				if self.playerAudio.player.state() != QMediaPlayer.PlayingState:
+					self.playerAudio.currentPlaylist.setCurrentIndex(self.curtrk)
+
 	def onAnchorClicked(self, url):
 		"""Balises html title album clicked"""
 		text = str(url.toString())
@@ -840,6 +899,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			elif function.startswith('s'):
 				self.lin_search.setText(param.replace('_',' '))
 				self.onFiltersChanged()
+			elif function.startswith('f'):
+				self.getFolder()
 			#if hasattr(self,function):
 			#	getattr(self,function)()
 	
@@ -857,28 +918,23 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		"""Update Score Album."""
 		listrows = self.getRowsfromListAlbums()
 		if listrows is not None:
-			#self.tbl_albums.setFocus()
 			self.ScoreAlbum = self.sli_scorealb.value()
 			for rowalb in listrows:
 				self.tableMdlAlb.updateScore(rowalb, self.ScoreAlbum)
 		# Button
 		self.btn_scorealb.setVisible(False)
+		self.tableMdlAlb.SortFilterProxy.invalidate()
 
 	def onPressButtonEnrScoreTrack(self):
 		"""Update Score Track."""
-		indexes = self.tbl_tracks.selectedIndexes()
-		if len(indexes) > 0:
-			listRows = []
-			for ind in indexes:
-				listRows.append(ind.row())
-			listRows = list(set(listRows))
+		listrows = self.getRowsfromListTracks()
+		if listrows is not None:
 			self.ScoreTrack = self.sli_scoretrk.value()
-			for rowtrk in listRows:
+			for rowtrk in listrows:
 				self.tableMdlTrk.updateScore(rowtrk, self.ScoreTrack)
-		# Treeview
-		self.tableMdlTrk.refresh() # #####################
 		# Button
 		self.btn_scoretrk.setVisible(False)
+		self.tableMdlTrk.SortFilterProxy.invalidate()
 
 	def popUpBaseAlbums(self,  position):
 		"""Menu Database."""
@@ -893,7 +949,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		listrows = self.getRowsfromListAlbums()
 		if listrows is not None:
 			if len(listrows) == 1:
-				self.currow = self.tbl_albums.currentIndex().row()
 				self.displayAlbum()
 				self.action_TAG.setEnabled(True)
 				self.updateTextPopupAlbum(self.tbl_albums.viewport().mapToGlobal(position))
@@ -929,9 +984,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		indexes = self.tbl_tracks.selectedIndexes()
 		if len(indexes) > 0:
 			# playing ? reset
-			self.curtrk = self.tbl_tracks.currentIndex().row()
+			indexes = self.tableMdlTrk.SortFilterProxy.mapToSource(indexes[0])
+			self.curtrk = indexes.row()
 			self.homMed = self.tableMdlTrk.getMedias()
-			self.playerAudio.addMediaslist(self.homMed, self.curtrk)
+			self.playerAudio.addMediaslist(self.homMed, self.curtrk, self.albumname)
 			self.playerAudio.player.play()
 	
 	def getRowsfromListAlbums(self):
@@ -940,8 +996,22 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		if len(indexes) > 0:
 			listrows = []
 			for ind in indexes:
-				if ind.row() not in listrows:
-					listrows.append(ind.row())
+				index = self.tableMdlAlb.SortFilterProxy.mapToSource(ind)
+				if index.row() not in listrows:
+					listrows.append(index.row())
+			return listrows
+		else:
+			return None
+
+	def getRowsfromListTracks(self):
+		"""Get ID of line in list."""
+		indexes = self.tbl_tracks.selectedIndexes()
+		if len(indexes) > 0:
+			listrows = []
+			for ind in indexes:
+				index = self.tableMdlTrk.SortFilterProxy.mapToSource(ind)
+				if index.row() not in listrows:
+					listrows.append(index.row())
 			return listrows
 		else:
 			return None
@@ -979,16 +1049,18 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.updateStatusBar('Foobar2000 playlists finished', 5000)
 		QMessageBox.information(self,'Foobar2000 import playlists', 'Operation successfull')
 
+	def updateAlbumsDnd(self):
+		"""Execute powershell Script update albums infos."""
+		exeprocess, params = buildCommandPowershell(PWSH_SCRU, '-listID_CD', str(self.curAlb), '-Envt', self.envits)
+		pro = ProcessGui(exeprocess, params, 'Update display album', self.w_main, self.h_main-150)
+		pro.signalend.connect(lambda: self.connectEnvt(True))
+
 	def updateAlbums(self):
 		"""Execute powershell Script update albums infos."""
-		indexes = self.tbl_albums.selectedIndexes()
-		if len(indexes) > 0:
-			listRows = []
-			for ind in indexes:
-				listRows.append(ind.row())
-			listRows = list(set(listRows))
-			listSelect = []
-			for ind in listRows:
+		listrows = self.getRowsfromListAlbums()
+		listSelect = []
+		if listrows is not None:
+			for ind in listrows:
 				listSelect.append(str(self.tableMdlAlb.getData(ind, 'ID_CD')))
 			exeprocess, params = buildCommandPowershell(PWSH_SCRU, '-listID_CD', ','.join(listSelect), '-Envt', self.envits)
 			pro = ProcessGui(exeprocess, params, 'Update ' + displayCounters(len(listSelect), "Album "), self.w_main, self.h_main-150)
@@ -1007,8 +1079,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def exportAlbums(self):
 		"""Export file cover or list albums select in grid."""
-		indexes = self.tbl_albums.selectedIndexes()
-		if len(indexes) > 0:
+		listrows = self.getRowsfromListAlbums()
+		if listrows is not None:
 			filename = QFileDialog.getSaveFileName(self,
 												"Export from CSV File list or cover jpeg Files",
 												getcwd(),
@@ -1017,16 +1089,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				return
 			filename = filename[0]
 			extension = (path.splitext(filename))[1]
-			# list select album
-			listRows = []
-			for ind in indexes:
-				listRows.append(ind.row())
-			listRows = list(set(listRows))
 			if extension == '.csv':
 				# extract file CSV
 				with open(filename, "w") as csv_file:
 					wr = writer(csv_file, delimiter=';', doublequote=True, quoting=QUOTE_ALL, lineterminator='\n')
-					for ind in listRows:
+					for ind in listrows:
 						textrow = []
 						for col in range(self.tableMdlAlb.columnCount()):
 							textcol = self.tableMdlAlb.getData(ind, None, col)
@@ -1038,7 +1105,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				self.statusBar().showMessage('Export csv list Albums /n Create file csv Sucessfull to :'+filename, 7000)
 			elif extension == '.jpg':
 				# extract base64\mysql to file JPEG
-				for ind in listRows:
+				for ind in listrows:
 					filecover = path.join(path.dirname(filename), self.tableMdlAlb.getData(ind, 'Name'))
 					extension = ((self.tableMdlAlb.getData(ind, 'Cover'))[-4:]).replace('.', '')
 					filecover = filecover+'.'+extension
@@ -1058,8 +1125,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			event.ignore()
 
 if __name__ == '__main__':
+	qInstallMessageHandler(qtmymessagehandler)
 	app = QApplication(argv)
-	DB = DBAlbumsMainGui()
+	if len(argv)>1 and argv[1] == 'MINI':
+		DB = DBAlbumsQT5Mini()
+	else:
+		DB = DBAlbumsMainGui()
 	DB.show()
 	rc = app.exec_()
 	exit(rc)

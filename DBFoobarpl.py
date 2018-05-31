@@ -79,6 +79,6 @@ def DBFOOBAR(parent, folder):
 			break
 		query.clear
 		counter += 1
-		parent.updateGaugeBar(counter/numtracks)
-	parent.updateGaugeBar(1)
+		parent.updateGaugeBar((counter/numtracks)*100)
+	parent.updateGaugeBar(100)
 	return(numtracks)

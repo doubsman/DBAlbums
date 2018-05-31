@@ -1,5 +1,7 @@
 """ DBAlbums History Version : Doubsman dev.
-1.5  QT5 final stable, theme colors
+1.52 theme colors, Drag and Drop no cover
+1.51 model ABS in memory
+1.5  QT5 final stable, album title
 1.49 integration widget thunbnails
 1.48 signal end process powershell, divide main code
 1.47 integration widget player audio

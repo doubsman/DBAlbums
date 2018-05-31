@@ -51,7 +51,7 @@
        <number>0</number>
       </property>
       <property name="topMargin">
-       <number>6</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
        <number>0</number>
@@ -80,40 +80,33 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="labelcover">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+         <widget class="QFrame" name="framecover">
           <property name="minimumSize">
            <size>
             <width>400</width>
             <height>400</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>400</width>
-            <height>400</height>
-           </size>
+          <property name="lineWidth">
+           <number>0</number>
           </property>
-          <property name="baseSize">
-           <size>
-            <width>400</width>
-            <height>400</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-          </property>
+          <layout class="QVBoxLayout" name="coverLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+          </layout>
          </widget>
         </item>
         <item>
@@ -225,15 +218,18 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>50</width>
-                <height>0</height>
+                <width>40</width>
+                <height>21</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>0</width>
                 <height>21</height>
                </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: darkgrey;</string>
               </property>
               <property name="text">
                <string/>
@@ -342,6 +338,22 @@
              </layout>
             </item>
             <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <widget class="QPushButton" name="btn_scoretrk">
               <property name="enabled">
                <bool>true</bool>
@@ -354,15 +366,18 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>40</width>
                 <height>21</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>0</width>
                 <height>21</height>
                </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: darkgrey;</string>
               </property>
               <property name="text">
                <string/>
@@ -374,10 +389,32 @@
             </item>
             <item>
              <widget class="QLabel" name="lab_scoretrk">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>☆☆☆</string>
               </property>
              </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>5</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
             <item>
              <widget class="QSlider" name="sli_scoretrk">
@@ -521,31 +558,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btn_search">
-          <property name="minimumSize">
-           <size>
-            <width>25</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>25</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">border: none;</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="flat">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QCheckBox" name="chb_searchtracks">
           <property name="text">
            <string>Search in tracks</string>
@@ -619,6 +631,85 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QFrame" name="frame">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 1px solid black;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <widget class="QPushButton" name="btn_zoomout">
+           <property name="geometry">
+            <rect>
+             <x>3</x>
+             <y>3</y>
+             <width>16</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: none;</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+          <widget class="QLabel" name="lab_zoom">
+           <property name="geometry">
+            <rect>
+             <x>22</x>
+             <y>0</y>
+             <width>35</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>35</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: lime;background-color: black</string>
+           </property>
+           <property name="text">
+            <string>100%</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="btn_zoomin">
+           <property name="geometry">
+            <rect>
+             <x>60</x>
+             <y>3</y>
+             <width>16</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: none;</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="btn_themecolor">
