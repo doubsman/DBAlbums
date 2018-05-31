@@ -111,7 +111,7 @@ class PlayerQThreadProcess(QThread):
 
 def PlayerProcess(filePath, fileName, x=0, y=0):
 	app = QApplication(argv)
-	player = PlayerAudio(filePath, fileName, x, y)
+	player = PlayerAudio("E:\WORK\ZTest","Morten Granau.flac",50,50)
 	app.exec_()
 
 	
