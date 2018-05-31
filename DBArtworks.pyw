@@ -4,24 +4,18 @@
 # ############################################################################
 # # Audio pyQT5 Player by SFI
 # ############################################################################
-from sys import argv, executable
-from os import system, path
+from sys import argv
+from os import path, chdir
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot, QSize
 from PyQt5.QtWidgets import (QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, 
-						 QFrame, QLabel, QApplication)
+						QLabel, QApplication)
 from DBFunction import openFolder, getListFiles, centerWidget
-from DBThunbnail import DBThunbnails
+from DBThunbnai import DBThunbnails
 
 
-# path
-if getattr(system, 'frozen', False):
-	# frozen
-	PATH_PROG = path.dirname(executable)
-else:
-	# unfrozen
-	PATH_PROG = path.realpath(path.dirname(argv[0]))
-	
+PATH_PROG = path.dirname(path.abspath(__file__))
+chdir(PATH_PROG)
 VERS_PROG = '1.00'
 TITL_PROG = "Artwork viewer v{v} : ".format(v=VERS_PROG)
 WINS_ICO = path.join(PATH_PROG, 'IMG', 'icone.ico')
@@ -75,8 +69,8 @@ class ArtworksGui(QWidget):
 		self.sizethun = sizeTN
 		self.thunbnails = DBThunbnails(self, self.sizethun, self.line)
 		self.thunbnails.signalthunchgt.connect(self.onSelectCover)
-		
-		self.labelcover = QLabel()
+		self.thunbnails.setMaximumSize(QSize(16667, sizeTN+4))
+		self.labelcover = QLabel(self)
 		self.labelcover.setAlignment(Qt.AlignCenter)
 		self.labelcover.setMinimumSize(QSize(self.width()-40, h-(self.line*(self.sizethun+4))-70))
 		self.labelcover.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -93,18 +87,18 @@ class ArtworksGui(QWidget):
 		# create cover option only if no cover file
 		if createcover[0:len(TEXT_NCO)] != TEXT_NCO:
 			self.action_COV.setEnabled(False)
-		self.line = QFrame(self)
-		self.line.setFrameShape(QFrame.HLine)
-		self.line.setFrameShadow(QFrame.Sunken)
-		self.line.setContentsMargins(0, 0, 0, 0)
-		
+
 		layout = QVBoxLayout(self)
-		lyaout = QGridLayout()
+		
+		lyaout = QGridLayout(self)
 		lyaout.addWidget(self.thunbnails)
+		lyaout.setContentsMargins(0, 0, 0, 0)
+		lyaout.setSpacing(0)
+		
 		layout.addLayout(lyaout)
-		layout.addWidget(self.line)
-		layout.addStretch(1)
 		layout.addWidget(self.labelcover)
+		layout.setSpacing(5)
+		layout.setContentsMargins(7, 7, 7, 7)
 		self.setLayout(layout)
 		centerWidget(self)
 		self.show()
@@ -115,7 +109,7 @@ class ArtworksGui(QWidget):
 		self.filelist = self.fileslist[0]
 
 		# build thunbnails
-		self.thunbnails.addthunbails(self.fileslist)
+		self.thunbnails.addthunbails(self.fileslist, self.sizethun,  True, 0, 100, len(self.fileslist))
 
 		# build large cover
 		self.displayCover(self.numpic)
@@ -136,12 +130,11 @@ class ArtworksGui(QWidget):
 
 	def onSelectCover(self, numpic):
 		"""Select thunbnail."""
-		self.thunbnails.onSelectThunbnail(numpic)
 		self.displayCover(numpic)
 
 	def selectCover(self, event):
 		"""Select thunbnail if select cover."""
-		self.thunbnails.onSelectThunbnail(self.numpic)
+		self.thunbnails.selectThunbnail(self.numpic)
 		
 	def popUpMenu(self,  position):
 		"""Menu."""
@@ -152,7 +145,7 @@ class ArtworksGui(QWidget):
 		self.numpic = numpic
 		self.filelist = self.fileslist[self.numpic]
 		self.mycover = QPixmap(self.filelist)
-		width, height, new_width, new_height = self.resizeImage(self.labelcover.size().width(), self.size().height()-self.thunbnails.size().height()-30, self.mycover)
+		width, height, new_width, new_height = self.resizeImage(self.labelcover.size().width(), self.size().height()-self.thunbnails.size().height(), self.mycover)
 		dicover = self.mycover.scaled(new_width, new_height, Qt.IgnoreAspectRatio, Qt.FastTransformation)
 		self.labelcover.setPixmap(dicover)
 		self.setWindowTitle(TITL_PROG+" : [view ArtWorks: "+self.nametittle+'] {c}/{n} "{name}" A[{w}x{h}] O[{wo}x{ho}]'.format(c=str(self.numpic+1),
@@ -162,7 +155,7 @@ class ArtworksGui(QWidget):
 																	 name=path.basename(self.filelist),
 																	 wo=str(width),
 																	 ho=str(height)))
-		self.thunbnails.onSelectThunbnail(numpic)
+		self.thunbnails.selectThunbnail(numpic)
 	
 	def resizeImage(self, wmax, hmax, pic):
 		# measures

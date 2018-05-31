@@ -24,12 +24,6 @@ class DBPlayer(QWidget):
 
 	def __init__(self):
 		super(DBPlayer, self).__init__()
-
-		# Init main windows
-		#self.setWindowTitle(TITL_PROG)
-		#Ìself.setWindowIcon(QIcon(WINS_ICO))
-		self.setStyleSheet('DBPlayer{background-color: darkgray;border: 1px solid black;} '
-							'QMessageBox{background-color: darkgray;border: 1px solid black;}')
 		self.setMaximumSize(16777215, 35)
 		# Init Player
 		self.messtitle = TITL_PROG

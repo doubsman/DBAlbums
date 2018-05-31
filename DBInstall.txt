@@ -61,3 +61,13 @@ Add mount:
 test:
 	mount /HOMERSTATION/_LossLess/
 """
+
+
+
+COMPILATION..........................................
+-------------------------------------------------------------------
+install visual studio 2017 C++
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
+pyqtdeploy
+load 
+R:\Projets\DBALBUMSQT5\pyqtdeploy.pdy

@@ -1,28 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-from sys import platform, argv, executable
-from os import system, path
+from os import  path, chdir
 from base64 import b64decode
 from PyQt5.QtCore import QSettings, qDebug
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QPixmap
 
 
-if getattr(system, 'frozen', False):
-	PATH_PROG = path.dirname(executable)
-else:
-	PATH_PROG = path.realpath(path.dirname(argv[0]))
+PATH_PROG = path.dirname(path.abspath(__file__))
+chdir(PATH_PROG)
 BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
-if platform == "darwin" or platform == 'linux':
-	BASE_SQLI = r""+BASE_SQLI.replace('\\\\', '/').replace('\\', '/')
-FILE__INI = 'DBAlbums.ini'
-configini = QSettings(FILE__INI, QSettings.IniFormat)
-
 
 def connectDatabase(envt):
 	"""Connect base MySQL/Sqlite."""
+	FILE__INI = 'DBAlbums.ini'
+	configini = QSettings(FILE__INI, QSettings.IniFormat)
 	configini.beginGroup(envt)
 	MODE_SQLI = configini.value('typb')
 	BASE_RAC = r'' + configini.value('raci')
@@ -78,7 +71,7 @@ def getrequest(name, MODE_SQLI=None):
 		if MODE_SQLI == 'mssql':
 			request = request + "Position1+'\'+Position2 AS Position, "
 		request = request + " Typ_Tag, Path, Cover, MD5, ID_CD AS ID " \
-							"FROM DBALBUMS WHERE 1=1 ORDER BY Date_Insert DESC" \
+							"FROM DBALBUMS WHERE 1=1 ORDER BY Date_Insert DESC"
 	# list tracks
 	if name == 'trackslist':
 		request = "SELECT ODR_Track, TAG_Artists, TAG_Title, TAG_length, " \
@@ -141,6 +134,43 @@ def updateBaseScore(score, idalb, req):
 	query.clear
 
 
+def execSqlFile(parent, sql_file, nbop):
+	"""Exec script SQL file..."""
+	#cur = con.cursor()
+	statement = ""
+	counter = 0
+	parent.updateGaugeBar(0, "Exececution script SQL file"+sql_file)
+	for line in open(sql_file):
+		if line[0:2] == '--':
+			if line[0:3] == '-- ':
+				parent.updateGaugeBar(counter/nbop, "Exec :"+line.replace('--', ''))
+			continue
+		statement = statement + line
+		if len(line) > 2 and line[-2] == ';':
+			counter = counter + 1
+			query = QSqlQuery()
+			query.exec_(statement)
+			if not query.exec_():
+				errorText = query.lastError().text()
+				qDebug(query.lastQuery())
+				qDebug(errorText)
+				break
+			query.clear
+			statement = ""
+	parent.updateGaugeBar(1)
+
+
+def buildTabFromRequest(req):
+	"""Select to memory list."""
+	autoList = []
+	query = QSqlQuery(req)
+	query.exec_(req)
+	while query.next():
+		autoList.append(query.value(0))
+	query.clear
+	return autoList
+
+
 def buildReqTCD(group, column, tableName, TDCName='TDC', TDCSum=1, LineSum=True, MODE_SQLI='mysql'):
 	"""build request Pivot table compatible sqlite, mysql, SQLserver."""
 	# Collections
@@ -169,6 +199,38 @@ def buildReqTCD(group, column, tableName, TDCName='TDC', TDCSum=1, LineSum=True,
 	if MODE_SQLI == 'mssql':
 		ReqTDC = ReqTDC.replace(' `', ' [').replace('` ', '] ')
 	return ReqTDC
+
+
+def copytable(dbsrc, dbdes, tablename, reqcreate, reqinsert, reqindexe=None):
+	"""Copy table. Create+Datas+Index."""
+	querylite = QSqlQuery(None, dbdes)
+	query = QSqlQuery(None, dbsrc)
+	# drop
+	querylite.exec_("DROP TABLE {t}".format(t=tablename))
+	if not querylite.exec_():
+		qDebug(10*' '+"drop "+querylite.lastError().text())
+	# create
+	querylite.exec_(reqcreate)
+	if not querylite.exec_():
+		qDebug(10*' '+"create "+querylite.lastError().text())
+	# datas
+	query.exec_("SELECT * FROM "+tablename)
+	while query.next():
+		querylite.prepare(reqinsert)
+		for indcol in range(query.record().count()):
+			querylite.bindValue(indcol, query.value(indcol))
+		if not querylite.exec_():
+			qDebug(tablename+"10*' ' "+querylite.lastError().text())
+			listparam = list(querylite.boundValues().values())
+			for i in range(len(listparam)):
+				qDebug(10*' ', i, listparam[i])
+	# index
+	if reqindexe is not None:
+		querylite.exec_(reqindexe)
+		if not querylite.exec_():
+			qDebug(10*' '+":index "+querylite.lastError().text())
+	querylite.clear
+	query.clear
 
 
 def copyDatabaseInvent(parent, db, basename, logname):
@@ -237,72 +299,3 @@ def copyDatabaseInvent(parent, db, basename, logname):
 			parent.updateGaugeBar(1)
 		else:
 			qDebug('no create', basename)
-	parent.gaugeBar.setVisible(False)
-
-
-def copytable(dbsrc, dbdes, tablename, reqcreate, reqinsert, reqindexe=None):
-	"""Copy table. Create+Datas+Index."""
-	querylite = QSqlQuery(None, dbdes)
-	query = QSqlQuery(None, dbsrc)
-	# drop
-	querylite.exec_("DROP TABLE {t}".format(t=tablename))
-	if not querylite.exec_():
-		qDebug(10*' '+"drop "+querylite.lastError().text())
-	# create
-	querylite.exec_(reqcreate)
-	if not querylite.exec_():
-		qDebug(10*' '+"create "+querylite.lastError().text())
-	# datas
-	query.exec_("SELECT * FROM "+tablename)
-	while query.next():
-		querylite.prepare(reqinsert)
-		for indcol in range(query.record().count()):
-			querylite.bindValue(indcol, query.value(indcol))
-		if not querylite.exec_():
-			qDebug(tablename+"10*' ' "+querylite.lastError().text())
-			listparam = list(querylite.boundValues().values())
-			for i in range(len(listparam)):
-				qDebug(10*' ', i, listparam[i])
-	# index
-	if reqindexe is not None:
-		querylite.exec_(reqindexe)
-		if not querylite.exec_():
-			qDebug(10*' '+":index "+querylite.lastError().text())
-	querylite.clear
-	query.clear
-
-
-def execSqlFile(parent, sql_file, nbop):
-	"""Exec script SQL file..."""
-	#cur = con.cursor()
-	statement = ""
-	counter = 0
-	parent.updateGaugeBar(0, "Exececution script SQL file"+sql_file)
-	for line in open(sql_file):
-		if line[0:2] == '--':
-			if line[0:3] == '-- ':
-				parent.updateGaugeBar(counter/nbop, "Exec :"+line.replace('--', ''))
-			continue
-		statement = statement + line
-		if len(line) > 2 and line[-2] == ';':
-			counter = counter + 1
-			query = QSqlQuery()
-			query.exec_(statement)
-			if not query.exec_():
-				errorText = query.lastError().text()
-				qDebug(query.lastQuery())
-				qDebug(errorText)
-				break
-			query.clear
-			statement = ""
-
-
-def buildTabFromRequest(req):
-	"""Select to memory list."""
-	autoList = []
-	query = QSqlQuery(req)
-	query.exec_(req)
-	while query.next():
-		autoList.append(query.value(0))
-	query.clear
-	return autoList

@@ -7,6 +7,35 @@ from PyQt5.QtCore import QProcess
 from PyQt5.QtWidgets import QDesktopWidget
 
 
+def displayCounters(num=0, text=''):
+	"""format 0 000 + plural."""
+	strtxt = " %s%s" % (text, "s"[num == 1:])
+	if num > 9999:
+		strnum = '{0:,}'.format(num).replace(",", " ")
+	else:
+		strnum = str(num)
+	return (strnum + strtxt)
+
+
+def displayStars(star, scorelist):
+	"""scoring."""
+	maxstar = len(scorelist)-1
+	txt_score = scorelist[star]
+	txt_color = "<font color=yellow><big>" + star*'★' + "</p></big></font>" 
+	txt_color += "<font color=\"black\"><big>" +(maxstar-star)*'☆' + "</big></font>"
+	txt_color += "<br/><font color=\"black\"><small>" + txt_score + " </small></font>" 
+	#return (txt_score+'  '+star*'★'+(maxstar-star)*'☆')
+	return txt_color
+
+
+def centerWidget(widget):
+	"""Center Widget."""
+	qtrectangle = widget.frameGeometry()
+	centerPoint = QDesktopWidget().availableGeometry().center()
+	qtrectangle.moveCenter(centerPoint)
+	widget.move(qtrectangle.topLeft())
+
+
 def getListFiles(folder, masks):
 	"""Build files list."""
 	for folderName, subfolders, filenames in walk(folder):
@@ -17,6 +46,7 @@ def getListFiles(folder, masks):
 			for xmask in masks:
 				if filename[-4:].lower() in xmask:
 					yield path.join(folderName, filename)
+
 
 def logit(dat, filename):
 	"""Send message to log file."""
@@ -64,9 +94,4 @@ def convertUNC(path):
 	return(path)
 
 
-def centerWidget(widget):
-	"""Center Widget."""
-	qtrectangle = widget.frameGeometry()
-	centerPoint = QDesktopWidget().availableGeometry().center()
-	qtrectangle.moveCenter(centerPoint)
-	widget.move(qtrectangle.topLeft())
+

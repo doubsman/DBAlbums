@@ -57,7 +57,7 @@ def foobargetListFilesFromPlaylist(file_path):
 	return(listfiles)
 
 
-def foobarMajDBFOOBAR(parent, folder):
+def DBFOOBAR(parent, folder):
 	"""Insert track in database dans update score."""
 	# fill DBFOOBAR
 	footracks = foobarBuildTracksList(folder)
@@ -80,4 +80,5 @@ def foobarMajDBFOOBAR(parent, folder):
 		query.clear
 		counter += 1
 		parent.updateGaugeBar(counter/numtracks)
+	parent.updateGaugeBar(1)
 	return(numtracks)

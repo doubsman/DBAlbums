@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from os import path, chdir
 from PyQt5.QtGui import QIcon, QFont, QTextCursor, QColor
-from PyQt5.QtCore import Qt, QProcess, QIODevice, pyqtSlot, pyqtSignal
+from PyQt5.QtCore import Qt, QProcess, QIODevice, pyqtSlot, pyqtSignal, QSettings, QDateTime
 from PyQt5.QtSql import QSqlQueryModel
 from PyQt5.QtWidgets import QPushButton, QTextEdit, QWidget, QVBoxLayout, QHBoxLayout
 from DBDatabase import getrequest, buildTabFromRequest, buildReqTCD
@@ -10,19 +11,21 @@ from DBFunction import centerWidget
 from Ui_DBLOADING import Ui_LoadingWindow
 
 
-WIDT_MAIN = 1260
-HEIG_MAIN = 1060
-VERS_PROG = '1.0'
-WINS_ICO = "DBAlbums-icone.ico"
-TITL_PROG = "♫ DBAlbums v{v} (2017)".format(v=VERS_PROG)
-FONT_CON = 'Lucida Console'
-FONT_MAI = 'Calibri'
+PATH_PROG = path.dirname(path.abspath(__file__))
+chdir(PATH_PROG)
+FILE__INI = 'DBAlbums.ini'
+configini = QSettings(FILE__INI, QSettings.IniFormat)
+configini.beginGroup('dbalbums')
+FONT_MAI = configini.value('font00_ttx')
+FONT_CON = configini.value('font01_ttx')
+WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
+configini.endGroup()
 
 
 # ##################################################################
 class ProcessGui(QWidget):
 	signalend = pyqtSignal(int)
-	def __init__(self, process, params, title, w=WIDT_MAIN, h=HEIG_MAIN-150, parent=None):
+	def __init__(self, process, params, title, w, h, parent=None):
 		super(ProcessGui, self).__init__(parent)
 		self.title = title
 		self.resize(w, h)
@@ -99,7 +102,7 @@ class ProcessGui(QWidget):
 
 # ##################################################################
 class DBloadingGui(QWidget, Ui_LoadingWindow):
-	def __init__(self, modsql, parent=None):
+	def __init__(self, modsql, title, parent=None):
 		super(DBloadingGui, self).__init__(parent)
 		self.setupUi(self)
 		self.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -123,14 +126,13 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		self.tableWid3.setColumnWidth(0, 38)
 		# message
 		basedate = buildTabFromRequest(getrequest('datedatabase', modsql))[0]
-		if modsql == 'sqlite':
-			txt_message = modsql + " Base \nlast modified :\n"+str(basedate)
+		if isinstance(basedate, QDateTime):
+			txt_message = modsql + " Base \nlast modified :\n"+basedate.toString('dd/MM/yyyy hh:mm:ss')	
 		else:
-			txt_message = modsql + " Base \nlast modified :"+basedate.toString('hh:mm:ss')
-		self.lab_logo.setText(TITL_PROG+"\nConnected "+txt_message)
+			txt_message = modsql + " Base \nlast modified :\n"+basedate.replace('T',' ')
+		self.lab_logo.setText(title+"\nConnected "+txt_message)
 		# quit
 		self.btn_quit.clicked.connect(lambda: self.hide())
-		self.show()
 
 	def buildTab(self,  req, tab):
 		model = QSqlQueryModel(self)
