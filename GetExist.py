@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 # GetExist History Version
-#  1.26 viewers artworks
+#  1.28 fixed bugs + status bar
+#  1.27 combos label/year + fast speed viewer artworks
+#  1.26 viewer artworks
 #  1.25 gestion import tkinter + stats loading
 #  1.24 thunbnails + mousewheel + popup
 #  1.23 thunbnails link treeview
@@ -38,7 +40,7 @@ from tkinter import (Tk, Toplevel, Label, Button, Checkbutton, Entry, Canvas,
 					SUNKEN, SOLID, FLAT, N, S, W, E, X, Y, RIGHT, LEFT, BOTH,
 					TOP, END, BOTTOM, VERTICAL, HORIZONTAL, INSERT)
 from tkinter.filedialog import asksaveasfile
-from tkinter.ttk import Treeview, Combobox, Scrollbar
+from tkinter.ttk import Treeview, Combobox, Scrollbar, Separator
 from tkinter.font import Font
 from threading import Thread
 from pymysql import connect as connectmysql
@@ -52,13 +54,13 @@ from base64 import b64decode, decodestring, b64encode
 from time import sleep
 from queue import Queue, Empty
 # functions dev
-from GetExistPlayer import PlayerProcess
+from GetExistPlayer import PlayerProcess, PlayerAudio
 from GetExistCopyDatabaseToSqlite import CopyDatabaseInvent
 
 
 ###################################################################
 # CONSTANTS
-VERS_PROG = '1.26'
+VERS_PROG = '1.28'
 TITL_PROG = "DB Albums v{v} (2017)".format(v=VERS_PROG)
 PATH_PROG = path.dirname(__file__)
 LOGS_PROG = path.join(PATH_PROG, 'Logs')
@@ -86,7 +88,7 @@ SCOR_TRACKS = { 0 : 'track not listened',
 DISP_CJOKER = "*"
 # GUI
 WIDT_MAIN = 1280
-HEIG_MAIN = 1060
+HEIG_MAIN = 1090
 WIDT_PICM = 150
 # mysql
 # PRODS
@@ -109,7 +111,7 @@ PASS_MP3T = 'MwRbBR2HA8PFQjuu'
 BASE_MP3T = 'MP3'
 # gui
 NAME_EVT = ('LOSSLESS', 'MP3', 'LOSSLESS_TEST', 'MP3_TEST')
-CURT_EVT = 3 # 0 LOSSLESS
+CURT_EVT = 2 # 0 LOSSLESS
 WINS_ICO = "GetExist.ico"
 UNIX_ICO = 'GetExist.png'
 PICT_NCO = 'img-cd-blank.gif'
@@ -123,11 +125,11 @@ THUN_CO0 = 'black'
 THUN_CO1 = 'white'
 # REQS
 # combo Category
-D_REQUEST = "SELECT Category from DBALBUMS group by Category"
+D_REQUEST = "SELECT Category from DBALBUMS group by Category ORDER BY Category DESC"
 # combo Family
 E_REQUEST = "SELECT Family from DBALBUMS group by Family"
 # combo Label
-L_REQUEST = "SELECT DISTINCT Label from DBALBUMS WHERE Label<>'' ORDER BY Label"
+L_REQUEST = "SELECT DISTINCT Label from DBALBUMS ORDER BY Label"
 #combo year
 Y_REQUEST = "SELECT DISTINCT `Year` from DBALBUMS ORDER BY `Year` DESC"
 ### ALBUMS
@@ -154,7 +156,7 @@ A_POSITIO = {'ID_CD' 		: 0, 'Category'		: 1,
 A_C_WIDTH = (40,60,60,270,90,60,40,35,50,25,25,30,30,30,80,200,200,200,67,67)
 ### TRACKS
 #  request mysql/sqllite
-T_REQUEST = "SELECT ODR_Track AS `N°`, TAG_Artists AS Artist, TAG_Title AS Tittle, TAG_length AS Length, Score As SCR, TAG_Genres AS `Style`, FIL_Track AS File, REP_Track AS Folder, ID_TRACK AS `ID` FROM DBTRACKS WHERE ID_CD={id} ORDER BY ODR_Track"
+T_REQUEST = "SELECT ODR_Track AS `N°`, TAG_Artists AS Artist, TAG_Title AS Tittle, TAG_length AS Length, Score As SCR, TAG_Genres AS `Style`, FIL_Track AS File, REP_Track AS Folder, ID_TRACK AS `ID` FROM DBTRACKS WHERE ID_CD={id} ORDER BY REP_Track, ODR_Track"
 #  request search tracks
 B_REQUEST = "SELECT ID_CD AS ID FROM DBTRACKS AS TRK WHERE TAG_Artists like '%{search}%' OR TAG_Title like '%{search}%' GROUP BY ID_CD"
 #  Update Sore Track
@@ -250,7 +252,15 @@ def GetListColumns(con, req):
 	cur.close()
 	return col_names
 
-def SelectTOTab(con, req):
+def UpdateBaseScore(con, score, id, req):
+	"""Maj Mysql table Albums."""
+	req = req.format(score=score, id=id)
+	with con.cursor() as curs:
+		curs.execute(req)
+	curs.close()
+	con.commit()
+
+def BuildTabFromRequest(con, req):
 	"""Select Mysql/Sqlite to memory list."""
 	cur = con.cursor()    
 	cur.execute(req)
@@ -258,7 +268,7 @@ def SelectTOTab(con, req):
 	cur.close()
 	return rows
 
-def SelectTODict(con, req):
+def BuildDictFromRequest(con, req):
 	"""Select Mysql to memory object dict."""
 	with con.cursor() as curs:
 		curs.execute(req)
@@ -274,7 +284,7 @@ def BuildReqTCD(con, group, column, tableName, TDCName="TDC", TDCSum="1", LineSu
 	"""Pivot table Mysql/SQLite."""
 	# Collections
 	req = """SELECT `{column}` FROM {tableName} GROUP BY `{column}`;""".format(tableName=tableName,column=column)
-	col_names = SelectTOTab(con, req)
+	col_names = BuildTabFromRequest(con, req)
 	# sum/collections
 	ReqTDC = """SELECT * FROM (SELECT `{group}` AS '{TDCName}',""".format(group=group,TDCName=TDCName)
 	for col_name in col_names:
@@ -288,32 +298,6 @@ def BuildReqTCD(con, group, column, tableName, TDCName="TDC", TDCSum="1", LineSu
 		ReqTDC += """SUM({TDCSum}) FROM {tableName}""".format(tableName=tableName,TDCSum=TDCSum)
 	#ReqTDC += """ ORDER BY TOTAL"""
 	return ReqTDC
-
-def UpdateBaseScore(con, score, id, req):
-	"""Maj Mysql table Albums."""
-	req = req.format(score=score, id=id)
-	with con.cursor() as curs:
-		curs.execute(req)
-	curs.close()
-	con.commit()
-
-def CreateListCompletion(con, req=S_REQUEST):
-	"""list for utocompletion."""
-	Tabs = SelectTOTab(con, req)
-	completion_list = []
-	for row in Tabs:
-		completion_list.insert(0,row[0])
-	return completion_list
-
-def TreeviewSortColumn(tv, col, reverse):
-	"""sort column treeview."""
-	l = [(tv.set(k, col), k) for k in tv.get_children('')]
-	l.sort(reverse=reverse)
-	# rearrange items in sorted positions
-	for index, (val, k) in enumerate(l):
-		tv.move(k, '', index)
-	# reverse sort next time
-	tv.heading(col, command=lambda	c=col: TreeviewSortColumn(tv, c, not reverse))
 
 def BuildTree(con, frame, req, colWidth, line, scroll=False, align=W):
 	"""Build Columns treeview."""
@@ -339,36 +323,25 @@ def BuildTree(con, frame, req, colWidth, line, scroll=False, align=W):
 		tree.configure(yscrollcommand=ysb.set,xscrollcommand=xsb.set)
 	return (tree)
 
-def FillComboRequest(con, req):
+def TreeviewSortColumn(tv, col, reverse):
+	"""sort column treeview."""
+	l = [(tv.set(k, col), k) for k in tv.get_children('')]
+	l.sort(reverse=reverse)
+	# rearrange items in sorted positions
+	for index, (val, k) in enumerate(l):
+		tv.move(k, '', index)
+	# reverse sort next time
+	tv.heading(col, command=lambda	c=col: TreeviewSortColumn(tv, c, not reverse))
+
+def BuildListFromRequest(con, req, joker=DISP_CJOKER):
 	"""" fill combo tkinter."""
-	TLabs = SelectTOTab(con, req)
+	TLabs = BuildTabFromRequest(con, req)
 	TMods = []
-	TMods.append(DISP_CJOKER)
+	TMods.append(joker)
 	for row in TLabs:
 		TMods.append(''.join(map(str,row)))
+		#TMods.insert(0,row[0])
 	return (TMods)
-
-def ResizeImage(monimage, wmax, hmax):
-	# measures
-	width, height = monimage.size
-	if width>wmax or height>hmax:
-		# resize
-		if (width-wmax) > (height-hmax):
-			new_width  = wmax
-			new_height = int(new_width * height / width)
-		else:
-			new_height = hmax
-			new_width  = int(new_height * width / height)
-	else:
-		# zoom
-		if ((wmax/width)<(hmax/height)):
-			new_width  = wmax
-			new_height = int(new_width * height / width)
-		else:
-			new_height = hmax
-			new_width  = int(new_height * width / height)
-	monimage = monimage.resize((new_width, new_height), Image.ANTIALIAS)
-	return(monimage, new_width, new_height)
 
 def DisplayCounters(num = 0, text = '' ):
 	"""format 0 000 + plural."""
@@ -402,10 +375,10 @@ def BuildCover(con, pathcover, md5):
 	else:
 		# cover base64/mysql
 		req = C_REQUEST.format(MD5=md5)
-		Tableau = SelectTOTab(con, req)
+		Tableau = BuildTabFromRequest(con, req)
 		if len(Tableau) == 0:
 			monimage = Image.open(PICM_NCO)
-			print(pathcover) #############
+			print('err '+pathcover) #############
 		else:
 			monimage = Image.open(BytesIO(b64decode(Tableau[0][1])))
 	return (monimage)
@@ -418,10 +391,10 @@ def BuildMiniCover(con, pathcover, md5):
 	else:
 		# cover base64/mysql
 		req = M_REQUEST.format(MD5=md5)
-		Tableau = SelectTOTab(con, req)
+		Tableau = BuildTabFromRequest(con, req)
 		if len(Tableau) == 0:
 			monimage = Image.open(PICM_NCO)
-			print(pathcover) #############
+			print('err '+pathcover) #############
 		else:
 			monimage = Image.open(BytesIO(b64decode(Tableau[0][1])))
 	return (monimage)
@@ -432,7 +405,7 @@ def BuildFileCover(con, namefile, pathcover, md5):
 	if pathcover[0:len(TEXT_NCO)] != TEXT_NCO: 
 		#mysql
 		req = C_REQUEST.format(MD5=md5)
-		Tableau = SelectTOTab(con, req)
+		Tableau = BuildTabFromRequest(con, req)
 		extension = path.splitext(pathcover)[1][1:]
 		filecover = namefile+'.'+extension
 		cover = open(filecover, "wb")
@@ -447,13 +420,21 @@ def GetListFiles(folder, masks):
 			for subfolder in subfolders:
 				GetListFiles(subfolder, masks)
 		for filename in filenames:
-			if filename[-4:] in masks:
-				yield path.join(folderName,filename)
+			for xmask in masks:
+				if filename[-4:] in xmask:
+					yield path.join(folderName,filename)
 
 def OpenComand(progra, params):
 	"""Execute une commande system."""
 	command = """{tprogra} "{tparams}" """.format(tprogra=progra,tparams=params)
 	system(command)
+
+def RunProgExecWin(prog, *argv):
+	"""Execut a program no wait, no link."""
+	Command = [prog]
+	for arg in argv:
+		Command += (arg,)
+	Popen(Command, close_fds=True)
 
 # opening-a-folder-in-explorer-nautilus-mac-thingie
 if platform == 'darwin':
@@ -465,20 +446,6 @@ elif platform == 'linux2':
 elif platform == 'win32':
 	def openFolder(path):
 		OpenComand('explorer', path)
-
-def ExcecutePowershell(script, *argv):
-	Command = [r'powershell.exe',
-				'-ExecutionPolicy', 'RemoteSigned',
-				'-File', 
-				script]
-	for arg in argv:
-		Command += (arg,)
-	p = Popen(Command, stdin=stdout, stdout=stdout, stderr=stdout)
-	return p
-	#out, err = p.communicate()
-	#returncode = p.wait()
-	#print (returncode)
-	#print (out)
 
 def BuildCommandPowershell(script, *argv):
 	Command = [r'powershell.exe',
@@ -657,7 +624,7 @@ class LoadingGui():
 			self.MyTopLevel.update_idletasks()
 	
 	def BuildTreeStats(self, req):
-		Tabs = SelectTOTab(self.con, req)
+		Tabs = BuildTabFromRequest(self.con, req)
 		# ajust window height
 		linestabs = 6
 		if len(Tabs)>linestabs:
@@ -714,7 +681,7 @@ class CoverViewGui():
 
 class CoversArtWorkViewGui():
 	"""Fenetre view cover."""
-	def __init__(self, master, pathcover, pathalbum, namealbum):
+	def __init__(self, master, pathartworks, nametittle, modecreate=None):
 		# Windows
 		self.master = master
 		self.master.geometry("{w}x{h}".format(w=WIDT_MAIN,h=HEIG_MAIN))
@@ -725,19 +692,21 @@ class CoversArtWorkViewGui():
 		CenterWindows(self.master)
 		
 		# build list covers
-		self.namealbum = namealbum
-		fileslist = list(GetListFiles(pathalbum, MASKCOVERS))
+		self.nametittle = nametittle
+		fileslist = list(GetListFiles(pathartworks, MASKCOVERS))
 		self.numbersCov = len(fileslist)
 		
 		# build labels thunbnails
 		self.frameThunbnails = VerticalScrolledFrame(self.master , WIDT_MAIN , WIDT_PICM+4)
 		self.frameThunbnails.pack(side=TOP, anchor=W, fill=BOTH, padx=5, pady=5)
 		self.listartwork = []
+		self.listimage = []
 		maxCol = int(WIDT_MAIN/WIDT_PICM)
 		curRow = curCol = cptIte = 0
 		self.master.update_idletasks()
 		for filelist in fileslist:
 			monimage = Image.open(filelist)
+			self.listimage.append(monimage)
 			monimage = monimage.resize((WIDT_PICM, WIDT_PICM), Image.ANTIALIAS)
 			photo = ImageTk.PhotoImage(monimage)
 			label = Label(self.frameThunbnails.interior, image = photo, text=filelist)
@@ -748,6 +717,20 @@ class CoversArtWorkViewGui():
 			label.bind("<Button-1>", lambda event,a=cptIte: self.OnSelectThunbnail(event,a))
 			label.bind("<Enter>", lambda event: event.widget.config(relief=SOLID))
 			label.bind("<Leave>", lambda event: event.widget.config(relief=FLAT))
+			# build large cover
+			if cptIte==0: 
+				# build cover
+				self.framecover = Frame(self.master)
+				self.framecover.pack(side=TOP, anchor=W, fill=BOTH)
+				self.cover = Label(self.framecover, background=THUN_CO0)
+				self.cover.pack(side=TOP, fill=BOTH, expand=TRUE)
+				self.aMenu = Menu(self.framecover, tearoff=0)
+				self.aMenu.add_command(label="Create cover file...", command=self.CreateFileCover)
+				# only if no cover file
+				if modecreate[0:len(TEXT_NCO)] == TEXT_NCO:
+					self.master.bind("<Button-3>", self.popupThunbnail)
+				# display first artvork
+				self.OnSelectThunbnail(None, 0)
 			# count thunbnails
 			cptIte = cptIte + 1
 			# position
@@ -756,38 +739,37 @@ class CoversArtWorkViewGui():
 				curCol = 0
 				curRow = curRow + 1
 		
-		# build cover
-		self.framecover = Frame(self.master)
-		self.framecover.pack(side=TOP, anchor=W, fill=BOTH)
-		self.cover = Label(self.framecover, background=THUN_CO0)
-		self.cover.pack(side=TOP, fill=BOTH, expand=TRUE)
-		self.aMenu = Menu(self.framecover, tearoff=0)
-		self.aMenu.add_command(label="Create cover file...", command=self.CreateFileCover)
-		# only if no cover file
-		if pathcover[0:len(TEXT_NCO)] == TEXT_NCO:
-			self.master.bind("<Button-3>", self.popupThunbnail)
-		self.OnSelectThunbnail(None, 0)
-		
 	def OnSelectThunbnail(self, event, numlabel):
 		curlabel = self.listartwork[numlabel]
 		self.filelist = curlabel.cget('text')
-		self.monimage = Image.open(self.filelist)
+		self.monimage = self.listimage[numlabel]
 		# measures
-		width, height = self.monimage.size
-		self.monimage, new_width, new_height = ResizeImage(self.monimage, WIDT_MAIN, HEIG_MAIN-WIDT_PICM+4)
+		width, height, new_width, new_height = self.ResizeImage(WIDT_MAIN, HEIG_MAIN-WIDT_PICM+4)
 		photo = ImageTk.PhotoImage(self.monimage)
 		self.cover.configure(image = photo)
 		self.cover.image = photo
-		self.master.update_idletasks()
 		# windows
-		self.master.title(TITL_PROG+" : [view ArtWorks: "+self.namealbum+'] {c}/{n} "{name}" A[{w}x{h}] O[{wo}x{ho}]'.format(c=str(numlabel+1), 
+		self.master.title(TITL_PROG+" : [view ArtWorks: "+self.nametittle+'] {c}/{n} "{name}" A[{w}x{h}] O[{wo}x{ho}]'.format(c=str(numlabel+1), 
 																		 n=str(len(self.listartwork)), 
 																		 w=new_width, 
 																		 h=new_height, 
 																		 name=path.basename(self.filelist), 
 																		 wo=str(width), 
 																		 ho=str(height)))
-		#self.master.geometry("{w}x{h}".format(w=WIDT_MAIN,h=new_height+WIDT_PICM+4))
+		self.master.update_idletasks()
+	
+	def ResizeImage(self, wmax, hmax):
+		# measures
+		width, height = self.monimage.size
+		# resize
+		if ((wmax/width)<(hmax/height)):
+			new_width  = wmax
+			new_height = int(new_width * height / width)
+		else:
+			new_height = hmax
+			new_width  = int(new_height * width / height)
+		self.monimage = self.monimage.resize((new_width, new_height), Image.ANTIALIAS)
+		return(width, height, new_width, new_height)
 	
 	def popupThunbnail(self, event):
 		self.aMenu.post(event.x_root, event.y_root)
@@ -923,7 +905,7 @@ class CoverMainGui(Tk):
 		labelDir.pack(side="left", padx=5, pady=5)
 		# ligne de saisie
 		self.var_texte = StringVar(None)
-		self.ligne_texte = AutocompleteEntry(cadresaisie, textvariable=self.var_texte, width=30)
+		self.ligne_texte = AutocompleteEntry(cadresaisie, textvariable=self.var_texte, width=27)
 		self.ligne_texte.bind("<Return>", self.OnPressEnter)
 		self.ligne_texte.focus_set()
 		self.ligne_texte.pack(side="left", padx=5, pady=5)
@@ -972,6 +954,8 @@ class CoverMainGui(Tk):
 		self.con, self.MODE_SQLI = ConnectInvent(self.combo_value.get())
 		
 		#### LIST ALBUMS
+		self.separ= Separator(self.master ,orient=HORIZONTAL)
+		self.separ.pack(side=TOP, fill=BOTH)
 		self.frameThunbnails = VerticalScrolledFrame(self.master , WIDT_MAIN , (WIDT_PICM*2)+(4*2))
 		self.frameThunbnails.pack(side=TOP, anchor=W, fill=BOTH, padx=5, pady=5)
 		self.framealbumlist = Frame(self)
@@ -1020,7 +1004,7 @@ class CoverMainGui(Tk):
 		self.posalbum_scale.pack(side=RIGHT, padx=15, pady=5)
 		self.ScoAlbumlb = StringVar()
 		self.scorealbum_label = Label(self.cadrelabelalb, textvariable=self.ScoAlbumlb, font=self.customFont)
-		self.btn_enrscralb = Button(self.cadrelabelalb, text='Save', command = self.OnPressButtonEnrScoreAlbum)
+		self.btn_enrscralb = Button(self.cadrelabelalb, text='Update', command = self.OnPressButtonEnrScoreAlbum)
 		self.scorealbum_label.pack(side=RIGHT, padx=5, pady=5)
 		# TRACKS
 		self.treealb = BuildTree(self.con, self.cadrealbum, T_REQUEST.format(id=0), T_C_WIDTH, 15, True)
@@ -1032,9 +1016,6 @@ class CoverMainGui(Tk):
 		# SCORE TRACK
 		self.cadrescoretrack = Frame(self)
 		self.cadrescoretrack.pack(fill=BOTH, side=TOP)
-		self.MessageInfo = StringVar()
-		self.MessageInfo_label = Label(self.cadrescoretrack, textvariable=self.MessageInfo, anchor=W, font=self.customFont, bd=1, relief=SUNKEN, width=int((WIDT_MAIN/2)/8))
-		self.MessageInfo_label.pack(side=LEFT, padx=5, pady=5)
 		self.postrack_scale = Scale( self.cadrescoretrack,
 										command=self.ModifyScoreTrack, 
 										showvalue=0, 
@@ -1046,8 +1027,14 @@ class CoverMainGui(Tk):
 		self.ScoTracklb = StringVar()
 		self.scoretrack_label = Label(self.cadrescoretrack, textvariable=self.ScoTracklb, font=self.customFont)
 		self.scoretrack_label.pack(side=RIGHT, padx=5, pady=5)
-		self.btn_enrscrtrk = Button(self.cadrescoretrack, text='Save', command = self.OnPressButtonEnrScoreTrack)
-		
+		self.btn_enrscrtrk = Button(self.cadrescoretrack, text='Update', command = self.OnPressButtonEnrScoreTrack)
+		# Status Bar
+		self.StatusBar = Frame(self)
+		self.StatusBar.pack(fill=BOTH, side=TOP)
+		self.MessageInfo = StringVar()
+		self.MessageInfo_label = Label(self.StatusBar, textvariable=self.MessageInfo, anchor=W, font=self.customFont, bd=1, relief=SUNKEN)
+		self.MessageInfo_label.pack(fill=X, padx=5, pady=5) 
+
 		#### LOADING ENVT
 		self.labels = []
 		self.tplay = None
@@ -1266,7 +1253,7 @@ class CoverMainGui(Tk):
 			self.loadingWin = Toplevel(self)
 			LoadingGui(self.loadingWin, self.con, self.MODE_SQLI, 0)
 			# auto-completion
-			completion_list = CreateListCompletion(self.con)
+			completion_list = BuildListFromRequest(self.con, S_REQUEST, '')
 			self.ligne_texte.set_completion_list(completion_list)
 			# tittle
 			if self.MODE_SQLI:
@@ -1276,18 +1263,18 @@ class CoverMainGui(Tk):
 																			 database = self.Envs,
 																			 heure = self.condat))
 			# montage table mysql en memoire
-			self.Tabs = SelectTOTab(self.con, (Z_REQUEST if self.MODE_SQLI else A_REQUEST))
+			self.Tabs = BuildTabFromRequest(self.con, (Z_REQUEST if self.MODE_SQLI else A_REQUEST))
 			# init combos
-			self.Combostyle['values'] = FillComboRequest(self.con, D_REQUEST)
+			self.Combostyle['values'] = BuildListFromRequest(self.con, D_REQUEST)
 			self.Combostyle.bind("<<ComboboxSelected>>", self.OnPressEnter)
 			self.Combostyle.current(0)
-			self.Combofamily['values'] = FillComboRequest(self.con, E_REQUEST)
+			self.Combofamily['values'] = BuildListFromRequest(self.con, E_REQUEST)
 			self.Combofamily.bind("<<ComboboxSelected>>", self.OnPressEnter)
 			self.Combofamily.current(0)
-			self.Combolabelm['values'] = FillComboRequest(self.con, L_REQUEST)
+			self.Combolabelm['values'] = BuildListFromRequest(self.con, L_REQUEST)
 			self.Combolabelm.bind("<<ComboboxSelected>>", self.OnPressEnter)
 			self.Combolabelm.current(0)
-			self.Comboyearc['values'] = FillComboRequest(self.con, Y_REQUEST)
+			self.Comboyearc['values'] = BuildListFromRequest(self.con, Y_REQUEST)
 			self.Comboyearc.bind("<<ComboboxSelected>>", self.OnPressEnter)
 			self.Comboyearc.current(0)
 			# all albums to treeview
@@ -1301,7 +1288,7 @@ class CoverMainGui(Tk):
 		txt_search = self.var_texte.get()
 		# SEARCH IN TRACKS
 		if self.searchtracks.get() == 1:
-			lst_id = SelectTOTab(self.con, B_REQUEST.format(search=txt_search))
+			lst_id = BuildTabFromRequest(self.con, B_REQUEST.format(search=txt_search))
 		else:
 			lst_id = []
 		# THUNBNAILS
@@ -1314,6 +1301,7 @@ class CoverMainGui(Tk):
 		if self.tree.get_children():
 			for i in self.tree.get_children():
 				self.tree.delete(i)
+		self.update_idletasks()
 		# insert
 		counter = cpt_trk = cpt_cds = cpt_siz = cpt_len = 0
 		for row in self.Tabs:
@@ -1351,7 +1339,7 @@ class CoverMainGui(Tk):
 			else:
 				# seoncd -> Days
 				txt_dur = str(int(((cpt_len/60/60)/24)*10)/10) + ' Days'
-			self.MessageInfo.set("Search Result \"{sch}\" :  {alb} / {trk} / {cds} / {siz} / {dur} ".format(sch = (txt_search if len(txt_search)>0 else 'all'),
+			self.MessageInfo.set("Search Result \"{sch}\" =  {alb} | {trk} | {cds} | {siz} | {dur} ".format(sch = (txt_search if len(txt_search)>0 else 'all'),
 																						alb = DisplayCounters(counter, 'Album'),
 																						cds =  DisplayCounters(cpt_cds, 'CD'),
 																						trk = DisplayCounters(cpt_trk, 'Track'),
@@ -1401,7 +1389,7 @@ class CoverMainGui(Tk):
 						self.treealb.delete(i)
 				req = T_REQUEST.format(id=self.Id_CD)
 				counter = cpt_len = 0
-				tracks = SelectTOTab(self.con, req)
+				tracks = BuildTabFromRequest(self.con, req)
 				for track in tracks:
 					# SEARCH IN TRACKS
 					if self.searchtracks.get() == 1 and (self.var_texte.get().lower() in track[A_POSITIO['Category']].lower() or self.var_texte.get().lower() in track[A_POSITIO['Family']].lower()):
@@ -1479,7 +1467,8 @@ class CoverMainGui(Tk):
 	
 	def OpenTagScan(self):
 		"""Ouvre TAGSCAN."""
-		OpenComand(TAGS_SCAN, self.AlbumPath)
+		#OpenComand(TAGS_SCAN, self.AlbumPath)
+		RunProgExecWin(TAGS_SCAN, self.AlbumPath)
 	
 	def playmedia(self):
 		"""Player Audio thread pyQT5."""
@@ -1490,16 +1479,17 @@ class CoverMainGui(Tk):
 																self.curLign['values'][T_POSITIO['FIL_Track']],
 																self.winfo_x()+5, 
 																self.winfo_y()+self.winfo_height()-45))
-			self.tplay.daemon = True
+			self.tplay.daemon = False
 			self.tplay.start()
 		else:
 			# only one player run
 			if not self.tplay.isAlive():
+				print(self.tplay)
 				self.tplay = Thread(target = PlayerProcess, args = (self.curLign['values'][T_POSITIO['REP_Track']], 
 																	self.curLign['values'][T_POSITIO['FIL_Track']],
 																	self.winfo_x()+5, 
 																	self.winfo_y()+self.winfo_height()-45))
-				self.tplay.daemon = True
+				self.tplay.daemon = False
 				self.tplay.start()
 	
 	def ExportAlbums(self):
@@ -1554,7 +1544,6 @@ class CoverMainGui(Tk):
 	
 	def UpdateAlbum(self):
 		"""Execute powershell Script update albums infos."""
-		#p = ExcecutePowershell(PWSH_SCRU, '-Album_IDCD', str(self.Id_CD), '-Envt', self.Envs, '-Logs', LOGS_PROG)
 		self.GUIUpdateAlbum = Toplevel(self.master)
 		eCommand = BuildCommandPowershell(PWSH_SCRU, '-Album_IDCD', str(self.Id_CD), '-Envt', self.Envs, '-Logs', LOGS_PROG)
 		DisplaySubprocessGui(self.GUIUpdateAlbum, eCommand, 'Execution PowerShell : '+path.basename(PWSH_SCRU)+' -Album_IDCD '+str(self.Id_CD)+' -Envt "'+self.Envs+'"')
@@ -1573,8 +1562,7 @@ class CoverMainGui(Tk):
 	def ViewArtWorks(self):
 		"""views covers storage."""
 		self.coverWin = Toplevel(self.master)
-		#CoversViewGui(self.coverWin, self.pathcover, self.AlbumPath, self.albumname)
-		CoversArtWorkViewGui(self.coverWin, self.pathcover, self.AlbumPath, self.albumname)
+		CoversArtWorkViewGui(self.coverWin, self.AlbumPath, self.albumname, self.pathcover)
 
 
 ###################################################################

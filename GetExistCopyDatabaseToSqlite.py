@@ -91,8 +91,8 @@ def CopyDatabaseInvent(conMySQL, BaseNameSQLite, logname):
 	with con:
 		cur = con.cursor()
 		cur.execute("DROP TABLE IF EXISTS {t}".format(t=NAME_TABL))
-		cur.execute("CREATE TABLE {t}(MD5 TEXT, Cover64 BLOB)".format(t=NAME_TABL))
-		cur.executemany("INSERT INTO {t} VALUES(?, ?)".format(t=NAME_TABL), Tabs)	
+		cur.execute("CREATE TABLE {t}(MD5 TEXT, Cover64 BLOB, MiniCover64 BLOB)".format(t=NAME_TABL))
+		cur.executemany("INSERT INTO {t} VALUES(?, ?, ?)".format(t=NAME_TABL), Tabs)	
 		cur.execute("CREATE UNIQUE INDEX DBCOVERS_ndx_md5 ON DBCOVERS(MD5)")
 	con.commit() 
 
