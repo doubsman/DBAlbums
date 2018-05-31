@@ -1,0 +1,45 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170720104450
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File R:\Projets\ERIC6\DBALBUMSQT5\PS1\UPDATE_ALBUMS.ps1 -listID_CD 98 -Envt LOSSLESS_TEST
+ID de processus : 8404
+PSVersion: 5.1.14393.1480
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1480
+BuildVersion: 10.0.14393.1480
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+                                                                                               
+                                                                                               
+                                                                                               
+                                                                                               
+ ##     ######  #####  ###### ###    ######  ###### ######        ####### ######  ##### #######
+ ##     ##  ## ###    ###     ###    ###    ###     ##              ###   ###    ###      ###  
+ ##    ###  ######    ###     ###    ###    ###    ###              ###   ###    ###      ###  
+ ##    ###  #######    ####   ###    ######  ####   ####            ###   ###### ####     ###  
+ ##    ###  ###   ###    #### ###    ###       ####   ####          ###   ###       ###   ###  
+ ##    ###  ###    ###    ### ###    ###        ###     ##          ###   ###        ###  ###  
+ ##    ### ###     ###    ### ###    ###        ###     ##          ###   ###        ###  ###  
+ ###### #####  ###### ######  ###### ###### ###### ######           ###   ###### ######   ###  
+                                                                                               
+                                                                                               
+                                                          #########
+********** 10:44:50 -- Durée: 0 sec -- START UPDATE_ALBUMS_LOSSLESS_TEST ***********************************************************************************
+********** 10:44:51 -- Durée: 1 sec -- uptade album ID=98 (1/1) ********************************************************************************************
+No update required for : Haldolium - Skyfall (Feat  Jan Schmidt)
+      | remove R:\Projets\ERIC6\DBALBUMSQT5\LOG\20170717194016_UPDATE_ALBUMS_LOSSLESS_TEST.log
+********** 10:44:51 -- Durée: 1 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170720104451
+**********************

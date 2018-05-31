@@ -1,8 +1,23 @@
 ############################################################################################
 # Construction INVENT
-$Process = "BUILD_INVENT_FUNCTIONS";
-# Init Variables 
-$version = '1.09';
+$version = '1.11';
+
+#################
+$TXTNOPICTURE = 'No Picture'
+# base de données  
+$Tbl_Albums = "DBALBUMS";
+$Tbl_Tracks = "DBTRACKS";
+$Tbl_Covers = "DBCOVERS";
+$Tbl_Errors = "DBERRORS";
+# globaux
+$global:AlBumArtDownloader = 'C:\Program Files\AlbumArtDownloader\AlbumArt.exe';
+$global:Compteur = 0;
+$global:cptIDTK = 0;
+$global:FileDllTag = "$path\taglib-sharp.dll";
+$global:MaskMusic = @('.flac','.ape','.wma','.mp3','.wv','.aac','.mpc');
+$global:MaskCover = @('.jpg','.jpeg','.png','.bmp','.tif','.bmp');
+$global:CoverAlbum = @('cover.jpg','Cover.jpg','cover.jpeg','cover.png','front.jpg','folder.jpg','folder.jpeg');
+$global:Families =  @{"Physique"="Colonne";"Label/Physique"="Labels";"Download"="Download"};
 
 # Write-Host Waiting
 Function Super-Title{
@@ -20,16 +35,65 @@ Function Super-Title{
 	} Else {
 		$Length = [string]$Minute + ' min(s)';
 	}
-	$Tittle = $Deco*10 + ' ' + (Get-Date).tostring('HH:mm:ss') + " -- Durée: $Length -- $Label " + $Deco*($Width-33-$Label.Length-$Length.Length) + "`n`r";
+	$nbDEco = ($Width-33-$Label.Length-$Length.Length)
+	if ($nbDEco -lt 0){
+		$nbDEco=1;
+	}
+	$Tittle = $Deco*10 + ' ' + (Get-Date).tostring('HH:mm:ss') + " -- Durée: $Length -- $Label " + $Deco*($nbDEco) + "`n`r";
 	Write-Host -foregroundcolor 'Green' $Tittle;
+}
+
+Function ConnectEnvt{
+	param ([parameter(Mandatory = $true)][string] $Envt)
+	
+	# environnement
+	Switch ($Envt){
+			{$_ -eq "LOSSLESS"} {
+				$ErrorActionPreference = "Continue";
+				$racine = '\\HOMERSTATION\_LossLess';
+				$serv = "homerstation";
+				$user = "AdmInvent";
+				$db = "Invent";
+				$password = "JMctOz7a6TWnrJHB86pL";
+				$port = "3306";
+			}
+			{$_ -eq "MP3"} {
+				$ErrorActionPreference = "Continue";
+				$racine = '\\HOMERSTATION\_Mp3';
+				$serv = 'homerstation'
+				$user = 'admInventMP3'
+				$db = "InventMP3";
+				$password = 'nuDbC6spVZxtkKC8'
+				$port = "3306";
+			}
+			{$_ -eq "MP3_TEST"} {
+				$ErrorActionPreference = "Stop";
+				$racine = '\\HOMERSTATION\_Mp3';
+				$serv = "doubbigstation";
+				$user = "admInvent";
+				$db = "MP3";
+				$password = "MwRbBR2HA8PFQjuu";
+				$port = "3306";
+			}
+			default { # LOSSLESS_TEST
+				$ErrorActionPreference = "Stop";
+				$racine = 'E:\Work\ZTest\TAG_bluid';
+				$port = "3306";
+				$serv = 'doubbigstation'
+				$user = 'admInvent'
+				$db = "Invent";
+				$password = 'MwRbBR2HA8PFQjuu'
+			}
+	}
+	$MySqlCon = Connect-MySQL -MySQLHost $serv -user $user -password $password -Database $db -port $port;
+	Return($MySqlCon, $racine)
 }
 
 Function Run-UpdateAlbum{
 	param ([parameter(Mandatory = $true)][string] $ID_CD,
 		   [parameter(Mandatory = $true)][bool] $LossLess)
 	
-	
-	$Album_Exist = Get-AlbumMysql -ID_CD $ID_CD;
+	$Album_Exist = Get-AlbumIDMysql -ID_CD $ID_CD;
 	If ($Album_Exist){
 		$Album_Path = Test-Path -LiteralPath $Album_Exist.path
 		if ($Album_Path){
@@ -38,7 +102,6 @@ Function Run-UpdateAlbum{
 			#path modified
 			write-host -foregroundcolor "Magenta" ('...path modified '+$Album_Exist.path)
 			$Album_Rep = Get-childItem -Path ($Album_Exist.path+'*') | Where-Object { $_.PSIsContainer } | Select-Object Name,Fullname,LastWriteTime;
-			write-host($Album_Rep.length)
 			If ($Album_Rep.length -eq 0){
 				#path not find
 				write-host -foregroundcolor "Magenta" ('...path not find: Delete Album')
@@ -55,62 +118,144 @@ Function Run-UpdateAlbum{
 				write-host -foregroundcolor "Magenta" ('...path ok...... '+$Album_Rep.Fullname)
 			}
 		}
-		# ANALYSE ALBUM
-		$Family = $Album_Exist.Family
-		$Category = $Album_Exist.Category
-		$Album_Result = Get-AnalyseAlb -Album $Album_Rep -Family $Family -Category $Category -LossLess $LossLess;;
-		$Album_Result.Date_Insert = ($Album_Exist.Date_Insert).ToString("yyyy-MM-dd HH:mm:ss");
-		$Album_Result.ID_CD = $Album_Exist.ID_CD
-		$Album_Result.Statut = 'PRESENT';
-		# ANALYSE TRACKS
-		Switch ($Album_Result.Typ_Tag){
-			'TAG' {
-				$TAGS_Result = (Get-ListeTag -AlbumTAG $Album_Result);
-			}
-			'CUE' {
-				$TAGS_Result = (Get-ListeCue -AlbumCUE $Album_Result);
-			}
-		}
-		If ($TAGS_Result){
-			$TAGS_Result | ForEach-Object { $_.Statut='PRESENT' }
-			# MAJ ALBUM INFOS
-			$Album_Result.Qty_Tracks = ($TAGS_Result | Measure-Object).count;
-			$Duration = 0;
-			$TAGS_Result | Group-Object ID_CD | %{$Duration += ($_.Group | Measure-Object TAG_Duration -Sum).Sum};
-			$ts = New-TimeSpan -Seconds $Duration;
-			$Album_Result.Duration = $Duration;
-			$Album_Result.Length = ('{0:00}:{1:00}:{2:00}' -f $ts.Hours,$ts.Minutes,$ts.Seconds);
-			$TAGS_Result |  %{$maxCd = ($_ | Measure-Object TAG_Disc -Maximum).Maximum};
-			If (($Album_Result.Qty_CD -ne $maxCd) -and ($maxCd -ne 0)){
-				Write-Host -foregroundcolor "yellow" (' '*10+" | "+'probleme Qty_CD virtuelcd:'+$maxCd+'|'+'repcd:'+$Album_Result.Qty_CD)
-				if ($Album_Result.Name -match [string]$maxCd+"CD"){
-					Write-Host -foregroundcolor "magenta" (' '*10+" | "+'correction Qty_CD = virtuelcd:'+$maxCd+' | '+'old:'+$Album_Result.Qty_CD)
-					$Album_Result.Qty_CD = $maxCd
+		$Recent_Date = ((Get-ChildItem -LiteralPath $Album_Rep.FullName | Select LastWriteTime).LastWriteTime | measure-object -maximum).maximum
+		If ((($Recent_Date -gt $Album_Exist.Date_Modifs) -or ((Get-Date $Album_Rep.LastWriteTime) -gt (Get-Date ($Album_Exist.Date_Modifs))))){
+			# ANALYSE ALBUM
+			$Family = $Album_Exist.Family
+			$Category = $Album_Exist.Category
+			$Album_Result = Get-AnalyseAlb -Album $Album_Rep -Family $Family -Category $Category -LossLess $LossLess;;
+			$Album_Result.Date_Insert = ($Album_Exist.Date_Insert).ToString("yyyy-MM-dd HH:mm:ss");
+			$Album_Result.ID_CD = $Album_Exist.ID_CD
+			$Album_Result.Statut = 'PRESENT';
+			# ANALYSE TRACKS
+			Switch ($Album_Result.Typ_Tag){
+				'TAG' {
+					$TAGS_Result = (Get-ListeTag -AlbumTAG $Album_Result);
+				}
+				'CUE' {
+					$TAGS_Result = (Get-ListeCue -AlbumCUE $Album_Result);
 				}
 			}
-			# YEAR via tracks
-			If ($Album_Result.Year -eq "????"){
-				$Album_Result.Year = $TAGS_Result[0].TAG_Year
+			If ($TAGS_Result){
+				$TAGS_Result | ForEach-Object { $_.Statut='PRESENT' }
+				# MAJ ALBUM INFOS
+				$Album_Result.Qty_Tracks = ($TAGS_Result | Measure-Object).count;
+				$Duration = 0;
+				$TAGS_Result | Group-Object ID_CD | %{$Duration += ($_.Group | Measure-Object TAG_Duration -Sum).Sum};
+				$ts = New-TimeSpan -Seconds $Duration;
+				$Album_Result.Duration = $Duration;
+				$Album_Result.Length = ('{0:00}:{1:00}:{2:00}' -f $ts.Hours,$ts.Minutes,$ts.Seconds);
+				$TAGS_Result |  %{$maxCd = ($_ | Measure-Object TAG_Disc -Maximum).Maximum};
+				If (($Album_Result.Qty_CD -ne $maxCd) -and ($maxCd -ne 0)){
+					Write-Host -foregroundcolor "yellow" (' '*10+" | "+'probleme Qty_CD virtuelcd:'+$maxCd+'|'+'repcd:'+$Album_Result.Qty_CD)
+					if ($Album_Result.Name -match [string]$maxCd+"CD"){
+						Write-Host -foregroundcolor "magenta" (' '*10+" | "+'correction Qty_CD = virtuelcd:'+$maxCd+' | '+'old:'+$Album_Result.Qty_CD)
+						$Album_Result.Qty_CD = $maxCd
+					}
+				}
+				# YEAR via tracks
+				If ($Album_Result.Year -eq "????"){
+					$Album_Result.Year = $TAGS_Result[0].TAG_Year
+				}
+			} Else {
+				Write-Host -foregroundcolor "yellow" -NoNewLine '#pb tag track';
+				Anno-toMySQL -MySqlCon $MySqlCon -ID_CD $Album_Result.ID_CD -Path $Album_Result.Path -Mess 'Error No Track List';
+				break
 			}
+			# UPDATE Album
+			UpdateLineFromArrayToMySQL -MySqlCon $MySqlCon -TabPower $Album_Result -TblMysql $Tbl_Albums -Key "ID_CD"
+			# ENR Liste TRACKS mysql
+			$reqStr = "DELETE FROM $Tbl_Tracks WHERE ``ID_CD``="+$Album_Exist.ID_CD;
+			$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
+			ArrayToMySQL -MySqlCon $MySqlCon -TabPower $TAGS_Result -TblMysql $Tbl_Tracks -colAutoincrement 'ID_TRACK';
+			# ENR COVER
+			$reqStr = "DELETE FROM $Tbl_Covers WHERE ``MD5``='"+[string]$Album_Exist.MD5+"'";
+			$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
+			Covers-ToMySQL -MySqlCon $MySqlCon -PathCover $Album_Result.cover -MD5 $Album_Result.MD5;
+			
+			Write-host ($Album_Result | Select-Object ID_CD, Name, Qty_Tracks, Qty_CD, Qty_Audio, Qty_covers, Year, Length, Path | Format-Table | Out-String -width 160)
+			Write-host ($TAGS_Result | Select-Object ODR_Track, FIL_Track, TAG_Albumartists, TAG_Artists, TAG_Album, TAG_Length, TAG_Genres | Format-Table | Out-String -width 160)
 		} Else {
-			Write-Host -foregroundcolor "yellow" -NoNewLine '#pb tag track';
-			Anno-toMySQL -MySqlCon $MySqlCon -ID_CD $Album_Result.ID_CD -Path $Album_Result.Path -Mess 'Error No Track List';
-			break
+			Write-Host ("No update required for : "+$Album_Exist.Name)
 		}
-		# UPDATE Album
-		UpdateLineFromArrayToMySQL -MySqlCon $MySqlCon -TabPower $Album_Result -TblMysql $Tbl_Albums -Key "ID_CD"
-		# ENR Liste TRACKS mysql
-		$reqStr = "DELETE FROM $Tbl_Tracks WHERE ``ID_CD``="+$Album_Exist.ID_CD;
-		$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
-		ArrayToMySQL -MySqlCon $MySqlCon -TabPower $TAGS_Result -TblMysql $Tbl_Tracks -colAutoincrement 'ID_TRACK';
-		# ENR COVER
-		$reqStr = "DELETE FROM $Tbl_Covers WHERE ``MD5``='"+[string]$Album_Exist.MD5+"'";
-		$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
-		Covers-ToMySQL -MySqlCon $MySqlCon -PathCover $Album_Result.cover -MD5 $Album_Result.MD5;
-		
-		Write-host ($Album_Result | Select-Object ID_CD, Name, Path, Qty_CD, Qty_Audio, Year, Length | Format-Table | Out-String)
-		Write-host ($TAGS_Result | Select-Object ODR_Track, FIL_Track, TAG_Artists, TAG_Album, TAG_Genres, TAG_Length  | Format-Table | Out-String)
 	}
+}
+
+Function Run-AddNewAlbum{
+	param ([parameter(Mandatory = $true)][string] $AlbumRep,
+		   [parameter(Mandatory = $true)][bool] $LossLess)
+	
+	$Album_Result = $TAGS_Result = @();
+	$Album_Rep = Get-Item -LiteralPath "$AlbumRep"
+	$Category = $Album_Rep.Fullname.Split("\")[4]
+	$Position = $Album_Rep.Fullname.Split("\")[5];
+	$Family = ($Families.GetEnumerator() | Where-Object { $Position -Match $_.Value}).Name;
+	$Album_Exist = (Get-AlbumMD5Mysql -AlbumExist $Album_Rep);
+	If (!($LossLess)){
+		Write-Host -foregroundcolor "yellow" (' '*10+" | only LOSSLESS DATABASE")
+		break
+	}
+	# no audio = next album
+	$Audi_Count = (Get-ChildItem -LiteralPath $Album_Rep.Fullname -file -recurse | Where-Object { $global:MaskMusic -contains $_.Extension }).count;
+	if ($Audi_Count -eq 0){
+		Write-Host -foregroundcolor "yellow" ("`r"+' '*6+"{5,-7} | {0:00000} | ({1}) | {2:00000} | ({3}) | {4,-111}" -f $global:Compteur, 'X', 0 ,'XXX', ('NO AUDIO :'+$Album_Rep.Name).PadRight(111,' '), "XxXxXxX");
+		Continue
+	}
+	# exist ? update
+	If ($Album_Exist -ne 0){
+		Super-Title -Label ("EXIST Uptade album ID=$Album_Exist") -Start (Get-Date);
+		Run-UpdateAlbum -ID_CD $Album_Exist -LossLess $LossLess
+		Continue
+	}
+	Super-Title -Label ("Add album folder=sAlbum_Rep") -Start (Get-Date);
+	# ANALYSE ALBUM
+	$Album_Result = Get-AnalyseAlb -Album $Album_Rep -Family $Family -Category $Category -LossLess $LossLess;
+	Switch ($Album_Result.Typ_Tag){
+		'TAG' {
+			$TAGS_Result = (Get-ListeTag -AlbumTAG $Album_Result);
+		}
+		'CUE' {
+			$TAGS_Result = (Get-ListeCue -AlbumCUE $Album_Result);
+		}
+	}
+	# ANALYSE TRACKS
+	If ($TAGS_Result){
+		# MAJ ALBUM
+		$Album_Result.Qty_Tracks = ($TAGS_Result | Measure-Object).count;
+		$Duration = 0;
+		$TAGS_Result | Group-Object ID_CD | %{$Duration += ($_.Group | Measure-Object TAG_Duration -Sum).Sum};
+		$ts = New-TimeSpan -Seconds $Duration;
+		$Album_Result.Duration = $Duration;
+		$Album_Result.Length = ('{0:00}:{1:00}:{2:00}' -f $ts.Hours,$ts.Minutes,$ts.Seconds);
+		$TAGS_Result |  %{$maxCd = ($_ | Measure-Object TAG_Disc -Maximum).Maximum};
+		if (($Album_Result.Qty_CD -ne $maxCd) -and ($maxCd -ne 0)){
+			Write-Host -foregroundcolor "yellow" (' '*10+" | "+'probleme Qty_CD virtuelcd:'+$maxCd+'|'+'repcd:'+$Album_Result.Qty_CD)
+			if ($Album_Result.Name -match [string]$maxCd+"CD"){
+				Write-Host -foregroundcolor "magenta" (' '*10+" | "+'correction Qty_CD = virtuelcd:'+$maxCd+' | '+'old:'+$Album_Result.Qty_CD)
+				$Album_Result.Qty_CD = $maxCd
+			}
+		}
+		# YEAR via media
+		If ($Album_Result.Year -eq "????"){
+			$Album_Result.Year = $TAGS_Result[0].TAG_Year
+		}
+		$Album_Result.Statut ="PRESENT"
+		$TAGS_Result | ForEach-Object { $_.Statut='PRESENT' }
+	} Else {
+		Write-Host -foregroundcolor "yellow" -NoNewLine '#pb tag tracks';
+		Anno-toMySQL -MySqlCon $MySqlCon -ID_CD $Album_Result.ID_CD -Path $Album_Result.Path -Mess 'Error No Track List';
+	}
+	# ENR ALBUM
+	ArrayToMySQL -MySqlCon $MySqlCon -TabPower $Album_Result -TblMysql $Tbl_Albums -colAutoincrement 'ID_CD';
+	$reqStr = "SELECT LAST_INSERT_ID() as lastid;";
+	$lastID = (Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr)[0].lastid
+	$Album_Result.ID_CD = $lastID
+	$TAGS_Result | ForEach-Object { $_.ID_CD=$lastID }
+	ArrayToMySQL -MySqlCon $MySqlCon -TabPower $TAGS_Result -TblMysql $Tbl_Tracks -colAutoincrement 'ID_TRACK';
+	Covers-ToMySQL -MySqlCon $MySqlCon -PathCover $Album_Result.cover -MD5 $Album_Result.MD5;
+	
+	Write-host ($Album_Result | Select-Object ID_CD, Name, Qty_Tracks, Qty_CD, Qty_Audio, Qty_covers, Year, Length, Path | Format-Table | Out-String -width 160)
+	Write-host ($TAGS_Result | Select-Object ODR_Track, FIL_Track, TAG_Albumartists, TAG_Artists, TAG_Album, TAG_Length, TAG_Genres | Format-Table | Out-String -width 160)
 }
 
 
@@ -138,7 +283,7 @@ Function Get-ListeAlb{
 		if ($LossLess) {
 			$Category = $Album_Rep.Fullname.Split("\")[4]
 		};
-		$Album_Exist = (Get-AlbumExist -Album $Album_Rep); 
+		$Album_Exist = (Get-AlbumExist -Album $Album_Rep);
 		If ($Album_Exist){
 			# on prend la date la plus récente des éléments de l'album
 			$Recent_Date = ((Get-ChildItem -LiteralPath $Album_Rep.FullName | Select LastWriteTime).LastWriteTime | measure-object -maximum).maximum
@@ -279,7 +424,7 @@ Function Get-AnalyseAlb{
 		# Correction REM DATE ajout + test des fichiers .cue 
 		$CueR_Count = (Album-TestCues -AlbCue $Album);
 		
-		##################### INVENTAIRE	
+		##################### INVENTAIRE
 		# on compte le nombre de fichier audio dans la racine
 		$AudR_Count = (Get-ChildItem -LiteralPath $Album.Fullname -file | Where-Object { $global:MaskMusic -contains $_.Extension }).count;
 		# on compte le nombre de fichiers audio total
@@ -306,7 +451,7 @@ Function Get-AnalyseAlb{
 				if ($Albm_Cover){
 					$Albm_Cover = $Albm_Cover[0].FullName
 				} Else {
-					$Albm_Cover = "No Picture"
+					$Albm_Cover = $TXTNOPICTURE
 				}
 			}
 		}	
@@ -347,9 +492,10 @@ Function Get-AnalyseAlb{
 		$Position2 = $Album.Fullname.Split("\")[6];
 		If ((($Position1 -match 'label') -or ($Family -match 'label')) -and (($Album.Name).StartsWith('['))){
 			$ISRC = ($Album.Name).Split(']')[0].Split('[')[1];
-			$Album.Name =($Album.Name).substring($ISRC.length+3)
+			$albclean =($Album.Name).substring($ISRC.length+3)
 		} Else {
 			$ISRC = '';
+			$albclean = $Album.Name
 		}
 		# LABEL
 		If (($Position1 -match 'label') -or ($Family -match 'label')) {
@@ -358,7 +504,6 @@ Function Get-AnalyseAlb{
 			$LABEL = ''
 		}
 		# YEAR
-		$albclean = $Album.Name
 		$albclean = $albclean.replace('_',' ')
 		If ($albclean.Substring($albclean.length-6,6) -match "^[(][0-9][0-9][0-9][0-9][)]") {
 			$YEAR = $albclean.Substring($albclean.length-5,5).Split(')')[0];
@@ -424,17 +569,35 @@ Function Get-AnalyseAlb{
 	}	
 }
 
-
 # regarde si un album existe dans la base
-Function Get-AlbumMysql{
+Function Get-AlbumIDMysql{
 	param ([parameter(Mandatory = $true)][string] $ID_CD)
 	
 	$reqStr	 = "SELECT * FROM $Tbl_Albums WHERE ID_CD = $ID_CD LIMIT 1;";
 	$Rows = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
-	
-	Return $Rows[0];
+	if ($Rows.count -eq 0){
+		Return ($Rows.count -eq 0)
+	} Else {
+		Return $Rows[0]
+	}
 }
 
+# regarde si un album existe dans la base via MD5 + path
+Function Get-AlbumMD5Mysql{
+	param (	[parameter(Mandatory = $true)][object] $AlbumExist)
+	
+	[Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null;
+	# on regarde si l'album existe dans la base via son MD5
+	$Albm_Path  = ($AlbumExist.FullName).replace('\','\\')
+	$Albm_IDMD5 = [System.Web.Security.FormsAuthentication]::HashPasswordForStoringInConfigFile($AlbumExist.Name, "MD5");
+	$reqStr	 = "SELECT ID_CD FROM $Tbl_Albums WHERE MD5 = ""$Albm_IDMD5"" AND PATH = ""$Albm_Path"" LIMIT 1;";
+	$Rows = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
+	if ($Rows.count -eq 0){
+		Return 0;
+	} Else {
+		Return $Rows[0].ID_CD;
+	}
+}
 
 # traite le nom de l'album
 Function Get-CleanAlbumName{
@@ -486,13 +649,13 @@ Function Get-AlbumExist{
 	param ([parameter(Mandatory = $true)][PSObject] $AlbumExist)
 
 	[Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null;
-		   
 	# on regarde si l'album existe dans la base via son MD5
 	$Albm_IDMD5 = [System.Web.Security.FormsAuthentication]::HashPasswordForStoringInConfigFile($AlbumExist.Name, "MD5");
 	$AlbumPresent = ($global:DBALBUMS | Where-Object {($_.MD5 -eq $Albm_IDMD5) -and ($_.path -eq $AlbumExist.Fullname)});
 	If ($AlbumPresent){
 		$AlbumPresent = $AlbumPresent[0];
-	}
+	} 
+	
 	Return $AlbumPresent;
 }
 
@@ -1046,7 +1209,7 @@ Function Cover-ToMySQL{
 	param ([parameter(Mandatory = $true)][PSObject] $MySqlCon,
 		   [parameter(Mandatory = $true)][string] $PathCover,
 		   [parameter(Mandatory = $true)][string] $MD5)
-	If (!($PathCover.startswith('No Picture'))){
+	If (!($PathCover.startswith($TXTNOPICTURE))){
 		If ((Get-ChildItem -LiteralPath $PathCover).Length -gt 400000){
 			$ResizeCov = ($env:TEMP+'\cover_resized.jpg');
 			$TempflCov = ($env:TEMP+'\cover.jpg')
@@ -1070,7 +1233,7 @@ Function Covers-ToMySQL{
 		   [parameter(Mandatory = $true)][string] $PathCover,
 		   [parameter(Mandatory = $true)][string] $MD5,
 		   [parameter(Mandatory = $false)][Switch] $Mini)
-	If (!($PathCover.startswith('No Picture'))){
+	If (!($PathCover.startswith($TXTNOPICTURE))){
 		# cover
 		$rand = New-Object System.Random
 		$ResizeCov = $env:TEMP+'\cover_resized_'+[string]$rand.next(100000,9999999)+'.jpg';
@@ -1133,6 +1296,16 @@ Function Anno-toMySQL{
 	ArrayToMySQL -MySqlCon $MySqlCon -TabPower $TabErr -TblMysql $Tbl_Errors;
 }
 
+Function PurgeLog{
+	param ([parameter(Mandatory = $true)][string] $Path,
+		   [parameter(Mandatory = $true)][string] $NameLog,
+		   [parameter(Mandatory = $False)][Int32] $Retention=15)
+	
+	$nbfiles = (Get-ChildItem -LiteralPath ($Path) -file | Where-Object { ($_.name -match $NameLog) } | Measure-Object).count
+	If ($nbfiles -gt $Retention){
+		Get-ChildItem -LiteralPath ($Path) -file | Where-Object { ($_.name -match $NameLog) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Retention) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname} | Out-Null
+	}
+}
 
 # resize picture
 <#

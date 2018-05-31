@@ -1,40 +1,24 @@
 Param(
 	[parameter(position=0, Mandatory=$false)][string]$Envt = 'LOSSLESS_TEST',
-	[parameter(position=1, Mandatory=$false)][string]$Mode = 'UPDATE'
+	[parameter(position=1, Mandatory=$false)][object]$Collections = @("CLASSIC","TECHNO","TRANCE","ROCK","REGGAE"),
+	[parameter(position=2, Mandatory=$false)][string]$Mode = 'UPDATE' # Mise à jour de la base ("ADDNEW")
 	)
 
-# \\HOMERSTATION\_LossLess\_INVENT\DBAlbums\PS1\BUILD_INVENT_LOSSLESS.ps1 -mode "ADDNEW"
 ##############################################
 # Construction INVENT
 $Process = "BUILD_INVENT_$Envt";
 # Init Variables 
-$version = '1.09';
+$version = '1.11';
 $libversion = "INVENTAIRE COLLECTION $Envt";
-$Collections = @("CLASSIC","TECHNO","TRANCE","ROCK","REGGAE");
-$Families =  @{"Physique"="Colonne";"Label/Physique"="Labels";"Download"="Download"};
-$global:INVENTMODE = $Mode # Mise à jour de la base
-#$global:INVENTMODE = "ADDNEW"; 
+$global:INVENTMODE = $Mode;
 $Start = (Get-Date);
 $date = (Get-Date).ToString("yyyyMMddHHmmss");
 # file
 $path = split-path $SCRIPT:MyInvocation.MyCommand.Path -parent
-$path_Out = "$path\..\Logs";
+$path_Out = "$path\..\LOG";
 $File_NAlbums = "$path_Out\$date`_$Process`_Albums.csv";
 $File_NTracks = "$path_Out\$date`_$Process`_Tracks.csv";
 $File_LogTrac = "$path_Out\$date`_$Process.log";
-$Table_Version = 40;
-# base de données  
-$Tbl_Albums = "DBALBUMS";
-$Tbl_Tracks = "DBTRACKS";
-$Tbl_Covers = "DBCOVERS";
-$Tbl_Errors = "DBERRORS";
-# globaux
-$global:AlBumArtDownloader = 'C:\Program Files\AlbumArtDownloader\AlbumArt.exe';
-$global:Compteur = 0;
-$global:FileDllTag = "$path\taglib-sharp.dll";
-$global:MaskMusic = @('.flac','.ape','.wma','.mp3','.wv','.aac');
-$global:MaskCover = @('.jpg','.jpeg','.png','.bmp','.tif','.bmp');
-$global:CoverAlbum = @('cover.jpg','Cover.jpg','cover.jpeg','cover.png','folder.jpg','folder.jpeg');
 
 
 ##############################################
@@ -44,41 +28,35 @@ Start-Transcript $File_LogTrac | Out-Null
 
 ##############################################
 . "$path\BUILD_INVENT_FUNCTIONS.ps1"
-. "$path\Write-Banner.ps1"
+<#
+http://www.yusufozturk.info/windows-powershell/adding-welcome-banner-to-your-powershell-scripts.html
+# Install-Module -Name PSBanner function Write-Banner
+	# default
+	Write-Banner "Hello!"
+	# change font name, size
+	Write-Banner "Hello!" -FontName "Consolas" -FontSize 14
+	# use fontstyles
+	Write-Banner "Hello!" -Bold -Italic -Strikeout -Underline
+	# use pipeline
+	"Hello!" | Write-Banner
+	# use emoji
+	Write-Banner "??" -FontName "Segoe UI Emoji" -FontSize 20
+	# vertical writing :)
+	"??" -as [char[]] | Write-Banner
+#>
+$env:PSModulePath = $env:PSModulePath + ";C:\Program Files\WindowsPowerShell\Modules"
+Import-Module PSBanner -PassThru
+#import-module "C:\Program Files\WindowsPowerShell\Modules\PSBanner\0.4\PSBanner.psd1"  -PassThru
 
 
 ##############################################
-Super-Title -Label "DEMARRAGE $libversion version (v$version)" -Start $Start;
+Super-Title -Label "ENVT $Envt DEMARRAGE $libversion version (v$version)" -Start $Start;
 Write-Banner $Envt
 
 
 ##############################################
-Super-Title -Label "LOAD ENVIRONNEMENT $Envt" -Start $Start;
-Switch ($Envt){
-		{$_ -eq "LOSSLESS"} {
-			$ErrorActionPreference = "Continue";
-			$racine = '\\HOMERSTATION\_LossLess';
-			$serv = "homerstation";
-			$user = "AdmInvent";
-			$db = "Invent";
-			$password = "JMctOz7a6TWnrJHB86pL";
-			$port = "3306";
-		}
-		default {
-			$ErrorActionPreference = "Stop";
-			$racine = 'E:\ZTest\TAG_bluid\TEST'
-			$serv = 'doubbigstation'
-			$user = 'admInvent'
-			$db = "Invent";
-			$password = 'MwRbBR2HA8PFQjuu'
-			$port = "3306";
-		}
-}
-
-
-##############################################
 Super-Title -Label 'CONNECT MYSQL' -Start $Start;
-$MySqlCon = Connect-MySQL -MySQLHost $serv -user $user -password $password -Database $db -port $port;
+$MySqlCon, $racine = ConnectEnvt -Envt $Envt
 <# Effacer base
 $reqStr  = "TRUNCATE TABLE $Tbl_Albums;";
 $rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
@@ -90,10 +68,13 @@ $reqStr  = "TRUNCATE TABLE $Tbl_Errors;";
 $rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
 #>
 
+
 ##############################################
 Super-Title -Label 'LOAD BASES ALBUMS' -Start $Start;
 # Loading base ALBUMS
-$reqStr  = "SELECT * FROM $Tbl_Albums;";
+$SqlColllec = '"' + ($Collections -join '", "') + '"'
+write-host("Category Update : " + $SqlColllec)
+$reqStr  = "SELECT * FROM $Tbl_Albums WHERE Category IN ($SqlColllec);";
 $Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
 If ($Records){
 	$global:DBALBUMS = @() + $Records;
@@ -238,10 +219,8 @@ Write-Host ("`r`n");
 
 ##############################################
 Super-Title -Label 'PURJE LOGS' -Start $Start;
-$nbfiles = (Get-ChildItem -LiteralPath ($path_Out) -file | Where-Object { ($_.name -match $Process) } | Measure-Object).count
-If ($nbfiles -gt $Table_Version){
-	Get-ChildItem -LiteralPath ($path_Out) -file | Where-Object { ($_.name -match $Process) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Table_Version) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname}
-}
+PurgeLog -Path $path_Out -NameLog $Process
+
 
 ##############################################
 Super-Title -Label 'ANOMALIE(S) ANALYSE' -Start $Start;

@@ -1,0 +1,59 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170719180639
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File R:\Projets\ERIC6\DBALBUMSQT5\PS1\UPDATE_ALBUMS.ps1 -listID_CD 98 -Envt LOSSLESS_TEST
+ID de processus : 16816
+PSVersion: 5.1.14393.1480
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1480
+BuildVersion: 10.0.14393.1480
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Import-Module : Le module «PSBanner» spécifié n'a pas été chargé, car aucun fichier de module valide n'a été trouvé 
+dans un répertoire de module.
+Au caractère R:\Projets\ERIC6\DBALBUMSQT5\PS1\UPDATE_ALBUMS.ps1:22 : 1
++ Import-Module PSBanner -PassThru
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (PSBanner:String) [Import-Module], FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Le module «PSBanner» spécifié n'a pas été chargé, car aucun fichier de module valide n'a été trouvé
+dans un répertoire de module.
+Au caractère R:\Projets\ERIC6\DBALBUMSQT5\PS1\UPDATE_ALBUMS.ps1:22 : 1
++ Import-Module PSBanner -PassThru
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (PSBanner:String) [Import-Module], FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+
+Write-Banner : Le terme «Write-Banner» n'est pas reconnu comme nom d'applet de commande, fonction, fichier de script ou 
+programme exécutable. Vérifiez l'orthographe du nom, ou si un chemin d'accès existe, vérifiez que le chemin d'accès est 
+correct et réessayez.
+Au caractère R:\Projets\ERIC6\DBALBUMSQT5\PS1\UPDATE_ALBUMS.ps1:24 : 8
++ $ban = Write-Banner $Envt
++        ~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Write-Banner:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+Write-Banner : Le terme «Write-Banner» n'est pas reconnu comme nom d'applet de commande, fonction, fichier de script
+ou programme exécutable. Vérifiez l'orthographe du nom, ou si un chemin d'accès existe, vérifiez que le chemin d'accès
+est correct et réessayez.
+Au caractère R:\Projets\ERIC6\DBALBUMSQT5\PS1\UPDATE_ALBUMS.ps1:24 : 8
++ $ban = Write-Banner $Envt
++        ~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Write-Banner:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+
+********** 18:06:39 -- Durée: 1 sec -- START UPDATE_ALBUMS_LOSSLESS_TEST ***********************************************************************************
+********** 18:06:40 -- Durée: 2 sec -- uptade album ID=98 (1/1) ********************************************************************************************
+No update required for : Haldolium - Skyfall (Feat  Jan Schmidt)
+      | remove R:\Projets\ERIC6\DBALBUMSQT5\LOG\20170717192432_UPDATE_ALBUMS_LOSSLESS_TEST.log
+********** 18:06:41 -- Durée: 2 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170719180641
+**********************

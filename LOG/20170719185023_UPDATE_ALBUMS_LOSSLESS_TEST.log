@@ -1,0 +1,45 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170719185023
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File R:\Projets\ERIC6\DBALBUMSQT5\PS1\UPDATE_ALBUMS.ps1 -listID_CD 93 -Envt LOSSLESS_TEST
+ID de processus : 8912
+PSVersion: 5.1.14393.1480
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1480
+BuildVersion: 10.0.14393.1480
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+                                                                                               
+                                                                                               
+                                                                                               
+                                                                                               
+ ##     ######  #####  ###### ###    ######  ###### ######        ####### ######  ##### #######
+ ##     ##  ## ###    ###     ###    ###    ###     ##              ###   ###    ###      ###  
+ ##    ###  ######    ###     ###    ###    ###    ###              ###   ###    ###      ###  
+ ##    ###  #######    ####   ###    ######  ####   ####            ###   ###### ####     ###  
+ ##    ###  ###   ###    #### ###    ###       ####   ####          ###   ###       ###   ###  
+ ##    ###  ###    ###    ### ###    ###        ###     ##          ###   ###        ###  ###  
+ ##    ### ###     ###    ### ###    ###        ###     ##          ###   ###        ###  ###  
+ ###### #####  ###### ######  ###### ###### ###### ######           ###   ###### ######   ###  
+                                                                                               
+                                                                                               
+                                                          #########
+********** 18:50:24 -- Durée: 0 sec -- START UPDATE_ALBUMS_LOSSLESS_TEST ***********************************************************************************
+********** 18:50:25 -- Durée: 1 sec -- uptade album ID=93 (1/1) ********************************************************************************************
+No update required for : Laurent Garnier - Early Works
+      | remove R:\Projets\ERIC6\DBALBUMSQT5\LOG\20170717193045_UPDATE_ALBUMS_LOSSLESS_TEST.log
+********** 18:50:25 -- Durée: 2 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170719185025
+**********************

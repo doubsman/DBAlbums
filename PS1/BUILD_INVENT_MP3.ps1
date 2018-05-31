@@ -1,39 +1,24 @@
 Param(
 	[parameter(position=0, Mandatory=$false)][string]$Envt = 'MP3_TEST',
-	[parameter(position=1, Mandatory=$false)][string]$Mode = 'UPDATE'
+	[parameter(position=1, Mandatory=$false)][object]$Collections = '*',
+	[parameter(position=2, Mandatory=$false)][string]$Mode = 'UPDATE'
 	)
 
 ##############################################
 # Construction INVENT
 $Process = "BUILD_INVENT_$Envt";
 # Init Variables 
-$version = '1.09';
+$version = '1.11';
 $libversion = "INVENTAIRE COLLECTION $Envt";
-$Collections = @($Envt);
 $global:INVENTMODE = $Mode #"ONLYNEW"; # Mise à jour de la base
 $Start = (Get-Date);
 # file
 $date	= (Get-Date).ToString("yyyyMMddHHmmss");
 $path = split-path $SCRIPT:MyInvocation.MyCommand.Path -parent
-$path_Out = "$path\..\Logs";
+$path_Out = "$path\..\LOG";
 $File_NAlbums = "$path_Out\$date`_$Process`_Albums.csv";
 $File_NTracks = "$path_Out\$date`_$Process`_Tracks.csv";
 $File_LogTrac = "$path_Out\$date`_$Process.log";
-$Table_Version = 40;
-# base de données  
-$port = "3306";
-$Tbl_Albums = "DBALBUMS";
-$Tbl_Tracks = "DBTRACKS";
-$Tbl_Covers = "DBCOVERS";
-$Tbl_Errors = "DBERRORS";
-# globaux
-$global:AlBumArtDownloader = 'C:\Program Files\AlbumArtDownloader\AlbumArt.exe';
-$global:Compteur = 0;
-$global:FileDllTag = "$path\taglib-sharp.dll";
-$global:MaskMusic = @('.flac','.ape','.wma','.mp3','.wv','.aac','.mpc');
-$global:MaskCover = @('.jpg','.jpeg','.png','.bmp','.tif','.bmp');
-$global:CoverAlbum = @('cover.jpg','Cover.jpg','cover.jpeg','cover.png','front.jpg','folder.jpg','folder.jpeg');
-$Families =  @{"Physique"="Colonne";"Label/Physique"="Labels";"Download"="Download"};
 
 
 ##############################################
@@ -43,7 +28,9 @@ Start-Transcript $File_LogTrac | Out-Null
 
 ##############################################
 . "$path\BUILD_INVENT_FUNCTIONS.ps1"
-. "$path\Write-Banner.ps1"
+$env:PSModulePath = $env:PSModulePath + ";C:\Program Files\WindowsPowerShell\Modules"
+Import-Module PSBanner -PassThru
+#import-module "C:\Program Files\WindowsPowerShell\Modules\PSBanner\0.4\PSBanner.psd1"  -PassThru
 
 
 ##############################################
@@ -52,54 +39,38 @@ Write-Banner $Envt
 Super-Title -Label 'LOAD ENVIRONNEMENT' -Start $Start;
 Switch ($Envt){
 		{$_ -eq "MP3"} {
-			$ErrorActionPreference = "Continue";
-			$serv = 'homerstation'
-			$user = 'admInventMP3'
-			$db = "InventMP3";
-			$password = 'nuDbC6spVZxtkKC8'
-			$port = "3306";
-			$racinessimples1 =@{"PSYTECHNO"="\\HOMERSTATION\_Mp3\Psytechno";
-								"ELECTRO"="\\HOMERSTATION\_Mp3\Electro";
-								"AMBIENT"="\\HOMERSTATION\_Mp3\Ambient";
-								"ACID"="\\HOMERSTATION\_Mp3\Acid";
-								"HOUSE"="\\HOMERSTATION\_Mp3\House";
-								"DOWNTEMPO"="\\HOMERSTATION\_Mp3\DownTempo";
-								"SUOMI"="\\HOMERSTATION\_Mp3\PsySuomi";
-								"PSY-CHILL"="\\HOMERSTATION\_Mp3\PsyChill";
-								"TECHNO"="\\HOMERSTATION\_Mp3\Techno";
-								"REGGAE"="\\HOMERSTATION\_Mp3\Reggae";
-								"HARDTEK"="\\HOMERSTATION\_Mp3\Hardtek";
-								"ROCK"="\\HOMERSTATION\_Mp3\Rock";
-								"DRUMBASS"="\\HOMERSTATION\_Mp3\Drum Vinyls"}
-			$racinesdoubles1 =@{"TECHNO"="\\HOMERSTATION\_Mp3\Techno Artists";
-								"PSY-DARK"="\\HOMERSTATION\_Mp3\PsyDark";
-								"TRANCE"="\\HOMERSTATION\_Mp3\Psytrance\_master";
-								"ROCK"="\\HOMERSTATION\_Mp3\Rock Artists"}
-			$racinesdoubles0 =@{"TRANCE"="\\HOMERSTATION\_Mp3\Psytrance\_years"}
-			$racinessimples2 =@{}
-			$racinesdoubles2 = @{"TRANCE"="\\HOMERSTATION\_Mp3\Psytrance\_Labels";
-								"TECHNO"="\\HOMERSTATION\_Mp3\Techno Labels";
-								"REGGAE"="\\HOMERSTATION\_Mp3\Reggae Labels"}
+			$racDownloadSim=@{	"PSYTECHNO"	="\\HOMERSTATION\_Mp3\Psytechno";
+								"ELECTRO"	="\\HOMERSTATION\_Mp3\Electro";
+								"AMBIENT"	="\\HOMERSTATION\_Mp3\Ambient";
+								"ACID"		="\\HOMERSTATION\_Mp3\Acid";
+								"HOUSE"		="\\HOMERSTATION\_Mp3\House";
+								"DOWNTEMPO"	="\\HOMERSTATION\_Mp3\DownTempo";
+								"SUOMI"		="\\HOMERSTATION\_Mp3\PsySuomi";
+								"PSY-CHILL"	="\\HOMERSTATION\_Mp3\PsyChill";
+								"TECHNO"	="\\HOMERSTATION\_Mp3\Techno";
+								"REGGAE"	="\\HOMERSTATION\_Mp3\Reggae";
+								"HARDTEK"	="\\HOMERSTATION\_Mp3\Hardtek";
+								"ROCK"		="\\HOMERSTATION\_Mp3\Rock";
+								"DRUMBASS"	="\\HOMERSTATION\_Mp3\Drum Vinyls"}
+			$racDownloadDou=@{	"TECHNO"	="\\HOMERSTATION\_Mp3\Techno Artists";
+								"PSY-DARK"	="\\HOMERSTATION\_Mp3\PsyDark";
+								"TRANCE"	="\\HOMERSTATION\_Mp3\Psytrance\_master", "\\HOMERSTATION\_Mp3\Psytrance\_years";
+								"ROCK"		="\\HOMERSTATION\_Mp3\Rock Artists"}
+			$racLabelsssDou=@{	"TRANCE"	="\\HOMERSTATION\_Mp3\Psytrance\_Labels";
+								"TECHNO"	="\\HOMERSTATION\_Mp3\Techno Labels";
+								"REGGAE"	="\\HOMERSTATION\_Mp3\Reggae Labels"}
 		}
 		default {
-			$ErrorActionPreference = "Continue";
-			$serv = "doubbigstation";
-			$user = "admInvent";
-			$db = "MP3";
-			$password = "MwRbBR2HA8PFQjuu";
-			$port = "3306";
-			$racinessimples1 = @{"ACID"="\\HOMERSTATION\_Mp3\Acid"}
-			$racinesdoubles1 = @{}
-			$racinesdoubles0 = @{}
-			$racinessimples2 = @{}
-			$racinesdoubles2 = @{}
+			$racDownloadSim = @{"ACID"="\\HOMERSTATION\_Mp3\Acid"}
+			$racDownloadDou = @{}
+			$racLabelsssDou = @{}
 		}
 }
-# Techno Labels
+
 
 ##############################################
 Super-Title -Label 'CONNECT MYSQL' -Start $Start;
-$MySqlCon = Connect-MySQL -MySQLHost $serv -user $user -password $password -Database $db -port $port;
+$MySqlCon, $racineMP3 = ConnectEnvt -Envt $Envt
 
 
 ##############################################
@@ -121,7 +92,13 @@ If ($Envt -eq "MP3_TEST"){
 ##############################################
 Super-Title -Label 'LOAD BASES ALBUMS' -Start $Start;
 # Loading base ALBUMS
-$reqStr  = "SELECT * FROM $Tbl_Albums;";
+if ($Collections -eq '*'){
+	$reqStr  = "SELECT * FROM $Tbl_Albums;";
+} else {
+	$SqlColllec = '"' + ($Collections -join '", "') + '"'
+	write-host("Category Update : " + $SqlColllec)
+	$reqStr  = "SELECT * FROM $Tbl_Albums WHERE Category IN ($SqlColllec);";
+}
 $Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
 If ($Records){
 	$global:DBALBUMS = @() + $Records;
@@ -147,55 +124,49 @@ If ($Records){
 ##############################################
 Super-Title -Label 'BUILD ALBUMS LIST' -Start $Start;
 $A_List = $T_List = @();
-Write-Host (' '*6+" Category |  Cpt  |State|  Ids  | Method| Name");
-Write-Host (' '*6+"----------|-------|-----|-------|-------|"+'-'*111);
+Write-Host (' '*7+" Category |  Cpt  |State|  Ids  | Method| Name");
+Write-Host (' '*7+"----------|-------|-----|-------|-------|"+'-'*111);
 
 # DOWNLOAD
 $Family = "Download"
-ForEach ($Racine in $racinessimples1.GetEnumerator()){
-	$Resultat = (Get-ListeAlb -pathAlbumsList $Racine.Value  -Family $Family -Category $Racine.Name);
-	If ($Resultat[0]){
-		$A_List += $Resultat[0];
-		$T_List += $Resultat[1];
-	}
-}
-ForEach ($Racine in $racinesdoubles1.GetEnumerator()){
-	$List_Reps = Get-ChildItem -LiteralPath $Racine.Value | Where-Object { $_.PSIsContainer } | Sort-Object Name | Select-Object Name,Fullname;
-	ForEach ($List_Rep in $List_Reps){
-		$Resultat = (Get-ListeAlb -pathAlbumsList $List_Rep.Fullname -Family $Family -Category $Racine.Name);
+ForEach ($Racine in $racDownloadSim.GetEnumerator()){
+	If (($Collections -contains $Racine.Name) -or ($Collections -eq '*')){
+		$Resultat = (Get-ListeAlb -pathAlbumsList $Racine.Value  -Family $Family -Category $Racine.Name);
 		If ($Resultat[0]){
 			$A_List += $Resultat[0];
 			$T_List += $Resultat[1];
 		}
 	}
 }
-ForEach ($Racine in $racinesdoubles0.GetEnumerator()){
-	$List_Reps = Get-ChildItem -LiteralPath $Racine.Value | Where-Object { $_.PSIsContainer } | Sort-Object Name | Select-Object Name,Fullname;
-	ForEach ($List_Rep in $List_Reps){
-		$Resultat = (Get-ListeAlb -pathAlbumsList $List_Rep.Fullname -Family $Family -Category $Racine.Name);
-		If ($Resultat[0]){
-			$A_List += $Resultat[0];
-			$T_List += $Resultat[1];
+ForEach ($Racine in $racDownloadDou.GetEnumerator()){
+	If (($Collections -contains $Racine.Name) -or ($Collections -eq '*')){
+		if ($Racine.Value.split(',').count -eq 2){
+			$List_Reps = Get-ChildItem -LiteralPath $Racine.Value.split(',')[0] | Where-Object { $_.PSIsContainer } | Sort-Object Name | Select-Object Name,Fullname;
+			$List_Reps += Get-ChildItem -LiteralPath $Racine.Value.split(',')[1] | Where-Object { $_.PSIsContainer } | Sort-Object Name | Select-Object Name,Fullname;
+		} else {
+			$List_Reps = Get-ChildItem -LiteralPath $Racine.Value | Where-Object { $_.PSIsContainer } | Sort-Object Name | Select-Object Name,Fullname;
+		}
+		ForEach ($List_Rep in $List_Reps){
+			$Resultat = (Get-ListeAlb -pathAlbumsList $List_Rep.Fullname -Family $Family -Category $Racine.Name);
+			If ($Resultat[0]){
+				$A_List += $Resultat[0];
+				$T_List += $Resultat[1];
+			}
 		}
 	}
 }
 
 # LABEL
 $Family = "Label"
-ForEach ($Racine in $racinessimples2.GetEnumerator()){
-	$Resultat = (Get-ListeAlb -pathAlbumsList $Racine.Value  -Family $Family -Category $Racine.Name);
-	If ($Resultat[0]){
-		$A_List += $Resultat[0];
-		$T_List += $Resultat[1];
-	}
-}
-ForEach ($Racine in $racinesdoubles2.GetEnumerator()){
-	$List_Reps = Get-ChildItem -LiteralPath $Racine.Value | Where-Object { $_.PSIsContainer } | Sort-Object Name | Select-Object Name,Fullname;
-	ForEach ($List_Rep in $List_Reps){
-		$Resultat = (Get-ListeAlb -pathAlbumsList $List_Rep.Fullname -Family $Family -Category $Racine.Name);
-		If ($Resultat[0]){
-			$A_List += $Resultat[0];
-			$T_List += $Resultat[1];
+ForEach ($Racine in $racLabelsssDou.GetEnumerator()){
+	If (($Collections -contains $Racine.Name) -or ($Collections -eq '*')){
+		$List_Reps = Get-ChildItem -LiteralPath $Racine.Value | Where-Object { $_.PSIsContainer } | Sort-Object Name | Select-Object Name,Fullname;
+		ForEach ($List_Rep in $List_Reps){
+			$Resultat = (Get-ListeAlb -pathAlbumsList $List_Rep.Fullname -Family $Family -Category $Racine.Name);
+			If ($Resultat[0]){
+				$A_List += $Resultat[0];
+				$T_List += $Resultat[1];
+			}
 		}
 	}
 }
@@ -297,10 +268,7 @@ Write-Host ("`r`n");
 
 ##############################################
 Super-Title -Label 'PURJE LOGS' -Start $Start;
-$nbfiles = (Get-ChildItem -LiteralPath ($path_Out) -file | Where-Object { ($_.name -match $Process) } | Measure-Object).count
-If ($nbfiles -gt $Table_Version){
-	Get-ChildItem -LiteralPath ($path_Out) -file | Where-Object { ($_.name -match $Process) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Table_Version) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname}
-}
+PurgeLog -Path "$path_Out" -NameLog "$Process"
 
 
 ##############################################
@@ -320,17 +288,4 @@ Super-Title -Label ("...FIN...") -Start $Start;
 # fin trace
 Stop-Transcript | Out-Null
 #Start $path_Out;
-
-<#
-FICHIER TROP LONG
-# fichier trop >260 \\DOUBBIGSTATION\_LossLess
-$folders = cmd /c dir E:\Work\TAG_bluid\TEST /s /-c /a:h /a:d
-$folders = $folders -match "Répertoire"
-$folders = $folders | %{$_.Replace(" Répertoire de ","")}
-
-HTTP FOOBAR
-http://127.0.0.1:8888/default/?cmd=Stop&param1=
-http://127.0.0.1:8888/default/?cmd=PlayOrPause
-http://127.0.0.1:8888/default/?cmd=CreatePlaylist&param1=playlist name&param2=insertion point index
-#>
 

@@ -1,115 +1,0 @@
-﻿**********************
-Début de la transcription Windows Powershell
-Heure de début : 20170226200940
-Nom d'utilisateur : ANTEC\Mister doubs
-Utilisateur runAs : ANTEC\Mister doubs
-Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
-Application hôte : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
-ID de processus : 10680
-PSVersion: 5.1.14393.693
-PSEdition: Desktop
-PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.693
-BuildVersion: 10.0.14393.693
-CLRVersion: 4.0.30319.42000
-WSManStackVersion: 3.0
-PSRemotingProtocolVersion: 2.3
-SerializationVersion: 1.1.0.1
-**********************
-********** 20:09:40 -- Durée: 0 sec -- DEMARRAGE INVENTAIRE COLLECTION LOSSLESS_TEST version (v1.09) *******************************************************
- L         OOO    SSSSS   SSSSS  L       EEEEEEE  SSSSS   SSSSS  TTTTTTT EEEEEEE  SSSSS  TTTTTTT
- L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
- L       O     O S       S       L       E       S       S          T    E       S          T
- L       O     O S       S       L       E       S       S          T    E       S          T
- L       O     O  SSSSS   SSSSS  L       EEEEEE   SSSSS   SSSSS     T    EEEEEE   SSSSS     T
- L       O     O       S       S L       E             S       S    T    E             S    T
- L       O     O       S       S L       E             S       S    T    E             S    T
- L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
- LLLLLLL   OOO    SSSSS   SSSSS  LLLLLLL EEEEEEE  SSSSS   SSSSS     T    EEEEEEE  SSSSS     T
-********** 20:09:40 -- Durée: 0 sec -- LOAD ENVIRONNEMENT LOSSLESS_TEST ************************************************************************************
-********** 20:09:40 -- Durée: 0 sec -- CONNECT MYSQL *******************************************************************************************************
-********** 20:09:41 -- Durée: 1 sec -- LOAD BASES ALBUMS ***************************************************************************************************
-
-Dbase BASE ALBUMS Download Label/Physique Physique Total
------ ----------- -------- -------------- -------- -----
-      TRANCE             0              2        0     2
-      TECHNO             3              3        0     6
-      ROCK               1              0        1     2
-      REGGAE             1              1        0     2
-      CLASSIC            1              0        0     1
-      TOTAL              6              6        1    13
-
-
-
-Dbase SIZE   (GO) Download Label/Physique Physique Total
------ ----------- -------- -------------- -------- -----
-      TRANCE           0,0            0,5      0,0   0,5
-      TECHNO           0,4            1,3      0,0   1,7
-      ROCK             0,5            0,0      0,1   0,6
-      REGGAE           1,2            0,2      0,0   1,4
-      CLASSIC          0,3            0,0      0,0   0,3
-      TOTAL            2,4            2,0      0,1   4,5
-
-
-
-Dbase BASE TRACKS Download Label/Physique Physique Total
------ ----------- -------- -------------- -------- -----
-      TRANCE             0             47        0    47
-      TECHNO            29             55        0    84
-      ROCK              20              0        4    24
-      REGGAE            52             16        0    68
-      CLASSIC           15              0        0    15
-      TOTAL            116            118        4   238
-
-
-********** 20:09:43 -- Durée: 3 sec -- BUILD ALBUMS LIST mode ONLYNEW **************************************************************************************
-       Category |  Cpt  |State|  Ids  | Method| Name
-      ----------|-------|-----|-------|-------|---------------------------------------------------------------------------------------------------------------
->
-      CLASSIC   | 00001 | (P) | 00041 | (CUE) | Gonzales -4- Presidential Suite (2002)
->
-      TECHNO    | 00002 | (P) | 00053 | (CUE) | Caia - The Magic Dragon (2003)
->
-      TECHNO    | 00003 | (P) | 00039 | (TAG) | Gabriel_Ananda_-_Live_Series_Vol_1-(BASMATI04)(2011)
->
-      TECHNO    | 00004 | (P) | 00050 | (TAG) | Thievery Corporation - Sounds from the Verve Hi (2002)
->
-      TECHNO    | 00005 | (P) | 00006 | (CUE) | [F115] Laurent Garnier - Early Works (1998)
->
-      TECHNO    | 00006 | (P) | 00044 | (CUE) | Fabric 20 - John Digweed (2004)
->
-      TECHNO    | 00007 | (P) | 00049 | (TAG) | [REN26CD] Hernán Cattáneo - Sequential (2006)
->
-      TRANCE    | 00008 | (P) | 00010 | (TAG) | [YSE 053-CD] VA - Goa 2004 Vol.3 (2004)
->
-      TRANCE    | 00009 | (P) | 00011 | (CUE) | VA_-_Tsunami_Benefit-3CD-2005-UPE (2005)
->
-      ROCK      | 00010 | (P) | 00035 | (TAG) | Loud_-_Old_is_Gold-2016
->
-      ROCK      | 00011 | (P) | 00052 | (TAG) | Air - Moon - Safari (1998)
->
-      REGGAE    | 00012 | (P) | 00033 | (CUE) | Lee Scratch Perry - Arkology (1997)
->
-      REGGAE    | 00013 | (P) | 00023 | (CUE) | Jennifer Lara - Studio One Presents Jennifer Lara (1981)
-
-      ----------|------|-----|------|-------|---------------------------------------------------------------------------------------------------------------
-      Waiting 5s.....
-      Waiting 4s....
-      Waiting 3s...
-      Waiting 2s..
-      Waiting 1s.
-      Waiting 0s
-
-********** 20:09:50 -- Durée: 10 sec -- BUILD TDC **********************************************************************************************************
-  DBALBUMS__________________________________________
-      | NEW 0
-      | UPDATE 0
-********** 20:09:50 -- Durée: 10 sec -- BUILD COVER TO MySQL ***********************************************************************************************
-
-********** 20:09:50 -- Durée: 10 sec -- PURJE LOGS *********************************************************************************************************
-********** 20:09:50 -- Durée: 10 sec -- ANOMALIE(S) ANALYSE ************************************************************************************************
-********** 20:09:50 -- Durée: 10 sec -- DISCONNECT MYSQL ***************************************************************************************************
-********** 20:09:50 -- Durée: 10 sec -- ...FIN... **********************************************************************************************************
-**********************
-Fin de la transcription Windows PowerShell
-Heure de fin : 20170226200950
-**********************
