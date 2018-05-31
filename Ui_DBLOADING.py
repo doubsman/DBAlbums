@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'R:\Projets\ERIC6\DBALBUMSQT5\DBLOADING.ui'
+# Form implementation generated from reading ui file 'R:\Projets\DBALBUMSQT5\DBLOADING.ui'
 #
 # Created by: PyQt5 UI code generator 5.9
 #

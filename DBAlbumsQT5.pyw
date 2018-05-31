@@ -12,19 +12,21 @@ __status__ = "Production"
 
 from sys import platform, argv, executable, exit
 from csv import writer, QUOTE_ALL
-from os import system, path, getcwd, remove, chdir
+from os import system, path, getcwd, remove
 from PyQt5.QtGui import QIcon, QPixmap, QFont
-from PyQt5.QtCore import (Qt, QDir, QTime, pyqtSlot, QDateTime, QSettings, 
-						QtInfoMsg, QtWarningMsg, QtCriticalMsg, QtFatalMsg, qInstallMessageHandler) # qDebug
-from PyQt5.QtWidgets import QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QMenu, QCompleter
+from PyQt5.QtCore import (Qt, QDir, QTime, pyqtSlot, QDateTime, QSettings, QtInfoMsg,
+						QtWarningMsg, QtCriticalMsg, QtFatalMsg, qInstallMessageHandler, qDebug) 
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, 
+						QMenu, QCompleter, QStyle)
 from PyQt5.QtMultimedia import QMediaPlayer
 # Gui QtDesigner : compiler .ui sans Eric6: pyuic5 file.ui -o Ui_main_file.py
 from Ui_DBALBUMS import Ui_MainWindow
 
 # DB DEV
-from DBFunction import buildCommandPowershell, runCommand, openFolder, centerWidget
+from DBFunction import buildCommandPowershell, runCommand, openFolder, centerWidget, convertUNC
 from DBLoadProc import DBloadingGui, ProcessGui
-from DBDatabase import connectDatabase, getrequest, copyDatabaseInvent, execSqlFile, buildTabFromRequest, updateBaseScore, buildFileCover
+from DBDatabase import (connectDatabase, getrequest, copyDatabaseInvent, execSqlFile, 
+						buildTabFromRequest, updateBaseScore, buildFileCover, extractCoverb64)
 from DBModeldat import ModelTbl
 from DBArtworks import ArtworksGui, CoverViewGui
 from DBAuPlayer import DBPlayer
@@ -34,6 +36,7 @@ from DBFoobarpl import foobarMajDBFOOBAR
 # ##################################################################
 # CONSTANTS
 # path
+qDebug('Start')
 if getattr(system, 'frozen', False):
 	# frozen
 	PATH_PROG = path.dirname(executable)
@@ -42,7 +45,7 @@ else:
 	PATH_PROG = path.realpath(path.dirname(argv[0]))
 	# PATH_PROG = path.dirname(__file__)
 # working directory
-chdir(PATH_PROG)
+# chdir(PATH_PROG)
 QDir.setCurrent(PATH_PROG)
 LOGS_PROG = path.join(PATH_PROG, 'LOG')
 BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
@@ -50,11 +53,13 @@ PWSH_SCRI = path.join(PATH_PROG, 'PS1', "BUILD_INVENT_{mod}.ps1")
 PWSH_SCRU = path.join(PATH_PROG, 'PS1', "UPDATE_ALBUMS.ps1")
 PWSH_SCRA = path.join(PATH_PROG, 'PS1', "ADD_ALBUMS.ps1")
 FOOB_UPSC = path.join(PATH_PROG, 'SQL', "DBAlbums_FOOBAR_UPADTESCORE.sql")
-RESS_PICS = 'IMG'
+RESS_LABS = 'LAB'
 MASKCOVER = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')
+
 
 # ##################################################################
 # Read File DBAlbums.ini
+qDebug('read ini file')
 FILE__INI = 'DBAlbums.ini'
 configini = QSettings(FILE__INI, QSettings.IniFormat)
 configini.beginGroup('dbalbums')
@@ -66,12 +71,13 @@ WIDT_PICM = int(configini.value('thun_csize'))
 HEIG_LHUN = int(configini.value('thnail_nbl'))
 HEIG_LTAB = int(configini.value('tagrid_nbl'))
 DISP_CJOKER = configini.value('text_joker')
-WINS_ICO = RESS_PICS+'/'+configini.value('wins_icone')
-UNIX_ICO = RESS_PICS+'/'+configini.value('unix_icone')
-LOGO_PRG = RESS_PICS+'/'+configini.value('progr_logo')
-PICT_NCO = RESS_PICS+'/'+configini.value('pict_blank')
-PICM_NCO = RESS_PICS+'/'+configini.value('picm_blank')
-THUN_DBA = RESS_PICS+'/'+configini.value('picm_endof')
+WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
+UNIX_ICO = path.join(PATH_PROG, 'IMG', configini.value('unix_icone'))
+CDRO_ICO = path.join(PATH_PROG, 'IMG', configini.value('cdro_icone'))
+LOGO_PRG = path.join(PATH_PROG, 'IMG', configini.value('progr_logo'))
+PICT_NCO = path.join(PATH_PROG, 'IMG', configini.value('pict_blank'))
+PICM_NCO = path.join(PATH_PROG, 'IMG', configini.value('picm_blank'))
+THUN_DBA = path.join(PATH_PROG, 'IMG', configini.value('picm_endof'))
 TEXT_NCO = configini.value('text_nocov')
 ENVT_DEF = configini.value('envt_deflt')
 TREE_CO0 = configini.value('color0_lin')
@@ -94,8 +100,15 @@ TAGS_SCAN = r'' + configini.value('tagscan')
 FOOB_PLAY = r'' + configini.value('foobarP')
 if platform == "darwin" or platform == 'linux':
 	EDIT_TEXT = r'' + configini.value('txt_lin')
-	LOGS_PROG = r""+LOGS_PROG.replace('\\\\', '/').replace('\\', '/')
-	BASE_SQLI = r""+BASE_SQLI.replace('\\\\', '/').replace('\\', '/')
+	LOGS_PROG = convertUNC(LOGS_PROG)
+	BASE_SQLI = convertUNC(BASE_SQLI)
+	WINS_ICO = convertUNC(WINS_ICO)
+	UNIX_ICO = convertUNC(UNIX_ICO)
+	CDRO_ICO = convertUNC(CDRO_ICO)	
+	LOGO_PRG = convertUNC(LOGO_PRG)
+	PICT_NCO = convertUNC(PICT_NCO)
+	PICM_NCO = convertUNC(PICM_NCO)
+	THUN_DBA = convertUNC(THUN_DBA)
 else:
 	EDIT_TEXT = r'' + configini.value('txt_win')
 configini.endGroup()
@@ -176,26 +189,68 @@ def displayStars(star, scorelist):
 	return (txt_score+'  '+star*'★'+(maxstar-star)*'☆')
 
 
-def albumnameextract(name, label, isrc, nbcd):
+def albumnameextract(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers ):
 	"""buil label name & album name."""
+	# name + label
 	infoslabel = ""
-	if label != "":
-		#infoslabel = label + ' • '
-		infoslabel = '<br><a href="https://openclassrooms.com">'+label + '</a> • '
-	if isrc != "":
-		infoslabel += isrc + ' • '
+	infosaisrc = ""
+	infonameal = ""
+	infosayear = ""
+	imglabel = None
 	if '[' in name:
-		infosalbum = name[name.find('[')+1:name.find(']')]
-		albumnamet = name.replace('['+infosalbum+']', '')
-		infoslabel += infosalbum.replace('-', ' • ')
+		textsalbum = name[name.find('[')+1:name.find(']')]
+		infonameal = name.replace('['+textsalbum+']', '')
+		infoslabel += textsalbum.replace('-', ' • ')
 	else:
-		infoslabel = infoslabel[:-3]
-		albumnamet = name
-	albumnamet = albumnamet.replace('('+nbcd+'CD)', '').replace(nbcd+'CD', '')
-	return (albumnamet, infoslabel)
+		infonameal = name
+	snbcd = str(nbcd)
+	sctxt = infonameal.split(' - ')[0].rstrip()
+	if sctxt=='':
+		sctxt = infonameal.split('—')[0].rstrip()
+	infonameal = infonameal.replace('('+snbcd+'CD)', '').replace(snbcd+'CD', '')
+	infonameal = infonameal.replace(snbcd+'CD', '').replace(snbcd+'CD', '')
+	infonameal = '<a style="text-decoration:none;color: black;" href="dbfunction://s' + sctxt + '"><b><big>' + infonameal + '</big></b></a>'
+	# label
+	if label != "":
+		imglabel = RESS_LABS +'/'+ label.replace(' ','_') +'.jpg'
+		if not path.isfile(imglabel):
+			imglabel = None
+		infoslabel = '<a style="color: black;" href="dbfunction://l'+label+'">' + label + '</a>'
+	elif infoslabel != "":
+		if infoslabel.find('-') > 0:
+			label = infoslabel.split('-')[0].replace('[', '').rstrip()
+			infoslabel = '<big>' + label + '</big>'
+			isrc = infoslabel.split('-')[1].replace(']', '').lstrip()
+	# isrc
+	if isrc != "":
+		infosaisrc = isrc
+	# year
+	if year != "":
+		infosayear = '<b><big> - <a style="color: black;" href="dbfunction://y'+year+'">' + year + '</a></big></b> '
+	# nb cd
+	if nbcd<6:
+		infosnbcd = '<img style="vertical-align:Bottom;" src="' + CDRO_ICO + '" height="15">'
+		infosnbcd = nbcd*infosnbcd
+	else:
+		infosnbcd = displayCounters(nbcd, 'CD')
+	# others
+	infotrack = displayCounters(nbtracks, 'Track')
+	infoduree = displayCounters(nbmin, 'min')
+	infoartco = displayCounters(nbcovers, 'art')
+	if nbcovers>0:
+		infoartco = '<a style="color: black;" href="dbfunction://a">' + infoartco + '</a>'
+	infoshtml = '<span>' + infonameal + infosayear + '</span>' + infosnbcd + '<br/>'
+	if infoslabel != "":
+		if infosaisrc != "":
+			infoshtml += infoslabel + ' • ' + infosaisrc + ' • '
+		else:
+			infoshtml += infoslabel + ' • '
+	infoshtml += infotrack + ' • ' + infoduree + ' • ' + infoartco
+	return infoshtml, imglabel
 
 
 # ##################################################################
+qDebug('init main gui')
 class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	"""DBAlbums main gui."""
 	# default value
@@ -224,10 +279,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.maintitle = 'Loading...'	# status bar main message
 		self.coveral = QPixmap(PICT_NCO)	# current cover album
 		# zoom
-		self.cuzoom = DBAlbumsMainGui.COEF_ZOOM
-		self.sizeTN = DBAlbumsMainGui.WIDT_PICM
-		self.h_main = DBAlbumsMainGui.HEIG_MAIN
-		self.w_main = DBAlbumsMainGui.WIDT_MAIN
+		self.cuzoom = self.COEF_ZOOM
+		self.sizeTN = self.WIDT_PICM
+		self.h_main = self.HEIG_MAIN
+		self.w_main = self.WIDT_MAIN
 		# loading
 		self.loadingGui = None
 
@@ -239,6 +294,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.lab_search.setFont(font)
 		self.lab_scorealb.setFont(font)
 		self.lab_scoretrk.setFont(font)
+		self.lab_album.setFont(font)
 
 		# center
 		centerWidget(self)
@@ -252,7 +308,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		# init combos Envt
 		self.com_envt.addItems(NAME_EVT)
 		self.com_envt.setCurrentIndex(CURT_EVT)
-
+		
+		# buttons
+		self.btn_clearsearch.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
+		self.btn_search.setIcon(self.style().standardIcon(QStyle.SP_FileDialogContentsView))
+		self.btn_notreeview.setIcon(self.style().standardIcon(QStyle.SP_FileDialogListView))
+		
 		# init scrore
 		self.sli_scorealb.setMinimum(0)
 		self.sli_scorealb.setMaximum(len(SCOR_ALBUMS)-1)
@@ -263,6 +324,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.btn_scoretrk.setVisible(False)
 		self.sli_scoretrk.setValue(0)
 
+		# init title album
+		self.lab_album.setOpenLinks(False)
+		
 		# tab list no header row
 		self.tbl_albums.verticalHeader().setVisible(False)
 		self.tbl_tracks.verticalHeader().setVisible(False)
@@ -297,7 +361,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.action_EXA = self.menua.addAction("Export Album...", self.exportAlbums)
 		self.action_UAP = self.menua.addAction("Update Album...", self.updateAlbums)
 		self.action_TAG = self.menua.addAction("Edit Tags (TagScan)...", self.openTagScan)
-
+		
 		# link Gui
 		self.lin_search.returnPressed.connect(self.onFiltersChanged)
 		self.btn_clearsearch.clicked.connect(self.clearFilters)
@@ -322,6 +386,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.tbl_tracks.clicked.connect(self.onSelectTrackChanged)
 		self.tbl_tracks.doubleClicked.connect(self.playMediasAlbum)
 		self.tbl_tracks.currentChanged = self.onSelectTrackChanged
+		self.lab_album.anchorClicked.connect(self.onAnchorClicked)
 		self.labelcover.mousePressEvent = self.onPressCover
 		self.sli_scorealb.valueChanged.connect(self.onModifyScoreAlbum)
 		self.sli_scoretrk.valueChanged.connect(self.onModifyScoreTrack)
@@ -440,7 +505,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def connectEnvt(self, refresh=False):
 		"""Connect Envt."""
-		print('Connect')
 		if self.envits != self.com_envt.currentText() or refresh:
 			self.envits = self.com_envt.currentText()
 			# clear combos
@@ -493,6 +557,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.com_year.addItems(self.tableMdlAlb.datacombos('Year'))
 					# fill thunbnails
 					self.tableMdlAlb.displayThunbnails()
+					self.tableMdlAlb.builListThunbnails2()
 					# autocompletion list
 					autoList = buildTabFromRequest(getrequest('autocompletion', self.modsql))
 					self.com_autcom = QCompleter(autoList, self.lin_search)
@@ -560,9 +625,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			if int(self.gridthunbnails.itemAt(i).widget().Name) == int(self.currow):
 				self.gridthunbnails.itemAt(i).widget().setStyleSheet("border: 2px solid red;")
 				curthu = self.gridthunbnails.itemAt(i).widget()
+				# move scroll to widget
+				self.scrollArea.ensureWidgetVisible(curthu)
 				break
-		# move scroll to widget
-		self.scrollArea.ensureWidgetVisible(curthu)
 
 		# fill tracks
 		req = (getrequest('trackslist', self.modsql)).format(id=self.curAlb)
@@ -571,18 +636,25 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.tbl_tracks.resizeColumnsToContents()
 		self.tbl_tracks.resizeRowsToContents()
 
-		# fill label
-		counter = self.tableMdlAlb.rowCount()
+		# build stats album
 		cpt_len = self.tableMdlTrk.getSum('TAG_length')
-		albumnamet, infoslabel = albumnameextract(self.albumname, str(self.tableMdlAlb.getData(self.currow, 'Label').value()),
-																str(self.tableMdlAlb.getData(self.currow, 'ISRC').value()),
-																str(self.tableMdlAlb.getData(self.currow, 'Qty_CD').value()))
-		txt_album = albumnamet + "\n{year} • {tracks} • {dur} • {cd} • {art}\n{lab}".format(year=str(self.tableMdlAlb.getData(self.currow, 'Year').value()),
-																tracks=displayCounters(counter, 'track'),
-																dur=displayCounters(int(((cpt_len/60)*10)/10), 'min'),
-																cd=displayCounters(self.tableMdlAlb.getData(self.currow, 'Qty_CD').value(), 'CD'),
-																art=displayCounters(self.tableMdlAlb.getData(self.currow, 'Qty_covers').value(), 'ArtWork'),
-																lab=infoslabel)
+		txt_album, img_lab = albumnameextract(self.albumname,
+									str(self.tableMdlAlb.getData(self.currow, 'Label').value()),
+									str(self.tableMdlAlb.getData(self.currow, 'ISRC').value()),
+									str(self.tableMdlAlb.getData(self.currow, 'Year').value()),
+									int(self.tableMdlAlb.getData(self.currow, 'Qty_CD').value()),
+									self.tableMdlTrk.rowCount(),
+									int(((cpt_len/60)*10)/10),
+									int(self.tableMdlAlb.getData(self.currow, 'Qty_covers').value()))
+		# img label
+		if img_lab is not None:
+			plabel = QPixmap(img_lab)
+			self.lab_label.setPixmap(plabel)
+			self.lab_label.setVisible(True)
+		else:
+			self.lab_label.setVisible(False)
+		
+		# title album
 		self.lab_album.setHtml(txt_album)
 
 		# fill score album
@@ -590,17 +662,19 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.lab_scorealb.setText(displayStars(self.ScoreAlbum, SCOR_ALBUMS))
 
 		# fill cover
-		self.pathcov = self.tableMdlAlb.getData(self.currow, 'Cover').value()
-		self.coveral = self.tableMdlAlb.buildCover(self.pathcov, self.curMd5, DBAlbumsMainGui.COVE_SIZ)
-		pixmap = QPixmap(self.coveral)
-		self.labelcover.setPixmap(pixmap)
+		self.coveral = extractCoverb64(self.curMd5, PICM_NCO)
+		self.coveral = self.coveral.scaled(self.COVE_SIZ, self.COVE_SIZ, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+		self.labelcover.setPixmap(self.coveral)
 
 		# fill play medias only is not playing
 		if self.playerAudio.player.state() != QMediaPlayer.PlayingState:
 			self.curtrk = self.tbl_tracks.currentIndex().row()
 			self.homMed = self.tableMdlTrk.getMedias()
 			self.playerAudio.addMediaslist(self.homMed, self.curtrk)
-
+			
+		# init status bar
+		self.updateStatusBar(self.maintitle)
+		
 		# select track default
 		if self.tableMdlTrk.rowCount() > 0:
 			self.tbl_tracks.selectRow(0)
@@ -629,6 +703,14 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.lab_scorealb.setText(displayStars(self.sli_scorealb.value(), SCOR_ALBUMS))
 			if self.ScoreAlbum != self.sli_scorealb.value():
 				self.btn_scorealb.setVisible(True)
+				listRows = []
+				for ind in indexes:
+					listRows.append(ind.row())
+				nbselect = len(list(set(listRows)))
+				if nbselect == 1:
+					self.btn_scorealb.setText('Update')
+				else:
+					self.btn_scorealb.setText('Upd*' + str(nbselect))
 			else:
 				self.btn_scorealb.setVisible(False)
 
@@ -639,6 +721,14 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.lab_scoretrk.setText(displayStars(self.sli_scoretrk.value(), SCOR_TRACKS))
 			if self.ScoreTrack != self.sli_scoretrk.value():
 				self.btn_scoretrk.setVisible(True)
+				listRows = []
+				for ind in indexes:
+					listRows.append(ind.row())
+				nbselect = len(list(set(listRows)))
+				if nbselect == 1:
+					self.btn_scoretrk.setText('Update')
+				else:
+					self.btn_scoretrk.setText('Upd*' + str(nbselect))
 			else:
 				self.btn_scoretrk.setVisible(False)
 
@@ -662,14 +752,38 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.currow = self.tbl_albums.currentIndex().row()
 			self.displayAlbum()
 
-	def onSelectTrackChanged(self, event,  indexes=None):
+	def onSelectTrackChanged(self, event, indexes=None):
 		"""Select Track."""
 		indexes = self.tbl_tracks.selectedIndexes()
 		if len(indexes) > 0 and self.curtrk != self.tbl_tracks.currentIndex().row():
 			self.curtrk = self.tbl_tracks.currentIndex().row()
-			self.currentPlaylist.setCurrentIndex(self.curtrk)
 			self.displaytrack()
-
+			if self.playerAudio.player.state() != QMediaPlayer.PlayingState:
+				self.playerAudio.currentPlaylist.setCurrentIndex(self.curtrk)
+	
+	def onAnchorClicked(self, url):
+		"""Balises html title album clicked"""
+		text = str(url.toString())
+		if text.startswith('dbfunction://'):
+			function = text.replace('dbfunction://','')
+			print(function)
+			param = function[1:]
+			if function.startswith('a'):
+				self.viewArtworks()
+			elif function.startswith('y'):
+				index = self.com_year.findText(param, Qt.MatchFixedString)
+				if index >= 0:
+					self.com_year.setCurrentIndex(index)
+			elif function.startswith('l'):
+				index = self.com_label.findText(param, Qt.MatchFixedString)
+				if index >= 0:
+					self.com_label.setCurrentIndex(index)
+			elif function.startswith('s'):
+				self.lin_search.setText(param)
+				self.onFiltersChanged()
+			#if hasattr(self,function):
+			#	getattr(self,function)()
+	
 	def onPressCover(self,  event):
 		"""Display large cover MD5."""
 		if self.pathcov is not None:
@@ -678,14 +792,22 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def viewArtworks(self):
 		"""views artworks covers storage."""
-		ArtworksGui(self.AlbumPath, self.albumname, self.pathcover, self.h_main, self.h_main, self.sizeTN)
+		ArtworksGui(self.AlbumPath, self.albumname, self.pathcover, self.w_main, self.h_main, self.sizeTN)
 
 	def onPressButtonEnrScoreAlbum(self):
 		"""Update Score Album."""
-		self.ScoreAlbum = self.sli_scorealb.value()
-		self.lab_scorealb.setText(displayStars(self.sli_scorealb.value(), SCOR_ALBUMS))
-		# Mysql
-		updateBaseScore(self.ScoreAlbum, self.curAlb, getrequest('updatescorealbum', self.modsql))
+		indexes = self.tbl_albums.selectedIndexes()
+		if len(indexes) > 0:
+			listRows = []
+			for ind in indexes:
+				listRows.append(ind.row())
+			listRows = list(set(listRows))
+			self.ScoreAlbum = self.sli_scorealb.value()
+			self.lab_scorealb.setText(displayStars(self.sli_scorealb.value(), SCOR_ALBUMS))
+			for ind in listRows:
+				indalb = str(self.tableMdlAlb.getData(ind, 'ID_CD').value())
+				# Mysql
+				updateBaseScore(self.ScoreAlbum, indalb, getrequest('updatescorealbum', self.modsql))
 		# Treeview
 		self.tableMdlAlb.refresh()
 		# Button
@@ -693,10 +815,18 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def onPressButtonEnrScoreTrack(self):
 		"""Update Score Track."""
-		self.ScoreTrack = self.sli_scoretrk.value()
-		self.lab_scoretrk.setText(displayStars(self.sli_scoretrk.value(), SCOR_TRACKS))
-		# Mysql
-		updateBaseScore(self.ScoreTrack, self.curtrk, getrequest('updatescoretrack', self.modsql))
+		indexes = self.tbl_tracks.selectedIndexes()
+		if len(indexes) > 0:
+			listRows = []
+			for ind in indexes:
+				listRows.append(ind.row())
+			listRows = list(set(listRows))
+			self.ScoreTrack = self.sli_scoretrk.value()
+			self.lab_scoretrk.setText(displayStars(self.sli_scoretrk.value(), SCOR_TRACKS))
+			for ind in listRows:
+				indalb = str(self.tableMdlTrk.getData(ind, 'ID_TRACK').value())
+				# Mysql
+				updateBaseScore(self.ScoreTrack, indalb, getrequest('updatescoretrack', self.modsql))
 		# Treeview
 		self.tableMdlTrk.refresh()
 		# Button

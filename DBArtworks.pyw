@@ -4,27 +4,34 @@
 # ############################################################################
 # # Audio pyQT5 Player by SFI
 # ############################################################################
-from os import path
+from sys import argv, executable
+from os import system, path
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot, QSize
 from PyQt5.QtWidgets import (QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, 
-						 QScrollArea, QFrame, QLayout, QLabel)
-from DBModeldat import TNLabel						 
+						 QFrame, QLabel, QApplication)
 from DBFunction import openFolder, getListFiles, centerWidget
+from DBThunbnail import DBThunbnails
 
 
+# path
+if getattr(system, 'frozen', False):
+	# frozen
+	PATH_PROG = path.dirname(executable)
+else:
+	# unfrozen
+	PATH_PROG = path.realpath(path.dirname(argv[0]))
+	
 VERS_PROG = '1.00'
-TITL_PROG = "Player v{v} : ".format(v=VERS_PROG)
-WINS_ICO = "DBAlbums-icone.ico"
-WIDT_PICM = 1250
-HEIG_MAIN = 1060
+TITL_PROG = "Artwork viewer v{v} : ".format(v=VERS_PROG)
+WINS_ICO = path.join(PATH_PROG, 'IMG', 'icone.ico')
 TEXT_NCO = 'No Picture'
 MASKCOVER = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')
 
 
 # ##################################################################
 class CoverViewGui(QWidget):
-	def __init__(self, cover, namealbum, w=HEIG_MAIN, h=HEIG_MAIN, parent=None):
+	def __init__(self, cover, namealbum, w, h, parent=None):
 		super(CoverViewGui, self).__init__(parent)
 		self.resize(w, h)
 		self.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -52,56 +59,52 @@ class CoverViewGui(QWidget):
 
 # ##################################################################
 class ArtworksGui(QWidget):
-	def __init__(self, pathartworks, nametittle, createcover, w, h, sizeTN=WIDT_PICM, parent=None):
+	def __init__(self, pathartworks, nametittle, createcover, w, h, sizeTN, parent=None):
 		super(ArtworksGui, self).__init__(parent)
 		self.resize(w, h)
 		self.setWindowIcon(QIcon(WINS_ICO))
 		self.setWindowTitle(TITL_PROG+" [view ArtWorks] : reading files covers...")
 		self.setStyleSheet('QWidget{background-color: darkgray} '
-							'QLabel{background-color: darkgray;}')
-		self.height = h
+							'QLabel{background-color: black;border: 1px solid black;}')
+		
+		# cover default
 		self.mycover = None
+		self.numpic = 0
+		
+		self.line = 1
 		self.sizethun = sizeTN
-		self.scrollAreaWidgetthunbnails = QWidget(self)
-		self.scrollArea = QScrollArea()
-		self.scrollArea.setSizeIncrement(QSize(sizeTN+4, sizeTN+4))
-		self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-		self.scrollArea.setMinimumSize(QSize(8*(self.sizethun+4), 155))
-		self.gridthunbnails = QGridLayout()
-		self.gridthunbnails.setContentsMargins(5, 5, 5, 5)
+		self.thunbnails = DBThunbnails(self, self.sizethun, self.line)
+		self.thunbnails.signalthunchgt.connect(self.onSelectCover)
+		
 		self.labelcover = QLabel()
 		self.labelcover.setAlignment(Qt.AlignCenter)
-		self.labelcover.setMinimumSize(QSize(self.width()-40, self.height-(self.gridthunbnails.rowCount()*(self.sizethun+4))-70))
-		self.labelcover.enterEvent = self.onSelectCover
+		self.labelcover.setMinimumSize(QSize(self.width()-40, h-(self.line*(self.sizethun+4))-70))
 		self.labelcover.setContextMenuPolicy(Qt.CustomContextMenu)
 		self.labelcover.customContextMenuRequested.connect(self.popUpMenu)
+		sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+		self.labelcover.setSizePolicy(sizePolicy)
+		self.labelcover.enterEvent = self.selectCover
+		
 		# popup albums
 		self.menua = QMenu()
 		self.action_OFC = self.menua.addAction("Open Folder...", lambda c=pathartworks: openFolder(c))
 		self.action_COV = self.menua.addAction("Create cover file...", self.createFileCover)
+		
 		# create cover option only if no cover file
 		if createcover[0:len(TEXT_NCO)] != TEXT_NCO:
 			self.action_COV.setEnabled(False)
 		self.line = QFrame(self)
 		self.line.setFrameShape(QFrame.HLine)
 		self.line.setFrameShadow(QFrame.Sunken)
-		sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-		self.labelcover.setSizePolicy(sizePolicy)
-		labelcgrid = QGridLayout()
-		labelcgrid.setContentsMargins(5, 5, 5, 5)
-		labelcgrid.addWidget(self.labelcover)
-		labelcgrid.setSizeConstraint(QLayout.SetFixedSize)
-		self.gridthunbnails.setContentsMargins(3, 5, -1, 5)
-		self.gridthunbnails.setSpacing(2)
-		self.gridLayout_2 = QGridLayout(self.scrollAreaWidgetthunbnails)
-		self.gridLayout_2.addLayout(self.gridthunbnails, 0, 0, 1, 1)
-
-		self.scrollArea.setWidget(self.scrollAreaWidgetthunbnails)
+		self.line.setContentsMargins(0, 0, 0, 0)
+		
 		layout = QVBoxLayout(self)
-		layout.addWidget(self.scrollAreaWidgetthunbnails)
+		lyaout = QGridLayout()
+		lyaout.addWidget(self.thunbnails)
+		layout.addLayout(lyaout)
 		layout.addWidget(self.line)
 		layout.addStretch(1)
-		layout.addLayout(labelcgrid)
+		layout.addWidget(self.labelcover)
 		self.setLayout(layout)
 		centerWidget(self)
 		self.show()
@@ -109,104 +112,58 @@ class ArtworksGui(QWidget):
 		# build list covers
 		self.nametittle = nametittle
 		self.fileslist = list(getListFiles(pathartworks, MASKCOVER))
-		self.pathartworks = pathartworks
 		self.filelist = self.fileslist[0]
 
-		maxCol = int(w/self.sizethun)
-		curRow = curCol = 0
 		# build thunbnails
-		cpt = 0
-		for filelist in self.fileslist:
-			mycover = QPixmap(filelist)
-			mythunb = mycover.scaled(sizeTN, sizeTN, Qt.IgnoreAspectRatio, Qt.FastTransformation)
-			label = TNLabel(self, mythunb, sizeTN,  filelist)
-			label.mousePressEvent = (lambda event,  n=cpt: self.onSelectThunbnailChanged(event, n))
-			self.gridthunbnails.addWidget(label, curRow, curCol)
-			cpt += 1
-			# position
-			curCol += 1
-			if curCol == maxCol:
-				curCol = 0
-				curRow += 1
+		self.thunbnails.addthunbails(self.fileslist)
+
 		# build large cover
-		self.numpic = 0
-		self.onSelectThunbnailChanged(None, self.numpic)
+		self.displayCover(self.numpic)
 
 	@pyqtSlot()
 	def keyPressEvent(self, event):
 		if event.key() == Qt.Key_Escape:
 			self.destroy()
 		elif event.key() == Qt.Key_Left:
-			self.onSelectThunbnailChanged(None, (self.numpic-1) % len(self.fileslist))
+			self.displayCover((self.numpic-1) % len(self.fileslist))
 		elif event.key() == Qt.Key_Right:
-			self.onSelectThunbnailChanged(None, (self.numpic+1) % len(self.fileslist))
-
+			self.displayCover((self.numpic+1) % len(self.fileslist))
+	
 	@pyqtSlot()
 	def resizeEvent(self, event):
-		if self.gridthunbnails.count() > 0:
-			self.replaceThunbnails(self.sizethun, self.sizethun)
-			self.onSelectThunbnailChanged(None, self.numpic)
+		if self.thunbnails.getTotalThunbnails() > 0:
+			self.displayCover(self.numpic)
 
+	def onSelectCover(self, numpic):
+		"""Select thunbnail."""
+		self.thunbnails.onSelectThunbnail(numpic)
+		self.displayCover(numpic)
+
+	def selectCover(self, event):
+		"""Select thunbnail if select cover."""
+		self.thunbnails.onSelectThunbnail(self.numpic)
+		
 	def popUpMenu(self,  position):
+		"""Menu."""
 		self.menua.exec_(self.labelcover.mapToGlobal(position))
 
-	def onSelectThunbnailChanged(self, event, numpic):
+	def displayCover(self, numpic):
 		"""Display picture."""
-		self.filelist = self.fileslist[numpic]
 		self.numpic = numpic
+		self.filelist = self.fileslist[self.numpic]
 		self.mycover = QPixmap(self.filelist)
-		width, height, new_width, new_height = self.resizeImage(self.width()-40, self.height-(self.gridthunbnails.rowCount()*(self.sizethun+4))-70, self.mycover)
+		width, height, new_width, new_height = self.resizeImage(self.labelcover.size().width(), self.size().height()-self.thunbnails.size().height()-30, self.mycover)
 		dicover = self.mycover.scaled(new_width, new_height, Qt.IgnoreAspectRatio, Qt.FastTransformation)
 		self.labelcover.setPixmap(dicover)
-		self.setWindowTitle(TITL_PROG+" : [view ArtWorks: "+self.nametittle+'] {c}/{n} "{name}" A[{w}x{h}] O[{wo}x{ho}]'.format(c=str(numpic),
+		self.setWindowTitle(TITL_PROG+" : [view ArtWorks: "+self.nametittle+'] {c}/{n} "{name}" A[{w}x{h}] O[{wo}x{ho}]'.format(c=str(self.numpic+1),
 																	 n=str(len(self.fileslist)),
 																	 w=new_width,
 																	 h=new_height,
 																	 name=path.basename(self.filelist),
 																	 wo=str(width),
 																	 ho=str(height)))
-		self.onSelectCover()
-
-	def onSelectCover(self,  event=None):
-		# unselect/select thunbnail
-		for i in range(self.gridthunbnails.count()):
-			if self.gridthunbnails.itemAt(i).widget().Name == self.filelist:
-				self.gridthunbnails.itemAt(i).widget().setStyleSheet("border: 2px solid red;")
-			else:
-				self.gridthunbnails.itemAt(i).widget().setStyleSheet("border: 2px solid white;")
-
-	def replaceThunbnails(self, sizeTN, oldsizeTN):
-		# replace labels thunbnails
-		numCov = self.gridthunbnails.count()
-		if numCov > 1:
-			oldmaxCol = int(self.frameGeometry().width()/(oldsizeTN+4))
-			maxCol = int(self.frameGeometry().width()/(sizeTN+4))
-			curRow = curCol = cptIte = oldcurRow = oldcurCol = 0
-			for row in range(numCov):
-				if self.gridthunbnails.itemAtPosition(oldcurRow, oldcurCol) != 0:
-					# capture and clear label gridlayout
-					layoutitem = self.gridthunbnails.takeAt(cptIte)
-					label = layoutitem.widget()
-					self.gridthunbnails.removeWidget(label)
-					# resize
-					label.setFixedSize(sizeTN, sizeTN)
-					mypixmap = label.pixmap()
-					if mypixmap.size().width() != sizeTN or mypixmap.size().height() != sizeTN:
-						mypixmap = mypixmap.scaled(sizeTN, sizeTN, Qt.IgnoreAspectRatio, Qt.FastTransformation)
-					label.setPixmap(mypixmap)
-					# replace
-					self.gridthunbnails.addWidget(label, curRow, curCol)
-				# position old next
-				oldcurRow += 1
-				if oldcurCol == oldmaxCol:
-					oldcurCol = 0
-					oldcurRow += 1
-				# position next
-				curCol += 1
-				if curCol == maxCol:
-					curCol = 0
-					curRow += 1
-
+		self.thunbnails.onSelectThunbnail(numpic)
+	
 	def resizeImage(self, wmax, hmax, pic):
 		# measures
 		width, height = pic.size().width(), pic.size().height()
@@ -224,3 +181,15 @@ class ArtworksGui(QWidget):
 		path_cover = path.join(path.dirname(self.filelist), 'cover.' + file_exten)
 		self.setWindowTitle("create file {name} ".format(name=path.basename(path_cover)))
 		self.mycover.save(path_cover)
+
+
+if __name__ == '__main__':
+	app = QApplication(argv)
+	ART = ArtworksGui(r"E:\Work\ZTest\TAG_bluid\TECHNO\Download\Caia - The Magic Dragon (2003)", 
+						'test', 
+						'chocolat', 
+						1250, 
+						1060, 
+						150)
+	rc = app.exec_()
+	exit(rc)

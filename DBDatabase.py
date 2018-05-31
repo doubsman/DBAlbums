@@ -7,6 +7,7 @@ from os import system, path
 from base64 import b64decode
 from PyQt5.QtCore import QSettings, qDebug
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5.QtGui import QPixmap
 
 
 if getattr(system, 'frozen', False):
@@ -115,6 +116,21 @@ def buildFileCover(filenamecover, md5):
 	filecover = open(filenamecover, "wb")
 	filecover.write(cover)
 	filecover.close()
+
+
+def extractCoverb64(md5, blankcover, namerequest='cover'):
+	"""Get base64 picture cover."""
+	request = (getrequest(namerequest)).format(MD5=md5)
+	try:
+		coverb64 = buildTabFromRequest(request)[0]
+		cover = b64decode(coverb64)
+		labelpixmap = QPixmap()
+		labelpixmap.loadFromData(cover)
+	except:
+		pass
+		qDebug('err thunbnail read : '+str(md5))
+		labelpixmap = QPixmap(blankcover)
+	return labelpixmap
 
 
 def updateBaseScore(score, idalb, req):
