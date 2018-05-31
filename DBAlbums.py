@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# GetExist History Version
+# DBAlbums History Version
+#  1.29 GetExist -> DBAlbums
 #  1.28 fixed bugs + status bar
 #  1.27 combos label/year + fast speed viewer artworks
 #  1.26 viewer artworks
@@ -54,14 +55,14 @@ from base64 import b64decode, decodestring, b64encode
 from time import sleep
 from queue import Queue, Empty
 # functions dev
-from GetExistPlayer import PlayerProcess, PlayerAudio
-from GetExistCopyDatabaseToSqlite import CopyDatabaseInvent
+from DBAlbumsPlayer import PlayerProcess, PlayerAudio
+from DBAlbumsCopyDatabaseToSqlite import CopyDatabaseInvent
 
 
 ###################################################################
 # CONSTANTS
 VERS_PROG = '1.28'
-TITL_PROG = "DB Albums v{v} (2017)".format(v=VERS_PROG)
+TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
 PATH_PROG = path.dirname(__file__)
 LOGS_PROG = path.join(PATH_PROG, 'Logs')
 # TAG
@@ -112,8 +113,8 @@ BASE_MP3T = 'MP3'
 # gui
 NAME_EVT = ('LOSSLESS', 'MP3', 'LOSSLESS_TEST', 'MP3_TEST')
 CURT_EVT = 2 # 0 LOSSLESS
-WINS_ICO = "GetExist.ico"
-UNIX_ICO = 'GetExist.png'
+WINS_ICO = "DBAlbums.ico"
+UNIX_ICO = 'DBAlbums.png'
 PICT_NCO = 'img-cd-blank.gif'
 PICM_NCO = 'img-cd-blank-mini.jpg'
 TEXT_NCO = 'No Picture'
@@ -1346,7 +1347,7 @@ class CoverMainGui(Tk):
 																						siz = txt_siz,
 																						dur = txt_dur))
 		else:
-			self.MessageInfo.set("Search Result ({sch}) = nothing".format(sch = self.style_value.get()))
+			self.MessageInfo.set("Search Result \"{sch}\" = nothing".format(sch = self.ligne_texte.get()))
 		if self.tree.get_children():
 			# first line by defaut
 			if not(refresh): self.CurentAlbum = 'Row_0'
