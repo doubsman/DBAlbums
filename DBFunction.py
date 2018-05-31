@@ -65,6 +65,22 @@ class ThemeColors(QObject):
 		nametheme = self.themes[self.curthe]
 		self.selectTheme(nametheme)
 
+def displayArrayDict(arraydatadict, colList=None, carcolumn = ' ', carline = '-'):
+	"""Create var string with array."""
+	displaytabulate = ''
+	if not colList: 
+		colList = list(arraydatadict[0].keys() if arraydatadict else [])
+	myList = [colList]
+	for item in arraydatadict: 
+		myList.append([str(item[col] or '') for col in colList])
+	colSize = [max(map(len,col)) for col in zip(*myList)]
+	formatStr = (' ' + carcolumn + ' ').join(["{{:<{}}}".format(i) for i in colSize])
+	# Seperating line
+	myList.insert(1, [carline * i for i in colSize])
+	for item in myList: 
+		displaytabulate += '\n' + (formatStr.format(*item))
+	displaytabulate += '\n'
+	return displaytabulate
 
 def buildlistcategory(configini, category, racine,  mode):
 	"""Build list category from read ini file."""
@@ -120,22 +136,52 @@ def centerWidget(widget):
 	widget.move(qtrectangle.topLeft())
 
 
-def getListFiles(folder, masks=None):
+def getListFiles(folder, masks=None, exact=None):
 	"""Build files list."""
 	blacklist = ['desktop.ini', 'Thumbs.db']
 	for folderName, subfolders, filenames in walk(folder):
 		if subfolders:
 			for subfolder in subfolders:
-				getListFiles(subfolder, masks)
+				getListFiles(subfolder, masks, exact)
 		for filename in filenames:
 			if masks is None:
+				# no mask
 				if filename not in blacklist:
 					yield path.join(folderName, filename)
 			else:
-				for xmask in masks:
-					if filename[-len(xmask):].lower() in xmask:
+				# same
+				if exact:
+					if filename.lower() in masks:
 						if filename not in blacklist:
-							yield path.join(folderName, filename)
+								yield path.join(folderName, filename)
+				else:
+					# mask joker
+					for xmask in masks:
+						if filename[-len(xmask):].lower() in xmask:
+							if filename not in blacklist:
+								yield path.join(folderName, filename)
+
+
+def getListFilesNoSubFolders(folder, masks=None, exact=None):
+	"""Build files list."""
+	blacklist = ['desktop.ini', 'Thumbs.db']
+	for filename in listdir(folder):
+		# file
+		if not path.isdir(path.join(folder, filename)):
+			if masks is None:
+				yield path.join(folder, filename)
+			else:
+				# same
+				if exact:
+					if filename.lower() in masks:
+						if filename not in blacklist:
+								yield path.join(folder, filename)
+				else:
+					# mask joker
+					for xmask in masks:
+						if filename[-len(xmask):].lower() in xmask:
+							if filename not in blacklist:
+								yield path.join(folder, filename)
 
 
 def getListFolders(folder):
@@ -201,16 +247,17 @@ def convertUNC(path):
 	return(path)
 
 
-def buildalbumnamehtml(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers, albumPath, RESS_LABS, RESS_ICOS):
+def buildalbumnamehtml(name, label, isrc, country, year, nbcd, nbtracks, nbmin, nbcovers, albumPath, RESS_LABS, RESS_ICOS, RESS_FLAGS):
 	"""buil label name & album name."""
 	# name + label
 	stylehtml = "text-decoration:none;color: black;"
-	infoslabel = ""
-	infonameal = ""
-	infosayear = ""
-	inffolder = ""
-	infotags = ""
-	infopowe = ""
+	infoslabel = ''
+	infonameal = ''
+	infosayear = ''
+	inffolder = ''
+	infotags = ''
+	infopowe = ''
+	imageflag = ''
 	imglabel = None
 	if '[' in name:
 		textsalbum = name[name.find('[')+1:name.find(']')]
@@ -248,12 +295,19 @@ def buildalbumnamehtml(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers,
 	# year
 	if year != "":
 		infosayear = '<a style="' + stylehtml + '" href="dbfunction://y'+year+'">' + year + '</a>'
+	# flags
+	if country != "":
+		flagfile = path.join(RESS_FLAGS, country+'.png')
+		if path.isfile(flagfile):
+			imageflag = '<img style="vertical-align:Bottom;" src="' + flagfile + '" height="17">'
+			imageflag = '<a style="' + stylehtml + '" href="dbfunction://c' + country + '">' + imageflag + '</a>'
 	# nb cd
 	if nbcd<6:
 		infosnbcd = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'cdrom.png') + '" height="17">'
 		infosnbcd = nbcd*infosnbcd
 	else:
 		infosnbcd = displayCounters(nbcd, 'CD')
+	infosnbcd = ''
 	if path.exists(albumPath):
 		# folder
 		inffolder =  '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'folder.png') + '" height="17">'
@@ -262,7 +316,7 @@ def buildalbumnamehtml(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers,
 		if platform == "win32":
 			infotags = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'tag.png') + '" height="17">'
 			infotags = '<a style="' + stylehtml + '" href="dbfunction://t">' + infotags + '</a>'
-			infopowe = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'pwr.png') + '" height="17">'
+			infopowe = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'update.png') + '" height="17">'
 			infopowe = '<a style="' + stylehtml + '" href="dbfunction://p">' + infopowe + '</a>'
 		else:
 			infotags = infopowe = ''
@@ -272,7 +326,7 @@ def buildalbumnamehtml(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers,
 	infoartco = displayCounters(nbcovers, 'art')
 	if nbcovers>0:
 		infoartco = '<a style="' + stylehtml + '" href="dbfunction://a">' + infoartco + '</a>'
-	infoshtml = '<span>' + infonameal + '</span>' + infosnbcd + ' ' + inffolder + infotags + infopowe + '<br/>'
+	infoshtml = '<span>' + infonameal + '</span>' + imageflag + ' ' + infosnbcd + ' ' + inffolder + infotags + infopowe + '<br/>'
 	if infoslabel != "":
 		#if infosaisrc != "":
 		#	infoshtml += infoslabel + ' • ' + infosaisrc + ' • '

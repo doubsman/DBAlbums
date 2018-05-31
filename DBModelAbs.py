@@ -14,7 +14,6 @@ configini.beginGroup('dbalbums')
 TEXT_NCO = configini.value('text_nocov')
 THUN_NOD = int(configini.value('thnail_nod'))
 FONT_MAI = configini.value('font00_ttx')
-DISP_CJOKER = configini.value('text_joker')
 configini.endGroup()
 
 
@@ -80,10 +79,12 @@ class ModelDBAbstract(QAbstractTableModel):
 		return QVariant(self.arraydata[index.row()][index.column()])
 	
 	def getData(self, row, colname=None, col=None):
-		if col is None:
-			return self.arraydata[row][self.myindex.index(colname)]
-		elif colname is None:
-			return self.arraydata[row][col]
+		if self.rowCount() > 0:
+			if col is None:
+				return self.arraydata[row][self.myindex.index(colname)]
+			elif colname is None:
+				return self.arraydata[row][col]
+		return QVariant()
 
 	def getList(self, colname, desc=True):
 		"""Build list column."""
@@ -100,7 +101,7 @@ class ModelDBAbstract(QAbstractTableModel):
 		total = 0
 		for row in range(self.rowCount()):
 			itemlist = self.arraydata[row][self.myindex.index(colname)]
-			if isinstance(itemlist, int) is False:
+			if isinstance(itemlist, int) is False and len(itemlist) > 0:
 				if len(itemlist.split(':')) > 1:
 					itemlist = sum(int(x) * 60 ** i for i, x in enumerate(reversed(itemlist.split(':'))))
 			total += int(itemlist)
@@ -121,8 +122,8 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		self.filtlabl = None
 		self.filtintk = False
 		self.filtgenr = None
+		self.filtcoun = None
 		self.listidtxt = []
-		self.listidsty = []
 		self.cpt_siz = 0
 		self.cpt_len = 0
 		self.cpt_cds = 0
@@ -131,23 +132,16 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		self.listfam = []
 		self.listlab = []
 		self.listyea = []
+		self.listcou = []
 		self.listthun = []
 		self.listiddi = []
 
-	def updateFilters(self, filttext, filtcate=None, filtfami=None, filtyear=None, filtlabl=None, filtgenr=None, filtintk=False):
+	def updateFilters(self, filttext, filtcate=None, filtfami=None, filtyear=None, filtlabl=None, filtgenr=None, filtcoun=None, filtintk=False):
 		"""Update vars filter."""
 		if filtintk and filttext != '':
 			self.listidtxt = DBFuncBase().sqlToArray((getrequest('tracksinsearch')).format(search=filttext))
 		else:
 			self.listidtxt = []
-		if  filtgenr is not None:
-			if filtgenr != '':
-				filtsearch = '%'+filtgenr+'%'
-			else:
-				filtsearch = ''
-			self.listidsty = DBFuncBase().sqlToArray((getrequest('tracksgesearch')).format(search=filtsearch))
-		else:
-			self.listidsty = []
 		self.filttext = filttext
 		self.filtcate = filtcate
 		self.filtfami = filtfami
@@ -155,6 +149,7 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		self.filtlabl = filtlabl
 		self.filtintk = filtintk
 		self.filtgenr = filtgenr
+		self.filtcoun = filtcoun
 		self.cpt_siz = 0
 		self.cpt_len = 0
 		self.cpt_cds = 0
@@ -163,6 +158,7 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		self.listfam = []
 		self.listlab = []
 		self.listyea = []
+		self.listcou = []
 		self.listthun = []
 		self.listiddi = []
 		self.invalidate()
@@ -170,47 +166,55 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 	def filterAcceptsRow(self, sourceRow, sourceParent):
 		"""Filter data model."""
 		# category
-		if self.filtcate is not None and self.filtcate != self.parent.DISP_CJOKER:
-			index = self.parent.index(sourceRow, self.parent.myindex.index('Category'), sourceParent)
+		if self.filtcate:
+			index = self.parent.index(sourceRow, self.parent.myindex.index('CATEGORY'), sourceParent)
 			if self.filtcate != self.parent.data(index).value():
 				return False
 		# family
-		if self.filtfami is not None and self.filtfami != self.parent.DISP_CJOKER:
-			index = self.parent.index(sourceRow, self.parent.myindex.index('Family'), sourceParent)
+		if self.filtfami:
+			index = self.parent.index(sourceRow, self.parent.myindex.index('FAMILY'), sourceParent)
 			if self.filtfami != self.parent.data(index).value():
 				return False
 		# year
-		if self.filtyear is not None and self.filtyear != self.parent.DISP_CJOKER:
-			index = self.parent.index(sourceRow, self.parent.myindex.index('Year'), sourceParent)
+		if self.filtyear:
+			index = self.parent.index(sourceRow, self.parent.myindex.index('YEAR'), sourceParent)
 			if self.filtyear != self.parent.data(index).value():
 				return False
 		# label
-		if self.filtlabl is not None and self.filtlabl != self.parent.DISP_CJOKER:
-			index = self.parent.index(sourceRow, self.parent.myindex.index('Label'), sourceParent)
+		if self.filtlabl:
+			index = self.parent.index(sourceRow, self.parent.myindex.index('LABEL'), sourceParent)
 			if self.filtlabl != self.parent.data(index):
 				return False
-		# genres
-		if self.filtgenr is not None and self.filtgenr != self.parent.DISP_CJOKER:
-			index = self.parent.index(sourceRow, self.parent.myindex.index('ID_CD'), sourceParent)
-			if  self.parent.data(index).value() not in self.listidsty:
+		# style
+		if self.filtgenr:
+			index = self.parent.index(sourceRow, self.parent.myindex.index('STYLE'), sourceParent)
+			if not (self.filtgenr == 'Unknown' and self.parent.data(index).value() == ''):
+				if self.filtgenr not in self.parent.data(index).value():
+					return False
+		# country
+		if self.filtcoun:
+			index = self.parent.index(sourceRow, self.parent.myindex.index('COUNTRY'), sourceParent)
+			if self.filtcoun not in self.parent.data(index).value():
 				return False
 		# text search
 		if self.filtintk and self.filttext != '':
 			index = self.parent.index(sourceRow, self.parent.myindex.index('ID_CD'), sourceParent)
 			if  self.parent.data(index).value() not in self.listidtxt:
 				return False
+		# find in name and label
 		elif self.filttext != '':
-			index = self.parent.index(sourceRow, self.parent.myindex.index('Name'), sourceParent)
-			if self.filttext.lower() not in self.parent.data(index).value().lower():
+			index = self.parent.index(sourceRow, self.parent.myindex.index('NAME'), sourceParent)
+			index2 = self.parent.index(sourceRow, self.parent.myindex.index('LABEL'), sourceParent)
+			if self.filttext.lower() not in self.parent.data(index).value().lower() and self.filttext.lower() not in self.parent.data(index2).lower():
 				return False
 		# cumuls
-		index = self.parent.index(sourceRow, self.parent.myindex.index('Size'), sourceParent)
+		index = self.parent.index(sourceRow, self.parent.myindex.index('SIZE'), sourceParent)
 		self.cpt_siz += self.parent.data(index).value()
-		index = self.parent.index(sourceRow, self.parent.myindex.index('Qty_CD'), sourceParent)
+		index = self.parent.index(sourceRow, self.parent.myindex.index('CD'), sourceParent)
 		self.cpt_cds += self.parent.data(index).value()
-		index = self.parent.index(sourceRow, self.parent.myindex.index('Qty_Tracks'), sourceParent)
+		index = self.parent.index(sourceRow, self.parent.myindex.index('TRACKS'), sourceParent)
 		self.cpt_trk += self.parent.data(index).value()
-		index = self.parent.index(sourceRow, self.parent.myindex.index('Length'), sourceParent)
+		index = self.parent.index(sourceRow, self.parent.myindex.index('LENGTHDISPLAY'), sourceParent)
 		lethval = self.parent.data(index).value()
 		if isinstance(lethval, int) is False:
 			if len(lethval.split(':')) > 1:
@@ -220,38 +224,43 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		index = self.parent.index(sourceRow, self.parent.myindex.index('ID_CD'), sourceParent)
 		self.listiddi.append(self.parent.data(index).value())
 		# combos list
-		index = self.parent.index(sourceRow, self.parent.myindex.index('Category'), sourceParent)
+		index = self.parent.index(sourceRow, self.parent.myindex.index('CATEGORY'), sourceParent)
 		if self.parent.data(index).value() not in self.listcat:
 			self.listcat.append(self.parent.data(index).value())
-		index = self.parent.index(sourceRow, self.parent.myindex.index('Family'), sourceParent)
+		index = self.parent.index(sourceRow, self.parent.myindex.index('FAMILY'), sourceParent)
 		if self.parent.data(index).value() not in self.listfam:
 			self.listfam.append(self.parent.data(index).value())
-		index = self.parent.index(sourceRow, self.parent.myindex.index('Label'), sourceParent)
+		index = self.parent.index(sourceRow, self.parent.myindex.index('LABEL'), sourceParent)
 		if self.parent.data(index) not in self.listlab:
 			self.listlab.append(self.parent.data(index))
-		index = self.parent.index(sourceRow, self.parent.myindex.index('Year'), sourceParent)
+		index = self.parent.index(sourceRow, self.parent.myindex.index('YEAR'), sourceParent)
 		if self.parent.data(index).value() not in self.listyea:
 			self.listyea.append(self.parent.data(index).value())
+		index = self.parent.index(sourceRow, self.parent.myindex.index('COUNTRY'), sourceParent)
+		if self.parent.data(index).value() not in self.listcou:
+			self.listcou.append(self.parent.data(index).value())
 		# validate rows display ok
 		return True
 
 
 # TABLE DBALBUMS ABSTRACT
 class ModelTableAlbumsABS(ModelDBAbstract):
-	
+	PATH_PROG = path.dirname(path.abspath(__file__))
+	RESS_FLAG = path.join(PATH_PROG, 'IMG' , 'FLAG')
 	# ## definition list albums
 	# columns grid name
-	A_COLNAME = (	'Category', 'Family', 'Name', 'Label', 'ISRC',
-					'Trk', 'CD', 'Year', 'Time', 'Size',
-					'Score', 'Pic', 'Add', 'Modified', 'Position',
-					'Tag', 'Path', 'Cover', 'MD5', 'ID_CD')
+	A_COLNAME = (	'Category', 'Family', 'Name', 'Artist', 'Style',
+					'Label', 'TLabel', 'ISRC', 'TISRC', 'Trk', 
+					'CD', 'Year', 'Time', 'Size', 'Score', 
+					'Pic', 'Country', 'Add', 'Modified', 'Position',
+					'Path', 'Cover', 'Tag', 'ID_CD')
 	# treeview columns width
-	A_C_WIDTH = (	60, 90, 250, 120, 110,
-					30, 30, 40, 50, 40,
-					50, 30, 77, 77, 250,
-					30, 200, 200, 200, 40)
+	A_C_WIDTH = (	60, 90, 250, 0, 110,
+					120, 0, 100, 0, 30,
+					30, 40, 50, 40,	50,
+					30, 60, 77, 77, 250,
+					200, 200, 30, 40)
 	C_HEIGHT = 21
-	DISP_CJOKER = DISP_CJOKER 
 	
 	def __init__(self, parent, *args):
 		"""Init model."""
@@ -263,13 +272,13 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 		self.SortFilterProxy = ProxyModelAlbums(self)
 		self.SortFilterProxy.setDynamicSortFilter(True)
 		self.SortFilterProxy.setSourceModel(self)
-	
+
 	def data(self, index,  role=Qt.DisplayRole):
 		"""Sum and display data."""
 		if not index.isValid(): 
 			return QVariant() 
 		elif role == Qt.TextColorRole:
-			if index.column() == self.myindex.index('Score'):
+			if index.column() == self.myindex.index('SCORE'):
 				return QVariant(QColor("yellow"))	
 		elif role != Qt.DisplayRole:
 			# TextAlignmentRole
@@ -278,9 +287,11 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 			#		return Qt.AlignCenter
 			return QVariant()
 		# DisplayRole
-		if index.column() == self.myindex.index('Score'):
+		if index.column() == self.myindex.index('SCORE'):
 			return (self.arraydata[index.row()][index.column()]*'★')
-		if index.column() == self.myindex.index('Label') or index.column() == self.myindex.index('ISRC'):
+		if index.column() == self.myindex.index('LABEL'):
+			return ((self.arraydata[index.row()][index.column()]).title())
+		if index.column() == self.myindex.index('ISRC'):
 			return ((self.arraydata[index.row()][index.column()]).upper())
 		return QVariant(self.arraydata[index.row()][index.column()])
 	
@@ -294,8 +305,8 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 			index = self.SortFilterProxy.mapToSource(index)
 			if not index.isValid():
 				continue
-			pathcover = self.getData(index.row(), 'Cover')
-			albumname = self.getData(index.row(), 'Name')
+			pathcover = self.getData(index.row(), 'COVER')
+			albumname = self.getData(index.row(), 'NAME')
 			albumname = albumname.replace(' - ', '\n')
 			# no cover or no display thunbnails covers (thnail_nod = 1)
 			if THUN_NOD == 0 or pathcover == TEXT_NCO:
@@ -316,7 +327,7 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 		query.exec_(req)
 		query.clear
 		# change value to array
-		self.arraydata[row][self.myindex.index('Score')]= score
+		self.arraydata[row][self.myindex.index('SCORE')]= score
 
 
 # MODEL ABSTRACT proxy model tbl albums
@@ -337,12 +348,14 @@ class ModelTableTracksABS(ModelDBAbstract):
 	
 	# ## definition list tracks
 	# columns grid name
-	T_COLNAME = (	'N°', 'Artist', 'Title', 'Time',
-					'Score', 'Style', 'File', 'Folder', 'ID_TRACK')
+	T_COLNAME = (	'N°', 'Artist', 'Title', 'Time', 'Score',
+					'Style', 'File', 'index', 'start', 'end',
+					'Path', 'format', 'ID_TRACK')
 	# treeview columns width
 	C_HEIGHT = 21
-	T_C_WIDTH = (	50, 150, 200, 60,
-					50, 90, 250, 250, 70)
+	T_C_WIDTH = (	50, 150, 200, 60, 50,
+					90, 250, 60, 70, 70,
+					250, 70, 70)
 					
 	def __init__(self, parent, txtsearch, *args):
 		"""Init model."""
@@ -360,19 +373,19 @@ class ModelTableTracksABS(ModelDBAbstract):
 		if not index.isValid(): 
 			return QVariant() 
 		elif role == Qt.TextColorRole:
-			if index.column() == self.myindex.index('Score'):
+			if index.column() == self.myindex.index('SCORE'):
 				return QVariant(QColor("yellow"))
 		elif role == Qt.BackgroundRole:				
 			if self.txtsearch != '':
 				row = index.row()
-				value1 = self.arraydata[row][self.myindex.index('TAG_Artists')]
-				value2 = self.arraydata[row][self.myindex.index('TAG_Title')]
+				value1 = self.arraydata[row][self.myindex.index('ARTIST')]
+				value2 = self.arraydata[row][self.myindex.index('TITLE')]
 				if self.txtsearch.lower() in value1.lower() or self.txtsearch.lower() in value2.lower():
 					return QVariant(QColor("lightsteelblue"))
 		elif role != Qt.DisplayRole:
 			return QVariant()
 		# DisplayRole
-		if index.column() == self.myindex.index('Score'):
+		if index.column() == self.myindex.index('SCORE'):
 			return (self.arraydata[index.row()][index.column()]*'★')
 		return QVariant(self.arraydata[index.row()][index.column()])
 
@@ -385,7 +398,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 				index = self.SortFilterProxy.mapToSource(index)
 				if not index.isValid():
 					continue
-				file = path.join(self.arraydata[index.row()][self.myindex.index('REP_Track')], self.arraydata[index.row()][self.myindex.index('FIL_Track')])
+				file = path.join(self.arraydata[index.row()][self.myindex.index('PATHNAME')], self.arraydata[index.row()][self.myindex.index('FILENAME')])
 				listmedia.append(convertUNC(file))
 			return listmedia
 
@@ -399,7 +412,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 		query.exec_(req)
 		query.clear
 		# change value to array
-		self.arraydata[row][self.myindex.index('Score')] = score
+		self.arraydata[row][self.myindex.index('SCORE')] = score
 
 
 # TABLE DBTRACKS SQLQUERY

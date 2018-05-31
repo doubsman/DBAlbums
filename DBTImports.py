@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sys import argv
 from os import path
+from codecs import open
 from time import time, sleep
-from PyQt5.QtGui import QFont, QIcon
-from PyQt5.QtCore import (Qt, qDebug, pyqtSignal, qInstallMessageHandler,
-						pyqtSlot, QSettings, QThread)
-from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle
+from PyQt5.QtGui import QFont, QIcon, QColor, QTextCursor
+from PyQt5.QtCore import (Qt, qDebug, pyqtSignal,
+						pyqtSlot, QSettings, QThread, QDateTime)
+from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit, QScrollBar
 from PyQt5.QtSql import QSqlQuery
-from DBFunction import (buildCommandPowershell, centerWidget, qtmymessagehandler,
-						displayCounters, openFolder, ThemeColors)
-from DBDatabase import DBFuncBase, connectDatabase, getrequest
-from DBTProcess import DBProcessGui
+from DBFunction import centerWidget, openFolder
+from DBDatabase import DBFuncBase
 from DBModelAbs import ModelTableUpdatesABS
-from DBTImpFunc import BuildInvent
+from DBTImpoANA import BuildInvent
+from DBTImpoRUN import ReleaseInvent
 from Ui_DBUPDATE import Ui_UpdateWindows
 
 
@@ -53,9 +52,10 @@ class myThreadTimer(QThread):
 
 
 class InventGui(QWidget, Ui_UpdateWindows):
+	signalend = pyqtSignal()
+	
 	PATH_PROG = path.dirname(path.abspath(__file__))
-	PWSH_SCRU = path.join(PATH_PROG, 'PS1', "UPDATE_ALBUMS.ps1")
-	PWSH_SCRA = path.join(PATH_PROG, 'PS1', "ADD_ALBUMS.ps1")
+	LOGS_PROG = path.join(PATH_PROG, 'LOG')
 	# Read File DBAlbums.ini
 	qDebug('read ini file')
 	FILE__INI = 'DBAlbums.ini'
@@ -68,41 +68,69 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	HEIG_MAIN = int(configini.value('wgui_heigh'))
 	WIDT_PICM = int(configini.value('thun_csize'))
 	TEXT_NCO = configini.value('text_nocov')
+	FONT_CON = configini.value('font01_ttx')
 	WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
-	UNIX_ICO = path.join(PATH_PROG, 'IMG', configini.value('unix_icone'))
 	THEM_COL = configini.value('name_theme')
 	configini.endGroup()
 	
-	def __init__(self, list_albums, list_category, typeupdate, modsql, envt, themecolor, parent=None):
+	def __init__(self, list_albums, list_columns, list_category, typeupdate, modsql, envt, themecolor, parent=None):
 		"""Init Gui, start invent"""
 		super(InventGui, self).__init__(parent)
 		self.setupUi(self)
-		self.parent = parent
-		self.resize(self.WIDT_MAIN, self.HEIG_MAIN-500)
+		self.resize(self.WIDT_MAIN, self.HEIG_MAIN-300)
 		self.setWindowIcon(QIcon(self.WINS_ICO))
 		self.setWindowTitle(self.TITL_PROG + " Environment : " + envt + " mode : " + typeupdate)
 		centerWidget(self)
-		self.show()
 		
-		self.menua = QMenu()
-		self.action_OPF = self.menua.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
-							"Open Folder...", self.getFolder)
-		self.total_p = None
+		self.parent = parent
+		self.list_albums = list_albums
+		self.list_category = list_category
+		self.list_columns = list_columns
+		self.modsql = modsql
 		self.envits = envt
+		self.typeupdate = typeupdate
 		self.curthe = themecolor
+		self.logname = QDateTime.currentDateTime().toString('yyMMddhhmmss') + "_UPDATE_DATABASE_" + self.envits + ".log"
+		self.logname = path.join(self.LOGS_PROG, self.logname)
+		self.total_p = None
+		self.albumnew = 0
+		self.alupdate = 0
+		self.aldelete = 0
+		self.apresent = 0
+		self.actionerror = 0
+		self.selecttrowg = 0
+		self.list_actions = []
+		
 		font = QFont()
 		font.setFamily("Courrier New")
 		font.setFixedPitch(True)
 		font.setPointSize(10)
-		self.lab_result.setFont(font)
-		self.lab_advance.setFont(font)
+		fontconsol = QFont()
+		fontconsol.setFamily(self.FONT_CON)
+		fontconsol.setFixedPitch(True)
+		fontconsol.setPointSize(8)
+		self.levelcolors = [Qt.white, Qt.green, Qt.magenta, Qt.red]
 		
-		self.btn_quit.clicked.connect(lambda e: self.destroy())
+		self.menua = QMenu()
+		self.action_OPF = self.menua.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
+							"Open Folder...", self.getFolder)
+							
+		self.lab_result.setFont(font)
+		self.lab_release.setFont(font)
+		self.lab_advance.setFont(font)
+		self.lab_releaseadvance.setFont(font)
+		
+		self.textEditrelease.setStyleSheet("background-color: black;color:white;")
+		self.textEditrelease.setLineWrapMode(QTextEdit.NoWrap)
+		self.textEditrelease.setReadOnly(True)
+		self.textEditrelease.setFont(fontconsol)
+		self.vScrollBar = QScrollBar(self.textEditrelease.verticalScrollBar())
+		self.vScrollBar.sliderPressed.connect(self.onScrollPressed)
+	
 		self.btn_action.clicked.connect(self.realiseActions)
-		self.btn_actioncover.clicked.connect(self.releaseInsertCovers)
 		self.btn_action.setEnabled(False)
+		self.btn_quit.clicked.connect(lambda e: self.destroy())
 		self.lcdTime.setSegmentStyle(QLCDNumber.Flat)
-		self.applyTheme()
 		
 		self.seconds = 0
 		self.myThreadtime = myThreadTimer(self)
@@ -116,29 +144,33 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		for i in range(len(self.tableMdlUpd.U_C_WIDTH)):
 			self.tbl_update.setColumnWidth(i, self.tableMdlUpd.U_C_WIDTH[i])
 		self.tbl_update.verticalHeader().setDefaultSectionSize(self.tableMdlUpd.C_HEIGHT)
+		
+		self.applyTheme()
+		self.show()
 
+	def startAnalyse(self):
 		qDebug('Start BuildInvent')
 		self.setCursor(Qt.WaitCursor)
-		self.prepareInvent = BuildInvent(list_albums,
-									list_category,
-									typeupdate,
-									modsql, 
-									envt)
-		self.prepareInvent.signalthunchgt.connect(self.onBuild)
+		self.prepareInvent = BuildInvent(self.list_albums,
+									self.list_columns,
+									self.list_category,
+									self.typeupdate,
+									self.modsql, 
+									self.envits)
+		self.prepareInvent.signalchgt.connect(self.onBuild)
+		self.prepareInvent.signaltext.connect(self.updateInfos)
 		self.prepareInvent.inventDatabase()
 		self.setCursor(Qt.ArrowCursor)
-		self.lab_result.setText('Analyse completed in '+self.total_p)
+		self.lab_result.setText('Completed Analyse in '+self.total_p)
 		qDebug('End BuildInvent')
 		
 		self.btn_quit.setText('Quit')
-		if len(self.prepareInvent.list_action) > 0:
-			if self.checkBoxStart.isChecked():
-				self.realiseActions()
-			else:
-				self.btn_action.setEnabled(True)	
+		if len(self.prepareInvent.list_action) > 0 and not self.checkBoxStart.isChecked():
+				self.btn_action.setEnabled(True)
+		self.realiseActions()
 	
 	def onBuild(self, percent, message):
-		"""Display advance browsinf folders."""
+		"""Display advance browsing folders."""
 		self.lab_result.setText(message)
 		self.progressBar.setValue(percent)
 		mesresu =  'PRESENT : ' + format(self.prepareInvent.apresent + self.prepareInvent.alupdate - self.prepareInvent.aldelete, '05d')
@@ -146,45 +178,122 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		mesresu += '\nUPDATE  : ' + format(self.prepareInvent.alupdate, '05d')
 		mesresu += '\nDELETE  : ' + format(self.prepareInvent.aldelete, '05d')
 		self.lab_advance.setText(mesresu)
+		self.lab_releaseadvance.setText(mesresu)
 		self.tableMdlUpd.update(self.prepareInvent.list_action)
 		self.tbl_update.scrollToBottom()
 		QApplication.processEvents()
 	
-	def realiseActions(self):
+	def realiseActions(self, list_actions=None):
 		"""Execute Actions Update."""
-		self.btn_action.setEnabled(False)
-		listactionspwr = self.prepareInvent.getListIds()
-		# release Actions
-		if listactionspwr:
-			lstcate = []
-			lstfami = []
-			lstacti = []
-			lstpath = []
-			for pathadd in listactionspwr:
-				lstcate.append(pathadd[0])
-				lstfami.append(pathadd[1])
-				lstacti.append(pathadd[2])
-				lstpath.append(pathadd[3])
-			exeprocess, params = buildCommandPowershell(self.PWSH_SCRU,
-														'-Envt', self.envits, 
-														'-TypeOpe', '"' + '|'.join(lstacti) + '"',
-														'-AlbumInfos', '"' + '|'.join(lstpath) + '"',
-														'-Category', '"' + '|'.join(lstcate) + '"',
-														'-Family', '"' + '|'.join(lstfami) + '"',
-														'-Force')
-			DBProcessGui(exeprocess, params, 'Add ' + displayCounters(len(lstacti), "Album "), self.WIDT_MAIN, self.HEIG_MAIN-150)
-			#pro.signalend.connect(lambda: self.parent.connectEnvt(True))
+		if list_actions is None:
+			self.list_actions = self.prepareInvent.list_action
+			self.apresent = self.prepareInvent.apresent
+			self.albumnew = self.prepareInvent.albumnew
+			self.alupdate = self.prepareInvent.alupdate
+			self.aldelete = self.prepareInvent.aldelete
+		else:
+			# no analyse
+			self.btn_quit.setText('Quit')
+			self.list_actions = list_actions
+			self.lab_result.setText('No Analyse')
+			self.lab_advance.setText('')
+			self.progressBar.setValue(100)
+			self.tableMdlUpd.update(self.list_actions)
+			self.apresent = len(self.list_albums)
+			for action in self.list_actions:
+				if action[2] == 'DELETE':
+					self.aldelete += 1
+				elif action[2] == 'UPDATE':
+					self.alupdate += 1
+				elif action[2] == 'ADD':
+					self.albumnew += 1
+		run = ReleaseInvent(self.list_actions)
+		run.signalrun.connect(self.updateRun)
+		run.signalend.connect(self.updateEnd)
+		run.signaltxt.connect(self.updateInfos)
+		run.executeActions()
+
+	def updateRun(self, percent, text):
+		"""Display run operations update database."""
+		index = self.tableMdlUpd.index(self.selecttrowg, 0)
+		self.tbl_update.selectRow(index.row())
+		index = self.tbl_update.currentIndex()
+		self.tbl_update.scrollTo(index)
+		self.selecttrowg += 1
+		self.progressBarrelease.setValue(percent)
+		if text == 'DELETE':
+			self.aldelete -= 1
+			self.apresent -= 1
+		elif text == 'UPDATE':
+			self.alupdate -= 1
+		elif text == 'ADD':
+			self.albumnew -= 1
+			self.apresent += 1
+		elif text == 'ERROR':
+			self.actionerror += 1 
+		mesresu =  'ERROR   : ' + format(self.actionerror, '05d')
+		mesresu += '\nADD     : ' + format(self.albumnew, '05d')
+		mesresu += '\nUPDATE  : ' + format(self.alupdate, '05d')
+		mesresu += '\nDELETE  : ' + format(self.aldelete, '05d')
+		self.lab_releaseadvance.setText(mesresu)
+		mesresu =  'PRESENT : ' + format(self.apresent, '05d')
+		mesresu += '\nADD     : ' + format(self.albumnew, '05d')
+		mesresu += '\nUPDATE  : ' + format(self.alupdate, '05d')
+		mesresu += '\nDELETE  : ' + format(self.aldelete, '05d')
+		self.lab_advance.setText(mesresu)
+		QApplication.processEvents()
+		
+	@pyqtSlot()	
+	def updateEnd(self):
+		"""Operations finished."""
+		QApplication.processEvents()
+		self.lab_release.setText('Completed Operations in '+self.total_p)
+		if len(self.list_actions) > 0:
+			# create log file
+			self.textEditrelease.append('\n- Completed Operations in '+self.total_p)
+			self.textEditrelease.append('\n- Create log file : ' + self.logname)
+			text_file = open(self.logname, "w", 'utf-8')
+			text_file.write(self.textEditrelease.toPlainText())
+			text_file.close()
+			self.textEditrelease.moveCursor(QTextCursor.Start) ;
+			self.textEditrelease.ensureCursorVisible()
+			# refresh
+			self.signalend.emit()
+			QMessageBox.information(self,'Update Database', 'Completed Operations in '+self.total_p)
 	
-	def releaseInsertCovers(self):
-		request = "SELECT DBALBUMS.ID_CD, DBALBUMS.Cover FROM DBALBUMS " \
-					"LEFT JOIN DBPIXMAPS ON DBALBUMS.ID_CD = DBPIXMAPS.ID_CD " \
-					"WHERE DBPIXMAPS.ID_CD IS NULL AND DBALBUMS.Cover<>'{textnopic}'"
+	def updateInfos(self, line, level=None):
+		"""Write Reception signal run update."""
+		if not level:
+			if line.startswith('-'):
+				level = 1
+			elif line.startswith('WARNING'):
+				level = 2
+			elif line.startswith('ERROR'):
+				level = 3
+			else:
+				level = 0
+		# set color
+		self.textEditrelease.setTextColor(QColor(self.levelcolors[level]))
+		if self.focusWidget() != self.vScrollBar:
+			# display
+			cursor = self.textEditrelease.textCursor()
+			cursor.movePosition(QTextCursor.End)
+		#cursor.insertText(line)
+		self.textEditrelease.append(line.rstrip())
+		self.textEditrelease.setTextCursor(cursor)
+		if self.focusWidget() != self.vScrollBar:
+			self.textEditrelease.ensureCursorVisible()
+		self.textEditrelease.horizontalScrollBar().setValue(0)
+	
+	def golbalInsertCovers(self):
+		request = "SELECT ALBUMS.ID_CD, ALBUMS.Cover FROM ALBUMS " \
+					"LEFT JOIN COVERS ON ALBUMS.ID_CD = COVERS.ID_CD " \
+					"WHERE COVERS.ID_CD IS NULL AND ALBUMS.Cover<>'{textnopic}'"
 		request = request.format(textnopic = self.TEXT_NCO)
 		query = QSqlQuery(request)
 		query.exec_()
 		while query.next():
-			DBFuncBase().imageToSql( query.value(1), query.value(0), self.WIDT_PICM)
-			
+			DBFuncBase().imageToSql(query.value(1), query.value(0), self.WIDT_PICM)
 
 	def getFolder(self):
 		"""Open album folder."""
@@ -198,9 +307,10 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	
 	@pyqtSlot(int)
 	def showlcd(self, seconds):
-		minutes = seconds // 60
-		self.total_p = "%02d:%02d" % (minutes, seconds % 60)
-		self.lcdTime.display(str(self.total_p))
+		hours, seconds =  seconds // 3600, seconds % 3600
+		minutes, seconds = seconds // 60, seconds % 60
+		self.total_p = "%02d:%02d:%02d" % (hours, minutes, seconds)
+		self.lcdTime.display(self.total_p)
 		QApplication.processEvents()
 
 	def applyTheme(self):
@@ -220,22 +330,5 @@ class InventGui(QWidget, Ui_UpdateWindows):
 									col4 = self.curthe.listcolors[3])
 		self.tbl_update.setStyleSheet(gridstyle)
 
-
-
-if __name__ == '__main__':
-	app = QApplication(argv)
-	# debug
-	qInstallMessageHandler(qtmymessagehandler)
-	envt = 'LOSSLESS_TEST'
-	boolconnect, dbbase, modsql, rootDk, listcategory = connectDatabase(envt)
-	req = getrequest('albumslist', modsql)
-	list_albums = DBFuncBase().sqlToArray(req)
-	curthe = ThemeColors('brown')
-	prepareInvent = InventGui(list_albums,
-								listcategory,
-								"NEW",
-								modsql, 
-								envt, 
-								curthe)
-	rc = app.exec_()
-	exit(rc)
+	def onScrollPressed(self):
+		pass

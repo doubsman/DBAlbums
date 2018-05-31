@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums -->
-<!-- Saved: 2017-08-28, 01:42:45 -->
+<!-- Saved: 2017-09-09, 12:04:03 -->
 <!-- Copyright (C) 2017 Doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -25,19 +25,20 @@
     <Source>DBHistory.txt</Source>
     <Source>DBInstall.txt</Source>
     <Source>DBModelAbs.py</Source>
-    <Source>DBModelLab.py</Source>
-    <Source>DBModelSql.py</Source>
     <Source>DBPThreads.py</Source>
     <Source>DBSLoading.py</Source>
-    <Source>DBTImpFunc.py</Source>
+    <Source>DBTImpoALB.py</Source>
+    <Source>DBTImpoANA.py</Source>
+    <Source>DBTImpoCUE.py</Source>
     <Source>DBTImpoLab.py</Source>
+    <Source>DBTImpoRUN.py</Source>
+    <Source>DBTImpoTAG.py</Source>
+    <Source>DBTImpoTRK.py</Source>
     <Source>DBTImports.py</Source>
-    <Source>DBTProcess.py</Source>
     <Source>DBThunbnai.py</Source>
     <Source>Ui_DBALBUMS.py</Source>
     <Source>Ui_DBLOADING.py</Source>
     <Source>Ui_DBUPDATE.py</Source>
-    <Source>testcue.py</Source>
   </Sources>
   <Forms>
     <Form>DBALBUMS.ui</Form>

@@ -231,11 +231,12 @@ class DBPlayer(QWidget):
 			self.stopHandler()
 		self.currentPlaylist.removeMedia(0, self.currentPlaylist.mediaCount())
 		self.albumname = albumname
-		self.homMed = listmedias
-		for media in self.homMed:
-			self.currentPlaylist.addMedia(QMediaContent(QUrl.fromLocalFile(media)))
-		self.currentPlaylist.setCurrentIndex(position)
-		self.playHandler()
+		if listmedias:
+			self.homMed = listmedias
+			for media in self.homMed:
+				self.currentPlaylist.addMedia(QMediaContent(QUrl.fromLocalFile(media)))
+			self.currentPlaylist.setCurrentIndex(position)
+			self.playHandler()
 
 	def displaySongInfo(self):
 		# extract datas

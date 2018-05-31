@@ -29,6 +29,8 @@ class DBPThreadsListStyle(QThread):
 			for genre in genres.split('/'):
 				genre = genre.strip()
 				genre = genre.title()
+				if genre == '':
+					genre = 'Unknown'
 				liststyles.append([id_cd, genre])
 		liststyles.sort(reverse=False)
 		self.finished.emit(liststyles)

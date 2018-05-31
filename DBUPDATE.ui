@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayoutprepare">
        <item>
         <widget class="QLabel" name="lab_result">
          <property name="text">
@@ -73,9 +73,57 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayoutrelease">
        <item>
-        <widget class="QLCDNumber" name="lcdTime"/>
+        <widget class="QLabel" name="lab_release">
+         <property name="text">
+          <string>Realise Actions</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QProgressBar" name="progressBarrelease">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lab_releaseadvance">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QTextEdit" name="textEditrelease">
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="tabStopWidth">
+        <number>2000</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayoutcommands">
+       <item>
+        <widget class="QLCDNumber" name="lcdTime">
+         <property name="digitCount">
+          <number>8</number>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer">
@@ -93,17 +141,10 @@
        <item>
         <widget class="QCheckBox" name="checkBoxStart">
          <property name="text">
-          <string>Start directly</string>
+          <string>Auto</string>
          </property>
          <property name="checked">
           <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_actioncover">
-         <property name="text">
-          <string>Insert Image</string>
          </property>
         </widget>
        </item>

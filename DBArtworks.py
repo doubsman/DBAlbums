@@ -5,9 +5,9 @@
 # # Audio pyQT5 Player by SFI
 # ############################################################################
 from sys import argv
-from os import path, chdir
+from os import path
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, pyqtSlot, QSize
+from PyQt5.QtCore import Qt, pyqtSlot, QSize, QSettings
 from PyQt5.QtWidgets import (QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, 
 						QLabel, QApplication)
 from DBFunction import openFolder, getListFiles, centerWidget
@@ -15,11 +15,17 @@ from DBThunbnai import DBThunbnails
 
 
 PATH_PROG = path.dirname(path.abspath(__file__))
-chdir(PATH_PROG)
-VERS_PROG = '1.00'
-TITL_PROG = "Artwork viewer v{v} : ".format(v=VERS_PROG)
-WINS_ICO = path.join(PATH_PROG, 'IMG', 'icone.ico')
-TEXT_NCO = 'No Picture'
+# Read File DBAlbums.ini
+FILE__INI = 'DBAlbums.ini'
+configini = QSettings(FILE__INI, QSettings.IniFormat)
+configini.beginGroup('dbalbums')
+VERS_PROG = configini.value('prog_build')
+TITL_PROG = "♫ DBAlbums v{v} (2017)".format(v=VERS_PROG)
+TITL_PROG = TITL_PROG + " : Artwork viewer"
+TEXT_NCO = configini.value('text_nocov')
+WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
+THEM_COL = configini.value('name_theme')
+configini.endGroup()
 MASKCOVER = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')
 
 

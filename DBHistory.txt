@@ -1,4 +1,8 @@
 """ DBAlbums History Version : Doubsman dev.
+1.59 copy score for update album, bugs
+1.58 rewrite create base sqllite & import foobar playlist v3, database mssql
+1.57 update database v1.0 python, add country
+1.56 new database, mutagen library media tag, no powershell
 1.55 suppression cover B64, store native cover 
 1.54 update database Gui etape 1: powserhell macro
 1.53 zoom bar in status bar, combo style Qthread

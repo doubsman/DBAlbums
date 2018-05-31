@@ -93,7 +93,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		indexes = self.mytable.selectedIndexes()
 		indexes = self.model.SortFilterProxy.mapToSource(indexes[0])
 		self.currow = indexes.row()
-		albumname = self.model.getData(self.currow, 'Name')
+		albumname = self.model.getData(self.currow, 'NAME')
 		idcd = self.model.getData(self.currow, 'ID_CD')
 		coveral = DBFuncBase().sqlToPixmap(idcd, self.PICM_NCO)
 		CoverViewGui(coveral, albumname, self.h_main, self.h_main)
@@ -106,7 +106,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		indexes = self.mytable.selectedIndexes()
 		indexes = self.model.SortFilterProxy.mapToSource(indexes[0])
 		self.currow = indexes.row()
-		albumpath = self.model.getData(self.currow, 'Path')
+		albumpath = self.model.getData(self.currow, 'PATHNAME')
 		openFolder(albumpath)
 
 	def listChanged(self):

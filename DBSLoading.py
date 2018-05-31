@@ -19,6 +19,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 	configini = QSettings(FILE__INI, QSettings.IniFormat)
 	configini.beginGroup('dbalbums')
 	FONT_MAI = configini.value('font00_ttx')
+	LOGO = configini.value('progr_logo')
 	configini.endGroup()
 	
 	def __init__(self, modsql, title, parent):
@@ -41,13 +42,13 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		self.lab_logo.setMovie(self.movielogo)
 		self.movielogo.start()
 		# tab1
-		req = DBFuncBase().buildReqTCD("Category", "Family", "DBALBUMS", "ALBUM", "1", True, modsql)
+		req = DBFuncBase().buildReqTCD("CATEGORY", "FAMILY", "ALBUMS", "ALBUM", "1", True, modsql)
 		self.buildTab(req, self.tableWid1)
 		# tab2
-		req = DBFuncBase().buildReqTCD("Category", "Family", "DBALBUMS", "SIZE (GO)", "ROUND( `Size` /1024,1)", True, modsql)
+		req = DBFuncBase().buildReqTCD("CATEGORY", "FAMILY", "ALBUMS", "SIZE (GO)", "ROUND( `Size` /1024,1)", True, modsql)
 		self.buildTab(req, self.tableWid2)
 		# tab3
-		req = DBFuncBase().buildReqTCD("Year", "Category", "DBALBUMS", "YEAR", "1", True, modsql)
+		req = DBFuncBase().buildReqTCD("YEAR", "CATEGORY", "ALBUMS", "YEAR", "1", True, modsql)
 		self.buildTab(req, self.tableWid3)
 		# message
 		basedate = DBFuncBase().sqlToArray(getrequest('datedatabase', modsql))
@@ -84,8 +85,8 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		logo = path.join(self.RESS_LOGO, "logo" +str(self.numlogo) + ".gif")
 		self.movielogo = QMovie(logo)
 		self.lab_logo.setMovie(self.movielogo)
-		self.movielogo.start()		
-
+		self.movielogo.start()
+			
 	def applyTheme(self):
 		"""Apply color Theme to main Gui."""
 		# main

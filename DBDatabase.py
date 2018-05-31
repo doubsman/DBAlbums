@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from os import  path, chdir
-from PyQt5.QtCore import Qt, QSettings, qDebug, QObject, QByteArray, QIODevice, QBuffer
+from os import  path, chdir, remove
+from copy import deepcopy
+from PyQt5.QtCore import Qt, QSettings, qDebug, QObject, QByteArray, QIODevice, QBuffer, pyqtSignal
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QPixmap
 from DBFunction import buildlistcategory
@@ -35,18 +36,22 @@ def connectDatabase(envt):
 		configini.endGroup()
 		if MODE_SQLI == 'mysql':
 			db = QSqlDatabase.addDatabase("QMYSQL")
+			db.setHostName(BASE_SEV)
+			db.setDatabaseName(BASE_NAM)
+			db.setUserName(BASE_USR)
+			db.setPassword(BASE_PAS)
+			db.setPort(BASE_PRT)
 		elif MODE_SQLI == 'mssql':
-			db = QSqlDatabase.addDatabase("QODBC")
-		db.setHostName(BASE_SEV)
-		db.setDatabaseName(BASE_NAM)
-		db.setUserName(BASE_USR)
-		db.setPassword(BASE_PAS)
-		db.setPort(BASE_PRT)
+			db = QSqlDatabase.addDatabase("QODBC3")
+			driver = "DRIVER={SQL Server Native Client 11.0};Server=" + BASE_SEV + ";Database=" + BASE_NAM
+			driver += ";Uid=" + BASE_USR + ";Port=" + str(BASE_PRT) + ";Pwd=" + BASE_PAS + ";Trusted_connection=yes"
+			#print(driver)
+			db.setDatabaseName(driver);
 	list_category = []
 	if RACI_DOU is not None:
 		list_category += buildlistcategory(configini, RACI_DOU, BASE_RAC, 'D')
 	if RACI_SIM is not None:
-		list_category += buildlistcategory(configini, RACI_SIM, BASE_RAC, 'S')	
+		list_category += buildlistcategory(configini, RACI_SIM, BASE_RAC, 'S')
 	if db.isValid():
 		boolcon = db.open()
 	else:
@@ -59,107 +64,120 @@ def getrequest(name, MODE_SQLI=None):
 	# autocompletion VW_DBCOMPLETION
 	if name == 'autocompletion':
 		if MODE_SQLI == 'mssql':
-			request = "SELECT TOP 1000 Synthax FROM VW_AUTOCOMPLETION GROUP BY Synthax ORDER BY COUNT(*) DESC;"
+			request = "SELECT TOP 1000 Synthax FROM VW_COMPLETION GROUP BY Synthax ORDER BY COUNT(*) DESC;"
 		else:
-			request = "SELECT Synthax FROM VW_AUTOCOMPLETION GROUP BY Synthax ORDER BY COUNT(*) DESC LIMIT 1000;"
+			request = "SELECT Synthax FROM VW_COMPLETION GROUP BY Synthax ORDER BY COUNT(*) DESC LIMIT 1000;"
 	# date modification base
 	elif name == 'datedatabase':
-		request = "SELECT MAX(datebase) FROM (SELECT MAX(Date_insert) AS datebase FROM DBALBUMS UNION SELECT MAX(Date_Modifs) FROM DBALBUMS ) FUS;"
+		request = "SELECT MAX(datebase) FROM (SELECT MAX( `ADD` ) AS datebase FROM ALBUMS UNION SELECT MAX( `ADD` ) FROM ALBUMS ) FUS;"
 	# list albums DBALBUMS
 	elif name == 'albumslist':
-		request = "SELECT Category, Family, Name, Label, ISRC, " \
-				"Qty_Tracks, Qty_CD, Year, Length, Size, " \
-				"Score, Qty_covers, Date_Insert, Date_Modifs, "
-		if MODE_SQLI == 'sqlite':
-			request = request + "Position1 || '\\' || Position2 AS Position, "
-		if MODE_SQLI == 'mysql':
-			request = request + "CONCAT(Position1,'\\\\',Position2) AS Position, "
-		if MODE_SQLI == 'mssql':
-			request = request + "Position1+'\'+Position2 AS Position, "
-		request = request + " Typ_Tag, Path, Cover, MD5, ID_CD " \
-							"FROM DBALBUMS WHERE 1=1 ORDER BY Date_Insert DESC"
+		request = 	"SELECT " \
+					" `CATEGORY` , `FAMILY` , `NAME` , `ARTIST` , `STYLE` , " \
+					" `LABEL` , `TAGLABEL` , `ISRC` , `TAGISRC` , `TRACKS` , " \
+					" `CD` , `YEAR` , `LENGTHDISPLAY` , `SIZE` , `SCORE` , " \
+					" `PIC` , `COUNTRY` , `ADD` , `MODIFIED` , `POSITIONHDD` , " \
+					" `PATHNAME` , `COVER` , `TAGMETHOD` , `ID_CD` " \
+					" FROM ALBUMS ORDER BY `ADD` DESC";
 	# list tracks
 	elif name == 'trackslist':
-		request = "SELECT ODR_Track, TAG_Artists, TAG_Title, TAG_length, " \
-					"Score, TAG_Genres, FIL_Track, REP_Track, ID_TRACK  " \
-					"FROM DBTRACKS WHERE ID_CD={id} ORDER BY REP_Track, ODR_Track"
+		request = 	"SELECT " \
+					" `TRACKORDER` , `ARTIST` , `TITLE` , `LENGTHDISPLAY` , `SCORE` ," \
+					" `GENRE` , `FILENAME` , `INDEX` , `POS_START_SAMPLES` , `POS_END_SAMPLES` ," \
+					" `PATHNAME` , `TYPEMEDIA` , `ID_TRACK` " \
+					" FROM TRACKS WHERE ID_CD={id} ORDER BY `TRACKORDER` ";
 	# search in track
 	elif name == 'tracksinsearch':
-		request = "SELECT ID_CD AS ID FROM DBTRACKS AS TRK WHERE TAG_Artists like '%{search}%' OR TAG_Title like '%{search}%' GROUP BY ID_CD"
-	# search genres/style
-	elif name == 'tracksgesearch':
-		request = "SELECT ID_CD AS ID FROM DBTRACKS AS TRK WHERE REPLACE(TAG_Genres,'-','') like '{search}' GROUP BY ID_CD"
+		request = "SELECT ID_CD AS ID FROM TRACKS AS TRK WHERE ARTIST like '%{search}%' OR TITLE like '%{search}%' GROUP BY ID_CD"
 	# cover
 	elif name == 'coverpix':
-		request = "SELECT Cover FROM DBPIXMAPS WHERE ID_CD={id}"
+		request = "SELECT COVER FROM COVERS WHERE ID_CD={id}"
 	elif name == 'thumbnailpix':
-		request = "SELECT Thumbnail FROM DBPIXMAPS WHERE ID_CD={id}"
+		request = "SELECT THUMBNAIL FROM COVERS WHERE ID_CD={id}"
+	elif name == 'insertcover':
+		request = "REPLACE INTO COVERS(ID_CD, NAME, COVER, THUMBNAIL) VALUES (?, ?, ?, ?)"
 	# update Sore Album
 	elif name == 'updatescorealbum':
-		request = "UPDATE DBALBUMS SET Score={score} WHERE ID_CD={id}"
+		request = "UPDATE ALBUMS SET SCORE={score} WHERE ID_CD={id}"
 	# update Sore Track
 	elif name == 'updatescoretrack':
-		request = "UPDATE DBTRACKS SET Score={score} WHERE ID_TRACK={id}"
+		request = "UPDATE TRACKS SET SCORE={score} WHERE ID_TRACK={id}"
 	# insert playlist foobar
 	elif name == 'playlistfoobar':
-		request = "INSERT INTO DBFOOBAR (Playlist, Path, FIL_Track, Name , MD5, TAG_Album, TAG_Artists, TAG_Title) " \
-					"VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+		request = "INSERT INTO FOOBAR (PLAYLIST, PATH, FILENAME, ALBUM, NAME, ARTIST, TITLE, `ADD` ) " \
+					"VALUES (?, ?, ?, ?, ?, ?, ?,  NOW())"
 	# combobox style
 	elif name == 'listgenres':
-		request = "SELECT DISTINCT ID_CD, TAG_Genres FROM DBTRACKS;"
+		request = "SELECT ID_CD, STYLE FROM ALBUMS;"
+		
 	if MODE_SQLI == 'mssql':
-		request = request.replace(' `', ' [').replace('` ', '] ')
+		request = request.replace(' `', ' [').replace('` ', '] ').replace("'", '"')
 	return request
 
 
 
 class DBFuncBase(QObject):
+	signalchgt = pyqtSignal(int, str)		# signal browse
+	
 	def __init__(self, parent=None):
 		"""Init."""
 		super(DBFuncBase, self).__init__(parent)
 		self.parent = parent
 
-	def arrayToSql(self, operation, arraydata, tablename, columnnamekey):    # TEST
+	def arrayCardsToSql(self, operation, arraydata, tablename, columnnamekey):
 		listcolumns = self.getListColumnsTable(tablename)
-		numberscolumns = len(listcolumns)	
+		if len(listcolumns) == 0:
+			qDebug(tablename)
+			return False
 		
+		numberscolumns = len(listcolumns)
 		if operation == 'INSERT':
 			# build query insert
 			request = 'INSERT INTO ' + tablename + '('
-			request += ', '.join(listcolumns) + ') VALUES '
+			request += ', '.join('`{0}`'.format(w) for w in listcolumns) + ') VALUES '
 			request += '(' + ', '.join( ['?'] * numberscolumns) +')' 
 		elif operation == 'UPDATE':
 			# build query update
-			request = 'UPDATE ' + tablename + ' SET ('
-			request += ' = ? ,'.join(listcolumns[1:]) + ' = ?)'
-			request += 'WHERE ' + listcolumns[1] + ' = ?'	
+			listcolumns.remove(columnnamekey)
+			numberscolumns = len(listcolumns)
+			request = 'UPDATE ' + tablename + ' SET '
+			request += '= ?, '.join('`{0}`'.format(w) for w in listcolumns) + '= ? '
+			request += ' WHERE ' + columnnamekey + ' = ? ;'
 		else:
+			qDebug(operation)
 			return False
-		print(request)
-		return False     # TEST
-		
+	
 		# repeat query insert 
-		queryoperation = QSqlQuery()
-		for row in arraydata:
-			queryoperation.prepare(request)
-			for column in range(numberscolumns):
-				# first column : primary key
-				if listcolumns[column] == columnnamekey:
-					if operation == 'INSERT':
-						queryoperation.bindValue(column, 'NULL')
-					elif operation == 'UPDATE':
-						id = row[column]
-				# last column column : primary key
-				elif column == numberscolumns - 1 and operation == 'UPDATE':
-					queryoperation.bindValue(column, id)
-				else:
-					queryoperation.bindValue(column, row[column])
-			if not queryoperation.exec_():
-				qDebug(tablename+"10*' ' "+queryoperation.lastError().text())
-				listparam = list(queryoperation.boundValues().values())
-				for i in range(len(listparam)):
-					qDebug(10*' ', i, listparam[i])
+		if isinstance(arraydata, list):
+			# multi card
+			for row in arraydata:
+				if not self.arrayCardToSql(operation, row, columnnamekey, request, listcolumns):
+					return False
+		else:
+			# one card
+			if not self.arrayCardToSql(operation, arraydata, columnnamekey, request, listcolumns):
 				return False
+		return True
+	
+	def arrayCardToSql(self, operation, arraydata, columnnamekey, request, listcolumns):
+		# one card
+		numberscolumns = len(listcolumns)
+		queryoperation = QSqlQuery()
+		queryoperation.prepare(request)
+		for column in range(numberscolumns):
+			# first column : primary key
+			if listcolumns[column] == columnnamekey and operation == 'INSERT':
+				queryoperation.bindValue(column, 'NULL')
+			else:
+				queryoperation.bindValue(column, arraydata[listcolumns[column]])
+		if operation == 'UPDATE':
+			# primary key for update
+			queryoperation.bindValue(column + 1, arraydata[columnnamekey])
+		if not queryoperation.exec_():
+			qDebug(request + ' ' + queryoperation.lastError().text())
+			qDebug(','.join(list(queryoperation.boundValues().values())))
+			return False
+		queryoperation.clear
 		return True
 	
 	def getListColumnsTable(self, tablename):
@@ -174,7 +192,7 @@ class DBFuncBase(QObject):
 	def getListColumns(self, query):
 		"""Get list columns from QsqlQuery."""
 		listcolumns = []
-		numberscolumns = query.record().count()		
+		numberscolumns = query.record().count()
 		for column in range(numberscolumns):
 			listcolumns.append(query.record().fieldName(column))
 		return listcolumns
@@ -194,30 +212,39 @@ class DBFuncBase(QObject):
 		query.clear
 		return arraydata
 
-	def execSqlFile(self, sql_file, nbop):
+	def sqlToArrayDict(self, tablename, columnnamekey, columnvalue):
+		"""Select to array/ line format dict data."""
+		request = 'SELECT * FROM {tbl} WHERE {col}={colv};'
+		request = request.format(tbl = tablename, col = columnnamekey,  colv = str(columnvalue))
+		arraydata = []
+		cardline = {}
+		query = QSqlQuery(request)
+		query.exec_(request)
+		numberscolumns = query.record().count()
+		while query.next():
+			mycardline = deepcopy(cardline)
+			for column in range(numberscolumns):
+				mycardline[query.record().fieldName(column)] =	query.value(column)
+			arraydata.append(mycardline)
+		return arraydata
+
+	def execSqlFile(self, sql_file, dbcnx=None):
 		"""Exec script SQL file..."""
-		#cur = con.cursor()
-		statement = ""
 		counter = 0
-		self.parent.updateGaugeBar(0, "Exececution script SQL file"+sql_file)
-		for line in open(sql_file):
-			if line[0:2] == '--':
-				if line[0:3] == '-- ':
-					self.parent.updateGaugeBar((counter/nbop)*100, "Exec :"+line.replace('--', ''))
-				continue
-			statement = statement + line
-			if len(line) > 2 and line[-2] == ';':
+		request = ''
+		for line in open(sql_file, 'r'):
+			request += line
+			if line.endswith(';\n'):
 				counter = counter + 1
-				query = QSqlQuery()
-				query.exec_(statement)
+				request = request.rstrip('\n')
+				qDebug(request)
+				query = QSqlQuery(request, dbcnx)
 				if not query.exec_():
 					errorText = query.lastError().text()
 					qDebug(query.lastQuery())
 					qDebug(errorText)
-					break
 				query.clear
-				statement = ""
-		self.parent.updateGaugeBar(100)
+				request = ''
 
 	def imageToSql(self, pathimage, idcd, minisize):
 		"""Write image and thunbnail to database."""
@@ -227,6 +254,7 @@ class DBFuncBase(QObject):
 		#inByteArray = QByteArray(file.readAll())
 		
 		# image big
+		#print(path.getsize(pathimage))
 		inPixmap = QPixmap(pathimage)
 		inByteArray = QByteArray()
 		inBuffer = QBuffer(inByteArray)
@@ -234,8 +262,8 @@ class DBFuncBase(QObject):
 			return False
 		inPixmap.save(inBuffer,"JPG");
 		
-		# image mini
-		inPixmap = inPixmap.scaled(minisize, minisize, Qt.IgnoreAspectRatio, Qt.FastTransformation)
+		# image mini # Qt.FastTransformation
+		inPixmap = inPixmap.scaled(minisize, minisize, Qt.IgnoreAspectRatio, Qt.SmoothTransformation) 
 		inByteArraymini = QByteArray()
 		inBuffer = QBuffer(inByteArraymini)
 		inBuffer.open(QIODevice.WriteOnly);
@@ -243,10 +271,10 @@ class DBFuncBase(QObject):
 		
 		# mssql
 		# https://stackoverflow.com/questions/108403/solutions-for-insert-or-update-on-sql-server
-		
 		# UPDATE data or INSERT : https://en.wikipedia.org/wiki/Merge_(SQL)
 		query = QSqlQuery()
-		query.prepare( "REPLACE INTO DBPIXMAPS(ID_CD, NamePix, Cover, Thumbnail) VALUES (?, ?, ?, ?)")
+		request = getrequest('insertcover')
+		query.prepare(request)
 		query.bindValue(0, idcd)
 		query.bindValue(1, pathimage)
 		query.bindValue(2, inByteArray)
@@ -309,29 +337,63 @@ class DBFuncBase(QObject):
 			ReqTDC = ReqTDC.replace(' `', ' [').replace('` ', '] ')
 		return ReqTDC
 
+	def deleteTable(self, tableName, columnnamekey, idvalue):
+		"""Delete enr table."""
+		request = ('DELETE FROM ' + tableName + ' WHERE ' + columnnamekey + ' =' + str(idvalue))
+		query = QSqlQuery()	
+		return query.exec_(request)
+
 
 class DBCreateSqLite(QObject):
-	def __init__(self, parent=None):
+	signalchgt = pyqtSignal(int, str)		# signal browse
+	
+	def __init__(self, basename, parent=None):
 		"""Init."""
 		super(DBCreateSqLite, self).__init__(parent)
 		self.parent = parent
-		
-	def copytable(self, dbsrc, dbdes, tablename, reqcreate, reqinsert, reqindexe=None):
-		"""Copy table. Create+Datas+Index."""
-		querylite = QSqlQuery(self, dbdes)
-		query = QSqlQuery(self, dbsrc)
-		# drop
-		querylite.exec_("DROP TABLE {t}".format(t=tablename))
-		if not querylite.exec_():
-			qDebug(10*' '+"drop "+querylite.lastError().text())
-		# create
-		querylite.exec_(reqcreate)
-		if not querylite.exec_():
-			qDebug(10*' '+"create "+querylite.lastError().text())
-		# datas
+		self.basename = basename
+		if path.isfile(basename):
+			remove(basename)
+	
+	def createObjSqlLite(self, dbsource, filerequestcreate):
+		"""create SqlLite Database."""
+		qDebug('Process Creation Database Sqlite ' + self.basename)
+		# create sqlite database
+		cnxlite = 'CREA'
+		dblite = QSqlDatabase.addDatabase("QSQLITE", cnxlite)
+		dblite.setDatabaseName(self.basename)
+		if dblite.isValid():
+			boolcon = dblite.open()
+			if boolcon:	
+				# create objects database
+				DBFuncBase().execSqlFile(filerequestcreate, dblite)
+				# copy table
+				self.signalchgt.emit((1/5)*100, 'Create ALBUMS...')
+				self.copytable(dbsource, dblite, 'ALBUMS')
+				self.signalchgt.emit((2/5)*100, 'Create TRACKS...')
+				self.copytable(dbsource, dblite, 'TRACKS')
+				self.signalchgt.emit((3/5)*100, 'Create COVERS...')
+				self.copytable(dbsource, dblite, 'COVERS')
+				self.signalchgt.emit((4/5)*100, 'Create FOOBAR...')
+				self.copytable(dbsource, dblite, 'FOOBAR')
+				self.signalchgt.emit((5/5)*100, 'Create FOOBOR...')
+				self.copytable(dbsource, dblite, 'FOOBOR')
+		else:
+			qDebug('no create', self.basename)
+	
+	def copytable(self, dbsrc, dbdes, tablename):
+		listcolumns =  DBFuncBase().getListColumnsTable(tablename)
+		numberscolumns = len(listcolumns)
+		# build query insert
+		request = 'INSERT INTO ' + tablename + '('
+		request += ', '.join('`{0}`'.format(w) for w in listcolumns) + ') VALUES '
+		request += '(' + ', '.join(['?'] * numberscolumns) + ')' 
+		# query 
+		querylite = QSqlQuery(dbdes)
+		query = QSqlQuery(dbsrc)
 		query.exec_("SELECT * FROM "+tablename)
 		while query.next():
-			querylite.prepare(reqinsert)
+			querylite.prepare(request)
 			for indcol in range(query.record().count()):
 				querylite.bindValue(indcol, query.value(indcol))
 			if not querylite.exec_():
@@ -339,77 +401,14 @@ class DBCreateSqLite(QObject):
 				listparam = list(querylite.boundValues().values())
 				for i in range(len(listparam)):
 					qDebug(10*' ', i, listparam[i])
-		# index
-		if reqindexe is not None:
-			querylite.exec_(reqindexe)
-			if not querylite.exec_():
-				qDebug(10*' '+":index "+querylite.lastError().text())
-		querylite.clear
-		query.clear
 
-	def copyDatabaseInvent(self, db, basename, logname):
-		"""create SqlLite Database."""
-		qDebug('Process Creation Database Sqlite '+basename)
-		self.parent.updateGaugeBar(0, 'Process Creation Database Sqlite '+basename)
-		# create sqlite database
-		cnxlite = 'CREA'
-		dblite = QSqlDatabase.addDatabase("QSQLITE", cnxlite)
-		dblite.setDatabaseName(basename)
-		if dblite.isValid():
-			boolcon = dblite.open()
-			if boolcon:
-				self.parent.updateGaugeBar(5)
-				tablename = "DBALBUMS"
-				qDebug('Create '+tablename)
-				reqcreate = "CREATE TABLE DBALBUMS(ID_CD INTEGER PRIMARY KEY AUTOINCREMENT, MD5 TEXT, Family TEXT, " \
-							"Category TEXT, Position1 TEXT, Position2 TEXT, Name TEXT, Label TEXT, ISRC TEXT, " \
-							"Year TEXT, Qty_CD INT, Qty_Cue INT, Qty_CueERR INT, Qty_repMusic INT, Qty_Tracks INT, " \
-							"Qty_audio INT, Typ_Audio TEXT, Qty_repCover, Qty_covers, Cover TEXT, Path TEXT, Size INT, " \
-							"Duration TEXT, Length TEXT, Typ_Tag TEXT, Date_Insert DATETIME, Date_Modifs DATETIME, RHDD_Modifs DATETIME, Score INT, Statut TEXT)"
-				reqinsert = "INSERT INTO DBALBUMS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-				reqindexe = "CREATE INDEX DBALBUMS_ndx_Date_Insert ON DBALBUMS(Date_Insert)"
-				self.copytable(db, dblite, tablename, reqcreate, reqinsert, reqindexe)
-				self.parent.updateGaugeBar(15)
-				tablename = "DBTRACKS"
-				qDebug('Create '+tablename)
-				reqcreate = "CREATE TABLE DBTRACKS(ID_CD INT,ID_TRACK INTEGER PRIMARY KEY AUTOINCREMENT, Family TEXT, " \
-							"Category TEXT, Position1 TEXT, Position2 TEXT, REP_Album TEXT, REP_Track TEXT,FIL_Track TEXT, " \
-							"TAG_Exten TEXT,TAG_Album TEXT, TAG_Albumartists TEXT, TAG_Year TEXT,TAG_Disc INT, TAG_Track INT, " \
-							"ODR_Track TEXT, TAG_Artists TEXT,TAG_Title TEXT,TAG_Genres TEXT,TAG_Duration TEXT,TAG_length TEXT, " \
-							"Score INT,Date_Insert DATETIME, Statut TEXT, FOREIGN KEY(ID_CD) REFERENCES DBALBUMS(ID_CD))"
-				reqinsert = "INSERT INTO DBTRACKS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )"
-				reqindexe = "CREATE INDEX DBTRACKS_ndx_idcd ON DBTRACKS(ID_CD)"
-				self.copytable(db, dblite, tablename, reqcreate, reqinsert, reqindexe)
-				self.parent.updateGaugeBar(30)
-				tablename = "DBFOOBAR"
-				qDebug('Create '+tablename)
-				reqcreate = "CREATE TABLE {t}(ID_FOO INTEGER PRIMARY KEY AUTOINCREMENT, MD5 TEXT, Name TEXT, Path TEXT, " \
-							"FIL_Track TEXT, Playlist TEXT, TAG_Album TEXT, TAG_Artists TEXT, TAG_Title TEXT, " \
-							"Date_insert TIMESTAMP DEFAULT CURRENT_TIMESTAMP)".format(t=tablename)
-				reqinsert = "INSERT INTO {t} VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)".format(t=tablename)
-				reqindexe = "CREATE INDEX DBFOOBAR_ndx_FIL_Track ON DBFOOBAR(FIL_Track)"
-				self.copytable(db, dblite, tablename, reqcreate, reqinsert, reqindexe)
-				self.parent.updateGaugeBar(45)
-				tablename = "DBFOOBOR"
-				qDebug('Create '+tablename)
-				reqcreate = "CREATE TABLE {t}(FIL_Track TEXT, FIL_TrackM TEXT)".format(t=tablename)
-				reqinsert = "INSERT INTO {t} VALUES( ?, ?)".format(t=tablename)
-				self.copytable(db, dblite, tablename, reqcreate, reqinsert)
-				self.parent.updateGaugeBar(60)
-				tablename = "DBCOVERS"
-				qDebug('Create '+tablename)
-				reqcreate = "CREATE TABLE {t}(MD5 TEXT, Cover64 BLOB, MiniCover64 BLOB)".format(t=tablename)
-				reqinsert = "INSERT INTO {t} VALUES( ?, ?, ?)".format(t=tablename)
-				reqindexe = "CREATE UNIQUE INDEX DBCOVERS_ndx_md5 ON DBCOVERS(MD5)"
-				self.copytable(db, dblite, tablename, reqcreate, reqinsert, reqindexe)
-				self.parent.updateGaugeBar(75)
-				tablename = "VW_AUTOCOMPLETION"
-				qDebug('Create '+tablename)
-				reqcreate = "CREATE TABLE {t}(ID_CD INT, Synthax TEXT)".format(t=tablename)
-				reqinsert = "INSERT INTO {t} VALUES( ?, ?)".format(t=tablename)
-				self.copytable(db, dblite, tablename, reqcreate, reqinsert)
-				# remove database sqlite
-				db.removeDatabase(cnxlite)
-				self.parent.updateGaugeBar(100)
-			else:
-				qDebug('no create', basename)
+
+if __name__ == '__main__':
+#//2005 db.setDatabaseName(DRIVER={SQL Server};SERVER=localhost\SQLExpress;DATABASE=secundaria;UID=sa;PWD=contraseña;WSID=.;Trusted_connection=yes)
+#//2008 db.setDatabaseName("DRIVER={SQL Server Native Client 10.0};SERVER=localhost\SQLExpress;DATABASE=myDbName;UID=user;PWD=userPwd;WSID=.;Trusted_connection=yes")
+#//2012 db.setDatabaseName("DRIVER={SQL Server Native Client 11.0};SERVER=localhost\SQLExpress;DATABASE=myDbName;UID=user;PWD=userPwd;WSID=.;Trusted_connection=yes")
+	boolconnect, dbbase, modsql, rootDk, lstcat = connectDatabase('LOSSLESS_SQLSERVER')
+	print(boolconnect, dbbase, modsql, rootDk, lstcat)
+	
+	#createsqllite = DBCreateSqLite(r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\TEXT.DB')
+	#createsqllite.createObjSqlLite(dbbase, r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\Create_sqllite_database.sql')

@@ -166,13 +166,19 @@
               <property name="minimumSize">
                <size>
                 <width>500</width>
-                <height>0</height>
+                <height>60</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
                 <height>60</height>
+               </size>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
                </size>
               </property>
               <property name="autoFillBackground">
@@ -197,6 +203,12 @@
             </item>
             <item>
              <widget class="QLabel" name="lab_label">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>60</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
                 <width>100</width>
@@ -330,6 +342,34 @@
             <property name="bottomMargin">
              <number>8</number>
             </property>
+            <item>
+             <widget class="QPushButton" name="btn_findtrack">
+              <property name="minimumSize">
+               <size>
+                <width>20</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>25</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>20</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">border: none;</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalplayer">
               <property name="leftMargin">
@@ -577,7 +617,20 @@
          <widget class="QComboBox" name="com_category">
           <property name="minimumSize">
            <size>
-            <width>80</width>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="com_family">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
             <height>0</height>
            </size>
           </property>
@@ -590,22 +643,9 @@
          <widget class="QComboBox" name="com_genres">
           <property name="minimumSize">
            <size>
-            <width>120</width>
+            <width>0</width>
             <height>0</height>
            </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="com_family">
-          <property name="minimumSize">
-           <size>
-            <width>80</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="currentIndex">
-           <number>-1</number>
           </property>
          </widget>
         </item>
@@ -613,7 +653,7 @@
          <widget class="QComboBox" name="com_label">
           <property name="minimumSize">
            <size>
-            <width>80</width>
+            <width>0</width>
             <height>0</height>
            </size>
           </property>
@@ -629,7 +669,7 @@
          <widget class="QComboBox" name="com_year">
           <property name="minimumSize">
            <size>
-            <width>80</width>
+            <width>0</width>
             <height>0</height>
            </size>
           </property>
@@ -637,6 +677,9 @@
            <number>-1</number>
           </property>
          </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="com_country"/>
         </item>
         <item>
          <spacer name="horizontalSpacer">
