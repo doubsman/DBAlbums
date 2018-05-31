@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """ DBAlbums History Version : Doubsman dev.
-1.37 New player QT5 
+1.37 New player QT5 v2 (vol+playlist) + multiprocessing
 1.36 Enlarge Display thunbnails + bugs closing
 1.35 centralisation functions player/create sqlite3 / create exe via cx_freeze
 1.34 link tree id <-> mysql id / Full Screen
@@ -58,7 +58,7 @@ from tkinter import (Tk, Toplevel, Label, Button, Checkbutton, Entry, Canvas, Gr
 from tkinter.filedialog import asksaveasfile
 from tkinter.ttk import Treeview, Combobox, Scrollbar, Separator, Style
 from tkinter.font import Font
-from threading import Thread
+from multiprocessing import Process
 from subprocess import check_call, call, Popen, PIPE
 from queue import Queue, Empty
 from pymysql import connect as connectmysql
@@ -74,9 +74,9 @@ from hashlib import md5
 from configparser import ConfigParser
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QUrl
-from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
-from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QPushButton, QSlider, 
-						QStyle, QWidget, QLCDNumber)
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist, QMediaMetaData
+from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QVBoxLayout, QPushButton, QSlider, 
+							QLabel, QMainWindow, QStyle, QWidget, QAction, QMessageBox)
 from fpl_reader import read_playlist # dev ext https://github.com/rr-/fpl_reader
 
 
@@ -194,88 +194,219 @@ V_REQUEST = "UPDATE DBTRACKS SET `Score`={score} WHERE `ID_TRACK`={id}"
 F_REQUEST = "INSERT INTO DBFOOBAR (Playlist, Path, FIL_Track, Name , MD5, TAG_Album, TAG_Artists, TAG_Title) " \
 			"VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
+
 ###################################################################
-# PLAYER PQT5
-class PlayerAudio(QWidget):
-	def __init__(self, filePath, fileName, x=0, y=0):
-		super(PlayerAudio, self).__init__()
+# PLAYER PQT5 V2
+class playerAudioAlbum(QMainWindow):
+	def __init__(self, listemedia, position=1, x=0, y=0):
+		super().__init__()
 		
-		# media
-		self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.LowLatency)
-		
-		# windows
-		self.setFixedSize(400, 40)
-		self.setWindowIcon(QIcon(WINS_ICO))
+		#Init main windows
 		self.setWindowFlags(Qt.WindowStaysOnTopHint)
-		self.setWindowTitle(TITL_PROG)
 		self.move(x, y)
-		# mm:ss
-		self.lcd = QLCDNumber(self)
-		self.lcd.display("00:00")
-		# button
-		self.playButton = QPushButton()
-		self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
-		self.playButton.clicked.connect(self.play)
-		# slider position
-		self.positionSlider = QSlider(Qt.Horizontal, self)
-		self.positionSlider.setRange(0, 0)
-		self.positionSlider.sliderMoved.connect(self.setPosition)
-		self.positionSlider.valueChanged.connect(self.lcddisplay)
-		# order display
-		PlayerLayout = QHBoxLayout()
-		PlayerLayout.setContentsMargins(5, 5, 5, 5)
-		PlayerLayout.addWidget(self.playButton)
-		PlayerLayout.addWidget(self.lcd)
-		PlayerLayout.addWidget(self.positionSlider)
-		self.setLayout(PlayerLayout)
-		# display
+		self.setFixedSize(400, 100)
+		self.setWindowIcon(QIcon(WINS_ICO))
+		
+		#Init Player
+		self.currentPlaylist = QMediaPlaylist()
+		self.player = QMediaPlayer()
+		self.userAction = -1			#0- stopped, 1- playing 2-paused
+		self.player.stateChanged.connect(self.qmp_stateChanged)
+		self.player.positionChanged.connect(self.qmp_positionChanged)
+		self.player.volumeChanged.connect(self.qmp_volumeChanged)
+		self.player.durationChanged.connect(self.qmp_durationChanged)
+		self.player.setVolume(60)
+		#Add Status bar
+		self.statusBar().showMessage('No Media :: %d'%self.player.volume())
+		
+		#Init GUI
+		centralWidget = QWidget()
+		centralWidget.setLayout(self.addControls())
+		self.setCentralWidget(centralWidget)
 		self.show()
 		
-		# link media
-		self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
-		self.mediaPlayer.positionChanged.connect(self.positionChanged)
-		self.mediaPlayer.durationChanged.connect(self.durationChanged)
+		#Add media
+		self.listemedia = listemedia
+		self.addMedialist()
 		
-		# autoplay
-		self.insertMedia(path.join(filePath,fileName))
-
+		#Autoplay
+		self.playHandler()
+		self.currentPlaylist.setCurrentIndex(position-1)
+		self.player.play()
 	
-	def insertMedia(self, media):
-		self.mediaPlayer.pause()
-		self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(media)))
-		self.setWindowTitle('playing "'+path.basename(media)+'"')
-		self.mediaPlayer.play()
+	def addControls(self):
+		controlArea = QVBoxLayout()
+		seekSliderLayout = QHBoxLayout()
+		controls = QHBoxLayout()
+		
+		#creating buttons
+		self.playBtn = QPushButton()
+		self.playBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+		stopBtn = QPushButton()
+		stopBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaStop))
+		prevBtn = QPushButton()
+		prevBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipBackward))
+		nextBtn = QPushButton()
+		nextBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipForward))
+		volumeDescBtn = QPushButton('-')
+		volumeDescBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
+		volumeIncBtn = QPushButton('+')
+		volumeIncBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
+		infoBtn = QPushButton('Tags...')
+		infoBtn.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
+		
+		#creating seek slider
+		self.seekSlider = QSlider(Qt.Horizontal, self)
+		self.seekSlider.setMinimum(0)
+		self.seekSlider.setMaximum(100)
+		self.seekSlider.setTracking(False)
+		self.seekSlider.sliderMoved.connect(self.seekPosition)
+		
+		self.seekSliderLabel1 = QLabel('00:00')
+		self.seekSliderLabel2 = QLabel('00:00')
+		seekSliderLayout.addWidget(self.seekSliderLabel1)
+		seekSliderLayout.addWidget(self.seekSlider)
+		seekSliderLayout.addWidget(self.seekSliderLabel2)
+		
+		#Add link buttons media
+		self.playBtn.clicked.connect(self.playHandler)
+		stopBtn.clicked.connect(self.stopHandler)
+		volumeDescBtn.clicked.connect(self.decreaseVolume)
+		volumeIncBtn.clicked.connect(self.increaseVolume)
+		prevBtn.clicked.connect(self.prevItemPlaylist)
+		nextBtn.clicked.connect(self.nextItemPlaylist)
+		infoBtn.clicked.connect(self.displaySongInfo)
+		
+		#Adding to the horizontal layout
+		controls.addWidget(prevBtn)
+		controls.addWidget(self.playBtn)
+		controls.addWidget(stopBtn)
+		controls.addWidget(nextBtn)
+		
+		controls.addWidget(volumeDescBtn)
+		controls.addWidget(volumeIncBtn)
+		controls.addWidget(infoBtn)
+		
+		#Adding to the vertical layout
+		controlArea.addLayout(seekSliderLayout)
+		controlArea.addLayout(controls)
+		return controlArea
 	
-	def play(self):
-		if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
-			self.mediaPlayer.pause()
+	def playHandler(self):
+		if self.player.state() == QMediaPlayer.PlayingState:
+			self.userAction = 2
+			self.statusBar().showMessage('Paused %s at position %s at Volume %d'%\
+						(self.player.metaData(QMediaMetaData.Title),\
+						self.seekSliderLabel1.text(),\
+						self.player.volume()))
+			self.player.pause()
 		else:
-			self.mediaPlayer.play()
-	
-	def mediaStateChanged(self, state):
-		if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
-			self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
+			self.userAction = 1
+			self.statusBar().showMessage('Playing at Volume %d'%self.player.volume())
+			if self.player.state() == QMediaPlayer.StoppedState :
+				if self.player.mediaStatus() == QMediaPlayer.NoMedia:
+					if self.currentPlaylist.mediaCount() != 0:
+						self.player.setPlaylist(self.currentPlaylist)
+				elif self.player.mediaStatus() == QMediaPlayer.LoadedMedia:
+					self.player.play()
+				elif self.player.mediaStatus() == QMediaPlayer.BufferedMedia:
+					self.player.play()
+			elif self.player.state() == QMediaPlayer.PlayingState:
+				pass
+			elif self.player.state() == QMediaPlayer.PausedState:
+				self.player.play()
+			
+	def stopHandler(self):
+		self.userAction = 0
+		self.statusBar().showMessage('Stopped at Volume %d'%(self.player.volume()))
+		if self.player.state() == QMediaPlayer.PlayingState:
+			self.stopState = True
+			self.player.stop()
+		elif self.player.state() == QMediaPlayer.PausedState:
+			self.player.stop()
+		elif self.player.state() == QMediaPlayer.StoppedState:
+			pass
+		
+	def qmp_stateChanged(self):
+		if self.player.state() == QMediaPlayer.StoppedState:
+			self.player.stop()
+		#buttons icon play/pause change
+		if self.player.state() == QMediaPlayer.PlayingState:
+			self.playBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
 		else:
-			self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+			self.playBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
 	
-	def positionChanged(self, position):
-		self.positionSlider.setValue(position)
+	def qmp_positionChanged(self, position):
+		#update position slider
+		self.seekSlider.setValue(position)
+		#update the text label
+		self.seekSliderLabel1.setText('%d:%02d'%(int(position/60000),int((position/1000)%60)))
 	
-	def durationChanged(self, duration):
-		self.positionSlider.setRange(0, duration)
+	def seekPosition(self, position):
+		sender = self.sender()
+		if isinstance(sender,QSlider):
+			if self.player.isSeekable():
+				self.player.setPosition(position)
 	
-	def setPosition(self, position):
-		self.mediaPlayer.setPosition(position)
+	def qmp_volumeChanged(self):
+		msg = self.statusBar().currentMessage()
+		msg = msg[:-2] + str(self.player.volume())
+		self.statusBar().showMessage(msg)
 	
-	def lcddisplay(self, position):
-		seconds = position // 1000
-		minutes = seconds // 60
-		total_p = "%02d:%02d" % (minutes, seconds % 60)
-		self.lcd.display(str(total_p))
-
-def PlayerProcess(filePath, fileName, x=0, y=0):
+	def qmp_durationChanged(self, duration):
+		self.seekSlider.setRange(0,duration)
+		self.seekSliderLabel2.setText('%d:%02d'%(int(duration/60000),int((duration/1000)%60)))
+		nummedia = self.currentPlaylist.mediaCount()
+		curmedia = self.currentPlaylist.currentIndex()+1
+		#artist = self.player.metaData(QMediaMetaData.Author)
+		#tittle = self.player.metaData(QMediaMetaData.Title)
+		namemedia = path.basename(self.listemedia[self.currentPlaylist.currentIndex()])
+		self.setWindowTitle('[%02d/%02d'%(curmedia,nummedia)+'] '+namemedia)
+	
+	def increaseVolume(self):
+		vol = self.player.volume()
+		vol = min(vol+5,100)
+		self.player.setVolume(vol)
+	
+	def decreaseVolume(self):
+		vol = self.player.volume()
+		vol = max(vol-5,0)
+		self.player.setVolume(vol)
+	
+	def addMedialist(self):
+		for media in self.listemedia:
+			self.currentPlaylist.addMedia(QMediaContent(QUrl.fromLocalFile(media)))
+	
+	def displaySongInfo(self):
+		#extract datas
+		metaDataKeyList = self.player.availableMetaData()
+		fullText = '<table class="tftable" border="0">'
+		for key in metaDataKeyList:
+			value = str(self.player.metaData(key)).replace("'","").replace("[","").replace("]","")
+			fullText = fullText + '<tr><td>' + key + '</td><td>' + value + '</td></tr>'
+		fullText = fullText + '</table>'
+		#Box
+		infoBox = QMessageBox(self)
+		infoBox.setWindowTitle('Detailed Song Information')
+		infoBox.setTextFormat(Qt.RichText)
+		infoBox.setText(fullText)
+		infoBox.addButton('OK',QMessageBox.AcceptRole)
+		infoBox.show()
+	
+	def prevItemPlaylist(self):
+		self.player.playlist().previous()
+		if self.currentPlaylist.currentIndex()==-1:
+			self.player.playlist().previous()
+	
+	def nextItemPlaylist(self):
+		self.player.playlist().next()
+		if self.currentPlaylist.currentIndex()==-1:
+			self.player.playlist().next()
+	
+def playerProcessAudio(listmedia, position, x=0, y=0):
 	app = QApplication(argv)
-	player = PlayerAudio(filePath, fileName, x, y)
+	app.setStyleSheet('QMainWindow{background-color: darkgray;border: 1px solid black;}')
+	player = playerAudioAlbum(listmedia, position, x, y)
 	app.exec_()
 
 ###################################################################
@@ -1811,14 +1942,14 @@ class CoverMainGui(Tk):
 			else:
 				# seoncd -> Days
 				txt_dur = str(int(((cpt_len/60/60)/24)*10)/10) + ' Days'
-			self.MessageInfo.set("Search Result \"{sch}\" =  {alb} | {trk} | {cds} | {siz} | {dur} ".format(sch = (txt_search if len(txt_search)>0 else 'all'),
+			self.MessageInfo.set("Search Result \"{sch}\" :  {alb} | {trk} | {cds} | {siz} | {dur} ".format(sch = (txt_search if len(txt_search)>0 else 'all'),
 																						alb = DisplayCounters(counter, 'Album'),
 																						cds =  DisplayCounters(cpt_cds, 'CD'),
 																						trk = DisplayCounters(cpt_trk, 'Track'),
 																						siz = txt_siz,
 																						dur = txt_dur))
 		else:
-			self.MessageInfo.set("Search Result \"{sch}\" = nothing".format(sch = self.ligne_texte.get()))
+			self.MessageInfo.set("Search Result \"{sch}\" : nothing".format(sch = self.ligne_texte.get()))
 		if self.tree.get_children():
 			# first line by defaut
 			if not(refresh): 
@@ -1986,24 +2117,25 @@ class CoverMainGui(Tk):
 	def playmedia(self):
 		"""Player Audio thread pyQT5."""
 		self.curLign = self.treealb.item(self.CurentTrack)
+		lismedia = []
+		fileselect = path.join(self.curLign['values'][T_POSITIO['REP_Track']], self.curLign['values'][T_POSITIO['FIL_Track']])
+		position = 1
+		for SelItem in self.treealb.get_children():
+			file = path.join(self.treealb.item(SelItem)['values'][T_POSITIO['REP_Track']], self.treealb.item(SelItem)['values'][T_POSITIO['FIL_Track']])
+			if file == fileselect:
+				curentposition = position
+			lismedia.append(file)
+			position += 1
 		# first exec
-		if self.tplay == None:
-			self.tplay = Thread(target = PlayerProcess, args = (self.curLign['values'][T_POSITIO['REP_Track']], 
-																self.curLign['values'][T_POSITIO['FIL_Track']],
-																self.winfo_x()+5, 
-																self.winfo_y()+self.winfo_height()-45))
-			self.tplay.daemon = False
-			self.tplay.start()
-		else:
-			# only one player run
-			if not self.tplay.isAlive():
-				self.tplay = Thread(target = PlayerProcess, args = (self.curLign['values'][T_POSITIO['REP_Track']], 
-																	self.curLign['values'][T_POSITIO['FIL_Track']],
-																	self.winfo_x()+5, 
-																	self.winfo_y()+self.winfo_height()-45))
-				self.tplay.daemon = False
-				self.tplay.start()
-	
+		try:
+			if self.tplay.is_alive():
+				self.tplay.terminate()
+				sleep(0.1)
+		except Exception:
+			pass
+		self.tplay = Process(target = playerProcessAudio, args = (lismedia, curentposition, self.winfo_x()+3, self.winfo_y()+self.winfo_height()-130))
+		self.tplay.start()
+		
 	def ExportAlbums(self):
 		fileprop = datetime.now().strftime('%Y%m%d%H%M%S') + "_Albums.csv"
 		filename = asksaveasfile(mode='w', 
@@ -2096,6 +2228,14 @@ class CoverMainGui(Tk):
 			CoversArtWorkViewGui(self.coverWin, self.AlbumPath, self.albumname, self.pathcover)
 	
 	def QuitDBAlbums(self):
+		#close player processing ?
+		try:
+			if self.tplay.is_alive():
+				self.tplay.terminate()
+				sleep(0.1)
+		except Exception:
+			pass
+		#close sql
 		self.con.close()
 		self.destroy()
 
