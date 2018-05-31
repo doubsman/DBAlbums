@@ -408,3 +408,44 @@ class ModelTableTracksABS(ModelDBAbstract):
 		query.clear
 		# change value to array
 		self.arraydata[row][self.myindex.index('Score')] = score
+
+
+# TABLE DBTRACKS SQLQUERY
+class ModelTableUpdatesABS(QAbstractTableModel):
+	# columns position 0-8 wrapper
+	U_POSITIO = ('Category', 'Family', 'Action', 'ID', 'Name', 'Folder')
+	# columns grid name
+	U_COLNAME = U_POSITIO
+	# treeview columns width
+	C_HEIGHT = 21
+	U_C_WIDTH = (70, 120, 70, 50, 300, 800)
+					
+	def __init__(self, parent, arraydata):
+		"""Init model."""
+		super(ModelTableUpdatesABS, self).__init__(parent)
+		self._array = arraydata
+	
+	def update(self, arraydata):
+		self._array = arraydata
+		self.layoutChanged.emit()
+		
+	def headerData(self, section, orientation, role=Qt.DisplayRole):
+		"""Set the name list to column name."""
+		if role != Qt.DisplayRole:
+			return QVariant()
+		if orientation == Qt.Horizontal:
+			return self.U_POSITIO[section]
+		return QVariant()	
+		
+	def rowCount(self, parent=None):
+		return len(self._array)
+
+	def columnCount(self, parent=None):
+		return len(self.U_POSITIO)
+		
+	def data(self, index, role=Qt.DisplayRole):
+		if index.isValid():
+			if role == Qt.DisplayRole:
+				return QVariant(self._array[index.row()][index.column()])
+
+		return QVariant()

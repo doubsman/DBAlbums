@@ -165,6 +165,7 @@ class DBThunbnails(QWidget):
 		qDebug("Start Add Thunbnails")
 		self.stopbuild = False
 		self.isbuilder = True
+		fin = max(self.getTotalThunbnails(), fin)
 		# init grid
 		if new:
 			self.delThunbails()

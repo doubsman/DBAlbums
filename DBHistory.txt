@@ -1,4 +1,5 @@
 """ DBAlbums History Version : Doubsman dev.
+1.54 update database Gui etape 1: powserhell macro
 1.53 zoom bar in status bar, combo style Qthread
 1.52 theme colors, Drag and Drop no cover, 64 bits
 1.51 model Abstract in memory

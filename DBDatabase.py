@@ -19,6 +19,8 @@ def connectDatabase(envt):
 	configini.beginGroup(envt)
 	MODE_SQLI = configini.value('typb')
 	BASE_RAC = r'' + configini.value('raci')
+	RACI_DOU = configini.value('cate')
+	RACI_SIM = configini.value('cats')
 	boolcon = False
 	if MODE_SQLI == 'sqlite':
 		db = QSqlDatabase.addDatabase("QSQLITE")
@@ -41,11 +43,41 @@ def connectDatabase(envt):
 		db.setUserName(BASE_USR)
 		db.setPassword(BASE_PAS)
 		db.setPort(BASE_PRT)
+	list_category = []
+	if RACI_DOU is not None:
+		list_category += buildlistcategory(configini, RACI_DOU, BASE_RAC, 'D')
+	if RACI_SIM is not None:
+		list_category += buildlistcategory(configini, RACI_SIM, BASE_RAC, 'S')	
 	if db.isValid():
 		boolcon = db.open()
 	else:
 		qDebug(envt+' problem for open database')
-	return boolcon, db, MODE_SQLI, BASE_RAC
+	return boolcon, db, MODE_SQLI, BASE_RAC, list_category
+
+
+def buildlistcategory(configini, category, racine,  mode):
+	# build racines doubles
+	list_category = []
+	configini.beginGroup(category)
+	for cate in configini.allKeys():
+		listracate = configini.value(cate)
+		family = None
+		if isinstance(listracate, list):
+			for racate in listracate:
+				if racate.find('|') > 0:
+					family = racate.split('|')[1]
+					racate = racate.split('|')[0]
+				racate = path.join(racine, racate)
+				list_category.append([cate, mode, racate, family])
+		else:
+			racate = listracate
+			if racate.find('|') > 0:
+				family = racate.split('|')[1]
+				racate = racate.split('|')[0]
+			racate = path.join(racine, racate)
+			list_category.append([cate, mode, racate, family])
+	configini.endGroup()
+	return list_category
 
 
 def getrequest(name, MODE_SQLI=None):

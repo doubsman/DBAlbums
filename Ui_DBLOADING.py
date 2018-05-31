@@ -13,7 +13,7 @@ class Ui_LoadingWindow(object):
         LoadingWindow.setObjectName("LoadingWindow")
         LoadingWindow.setWindowModality(QtCore.Qt.ApplicationModal)
         LoadingWindow.resize(400, 350)
-        LoadingWindow.setStyleSheet("#LoadingWindow{border: 1px solid black;}")
+        LoadingWindow.setStyleSheet("")
         self.verticalLayoutWidget = QtWidgets.QWidget(LoadingWindow)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 381, 331))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -109,9 +109,6 @@ class Ui_LoadingWindow(object):
         self.btn_quit.setSizePolicy(sizePolicy)
         self.btn_quit.setBaseSize(QtCore.QSize(20, 24))
         self.btn_quit.setObjectName("btn_quit")
-        self.verticalLayoutWidget.raise_()
-        self.btn_quit.raise_()
-        self.frame.raise_()
 
         self.retranslateUi(LoadingWindow)
         self.tabWidget.setCurrentIndex(0)

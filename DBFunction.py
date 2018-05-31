@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sys import platform
-from os import path, walk
+from sys import platform, stdout
+from os import path, walk, listdir
 from PyQt5.QtCore import (QProcess, QObject, QTime, QtInfoMsg,
 						QtWarningMsg, QtCriticalMsg, QtFatalMsg)
 from PyQt5.QtWidgets import QDesktopWidget
@@ -26,6 +26,15 @@ def qtmymessagehandler(mode, context, message):
 																		 fi=context.file, 
 																		 ti=curdate))
 	print('  {m}: {e}\n'.format(m=mode, e=message))
+
+
+def progress(count, total, suffix=''):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+    stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', suffix))
+    stdout.flush()
 
 
 class ThemeColors(QObject):
@@ -86,16 +95,39 @@ def centerWidget(widget):
 	widget.move(qtrectangle.topLeft())
 
 
-def getListFiles(folder, masks):
+def getListFiles(folder, masks=None):
 	"""Build files list."""
+	blacklist = ['desktop.ini', 'Thumbs.db']
 	for folderName, subfolders, filenames in walk(folder):
 		if subfolders:
 			for subfolder in subfolders:
 				getListFiles(subfolder, masks)
 		for filename in filenames:
-			for xmask in masks:
-				if filename[-4:].lower() in xmask:
+			if masks is None:
+				if filename not in blacklist:
 					yield path.join(folderName, filename)
+			else:
+				for xmask in masks:
+					if filename[-len(xmask):].lower() in xmask:
+						if filename not in blacklist:
+							yield path.join(folderName, filename)
+
+
+def getListFolders(folder):
+	"""Build folders list."""
+	return [d for d in listdir(folder) if path.isdir(path.join(folder, d))]
+
+
+def getFolderSize(folder):
+	"""Calcul folder size."""
+	total_size = path.getsize(folder)
+	for item in listdir(folder):
+		itempath = path.join(folder, item)
+		if path.isfile(itempath):
+			total_size += path.getsize(itempath)
+		elif path.isdir(itempath):
+			total_size += getFolderSize(itempath)
+	return total_size
 
 
 def logit(dat, filename):
@@ -144,13 +176,16 @@ def convertUNC(path):
 	return(path)
 
 
-def buildalbumnamehtml(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers, RESS_LABS, RESS_ICOS):
+def buildalbumnamehtml(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers, albumPath, RESS_LABS, RESS_ICOS):
 	"""buil label name & album name."""
 	# name + label
 	stylehtml = "text-decoration:none;color: black;"
 	infoslabel = ""
 	infonameal = ""
 	infosayear = ""
+	inffolder = ""
+	infotags = ""
+	infopowe = ""
 	imglabel = None
 	if '[' in name:
 		textsalbum = name[name.find('[')+1:name.find(']')]
@@ -194,17 +229,18 @@ def buildalbumnamehtml(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers,
 		infosnbcd = nbcd*infosnbcd
 	else:
 		infosnbcd = displayCounters(nbcd, 'CD')
-	# folder
-	inffolder =  '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'folder.png') + '" height="17">'
-	inffolder = '<a style=' + stylehtml + ' href="dbfunction://f">' + inffolder + '</a>'
-	# tagscan / powershell
-	if platform == "win32":
-		infotags = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'tag.png') + '" height="17">'
-		infotags = '<a style="' + stylehtml + '" href="dbfunction://t">' + infotags + '</a>'
-		infopowe = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'pwr.png') + '" height="17">'
-		infopowe = '<a style="' + stylehtml + '" href="dbfunction://p">' + infopowe + '</a>'
-	else:
-		infotags = infopowe = ''
+	if path.exists(albumPath):
+		# folder
+		inffolder =  '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'folder.png') + '" height="17">'
+		inffolder = '<a style=' + stylehtml + ' href="dbfunction://f">' + inffolder + '</a>'
+		# tagscan / powershell
+		if platform == "win32":
+			infotags = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'tag.png') + '" height="17">'
+			infotags = '<a style="' + stylehtml + '" href="dbfunction://t">' + infotags + '</a>'
+			infopowe = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'pwr.png') + '" height="17">'
+			infopowe = '<a style="' + stylehtml + '" href="dbfunction://p">' + infopowe + '</a>'
+		else:
+			infotags = infopowe = ''
 	# others
 	infotrack = displayCounters(nbtracks, 'Track')
 	infoduree = displayCounters(nbmin, 'min')

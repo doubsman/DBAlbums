@@ -51,7 +51,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.btn_style.clicked.connect(lambda: [self.curthe.nextTheme(), self.applyTheme()])
 		self.statusBar().addPermanentWidget(self.btn_style)
 		
-		boolconnect, self.dbbase, self.modsql, self.rootDk = connectDatabase(self.ENVT_DEF)
+		boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.ENVT_DEF)
 		
 		autoList = buildTabFromRequest(getrequest('autocompletion', self.modsql))
 		self.com_autcom = QCompleter(autoList, self.textsearch)

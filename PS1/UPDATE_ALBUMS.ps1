@@ -1,14 +1,15 @@
 Param(
-	[parameter(position=0, Mandatory=$true)]
-	[string]$Envt,
-	[parameter(position=1, Mandatory=$true)]
-	[string]$listID_CD,
-	[parameter(position=1, Mandatory=$false)]
-	[switch]$Force)
+	[parameter(position=0, Mandatory=$True)][string]$Envt,
+	[parameter(position=1, Mandatory=$True)][string]$TypeOpe,
+	[parameter(position=2, Mandatory=$True)][string]$AlbumInfos,
+	[parameter(position=3, Mandatory=$False)][string]$Category,
+	[parameter(position=4, Mandatory=$False)][string]$Family,
+	[parameter(position=4, Mandatory=$False)][switch]$Force
+	)
 
 ##############################################
 # Construction INVENT
-$Process = "UPDATE_ALBUMS_"+$Envt;
+$Process = "ADD_ALBUMS_"+$Envt;
 $version = '1.00';
 $date = (Get-Date).ToString("yyyyMMddHHmmss");
 $Start = (Get-Date);
@@ -25,27 +26,46 @@ $env:PSModulePath = $env:PSModulePath + ";C:\Program Files\WindowsPowerShell\Mod
 Import-Module PSBanner -PassThru
 #import-module "C:\Program Files\WindowsPowerShell\Modules\PSBanner\0.4\PSBanner.psd1"  -PassThru
 
-$ban = Write-Banner $Envt
-write-host($ban)
 Super-Title -Label ('START '+$Process) -Start $Start;
 
 ##############################################
 $MySqlCon, $racine = ConnectEnvt -Envt $Envt
-$nbupdate = ($listID_CD.split(',')).Length;
-$crupdate = 1;
-$LossLess = ($Envt -match "LOSSLESS")
-Foreach ($ID_CD in $listID_CD.split(',')){
-	Super-Title -Label ("uptade album ID=$ID_CD ($crupdate/$nbupdate)") -Start $Start;
-	$crupdate ++
-	Run-UpdateAlbum -ID_CD $ID_CD -LossLess $LossLess -Force $Force
+if ($Force){
+	$BForce = $True
+} else {
+	$BForce = $False
 }
+$LossLess = ($Envt -match "LOSSLESS")
+$listacti = $TypeOpe.replace('"','').split('|')
+$listinfo = $AlbumInfos.replace('"','').split('|')
+$nbupdate = $listinfo.Length;
+$listcate = $Category.replace('"','').split('|')
+$listfami = $Family.replace('"','').split('|')
+$counters = 0
+Foreach ($AlbumRep in $listinfo){
+	if ($listacti[$counters] -eq 'ADD'){
+		$apath = $listinfo[$counters]
+		$acate = $listcate[$counters]
+		$afami = $listfami[$counters]
+		$counters++
+		Super-Title -Label ("ADD   : $acate $afami $apath ($counters/$nbupdate)") -Start $Start;
+		Run-AddNewAlbum -AlbumRep $apath -LossLess $LossLess -Category $acate -Family $afami
+	}
+	if (($listacti[$counters] -eq 'UPDATE') -or ($listacti[$counters] -eq 'DELETE')){
+		$aidcd = $listinfo[$counters]
+		$counters++
+		Super-Title -Label ("UPDATE: $aidcd ($counters/$nbupdate)") -Start $Start;
+		Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $BForce
+	}
+	
+}
+
 
 ##############################################
 PurgeLog -Path $path_Out -NameLog $Process
 
 ##############################################
 Disconnect-MySQL $MySqlCon
-
 ##############################################
 Super-Title -Label 'END' -Start $Start;
 Stop-Transcript | Out-Null

@@ -1,6 +1,6 @@
 ############################################################################################
 # Construction INVENT
-$version = '1.11';
+$version = '1.13';
 
 #################
 $TXTNOPICTURE = 'No Picture'
@@ -92,7 +92,7 @@ Function ConnectEnvt{
 Function Run-UpdateAlbum{
 	param ([parameter(Mandatory = $True)][string] $ID_CD,
 		   [parameter(Mandatory = $True)][bool] $LossLess,
-		   [parameter(Mandatory = $False)][bool] $Force=$False)
+		   [parameter(Mandatory = $False)][bool] $Force)
 	
 	$Album_Exist = Get-AlbumIDMysql -ID_CD $ID_CD;
 	If ($Album_Exist){
@@ -184,18 +184,13 @@ Function Run-UpdateAlbum{
 
 Function Run-AddNewAlbum{
 	param ([parameter(Mandatory = $true)][string] $AlbumRep,
-		   [parameter(Mandatory = $true)][bool] $LossLess)
+		   [parameter(Mandatory = $true)][bool] $LossLess,
+		   [parameter(Mandatory = $true)][string] $Category,
+		   [parameter(Mandatory = $true)][string] $Family)
 	
 	$Album_Result = $TAGS_Result = @();
 	$Album_Rep = Get-Item -LiteralPath "$AlbumRep"
-	$Category = $Album_Rep.Fullname.Split("\")[4]
-	$Position = $Album_Rep.Fullname.Split("\")[5];
-	$Family = ($Families.GetEnumerator() | Where-Object { $Position -Match $_.Value}).Name;
 	$Album_Exist = (Get-AlbumMD5Mysql -AlbumExist $Album_Rep);
-	If (!($LossLess)){
-		Write-Host -foregroundcolor "yellow" (' '*10+" | only LOSSLESS DATABASE")
-		break
-	}
 	# no audio = next album
 	$Audi_Count = (Get-ChildItem -LiteralPath $Album_Rep.Fullname -file -recurse | Where-Object { $global:MaskMusic -contains $_.Extension }).count;
 	if ($Audi_Count -eq 0){
@@ -247,6 +242,7 @@ Function Run-AddNewAlbum{
 		Anno-toMySQL -MySqlCon $MySqlCon -ID_CD $Album_Result.ID_CD -Path $Album_Result.Path -Mess 'Error No Track List';
 	}
 	# ENR ALBUM
+	$Album_Result.Date_Modifs = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss");
 	ArrayToMySQL -MySqlCon $MySqlCon -TabPower $Album_Result -TblMysql $Tbl_Albums -colAutoincrement 'ID_CD';
 	$reqStr = "SELECT LAST_INSERT_ID() as lastid;";
 	$lastID = (Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr)[0].lastid
