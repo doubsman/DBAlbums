@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 # GetExist History Version
-#  1.24 mousewheel
-#  1.23 thunbnails + treeview
-#  1.22 thunbnails
+#  1.25 gestion import tkinter + stats loading
+#  1.24 thunbnails + mousewheel + popup
+#  1.23 thunbnails link treeview
+#  1.22 thunbnails view
 #  1.21 Tagscan + sdtout powershell
 #  1.20 Artworks viewer
 #  1.19 integration Powershell script
@@ -29,14 +30,16 @@
 
 # python 3.5.2
 # python3 -m pip install pymysql
-import sys
-import tkinter as tk
-from tkinter import * #Tk, Label, Entry, Canvas, Frame, StringVar
+from sys import platform, stdout, argv
+from os import system, path, getcwd, name, remove, walk
+from tkinter import (Tk, Toplevel, Label, Button, Checkbutton, Entry, Canvas, 
+					Frame, Scale, Menu, Text, StringVar, IntVar, FALSE, TRUE, 
+					SUNKEN, SOLID, FLAT, N, S, W, E, X, Y, RIGHT, LEFT, BOTH,
+					TOP, END, BOTTOM, VERTICAL, HORIZONTAL, INSERT)
 from tkinter.filedialog import asksaveasfile
 from tkinter.ttk import Treeview, Combobox, Scrollbar
 from tkinter.font import Font
 from threading import Thread
-from os import system, path, getcwd, name, remove, walk
 from pymysql import connect as connectmysql
 from sqlite3 import connect as connectsqlite3
 from subprocess import check_call, call, Popen, PIPE
@@ -47,14 +50,14 @@ from io import BytesIO
 from base64 import b64decode, decodestring, b64encode
 from time import sleep
 from queue import Queue, Empty
-# functions
+# functions dev
 from GetExistPlayer import PlayerProcess
 from GetExistCopyDatabaseToSqlite import CopyDatabaseInvent
 
 
 ###################################################################
 # CONSTANTS
-VERS_PROG = '1.24'
+VERS_PROG = '1.25'
 TITL_PROG = "DB Albums v{v} (2017)".format(v=VERS_PROG)
 PATH_PROG = path.dirname(__file__)
 LOGS_PROG = path.join(PATH_PROG, 'Logs')
@@ -104,7 +107,7 @@ PASS_MP3T = 'MwRbBR2HA8PFQjuu'
 BASE_MP3T = 'MP3'
 # gui
 NAME_EVT = ('LOSSLESS', 'MP3', 'LOSSLESS_TEST', 'MP3_TEST')
-CURT_EVT = 2 # 0 LOSSLESS
+CURT_EVT = 3 # 0 LOSSLESS
 WINS_ICO = "GetExist.ico"
 UNIX_ICO = 'GetExist.png'
 PICT_NCO = 'img-cd-blank.gif'
@@ -322,10 +325,10 @@ def BuildTree(con, frame, req, colWidth, line=15, scroll=False):
 	tree.tag_configure('3', background=TREE_CO3)
 	if scroll:
 		ysb = Scrollbar(frame, orient=VERTICAL)
-		ysb.pack(side=tk.RIGHT, fill=tk.Y)
+		ysb.pack(side=RIGHT, fill=Y)
 		ysb.config(command=tree.yview)
-		xsb = Scrollbar(frame, orient=tk.HORIZONTAL)
-		xsb.pack(side=tk.BOTTOM, fill=tk.X)
+		xsb = Scrollbar(frame, orient=HORIZONTAL)
+		xsb.pack(side=BOTTOM, fill=X)
 		xsb.config(command=tree.xview)
 		tree.configure(yscrollcommand=ysb.set,xscrollcommand=xsb.set)
 	return (tree)
@@ -363,7 +366,11 @@ def BuildCover(con, pathcover, md5):
 		# cover base64/mysql
 		req = C_REQUEST.format(MD5=md5)
 		Tableau = SelectTOTab(con, req)
-		monimage = Image.open(BytesIO(b64decode(Tableau[0][1])))
+		if len(Tableau) == 0:
+			monimage = Image.open(PICM_NCO)
+			print(pathcover) #############
+		else:
+			monimage = Image.open(BytesIO(b64decode(Tableau[0][1])))
 	return (monimage)
 
 def BuildMiniCover(con, pathcover, md5):
@@ -375,7 +382,11 @@ def BuildMiniCover(con, pathcover, md5):
 		# cover base64/mysql
 		req = M_REQUEST.format(MD5=md5)
 		Tableau = SelectTOTab(con, req)
-		monimage = Image.open(BytesIO(b64decode(Tableau[0][1])))
+		if len(Tableau) == 0:
+			monimage = Image.open(PICM_NCO)
+			print(pathcover) #############
+		else:
+			monimage = Image.open(BytesIO(b64decode(Tableau[0][1])))
 	return (monimage)
 
 def BuildFileCover(con, namefile, pathcover, md5):
@@ -408,13 +419,13 @@ def OpenComand(progra, params):
 	system(command)
 
 # opening-a-folder-in-explorer-nautilus-mac-thingie
-if sys.platform == 'darwin':
+if platform == 'darwin':
 	def openFolder(path):
 		check_call(['open', '--', path])
-elif sys.platform == 'linux2':
+elif platform == 'linux2':
 	def openFolder(path):
 		check_call(['xdg-open', '--', path])
-elif sys.platform == 'win32':
+elif platform == 'win32':
 	def openFolder(path):
 		OpenComand('explorer', path)
 
@@ -425,7 +436,7 @@ def ExcecutePowershell(script, *argv):
 				script]
 	for arg in argv:
 		Command += (arg,)
-	p = Popen(Command, stdin=sys.stdout, stdout=sys.stdout, stderr=sys.stdout)
+	p = Popen(Command, stdin=stdout, stdout=stdout, stderr=stdout)
 	return p
 	#out, err = p.communicate()
 	#returncode = p.wait()
@@ -446,7 +457,7 @@ def getFileNameWithoutExtension(path):
 
 # auto-completion
 tk_umlauts=['odiaeresis', 'adiaeresis', 'udiaeresis', 'Odiaeresis', 'Adiaeresis', 'Udiaeresis', 'ssharp']
-class AutocompleteEntry(tk.Entry):
+class AutocompleteEntry(Entry):
 	"""
 	Subclass of tkinter.Entry that features autocompletion.
 	To enable autocompletion use set_completion_list(list) to define
@@ -463,7 +474,7 @@ class AutocompleteEntry(tk.Entry):
 	def autocomplete(self, delta=0):
 		"""autocomplete the Entry, delta may be 0/1/-1 to cycle through possible hits"""
 		if delta: # need to delete selection otherwise we would fix the current position
-				self.delete(self.position, tk.END)
+				self.delete(self.position, END)
 		else: # set position to end so selection starts where textentry ended
 				self.position = len(self.get())
 		# collect hits
@@ -480,23 +491,23 @@ class AutocompleteEntry(tk.Entry):
 				self._hit_index = (self._hit_index + delta) % len(self._hits)
 		# now finally perform the auto completion
 		if self._hits:
-				self.delete(0,tk.END)
+				self.delete(0,END)
 				self.insert(0,self._hits[self._hit_index])
-				self.select_range(self.position,tk.END)
+				self.select_range(self.position,END)
 
 	def handle_keyrelease(self, event):
 		"""event handler for the keyrelease event on this widget"""
 		if event.keysym == "BackSpace":
-				self.delete(self.index(tk.INSERT), tk.END)
-				self.position = self.index(tk.END)
+				self.delete(self.index(INSERT), END)
+				self.position = self.index(END)
 		if event.keysym == "Left":
-				if self.position < self.index(tk.END): # delete the selection
-						self.delete(self.position, tk.END)
+				if self.position < self.index(END): # delete the selection
+						self.delete(self.position, END)
 				else:
 						self.position = self.position-1 # delete one character
-						self.delete(self.position, tk.END)
+						self.delete(self.position, END)
 		if event.keysym == "Right":
-				self.position = self.index(tk.END) # go to end (no selection)
+				self.position = self.index(END) # go to end (no selection)
 		if event.keysym == "Down":
 				self.autocomplete(1) # cycle to next hit
 		if event.keysym == "Up":
@@ -528,19 +539,19 @@ class VerticalScrolledFrame(Frame):
 		
 		# creating a frame to inserto to canvas
 		self.interior = Frame(self.canv)
-		self.canv.create_window(0, 0, window = self.interior, anchor=NW)
+		self.canv.create_window(0, 0, window = self.interior, anchor=N+W)
 		self.interior.bind('<Configure>', self._configure_window)  
 		self.interior.bind('<Enter>', self._bound_to_mousewheel)
 		self.interior.bind('<Leave>', self._unbound_to_mousewheel)
 
 	def _bound_to_mousewheel(self, event):
-		self.canv.bind_all("<MouseWheel>", self._on_mousewheel)	  
+		self.canv.bind_all("<MouseWheel>", self._on_mousewheel)
 
 	def _unbound_to_mousewheel(self, event):
 		self.canv.unbind_all("<MouseWheel>") 
 
 	def _on_mousewheel(self, event):
-		self.canv.yview_scroll(int(-1*(event.delta/120)), "units")	
+		self.canv.yview_scroll(int(-1*(event.delta/120)), "units")
 
 	def _configure_window(self, event):
 		# update the scrollbars to match the size of the inner frame
@@ -558,55 +569,47 @@ class VerticalScrolledFrame(Frame):
 # LOADING GUI
 class LoadingGui():
 	"""Fenetre loading."""
-	def __init__(self , MyTopLevel, con, MODE_SQLI, sleeptime=0):
+	def __init__(self , MyTopLevel, con, MODE_SQLI, sleeptime=0, w=400, h=200):
 		self.MyTopLevel = MyTopLevel
-		self.MyTopLevel.geometry("400x290")
+		self.MyTopLevel.geometry("{w}x{h}".format(w=w,h=h))
 		self.MyTopLevel.attributes('-topmost', True)
-		CenterWindows(self.MyTopLevel)
 		BuildIco(self.MyTopLevel)
 		self.MyTopLevel.title("Loading Datas")
 		self.MyTopLevel.resizable(width=False, height=False)
 		self.MyTopLevel.overrideredirect(True)
-		# messages
+		# logo + message
 		customFont = Font(family="Calibri", size=14)
-		cadretittle = tk.Frame(self.MyTopLevel, width=380, height=50, bd=3, relief=SUNKEN)
-		cadretittle.pack(fill=tk.BOTH)
+		cadretittle = Frame(self.MyTopLevel, width=380, height=50, bd=3, relief=SUNKEN)
+		cadretittle.pack(fill=BOTH)
 		cadretittle.bind("<Button-1>", self.HideLoadingGui)
 		cadretittle.bind("<Button-3>", self.HideLoadingGui)
 		monimage = Image.open(UNIX_ICO)
 		monimage = monimage.resize((100, 100), Image.ANTIALIAS)
 		photo = ImageTk.PhotoImage(monimage)
-		prj_label = tk.Label(cadretittle, image = photo)
+		prj_label = Label(cadretittle, image = photo)
 		prj_label.image = photo
-		prj_label.pack(side=tk.LEFT, padx=10, pady=10)
-		message = StringVar()
+		prj_label.pack(side=LEFT, padx=10, pady=10)
 		if MODE_SQLI:
 			txt_message = "SQLite Base (mode offline)"
 		else:
 			txt_message = "Mysql Base"
+		message = StringVar()
 		message.set(TITL_PROG+"\nConnected "+txt_message+'.'*sleeptime)
-		mes_label = tk.Label(cadretittle, textvariable=message, font=customFont)
-		mes_label.pack(side=tk.LEFT, padx=5, pady=5)
-		# stats
-		MAX_LINES = 6
-		cadrestats = tk.Frame(self.MyTopLevel)
-		cadrestats.pack(fill=tk.BOTH)
+		mes_label = Label(cadretittle, textvariable=message, font=customFont)
+		mes_label.pack(side=LEFT, padx=5, pady=5)
+		# 2*tabs stats
+		self.con = con
+		self.w = w
+		self.h = h
+		self.cadrestats = Frame(self.MyTopLevel)
+		self.cadrestats.pack(fill=BOTH)
 		req = BuildReqTCD(con, "Category" , "Family", "DBALBUMS", "BASE ALBUMS", "1", True)
-		treeload = BuildTree(con, cadrestats, req, (50,50,50,50,50), MAX_LINES)
-		Tabs = SelectTOTab(con, req)
-		counter = 0
-		for row in Tabs:
-			tag = (counter%2)
-			if (counter + 1) == len(Tabs): tag = 3
-			treeload.insert("", counter, iid='Row_%s'%counter, values=row, tag = tag)
-			counter += 1
-		# add scrollbar ?
-		if counter > MAX_LINES:
-			ysb = Scrollbar(cadrestats, orient=VERTICAL)
-			ysb.pack(side=tk.RIGHT, fill=tk.Y)
-			ysb.config(command=treeload.yview)
-			treeload.configure(yscrollcommand=ysb.set)
-		treeload.pack(side=tk.TOP, anchor=tk.W, fill=tk.BOTH, padx=5, pady=5)
+		self.treestat1 = self.BuildTreeStats(req)
+		self.treestat1.bind("<Button-3>", self.ChangeTree1)
+		self.treestat1.pack(side=TOP, anchor=W, fill=BOTH, padx=5, pady=5)
+		req = BuildReqTCD(con, "Category" , "Family", "DBALBUMS", "SIZE (GO)", "ROUND(`Size`/1024,0)", True)
+		self.treestat2 = self.BuildTreeStats(req)
+		self.treestat2.bind("<Button-3>", self.ChangeTree2)
 		# windows
 		self.MyTopLevel.update_idletasks()
 		# waiting
@@ -616,6 +619,35 @@ class LoadingGui():
 			counter -= 1
 			message.set(TITL_PROG+"\nConnected "+txt_message+'.'*counter + ' '*(sleeptime-counter))
 			self.MyTopLevel.update_idletasks()
+	
+	def BuildTreeStats(self, req):
+		Tabs = SelectTOTab(self.con, req)
+		# ajust window height
+		linetebm = 6
+		if len(Tabs)>linetebm:
+			linestabs = len(Tabs)
+		else:
+			linestabs = linetebm
+		self.MyTopLevel.geometry("{w}x{h}".format(w=self.w,h=self.h+(linestabs*18)))
+		CenterWindows(self.MyTopLevel)
+		# build tree
+		tree = BuildTree(self.con, self.cadrestats, req, (50,50,50,50,50), linestabs)
+		# fill tree
+		counter = 0
+		for row in Tabs:
+			tag = (counter%2)
+			if (counter + 1) == len(Tabs): tag = 3
+			tree.insert("", counter, iid='Row_%s'%counter, values=row, tag = tag)
+			counter += 1
+		return(tree)
+	
+	def ChangeTree1(self, event):
+		self.treestat1.pack_forget()
+		self.treestat2.pack(side=TOP, anchor=W, fill=BOTH, padx=5, pady=5)
+		
+	def ChangeTree2(self, event):
+		self.treestat2.pack_forget()
+		self.treestat1.pack(side=TOP, anchor=W, fill=BOTH, padx=5, pady=5)
 		
 	def HideLoadingGui(self, event):
 		self.MyTopLevel.withdraw()
@@ -637,13 +669,109 @@ class CoverViewGui():
 		self.master.title("{name} - [{w}x{h}] orignal size:[{wo}x{ho}]".format(w=w, h=h, name=namealbum, wo=str(width), ho=str(height)))
 		monimage = monimage.resize((w, h), Image.ANTIALIAS)
 		photo = ImageTk.PhotoImage(monimage)
-		label = tk.Label(self.master, image = photo)
+		label = Label(self.master, image = photo)
 		label.image = photo
 		label.bind("<Button-1>", self.QuitCoverViewGui)
 		label.pack()
 	
 	def QuitCoverViewGui(self, event):
 		self.master.destroy()
+
+class CoversArtWorkViewGui():
+	"""Fenetre view cover."""
+	def __init__(self, master, pathcover, pathalbum, namealbum):
+		# Windows
+		self.master = master
+		self.master.geometry("{w}x{h}".format(w=WIDT_MAIN,h=HEIG_MAIN))
+		self.master.attributes('-topmost', True)
+		self.master.title(TITL_PROG+" [view ArtWorks] : reading files covers...")
+		self.master.resizable(width=False, height=False)
+		BuildIco(self.master)
+		CenterWindows(self.master)
+		
+		# build list covers
+		self.namealbum = namealbum
+		fileslist = list(GetListFiles(pathalbum, MASKCOVERS))
+		self.numbersCov = len(fileslist)
+		
+		# build labels thunbnails
+		self.frameThunbnails = VerticalScrolledFrame(self.master , WIDT_MAIN , WIDT_PICM+4)
+		self.frameThunbnails.pack(side=TOP, anchor=W, fill=BOTH, padx=5, pady=5)
+		self.listartwork = []
+		maxCol = int(WIDT_MAIN/WIDT_PICM)
+		curRow = curCol = cptIte = 0
+		self.master.update_idletasks()
+		for filelist in fileslist:
+			monimage = Image.open(filelist)
+			monimage = monimage.resize((WIDT_PICM, WIDT_PICM), Image.ANTIALIAS)
+			photo = ImageTk.PhotoImage(monimage)
+			label = Label(self.frameThunbnails.interior, image = photo, text=filelist)
+			label.image = photo
+			self.listartwork.append(label)
+			label.grid(row=curRow,column=curCol)
+			self.master.update_idletasks()
+			label.bind("<Enter>", lambda event,a=cptIte: self.OnSelectThunbnail(event,a))
+			# count thunbnails
+			cptIte = cptIte + 1
+			# position
+			curCol = curCol + 1
+			if curCol == maxCol:
+				curCol = 0
+				curRow = curRow + 1
+		
+		# build cover
+		self.framecover = Frame(self.master)
+		self.framecover.pack(side=TOP, anchor=W, fill=BOTH)
+		self.cover = Label(self.framecover, background=THUN_CO0)
+		self.cover.pack(side=TOP, fill=BOTH)
+		self.aMenu = Menu(self.framecover, tearoff=0)
+		self.aMenu.add_command(label="Create cover...", command=self.CreateFileCover)
+		# only if no cover file
+		if pathcover[0:len(TEXT_NCO)] != TEXT_NCO:
+			self.master.bind("<Button-3>", self.popupThunbnail)
+		self.OnSelectThunbnail(None, 0)
+		
+	def OnSelectThunbnail(self, event, numlabel):
+		curlabel = self.listartwork[numlabel]
+		self.filelist = curlabel.cget('text')
+		self.monimage = Image.open(self.filelist)
+		# measures
+		width, height = self.monimage.size
+		new_height = height
+		new_width = width
+		h = HEIG_MAIN-WIDT_PICM+4
+		if width>WIDT_MAIN or height>h:
+			# resize
+			if (width-WIDT_MAIN) > (height-h):
+				new_width  = WIDT_MAIN
+				new_height = int(new_width * height / width)
+			else:
+				new_height = h
+				new_width  = int(new_height * width / height)
+			self.monimage = self.monimage.resize((new_width, new_height), Image.ANTIALIAS)
+		photo = ImageTk.PhotoImage(self.monimage)
+		self.cover.configure(image = photo)
+		self.cover.image = photo
+		self.master.update_idletasks()
+		# windows
+		self.master.title(TITL_PROG+" [view ArtWorks: "+self.namealbum+"] {c}/{n} - {name}  - {w}x{h}<{wo}x{ho}".format(c=str(numlabel+1), 
+																		 n=str(len(self.listartwork)), 
+																		 w=new_width, 
+																		 h=new_height, 
+																		 name=path.basename(self.filelist), 
+																		 wo=str(width), 
+																		 ho=str(height)))
+		#self.master.geometry("{w}x{h}".format(w=WIDT_MAIN,h=new_height+WIDT_PICM+4))
+	
+	def popupThunbnail(self, event):
+		self.aMenu.post(event.x_root, event.y_root)
+	
+	def CreateFileCover(self):
+		file_pictu = getFileNameWithoutExtension(self.filelist)
+		file_exten = path.splitext(self.filelist)[1][1:]
+		path_cover = path.join(path.dirname(self.filelist), 'cover.' +file_exten )
+		self.master.title("create file {name} ".format(name=path.basename(path_cover)))
+		self.monimage.save(path_cover)
 
 class CoversViewGui():
 	"""Fenetre view covers."""
@@ -659,7 +787,7 @@ class CoversViewGui():
 		self.fileslist = list(GetListFiles(pathalbum, MASKCOVERS))
 		self.numbersCov = len(self.fileslist)
 		self.counterCov = 0
-		self.label = tk.Label(self.master)
+		self.label = Label(self.master)
 		self.label.bind("<Button-3>", self.nextCov)
 		self.label.bind("<Button-1>", self.QuitCoversViewGui)
 		self.label.pack()
@@ -721,20 +849,20 @@ class DisplaySubprocessGui():
 		CenterWindows(self.master)
 		# Gui
 		customFont = Font(family="Lucida Console", size=8)
-		self.textarea = tk.Text(self.master, wrap='word', state='disabled', height=49, width=200, bg='black', fg='snow', font=customFont)
-		ysb = Scrollbar(self.master, orient=tk.VERTICAL)
+		self.textarea = Text(self.master, wrap='word', state='disabled', height=49, width=200, bg='black', fg='snow', font=customFont)
+		ysb = Scrollbar(self.master, orient=VERTICAL)
 		ysb.config(command=self.textarea.yview)
 		self.endline = True
 		ysb.bind("<Button-1>", self.endlineKO)
 		ysb.bind("<ButtonRelease-1>", self.endlineOK)
-		ysb.pack(side=tk.RIGHT, fill=tk.Y)
+		ysb.pack(side=RIGHT, fill=Y)
 		self.textarea.configure(yscrollcommand=ysb.set)
 		self.textarea.tag_config("com", foreground="green2")
 		self.textarea.tag_config("nfo", foreground="magenta")
 		self.textarea.tag_config("err", foreground="red2")
-		self.textarea.pack(ipadx=4, padx=4, ipady=4, pady=4, fill=tk.BOTH)
-		self.button = tk.Button(master, text="Kill", width=15, command=self.QuitDisplaySubprocessGui)
-		self.button.pack(side=tk.BOTTOM, anchor=tk.E, padx=4, pady=5)
+		self.textarea.pack(ipadx=4, padx=4, ipady=4, pady=4, fill=BOTH)
+		self.button = Button(master, text="Kill", width=15, command=self.QuitDisplaySubprocessGui)
+		self.button.pack(side=BOTTOM, anchor=E, padx=4, pady=5)
 		# launch process
 		self.process = Popen(eCommand, stdout=PIPE, stderr=PIPE)
 		# launch thread for output
@@ -811,10 +939,10 @@ class DisplaySubprocessGui():
 		self.master.destroy()
 
 # MAIN GUI
-class CoverMainGui(tk.Tk):
+class CoverMainGui(Tk):
 	"""Fenetre principale."""
 	def __init__(self , master):
-		tk.Tk.__init__(self , master)
+		Tk.__init__(self , master)
 		self.master = master
 		self.title(TITL_PROG +' : initialisation...')
 		# Icone
@@ -825,13 +953,13 @@ class CoverMainGui(tk.Tk):
 		self.bind("<F5>", self.RefreshBase)
 		
 		#### SAISIE
-		cadresaisie = tk.Frame(self)
-		cadresaisie.pack(fill=tk.BOTH)
+		cadresaisie = Frame(self)
+		cadresaisie.pack(fill=BOTH)
 		# Label
-		labelDir = tk.Label(cadresaisie, text="Search")
+		labelDir = Label(cadresaisie, text="Search")
 		labelDir.pack(side="left", padx=5, pady=5)
 		# ligne de saisie
-		self.var_texte = tk.StringVar(None)
+		self.var_texte = StringVar(None)
 		self.ligne_texte = AutocompleteEntry(cadresaisie, textvariable=self.var_texte, width=30)
 		self.ligne_texte.bind("<Return>", self.OnPressEnter)
 		self.ligne_texte.focus_set()
@@ -841,32 +969,32 @@ class CoverMainGui(tk.Tk):
 		self.searchtracks.set(0)
 		Checkbutton(cadresaisie, text="In Tracks", variable = self.searchtracks).pack(side=LEFT,padx=5,pady=5)
 		# Style
-		self.style_value = tk.StringVar()
+		self.style_value = StringVar()
 		self.style = Combobox(cadresaisie, textvariable=self.style_value, state='readonly')
 		self.style.pack(side="left", padx=5, pady=5)
 		# Family
-		self.family_value = tk.StringVar()
+		self.family_value = StringVar()
 		self.family = Combobox(cadresaisie, textvariable=self.family_value, state='readonly')
 		self.family.pack(side="left", padx=5, pady=5)
 		# buttons
-		btn_search = tk.Button(cadresaisie, text='Search', width=15, command = self.GetSearchAlbums)
+		btn_search = Button(cadresaisie, text='Search', width=15, command = self.GetSearchAlbums)
 		btn_search.pack(side="left", padx=5, pady=5)
-		#btn_cdal = tk.Button(cadresaisie, text='grid', width=7, command = self.ChandeDisplayAlbumsList)
+		#btn_cdal = Button(cadresaisie, text='grid', width=7, command = self.ChandeDisplayAlbumsList)
 		#btn_cdal.pack(side="left", padx=5, pady=5)
 		# combo
-		self.combo_value = tk.StringVar()
+		self.combo_value = StringVar()
 		self.combo = Combobox(cadresaisie, textvariable=self.combo_value, state='readonly')
 		self.combo['values'] = NAME_EVT
 		self.combo.current(CURT_EVT)
 		# popup menu base
-		self.bMenu = tk.Menu(cadresaisie, tearoff=0)
+		self.bMenu = Menu(cadresaisie, tearoff=0)
 		self.bMenu.add_command(label="Show infos", command=self.showloadingWin)
 		self.bMenu.add_command(label="Refresh", command=self.RefreshBase)
 		self.bMenu.add_command(label="Update (powershell)...", command=self.BuildInvent)
 		self.bMenu.add_command(label="Create Local base (sqlite)", command=self.CreateLocalBase)
 		self.combo.bind("<<ComboboxSelected>>", self.OnComboEnvtChange)
 		self.combo.bind("<Button-3>", self.popupbase)
-		self.combo.pack(side=tk.RIGHT, padx=15, pady=5)
+		self.combo.pack(side=RIGHT, padx=15, pady=5)
 		
 		#### CONNECT
 		self.con = None
@@ -874,27 +1002,27 @@ class CoverMainGui(tk.Tk):
 		
 		#### LIST ALBUMS
 		self.frameThunbnails = VerticalScrolledFrame(self.master , WIDT_MAIN , (WIDT_PICM*2)+(4*2))
-		self.frameThunbnails.pack(side=tk.TOP, anchor=tk.W, fill=tk.BOTH, padx=5, pady=5)
-		self.framealbumlist = tk.Frame(self)
-		self.framealbumlist.pack(side=tk.TOP, anchor=tk.W, fill=tk.BOTH)
+		self.frameThunbnails.pack(side=TOP, anchor=W, fill=BOTH, padx=5, pady=5)
+		self.framealbumlist = Frame(self)
+		self.framealbumlist.pack(side=TOP, anchor=W, fill=BOTH)
 		# tree : compatibilité sqllite
 		self.tree = BuildTree(self.con, self.framealbumlist, (Z_REQUEST if self.MODE_SQLI else A_REQUEST), A_C_WIDTH, 10, True)
 		# popup menu album
-		self.aMenu = tk.Menu(self.framealbumlist, tearoff=0)
+		self.aMenu = Menu(self.framealbumlist, tearoff=0)
 		self.aMenu.add_command(label="View ArtWorks...", command=self.ViewArtWorks)
 		self.aMenu.add_command(label="Open Folder...", command=self.GetFolder)
 		self.aMenu.add_command(label="Export Select Album(s) to...", command=self.ExportAlbums)
 		self.aMenu.add_command(label="Update Album...", command=self.UpdateAlbum)
 		self.aMenu.add_command(label="Open TagScan...", command=self.OpenTagScan)
-		self.tree.bind("<Button-3>", self.popupalbum)
+		self.tree.bind("<Button-3>", self.popuptreealbum)
 		self.tree.bind("<<TreeviewSelect>>", self.OnTreeSelectAlbum)
-		self.tree.pack(side=tk.TOP, anchor=tk.W, padx=5, pady=5)
+		self.tree.pack(side=TOP, anchor=W, padx=5, pady=5)
 		
 		#### INFOS ALBUM 
 		# COVER
-		self.cadrealbum = tk.Frame(self)
-		self.cadrealbum.pack(fill=tk.BOTH)
-		self.labcover = tk.Label(self.cadrealbum)
+		self.cadrealbum = Frame(self)
+		self.cadrealbum.pack(fill=BOTH)
+		self.labcover = Label(self.cadrealbum)
 		self.labcover.pack(side=LEFT, padx=5, pady=5)
 		self.labcover.bind("<Button-1>", self.OnPressCover)
 		# BLANK COVERS
@@ -905,49 +1033,49 @@ class CoverMainGui(tk.Tk):
 		self.labcover.image = photo
 		# ALBUM NAME
 		self.customFont = Font(family="Calibri", size=12)
-		self.cadrelabelalb = tk.Frame(self.cadrealbum)
-		self.cadrelabelalb.pack(fill=tk.BOTH, side=tk.TOP)
-		self.stralbumname = tk.StringVar()
-		self.labelalb = Label( self.cadrelabelalb, textvariable=self.stralbumname, justify = tk.LEFT, font=self.customFont)
-		self.labelalb.pack(side=tk.LEFT, padx=0, pady=5)
+		self.cadrelabelalb = Frame(self.cadrealbum)
+		self.cadrelabelalb.pack(fill=BOTH, side=TOP)
+		self.stralbumname = StringVar()
+		self.labelalb = Label( self.cadrelabelalb, textvariable=self.stralbumname, justify = LEFT, font=self.customFont)
+		self.labelalb.pack(side=LEFT, padx=0, pady=5)
 		# SCORE ALBUM
-		self.posalbum_scale = tk.Scale( self.cadrelabelalb,
+		self.posalbum_scale = Scale( self.cadrelabelalb,
 										command=self.ModifyScoreAlbum, 
 										showvalue=0, 
 										from_=0, 
 										to=len(SCOR_ALBUMS)-1, 
 										length=100,
 										orient='horizontal')
-		self.posalbum_scale.pack(side=tk.RIGHT, padx=15, pady=5)
-		self.ScoAlbumlb = tk.StringVar()
+		self.posalbum_scale.pack(side=RIGHT, padx=15, pady=5)
+		self.ScoAlbumlb = StringVar()
 		self.scorealbum_label = Label(self.cadrelabelalb, textvariable=self.ScoAlbumlb, font=self.customFont)
-		self.btn_enrscralb = tk.Button(self.cadrelabelalb, text='Save', command = self.OnPressButtonEnrScoreAlbum)
-		self.scorealbum_label.pack(side=tk.RIGHT, padx=5, pady=5)
+		self.btn_enrscralb = Button(self.cadrelabelalb, text='Save', command = self.OnPressButtonEnrScoreAlbum)
+		self.scorealbum_label.pack(side=RIGHT, padx=5, pady=5)
 		# TRACKS
 		self.treealb = BuildTree(self.con, self.cadrealbum, T_REQUEST.format(id=0), T_C_WIDTH, 15, True)
 		# popup menu track
-		self.tMenu = tk.Menu(self.cadrealbum, tearoff=0)
+		self.tMenu = Menu(self.cadrealbum, tearoff=0)
 		self.treealb.bind("<Double-1>", self.OnDoubleClickTrack)
 		self.treealb.bind("<<TreeviewSelect>>", self.OnSelectTrack)
-		self.treealb.pack(side=tk.BOTTOM, anchor=tk.W, fill=tk.BOTH, padx=5, pady=5)
+		self.treealb.pack(side=BOTTOM, anchor=W, fill=BOTH, padx=5, pady=5)
 		# SCORE TRACK
-		self.cadrescoretrack = tk.Frame(self)
-		self.cadrescoretrack.pack(fill=tk.BOTH, side=tk.TOP)
-		self.MessageInfo = tk.StringVar()
-		self.MessageInfo_label = Label(self.cadrescoretrack, textvariable=self.MessageInfo, font=self.customFont)
-		self.MessageInfo_label.pack(side=tk.LEFT, padx=5, pady=5)
-		self.postrack_scale = tk.Scale( self.cadrescoretrack,
+		self.cadrescoretrack = Frame(self)
+		self.cadrescoretrack.pack(fill=BOTH, side=TOP)
+		self.MessageInfo = StringVar()
+		self.MessageInfo_label = Label(self.cadrescoretrack, textvariable=self.MessageInfo, font=self.customFont, bd=1, relief=SUNKEN)
+		self.MessageInfo_label.pack(side=LEFT, padx=5, pady=5)
+		self.postrack_scale = Scale( self.cadrescoretrack,
 										command=self.ModifyScoreTrack, 
 										showvalue=0, 
 										from_=0, 
 										to=len(SCOR_TRACKS)-1, 
 										length=100,
 										orient='horizontal')
-		self.postrack_scale.pack(side=tk.RIGHT, padx=15, pady=5)
-		self.ScoTracklb = tk.StringVar()
+		self.postrack_scale.pack(side=RIGHT, padx=15, pady=5)
+		self.ScoTracklb = StringVar()
 		self.scoretrack_label = Label(self.cadrescoretrack, textvariable=self.ScoTracklb, font=self.customFont)
-		self.scoretrack_label.pack(side=tk.RIGHT, padx=5, pady=5)
-		self.btn_enrscrtrk = tk.Button(self.cadrescoretrack, text='Save', command = self.OnPressButtonEnrScoreTrack)
+		self.scoretrack_label.pack(side=RIGHT, padx=5, pady=5)
+		self.btn_enrscrtrk = Button(self.cadrescoretrack, text='Save', command = self.OnPressButtonEnrScoreTrack)
 		
 		#### LOADING ENVT
 		self.labels = []
@@ -958,7 +1086,7 @@ class CoverMainGui(tk.Tk):
 		self.Envs = None
 		self.ConnectEnvt()
 	
-	def DisplayThunbnails(self, new=True, deb=0, fin=300):
+	def DisplayThunbnails(self, new=True, deb=0, fin=200):
 		if new:
 			# delete
 			for labelt in self.labels:
@@ -967,6 +1095,7 @@ class CoverMainGui(tk.Tk):
 		else:
 			# del label for more
 			self.labels[len(self.labels)-1].destroy()
+			self.labels[len(self.labels)-2].destroy()
 		numCov = len(self.tree.get_children())
 		maxCol = int(WIDT_MAIN/WIDT_PICM)
 		maxLin = round(numCov/maxCol)
@@ -993,27 +1122,37 @@ class CoverMainGui(tk.Tk):
 				curCol = 0
 				curRow = curRow + 1
 				self.update_idletasks()
-			# max display, label for more
-			if fin==cptIte :
+			# max display, labels for more
+			if cptIte==fin:
+				# add for add more thunbnails
 				monimage = Image.open(UNIX_ICO)
 				monimage = monimage.resize((WIDT_PICM, WIDT_PICM), Image.ANTIALIAS)
-				label = self.BuildThunbnail(UNIX_ICO, str(fin)+' covers display max \nselect for more... ', monimage, None)
+				label = self.BuildThunbnail(UNIX_ICO, "{n} covers display max \n Select for more +{f}...".format(n=str(fin),f=str(fin+fin) if (fin+fin)<(numCov-fin) else str(numCov-fin)), monimage, None)
 				label.grid(row=curRow,column=curCol)
 				label.bind("<Enter>", lambda e: self.DisplayThunbnails(False,fin,fin+fin))
+				self.labels.append(label)
+				# add for all thunbnails
+				curCol = curCol + 1
+				if curCol == maxCol:
+					curCol = 0
+					curRow = curRow + 1
+				label = self.BuildThunbnail(UNIX_ICO, "{n} covers display max \n Click for all +{f}...".format(n=str(fin),f=str(numCov-fin)), monimage, None)
+				label.grid(row=curRow,column=curCol)
+				label.bind("<Button-1>", lambda e: self.DisplayThunbnails(False,fin,numCov-fin+1))
 				self.labels.append(label)
 				break
 		#print(str(cptIte)+'*covers')
 	
 	def BuildThunbnail(self, pathcover, texte, monimage, curItem):
-		hfont = 12
-		font = ImageFont.truetype("calibri.ttf", hfont)
+		font = ImageFont.truetype("calibri.ttf", 12)
 		if pathcover[0:len(TEXT_NCO)] == TEXT_NCO or pathcover==UNIX_ICO: 
 			# add text infos
 			draw = ImageDraw.Draw(monimage)
-			draw.rectangle(((4,WIDT_PICM/2),(WIDT_PICM-4,(WIDT_PICM/2)+hfont*2)), fill=THUN_CO0)
-			draw.text((5,WIDT_PICM/2), texte, font=font, fill=THUN_CO1)
+			w, h = draw.textsize(texte)
+			draw.rectangle(((4,(WIDT_PICM-h)/2),(WIDT_PICM-4,((WIDT_PICM-h)/2)+h)), fill=THUN_CO0)
+			draw.text((((WIDT_PICM-w)/2)+4*2,((WIDT_PICM-h)/2)+4), texte, font=font, fill=THUN_CO1)
 		photo = ImageTk.PhotoImage(monimage)
-		label = tk.Label(self.frameThunbnails.interior, image = photo, text= curItem)
+		label = Label(self.frameThunbnails.interior, image = photo, text= curItem)
 		label.image = photo
 		return(label)
 	
@@ -1035,7 +1174,7 @@ class CoverMainGui(tk.Tk):
 	
 	def OnPressCover(self, event):
 		"""Affiche la pochette de l'album."""
-		self.coverWin = tk.Toplevel(self.master)
+		self.coverWin = Toplevel(self.master)
 		monimage = BuildCover(self.con, self.pathcover, self.curalbmd5)
 		CoverViewGui(self.coverWin, monimage, self.albumname)
 	
@@ -1084,7 +1223,7 @@ class CoverMainGui(tk.Tk):
 		"""Modify Score Album."""
 		self.ScoAlbumlb.set(DisplayStars(self.posalbum_scale.get(), SCOR_ALBUMS))
 		if self.ScoreAlbum != self.posalbum_scale.get():
-			self.btn_enrscralb.pack(side=tk.RIGHT, padx=5, pady=5)
+			self.btn_enrscralb.pack(side=RIGHT, padx=5, pady=5)
 		else:
 			self.btn_enrscralb.pack_forget()
 	
@@ -1092,7 +1231,7 @@ class CoverMainGui(tk.Tk):
 		"""Modify Score Track."""
 		self.ScoTracklb.set(DisplayStars(self.postrack_scale.get(), SCOR_TRACKS))
 		if self.ScoreTrack != self.postrack_scale.get():
-			self.btn_enrscrtrk.pack(side=tk.RIGHT, padx=5, pady=5)
+			self.btn_enrscrtrk.pack(side=RIGHT, padx=5, pady=5)
 		else:
 			self.btn_enrscrtrk.pack_forget()
 	
@@ -1117,7 +1256,7 @@ class CoverMainGui(tk.Tk):
 		self.aMenu.entryconfig(3, label="Update (powershell) Album : "+ self.albumname[:15] + "...")
 		self.aMenu.post(event.x_root, event.y_root)
 	
-	def popupalbum(self, event):
+	def popuptreealbum(self, event):
 		"""Mennu Album."""
 		# maj selection : only for one selection
 		ListeSelect = self.tree.selection()
@@ -1125,7 +1264,6 @@ class CoverMainGui(tk.Tk):
 			# select item
 			self.CurentAlbum = self.tree.identify('item',event.x,event.y)
 			self.tree.selection_set(self.CurentAlbum)
-			self.tree.see(self.CurentAlbum)
 			self.tree.focus(self.CurentAlbum)
 			# maj infos albums
 			self.GetInfosAlbum(self.CurentAlbum, True)
@@ -1153,7 +1291,7 @@ class CoverMainGui(tk.Tk):
 			self.condat = datetime.now().strftime('%H:%M:%S')
 			self.con, self.MODE_SQLI = ConnectInvent(self.Envs)
 			# debut loading
-			self.loadingWin = tk.Toplevel(self)
+			self.loadingWin = Toplevel(self)
 			LoadingGui(self.loadingWin, self.con, self.MODE_SQLI, 0)
 			# auto-completion
 			completion_list = CreateListCompletion(self.con)
@@ -1188,6 +1326,11 @@ class CoverMainGui(tk.Tk):
 			lst_id = SelectTOTab(self.con, B_REQUEST.format(search=txt_search))
 		else:
 			lst_id = []
+		# THUNBNAILS
+		# delete
+		for labelt in self.labels:
+			labelt.destroy()
+		self.frameThunbnails.canv.yview_moveto(0)
 		# TREEVIEW
 		# del
 		if self.tree.get_children():
@@ -1428,13 +1571,13 @@ class CoverMainGui(tk.Tk):
 	def UpdateAlbum(self):
 		"""Execute powershell Script update albums infos."""
 		#p = ExcecutePowershell(PWSH_SCRU, '-Album_IDCD', str(self.Id_CD), '-Envt', self.Envs, '-Logs', LOGS_PROG)
-		self.GUIUpdateAlbum = tk.Toplevel(self.master)
+		self.GUIUpdateAlbum = Toplevel(self.master)
 		eCommand = BuildCommandPowershell(PWSH_SCRU, '-Album_IDCD', str(self.Id_CD), '-Envt', self.Envs, '-Logs', LOGS_PROG)
 		DisplaySubprocessGui(self.GUIUpdateAlbum, eCommand, 'Execution PowerShell : '+path.basename(PWSH_SCRU)+' -Album_IDCD '+str(self.Id_CD)+' -Envt "'+self.Envs+'"')
 	
 	def BuildInvent(self):
 		"""Execute powershell Script update all albums infos."""
-		self.GUIBuildInvent = tk.Toplevel(self.master)
+		self.GUIBuildInvent = Toplevel(self.master)
 		if 'LOSSLESS' in self.Envs:
 			filescript = PWSH_SCRI.format(mod='LOSSLESS')
 		else:
@@ -1445,9 +1588,9 @@ class CoverMainGui(tk.Tk):
 	
 	def ViewArtWorks(self):
 		"""views covers storage."""
-		self.coverWin = tk.Toplevel(self.master)
-		CoversViewGui(self.coverWin, self.pathcover, self.AlbumPath, self.albumname)
-	
+		self.coverWin = Toplevel(self.master)
+		#CoversViewGui(self.coverWin, self.pathcover, self.AlbumPath, self.albumname)
+		CoversArtWorkViewGui(self.coverWin, self.pathcover, self.AlbumPath, self.albumname)
 
 
 ###################################################################
@@ -1455,7 +1598,7 @@ class CoverMainGui(tk.Tk):
 if __name__ == "__main__":
 	#path.dirname(os.path.realpath(sys.argv[0]))
 	#chdir(os.path.dirname(sys.argv[0]))
-	path.realpath(path.dirname(sys.argv[0]))
+	path.realpath(path.dirname(argv[0]))
 	app = CoverMainGui(None)
 	app.mainloop()
 	
