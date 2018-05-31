@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # DBAlbums History Version
+#  1.30 import playlist foobar
 #  1.29 GetExist -> DBAlbums
 #  1.28 fixed bugs + status bar
 #  1.27 combos label/year + fast speed viewer artworks
@@ -38,8 +39,8 @@ from sys import platform, stdout, argv
 from os import system, path, getcwd, name, remove, walk
 from tkinter import (Tk, Toplevel, Label, Button, Checkbutton, Entry, Canvas, 
 					Frame, Scale, Menu, Text, StringVar, IntVar, FALSE, TRUE, 
-					SUNKEN, SOLID, FLAT, N, S, W, E, X, Y, RIGHT, LEFT, BOTH,
-					TOP, END, BOTTOM, VERTICAL, HORIZONTAL, INSERT)
+					RIDGE, SUNKEN, SOLID, FLAT, N, S, W, E, X, Y, RIGHT, LEFT, 
+					BOTH, TOP, END, BOTTOM, VERTICAL, HORIZONTAL, INSERT, ALL)
 from tkinter.filedialog import asksaveasfile
 from tkinter.ttk import Treeview, Combobox, Scrollbar, Separator
 from tkinter.font import Font
@@ -54,6 +55,9 @@ from io import BytesIO
 from base64 import b64decode, decodestring, b64encode
 from time import sleep
 from queue import Queue, Empty
+from hashlib import md5
+# dev ext
+from fpl_reader import read_playlist
 # functions dev
 from DBAlbumsPlayer import PlayerProcess, PlayerAudio
 from DBAlbumsCopyDatabaseToSqlite import CopyDatabaseInvent
@@ -61,12 +65,16 @@ from DBAlbumsCopyDatabaseToSqlite import CopyDatabaseInvent
 
 ###################################################################
 # CONSTANTS
-VERS_PROG = '1.28'
+VERS_PROG = '1.30'
 TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
 PATH_PROG = path.dirname(__file__)
 LOGS_PROG = path.join(PATH_PROG, 'Logs')
+FILE__INI = path.join(PATH_PROG, 'DBAlbums.ini')
 # TAG
 TAGS_SCAN = '\\\\HOMERSTATION\_Synchro\_Apps_Portables\\tagscan_6.0.4\Tagscan.exe'
+# FOOBAR
+FOOB_PLAY = 'C:\\Users\\Mister doubs\\AppData\\Roaming\\foobar2000\\playlists-v1.3'
+#FOOB_PLAY = "E:\ZTest\playlists-v1.3" # TEST
 # LOCAL SQLLITE
 BASE_SQLI = path.join(PATH_PROG, 'local', "Invent_{envt}.db")
 # INVENT POWERSHELL
@@ -75,12 +83,10 @@ PWSH_SCRU = path.join(PATH_PROG, 'PS1', "UPDATEALBUM.ps1")
 # EXT COVERS
 MASKCOVERS = ('.jpg','.jpeg','.png','.bmp','.tif','.bmp')
 # SCORE ALBUMS
-SCOR_ALBUMS = { 0 : 'not listened',
-				1 : 'listened',
-				2 : 'Less 3 tracks well',
-				3 : 'More 3 tracks well',
-				4 : 'top',
-				5 : 'best'}
+SCOR_ALBUMS = { 0 : 'album not listened',
+				1 : 'album listened',
+				2 : 'top album',
+				3 : 'best album'}
 # SCORE TRACKS
 SCOR_TRACKS = { 0 : 'track not listened',
 				1 : 'track listened',
@@ -111,7 +117,7 @@ USER_MP3T = 'admInvent'
 PASS_MP3T = 'MwRbBR2HA8PFQjuu'
 BASE_MP3T = 'MP3'
 # gui
-NAME_EVT = ('LOSSLESS', 'MP3', 'LOSSLESS_TEST', 'MP3_TEST')
+NAME_EVT = ['LOSSLESS', 'MP3', 'LOSSLESS_TEST', 'MP3_TEST']
 CURT_EVT = 2 # 0 LOSSLESS
 WINS_ICO = "DBAlbums.ico"
 UNIX_ICO = 'DBAlbums.png'
@@ -425,6 +431,58 @@ def GetListFiles(folder, masks):
 				if filename[-4:] in xmask:
 					yield path.join(folderName,filename)
 
+def GetFile(folder, file_name):
+	"""open file playlist foobar 2000."""
+	with open(path.join(folder, file_name), 'rb') as handle:
+		return handle.read()
+
+def foobarBuildTracksList(folder):
+	"""build list of playlists foobar 2000."""
+	trackslist = []
+	playfiles = list(GetListFiles(folder,(".fpl",)))
+	for playfile in playfiles:
+		trackslist += foobarGetListfilesFromPlaylist(playfile)
+	return(trackslist)
+
+def foobarGetListfilesFromPlaylist(file_path):
+	folder = path.dirname(file_path)
+	file_name = path.basename(file_path)
+	playlistcontent = read_playlist(GetFile(folder, file_name))
+	listfiles = []
+	for lfile in playlistcontent.tracks:
+		playlist = file_path
+		audiofil = str(lfile.file_name[7:], 'utf-8')
+		albumnam = audiofil.split('\\')[-2]
+		albummd5 = md5(albumnam.encode('utf-8')).hexdigest()
+		# add list Playlist, Path, FIL_Track, Name , MD5
+		listfiles.append((path.basename(playlist), path.dirname(audiofil), path.basename(audiofil) , albumnam, albummd5)) 
+	return(listfiles)
+
+def foobarMajDBFOOBAR(con, bar, folder):
+	# delete DBFOOBAR
+	sql = "TRUNCATE DBFOOBAR;"
+	with con.cursor() as curs:
+		curs.execute(sql)
+		curs.close()
+	con.commit()
+	# fill DBFOOBAR
+	footracks = foobarBuildTracksList(folder)
+	numtracks = len(footracks)
+	counter = 0
+	bar = ProgressBar()
+	bar.settitle('import playlists ('+str(numtracks)+' Tracks) Foobar in progress...')
+	for footrack in footracks:
+		sql = "INSERT INTO DBFOOBAR (Playlist, Path, FIL_Track, Name , MD5) VALUES (%s, %s, %s, %s, %s)"
+		with con.cursor() as curs:
+			curs.execute(sql, footrack)
+			curs.close()
+		con.commit()
+		counter = counter +1
+		bar.update(counter/numtracks)
+	bar.settitle('importation playlist Foobar 2000 terminated')
+	bar.close()
+	return(numtracks)
+
 def OpenComand(progra, params):
 	"""Execute une commande system."""
 	command = """{tprogra} "{tparams}" """.format(tprogra=progra,tparams=params)
@@ -567,6 +625,38 @@ class VerticalScrolledFrame(Frame):
 		#if self.interior.winfo_reqheight() != self.canv.winfo_height():
 			# update the canvas's width to fit the inner frame
 			#self.canv.config(height = self.interior.winfo_reqheight())
+
+class ProgressBar():
+	"""progress bar tkinter."""
+	def __init__(self, width=400, height=30):
+		self.__root = Tk()
+		self.__root.geometry("{w}x{h}".format(w=width+5,h=height+5))
+		self.__root.resizable(False, False)
+		self.__root.attributes('-topmost', True)
+		self.__root.title('Wait please...')
+		BuildIco(self.__root)
+		CenterWindows(self.__root)
+		self.__canvas = Canvas(self.__root, width=width, height=height)
+		self.__canvas.grid()
+		self.__width = width
+		self.__height = height
+	
+	def settitle(self, title):
+		self.__root.title(title)
+	
+	def open(self):
+		self.__root.deiconify()
+		#self.__root.focus_set()
+	
+	def close(self):
+		self.__root.withdraw()
+	
+	def update(self, ratio):
+		self.__canvas.delete(ALL)
+		self.__canvas.create_rectangle(0, 0, self.__width , self.__height)
+		self.__canvas.create_rectangle(0, 0, self.__width * ratio, self.__height, fill='grey')
+		self.__root.update()
+		self.__root.focus_set()
 
 
 ###################################################################
@@ -946,6 +1036,7 @@ class CoverMainGui(Tk):
 		self.bMenu.add_command(label="Refresh", command=self.RefreshBase)
 		self.bMenu.add_command(label="Update (powershell)...", command=self.BuildInvent)
 		self.bMenu.add_command(label="Create Local base (sqlite)", command=self.CreateLocalBase)
+		self.bMenu.add_command(label="Import Foobar 2000 playlist...", command=self.ImportFoobar)
 		self.combo.bind("<<ComboboxSelected>>", self.OnComboEnvtChange)
 		self.combo.bind("<Button-3>", self.popupbase)
 		self.combo.pack(side=RIGHT, padx=15, pady=5)
@@ -1007,6 +1098,7 @@ class CoverMainGui(Tk):
 		self.scorealbum_label = Label(self.cadrelabelalb, textvariable=self.ScoAlbumlb, font=self.customFont)
 		self.btn_enrscralb = Button(self.cadrelabelalb, text='Update', command = self.OnPressButtonEnrScoreAlbum)
 		self.scorealbum_label.pack(side=RIGHT, padx=5, pady=5)
+		self.ScoreAlbum = 0
 		# TRACKS
 		self.treealb = BuildTree(self.con, self.cadrealbum, T_REQUEST.format(id=0), T_C_WIDTH, 15, True)
 		# popup menu track
@@ -1029,13 +1121,17 @@ class CoverMainGui(Tk):
 		self.scoretrack_label = Label(self.cadrescoretrack, textvariable=self.ScoTracklb, font=self.customFont)
 		self.scoretrack_label.pack(side=RIGHT, padx=5, pady=5)
 		self.btn_enrscrtrk = Button(self.cadrescoretrack, text='Update', command = self.OnPressButtonEnrScoreTrack)
+		self.ScoreTrack = 0
 		# Status Bar
 		self.StatusBar = Frame(self)
 		self.StatusBar.pack(fill=BOTH, side=TOP)
 		self.MessageInfo = StringVar()
 		self.MessageInfo_label = Label(self.StatusBar, textvariable=self.MessageInfo, anchor=W, font=self.customFont, bd=1, relief=SUNKEN)
 		self.MessageInfo_label.pack(fill=X, padx=5, pady=5) 
-
+		# Gauge progress
+		self.bargauge = ProgressBar()
+		self.bargauge.close()
+		
 		#### LOADING ENVT
 		self.labels = []
 		self.tplay = None
@@ -1057,7 +1153,13 @@ class CoverMainGui(Tk):
 			self.labels[len(self.labels)-2].destroy()
 		numCov = len(self.tree.get_children())
 		maxCol = int(WIDT_MAIN/WIDT_PICM)
-		maxLin = round(numCov/maxCol)
+		if (numCov-deb)<(fin-deb):
+			disCov = (numCov-deb)
+		else:
+			disCov = (fin-deb)
+		if not new: 
+			self.bargauge.open()
+			self.bargauge.settitle("Create albums cover in progress...")
 		curRow = curCol = cptIte = 0
 		for curItem in self.tree.get_children():
 			if cptIte >= deb and cptIte <= fin:
@@ -1073,6 +1175,7 @@ class CoverMainGui(Tk):
 				label.bind("<Enter>", lambda event: event.widget.config(relief=SOLID))
 				label.bind("<Leave>", lambda event: event.widget.config(relief=FLAT))
 				self.labels.append(label)
+				if not new: self.bargauge.update((cptIte-deb)/disCov)
 			# count thunbnails
 			cptIte = cptIte + 1
 			# position
@@ -1100,6 +1203,7 @@ class CoverMainGui(Tk):
 				label.bind("<Button-1>", lambda e: self.DisplayThunbnails(False,fin,numCov-fin+1))
 				self.labels.append(label)
 				break
+		if not new: self.bargauge.close()
 		#print(str(cptIte)+'*covers')
 	
 	def BuildThunbnail(self, pathcover, texte, monimage, curItem):
@@ -1539,9 +1643,12 @@ class CoverMainGui(Tk):
 		if path.isfile(filename):
 			remove(filename)
 		logname = datetime.now().strftime("%Y%m%d%H%M%S") + "_CopyDatabaseToSqlite_" + self.Envs + ".log"
-		self.config(cursor="wait")
-		CopyDatabaseInvent(self.con, filename, path.join(LOGS_PROG, logname))
-		self.config(cursor="")
+		CopyDatabaseInvent(self.con, filename, self.bargauge, path.join(LOGS_PROG, logname))
+		self.MessageInfo.set("Create Database SQLite :"+filename+" Sucessfull")
+	
+	def ImportFoobar(self):
+		numtracks = foobarMajDBFOOBAR(self.con,FOOB_PLAY)
+		self.MessageInfo.set("Import Sucessfull Playlists Foobar 2000: "+str(numtracks)+" Tracks in base")
 	
 	def UpdateAlbum(self):
 		"""Execute powershell Script update albums infos."""
@@ -1564,7 +1671,6 @@ class CoverMainGui(Tk):
 		"""views covers storage."""
 		self.coverWin = Toplevel(self.master)
 		CoversArtWorkViewGui(self.coverWin, self.AlbumPath, self.albumname, self.pathcover)
-
 
 ###################################################################
 # START
