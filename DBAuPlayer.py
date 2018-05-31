@@ -21,6 +21,7 @@ WINS_ICO = "DBAlbums-icone.ico"
 class DBPlayer(QWidget):
 	# signal
 	signaltxt = pyqtSignal(str)
+	signalnum = pyqtSignal(int)
 
 	def __init__(self):
 		super(DBPlayer, self).__init__()
@@ -199,6 +200,7 @@ class DBPlayer(QWidget):
 			compteur += 1
 		self.textplaylist = self.textplaylist + '</table>'
 		self.playBtn.setToolTip(self.textplaylist)
+		self.signalnum.emit(curmedia-1)
 		
 	def increaseVolume(self):
 		"""Volume +."""

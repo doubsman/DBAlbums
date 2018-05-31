@@ -162,6 +162,7 @@ class DBThunbnails(QWidget):
 		
 	def addthunbails(self, listthunbnails, sizetn=None,  new=True, deb=0, fin=100, total=9999):
 		"""Build thunbails. list = [md5, id, labelname] or list = [image]."""
+		qDebug("Start Add Thunbnails")
 		self.stopbuild = False
 		self.isbuilder = True
 		# init grid
@@ -183,6 +184,7 @@ class DBThunbnails(QWidget):
 			thundesc = listthunbnails[cpt]
 			if self.stopbuild:
 				self.isbuilder = False
+				qDebug("Break Add Thunbnails")
 				break
 			# 2 modes : list or pathcover
 			if isinstance(thundesc, list):
@@ -217,6 +219,7 @@ class DBThunbnails(QWidget):
 			self.thunbncur = 0
 		self.signalthubuild.emit(100, 'end Create thunbnails')
 		self.isbuilder = False
+		qDebug("Start End Thunbnails")
 	
 	def delThunbails(self):
 		"""Remove thunbnails."""

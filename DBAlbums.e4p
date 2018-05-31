@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums -->
-<!-- Saved: 2017-08-04, 01:46:26 -->
+<!-- Saved: 2017-08-14, 01:41:52 -->
 <!-- Copyright (C) 2017 Doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -29,12 +29,9 @@
     <Source>DBModelLab.py</Source>
     <Source>DBModelSql.py</Source>
     <Source>DBPThreads.py</Source>
-    <Source>DBPluginsL.py</Source>
     <Source>DBThunbnai.py</Source>
     <Source>Ui_DBALBUMS.py</Source>
-    <Source>Ui_DBARTWORKS.py</Source>
     <Source>Ui_DBLOADING.py</Source>
-    <Source>__init__.py</Source>
   </Sources>
   <Forms>
     <Form>DBALBUMS.ui</Form>

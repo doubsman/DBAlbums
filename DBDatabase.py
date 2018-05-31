@@ -80,6 +80,9 @@ def getrequest(name, MODE_SQLI=None):
 	# search in track
 	if name == 'tracksinsearch':
 		request = "SELECT ID_CD AS ID FROM DBTRACKS AS TRK WHERE TAG_Artists like '%{search}%' OR TAG_Title like '%{search}%' GROUP BY ID_CD"
+	# search genres/style
+	if name == 'tracksgesearch':
+		request = "SELECT ID_CD AS ID FROM DBTRACKS AS TRK WHERE REPLACE(TAG_Genres,'-','') like '{search}' GROUP BY ID_CD"
 	# cover base64
 	if name == 'cover':
 		request = "SELECT Cover64 FROM DBCOVERS WHERE MD5='{MD5}'"
@@ -96,6 +99,8 @@ def getrequest(name, MODE_SQLI=None):
 	if name == 'playlistfoobar':
 		request = "INSERT INTO DBFOOBAR (Playlist, Path, FIL_Track, Name , MD5, TAG_Album, TAG_Artists, TAG_Title) " \
 					"VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+	if name == 'listgenres':
+		request = "SELECT DISTINCT ID_CD, TAG_Genres FROM DBTRACKS;"
 	if MODE_SQLI == 'mssql':
 		request = request.replace(' `', ' [').replace('` ', '] ')
 	return request
@@ -165,8 +170,13 @@ def buildTabFromRequest(req):
 	autoList = []
 	query = QSqlQuery(req)
 	query.exec_(req)
+	indexes = query.record().count()
 	while query.next():
-		autoList.append(query.value(0))
+		if indexes == 1:
+			autoList.append(query.value(0))
+		else:
+			row = [query.value(index) for index in range(indexes)]
+			autoList.append(row)
 	query.clear
 	return autoList
 

@@ -29,11 +29,14 @@ $MySqlCon, $racine = ConnectEnvt -Envt $Envt
 ##############################################
 
 $LossLess = ($Envt -match "LOSSLESS")
-$reqStr  = "SELECT DISTINCT DBALBUMS.Id_CD FROM DBALBUMS INNER JOIN DBTRACKS 	ON DBALBUMS.ID_CD=DBTRACKS.ID_CD AND (TAG_Artists IS NULL OR TAG_Artists='') WHERE Cover='No Picture' AND (year IS NULL OR Year='' OR Year ='????' OR Year=0);";
+$reqStr  = "SELECT DISTINCT ID_CD FROM DBTRACKS WHERE LENGTH(TAG_Genres)=70;";
 $Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
+$Records = @('997', '4640', '3607', '3608', '3609', '3610', '3611', '3612', '3613', '3614', '3962', '3668')
 ForEach ($row in $Records){
-	Super-Title -Label ("uptade album ID="+$row.ID_CD) -Start $Start;
-	Run-UpdateAlbum -ID_CD $row.ID_CD -LossLess $LossLess
+	#Super-Title -Label ("uptade album ID="+$row.ID_CD) -Start $Start;
+	#Run-UpdateAlbum -ID_CD $row.ID_CD -LossLess $LossLess -Force $True
+	Super-Title -Label ("uptade album ID="+$row) -Start $Start;
+	Run-UpdateAlbum -ID_CD $row -LossLess $LossLess -Force $True
 }
 
 ##############################################

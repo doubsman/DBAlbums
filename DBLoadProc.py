@@ -29,6 +29,7 @@ class ProcessGui(QWidget):
 	signalend = pyqtSignal(int)
 	def __init__(self, process, params, title, w, h, parent=None):
 		super(ProcessGui, self).__init__(parent)
+		self.endline = True
 		self.title = title
 		self.resize(w, h)
 		self.setWindowIcon(QIcon(WINS_ICO))
@@ -62,7 +63,7 @@ class ProcessGui(QWidget):
 		self.process.finished.connect(self.WorkFinished)
 		self.process.start(process, params, QIODevice.ReadWrite)
 		self.process.waitForStarted()
-
+	
 	def normalOutputWritten(self, line):
 		# set level line
 		if line.startswith('*') or ('****' in line):
@@ -87,7 +88,7 @@ class ProcessGui(QWidget):
 	def WorkReply(self):
 		"""Outpout to Gui."""
 		data = self.process.readAllStandardOutput().data()
-		ch = data.decode('cp850').rstrip()
+		ch = data.decode('cp850').rstrip().replace("\n", "")
 		self.normalOutputWritten(ch)
 
 	@pyqtSlot()
@@ -104,7 +105,7 @@ class ProcessGui(QWidget):
 
 # ##################################################################
 class DBloadingGui(QWidget, Ui_LoadingWindow):
-	def __init__(self, modsql, title, parent=None):
+	def __init__(self, modsql, title, parent):
 		super(DBloadingGui, self).__init__(parent)
 		self.setupUi(self)
 		self.parent = parent
@@ -143,7 +144,6 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		self.btn_quit.clicked.connect(lambda: self.hide())
 		# theme
 		self.applyTheme()
-
 
 	@pyqtSlot()
 	def keyPressEvent(self, event):

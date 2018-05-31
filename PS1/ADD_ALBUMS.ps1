@@ -31,7 +31,7 @@ $nbupdate = ($AlbumReps.split(',')).Length;
 $crupdate = 1;
 $LossLess = ($Envt -match "LOSSLESS")
 Foreach ($AlbumRep in $AlbumReps.split(',')){
-	Super-Title -Label ("Analyse album ""$AlbumRep"" ($crupdate/$nbupdate)") -Start $Start;
+	Super-Title -Label ("Analyse album '$AlbumRep' ($crupdate/$nbupdate)") -Start $Start;
 	$crupdate ++
 	Run-AddNewAlbum -AlbumRep $AlbumRep -LossLess $LossLess
 }

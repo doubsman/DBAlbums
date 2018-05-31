@@ -3,53 +3,73 @@
 from sys import argv
 from os import path, chdir
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QSettings
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableView, QLineEdit
-from DBDatabase import connectDatabase, getrequest, extractCoverb64
-from DBFunction import displayCounters, centerWidget
-from DBModelAbs import ModelTableAlbumsABS		# model tables
-from DBArtworks import CoverViewGui				# viewer image b64 and hdd
-
-PATH_PROG = path.dirname(path.abspath(__file__))
-chdir(PATH_PROG)
-VERS_PROG = '1.00'
-TITL_PROG = "♫ DBAlbums mini v{v} (2017)".format(v=VERS_PROG)
-
-FILE__INI = 'DBAlbums.ini'
-configini = QSettings(FILE__INI, QSettings.IniFormat)
-configini.beginGroup('dbalbums')
-WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
-PICM_NCO = path.join(PATH_PROG, 'IMG', configini.value('pict_blank'))
-ENVT_DEF = configini.value('envt_deflt')
-configini.endGroup()
+from PyQt5.QtCore import QSettings, Qt
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QTableView, QPushButton,
+							QMenu, QLineEdit, QStyle, QAbstractItemView, QCompleter)
+from DBDatabase import connectDatabase, getrequest, extractCoverb64, buildTabFromRequest
+from DBFunction import displayCounters, centerWidget, openFolder, ThemeColors
+from DBModelAbs import ModelTableAlbumsABS	# model tables
+from DBArtworks import CoverViewGui			# viewer image b64
 
 
 class DBAlbumsQT5Mini(QMainWindow):
-	"""Exemple model ABSTRACT."""
+	"""Init mini Gui constants."""
+	PATH_PROG = path.dirname(path.abspath(__file__))
+	RESS_ICOS = path.join(PATH_PROG, 'IMG' , 'ICO')
+	chdir(PATH_PROG)
+	VERS_PROG = '1.01'
+	TITL_PROG = "♫ DBAlbums mini v{v} (2017)".format(v=VERS_PROG)
+	FILE__INI = 'DBAlbums.ini'
+	configini = QSettings(FILE__INI, QSettings.IniFormat)
+	configini.beginGroup('dbalbums')
+	WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
+	PICM_NCO = path.join(PATH_PROG, 'IMG', configini.value('pict_blank'))
+	THEM_COL = configini.value('name_theme')
+	ENVT_DEF = configini.value('envt_deflt')
+	configini.endGroup()
+	
 	def __init__(self, parent=None):
 		super(DBAlbumsQT5Mini, self).__init__(parent)
-		self.setWindowIcon(QIcon(WINS_ICO))
-		self.setWindowTitle(TITL_PROG + ' : [' + ENVT_DEF + ']')
+		self.setWindowIcon(QIcon(self.WINS_ICO))
+		self.setWindowTitle(self.TITL_PROG + ' : [' + self.ENVT_DEF + ']')
 		self.h_main = 400
-		self.resize(self.h_main + 300, self.h_main)
+		self.resize(1248, self.h_main)
 		centerWidget(self)
 		
-		self.setStyleSheet('QMainWindow{background-color: darkgray;border: 1px solid black;}' \
-							'QTableView{alternate-background-color: lightgray;background-color: silver;}')
+		self.menua = QMenu()
+		self.action_OPF = self.menua.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
+							"Open Folder...", self.getFolder)
 		
 		self.textsearch = QLineEdit()
 		self.textsearch.setFixedSize(170,22)
 		self.statusBar().addPermanentWidget(self.textsearch)
 		self.textsearch.textChanged.connect(self.onFiltersChanged)
+
+		self.btn_style = QPushButton()
+		self.btn_style.setIcon(self.style().standardIcon(QStyle.SP_DialogResetButton))
+		self.btn_style.setStyleSheet("border: none;")
+		self.btn_style.clicked.connect(lambda: [self.curthe.nextTheme(), self.applyTheme()])
+		self.statusBar().addPermanentWidget(self.btn_style)
 		
-		boolconnect, self.dbbase, self.modsql, self.rootDk = connectDatabase(ENVT_DEF)
+		boolconnect, self.dbbase, self.modsql, self.rootDk = connectDatabase(self.ENVT_DEF)
+		
+		autoList = buildTabFromRequest(getrequest('autocompletion', self.modsql))
+		self.com_autcom = QCompleter(autoList, self.textsearch)
+		self.com_autcom.setCaseSensitivity(Qt.CaseInsensitive)
+		self.textsearch.setCompleter(self.com_autcom)
+		
 		self.mytable = QTableView(self)
 		self.mytable.setAlternatingRowColors(True)
 		self.mytable.setSortingEnabled(True)
 		self.mytable.setSelectionBehavior(QTableView.SelectRows)
+		self.mytable.setSelectionMode(QAbstractItemView.SingleSelection)
 		self.mytable.doubleClicked.connect(self.onSelect)
+		self.mytable.setContextMenuPolicy(Qt.CustomContextMenu)
+		self.mytable.customContextMenuRequested.connect(self.popUpTreeAlbums)
+		
+		self.curthe = ThemeColors(self.THEM_COL)
+		self.applyTheme()
 			
-		# abstract model
 		req = getrequest('albumslist', self.modsql)
 		self.model = ModelTableAlbumsABS(self, req)
 		self.model.SortFilterProxy.layoutChanged.connect(self.listChanged)
@@ -57,14 +77,12 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.mytable.setModel(self.model.SortFilterProxy)
 		
 		# width columns
-		for i in range(len(self.model.A_C_WIDTH)):
-			self.mytable.setColumnWidth(i, self.model.A_C_WIDTH[i])
+		for ind in range(len(self.model.A_C_WIDTH)):
+			self.mytable.setColumnWidth(ind, self.model.A_C_WIDTH[ind])
 		# height rows
 		self.mytable.verticalHeader().setDefaultSectionSize(self.model.C_HEIGHT)
 		
-		# status bar
 		self.displayTitle()
-		
 		self.setCentralWidget(self.mytable)
 	
 	def onFiltersChanged(self):
@@ -77,8 +95,19 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.currow = indexes.row()
 		albumname = self.model.getData(self.currow, 'Name')
 		curMd5 = self.model.getData(self.currow, 'MD5')
-		coveral = extractCoverb64(curMd5, PICM_NCO)
+		coveral = extractCoverb64(curMd5, self.PICM_NCO)
 		CoverViewGui(coveral, albumname, self.h_main, self.h_main)
+	
+	def popUpTreeAlbums(self, position):
+		self.menua.exec_(self.mytable.viewport().mapToGlobal(position))
+	
+	def getFolder(self):
+		"""Open album folder."""
+		indexes = self.mytable.selectedIndexes()
+		indexes = self.model.SortFilterProxy.mapToSource(indexes[0])
+		self.currow = indexes.row()
+		albumpath = self.model.getData(self.currow, 'Path')
+		openFolder(albumpath)
 
 	def listChanged(self):
 		pass
@@ -103,6 +132,27 @@ class DBAlbumsQT5Mini(QMainWindow):
 								dur=txt_len,
 								sch=txt_sch)
 		self.statusBar().showMessage(message) # setsetWindowTitle(message)
+		
+	def applyTheme(self):
+		"""Apply color Theme to main Gui."""
+		# main
+		mainstyle = 'QMainWindow{{background-color: {col1};border: 1px solid black;}}' \
+					'QLineEdit{{background-color: {col2};}}' \
+					'QStatusBar{{background-color: {col1};border: 1px solid black;}}' \
+					'QScrollBar:vertical{{width: 14px;}}' \
+					'QScrollBar:horizontal{{height: 14px;}}' \
+					'QTableView{{alternate-background-color: {col3};background-color: {col4};}}' \
+					'QTableView::item:selected{{ background-color:{col5}; color:white;}}'
+		mainstyle = mainstyle.format(col1 = self.curthe.listcolors[0], 
+									col2 = self.curthe.listcolors[1], 
+									col3 = self.curthe.listcolors[2], 
+									col4 = self.curthe.listcolors[3],
+									col5 = self.curthe.listcolors[4])
+		self.setStyleSheet(mainstyle)
+		# treeview
+		gridstyle = 'QHeaderView::section{{background-color: {col2};border-radius:1px;margin: 1px;padding: 2px;}}'
+		gridstyle = gridstyle.format(col2 = self.curthe.listcolors[1])
+		self.mytable.setStyleSheet(gridstyle)
 
 
 if __name__ == '__main__':

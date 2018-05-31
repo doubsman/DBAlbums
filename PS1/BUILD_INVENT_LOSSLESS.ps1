@@ -29,7 +29,7 @@ Start-Transcript $File_LogTrac | Out-Null
 ##############################################
 . "$path\BUILD_INVENT_FUNCTIONS.ps1"
 <#
-http://www.yusufozturk.info/windows-powershell/adding-welcome-banner-to-your-powershell-scripts.html
+https://github.com/stknohg/PSBanner
 # Install-Module -Name PSBanner function Write-Banner
 	# default
 	Write-Banner "Hello!"

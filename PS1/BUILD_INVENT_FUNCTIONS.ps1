@@ -90,8 +90,9 @@ Function ConnectEnvt{
 }
 
 Function Run-UpdateAlbum{
-	param ([parameter(Mandatory = $true)][string] $ID_CD,
-		   [parameter(Mandatory = $true)][bool] $LossLess)
+	param ([parameter(Mandatory = $True)][string] $ID_CD,
+		   [parameter(Mandatory = $True)][bool] $LossLess,
+		   [parameter(Mandatory = $False)][bool] $Force=$False)
 	
 	$Album_Exist = Get-AlbumIDMysql -ID_CD $ID_CD;
 	If ($Album_Exist){
@@ -119,7 +120,7 @@ Function Run-UpdateAlbum{
 			}
 		}
 		$Recent_Date = ((Get-ChildItem -LiteralPath $Album_Rep.FullName | Select LastWriteTime).LastWriteTime | measure-object -maximum).maximum
-		If ((($Recent_Date -gt $Album_Exist.Date_Modifs) -or ((Get-Date $Album_Rep.LastWriteTime) -gt (Get-Date ($Album_Exist.Date_Modifs))))){
+		If ((($Recent_Date -gt $Album_Exist.Date_Modifs) -or ((Get-Date $Album_Rep.LastWriteTime) -gt (Get-Date ($Album_Exist.Date_Modifs)))) -or $Force){
 			# ANALYSE ALBUM
 			$Family = $Album_Exist.Family
 			$Category = $Album_Exist.Category

@@ -109,18 +109,20 @@ class ModelDBAbstract(QAbstractTableModel):
 
 
 # MODEL ABSTRACT proxy model tbl albums
-class ProxyModel(QSortFilterProxyModel):
+class ProxyModelAlbums(QSortFilterProxyModel):
 	def __init__(self, parent):
 		"""Init proxy model."""
-		super(ProxyModel, self).__init__(parent)
+		super(ProxyModelAlbums, self).__init__(parent)
 		self.parent = parent
 		self.filttext = ''
-		self.filtcate = ''
-		self.filtfami = ''
-		self.filtyear = ''
-		self.filtlabl = ''
-		self.filtintk = ''
-		self.listid = []
+		self.filtcate = None
+		self.filtfami = None
+		self.filtyear = None
+		self.filtlabl = None
+		self.filtintk = False
+		self.filtgenr = None
+		self.listidtxt = []
+		self.listidsty = []
 		self.cpt_siz = 0
 		self.cpt_len = 0
 		self.cpt_cds = 0
@@ -130,19 +132,29 @@ class ProxyModel(QSortFilterProxyModel):
 		self.listlab = []
 		self.listyea = []
 		self.listthun = []
+		self.listiddi = []
 
-	def updateFilters(self, filttext, filtcate='', filtfami='', filtyear='', filtlabl='', filtintk=False):
+	def updateFilters(self, filttext, filtcate=None, filtfami=None, filtyear=None, filtlabl=None, filtgenr=None, filtintk=False):
 		"""Update vars filter."""
 		if filtintk and filttext != '':
-			self.listid = buildTabFromRequest((getrequest('tracksinsearch')).format(search=filttext))
+			self.listidtxt = buildTabFromRequest((getrequest('tracksinsearch')).format(search=filttext))
 		else:
-			self.listid = []
+			self.listidtxt = []
+		if  filtgenr is not None:
+			if filtgenr != '':
+				filtsearch = '%'+filtgenr+'%'
+			else:
+				filtsearch = ''
+			self.listidsty = buildTabFromRequest((getrequest('tracksgesearch')).format(search=filtsearch))
+		else:
+			self.listidsty = []
 		self.filttext = filttext
 		self.filtcate = filtcate
 		self.filtfami = filtfami
 		self.filtyear = filtyear
 		self.filtlabl = filtlabl
 		self.filtintk = filtintk
+		self.filtgenr = filtgenr
 		self.cpt_siz = 0
 		self.cpt_len = 0
 		self.cpt_cds = 0
@@ -152,34 +164,40 @@ class ProxyModel(QSortFilterProxyModel):
 		self.listlab = []
 		self.listyea = []
 		self.listthun = []
+		self.listiddi = []
 		self.invalidate()
 		
 	def filterAcceptsRow(self, sourceRow, sourceParent):
 		"""Filter data model."""
 		# category
-		if self.filtcate != '' and self.filtcate != self.parent.DISP_CJOKER:
+		if self.filtcate is not None and self.filtcate != self.parent.DISP_CJOKER:
 			index = self.parent.index(sourceRow, self.parent.myindex.index('Category'), sourceParent)
 			if self.filtcate != self.parent.data(index).value():
 				return False
 		# family
-		if self.filtfami != '' and self.filtfami != self.parent.DISP_CJOKER:
+		if self.filtfami is not None and self.filtfami != self.parent.DISP_CJOKER:
 			index = self.parent.index(sourceRow, self.parent.myindex.index('Family'), sourceParent)
 			if self.filtfami != self.parent.data(index).value():
 				return False
 		# year
-		if self.filtyear != '' and self.filtyear != self.parent.DISP_CJOKER:
+		if self.filtyear is not None and self.filtyear != self.parent.DISP_CJOKER:
 			index = self.parent.index(sourceRow, self.parent.myindex.index('Year'), sourceParent)
 			if self.filtyear != self.parent.data(index).value():
 				return False
 		# label
-		if self.filtlabl != '' and self.filtlabl != self.parent.DISP_CJOKER:
+		if self.filtlabl is not None and self.filtlabl != self.parent.DISP_CJOKER:
 			index = self.parent.index(sourceRow, self.parent.myindex.index('Label'), sourceParent)
 			if self.filtlabl != self.parent.data(index):
+				return False
+		# genres
+		if self.filtgenr is not None and self.filtgenr != self.parent.DISP_CJOKER:
+			index = self.parent.index(sourceRow, self.parent.myindex.index('ID_CD'), sourceParent)
+			if  self.parent.data(index).value() not in self.listidsty:
 				return False
 		# text search
 		if self.filtintk and self.filttext != '':
 			index = self.parent.index(sourceRow, self.parent.myindex.index('ID_CD'), sourceParent)
-			if  self.parent.data(index).value() not in self.listid:
+			if  self.parent.data(index).value() not in self.listidtxt:
 				return False
 		elif self.filttext != '':
 			index = self.parent.index(sourceRow, self.parent.myindex.index('Name'), sourceParent)
@@ -198,6 +216,9 @@ class ProxyModel(QSortFilterProxyModel):
 			if len(lethval.split(':')) > 1:
 				lethval = sum(int(x) * 60 ** i for i, x in enumerate(reversed(lethval.split(':'))))
 		self.cpt_len += int(lethval)
+		# list id
+		index = self.parent.index(sourceRow, self.parent.myindex.index('ID_CD'), sourceParent)
+		self.listiddi.append(self.parent.data(index).value())
 		# combos list
 		index = self.parent.index(sourceRow, self.parent.myindex.index('Category'), sourceParent)
 		if self.parent.data(index).value() not in self.listcat:
@@ -244,7 +265,7 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 		self.parent = parent
 		
 		# sorting
-		self.SortFilterProxy = ProxyModel(self)
+		self.SortFilterProxy = ProxyModelAlbums(self)
 		self.SortFilterProxy.setDynamicSortFilter(True)
 		self.SortFilterProxy.setSourceModel(self)
 	
@@ -303,6 +324,19 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 		self.arraydata[row][self.myindex.index('Score')]= score
 
 
+# MODEL ABSTRACT proxy model tbl albums
+class ProxyModelTracks(QSortFilterProxyModel):
+	def __init__(self, parent):
+		"""Init proxy model."""
+		super(ProxyModelTracks, self).__init__(parent)
+		self.parent = parent
+	
+	def filterAcceptsRow(self, sourceRow, sourceParent):
+		"""Filter data model."""
+		# validate rows display ok
+		return True
+
+
 # TABLE DBTRACKS SQLQUERY
 class ModelTableTracksABS(ModelDBAbstract):
 	
@@ -316,7 +350,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 	# treeview columns width
 	C_HEIGHT = 21
 	T_C_WIDTH = (	50, 150, 200, 60,
-					50, 70, 250, 250, 50)
+					50, 90, 250, 250, 70)
 					
 	def __init__(self, parent, txtsearch, *args):
 		"""Init model."""
@@ -325,7 +359,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 		self.txtsearch = txtsearch	
 		
 		# sorting
-		self.SortFilterProxy = QSortFilterProxyModel(self)
+		self.SortFilterProxy = ProxyModelTracks(self)
 		self.SortFilterProxy.setDynamicSortFilter(True)
 		self.SortFilterProxy.setSourceModel(self)
 		
@@ -355,9 +389,13 @@ class ModelTableTracksABS(ModelDBAbstract):
 		if self.rowCount() > 0:
 			listmedia = []
 			for row in range(self.rowCount()):
-				file = path.join(self.arraydata[row][self.myindex.index('REP_Track')], self.arraydata[row][self.myindex.index('FIL_Track')])
+				index = self.SortFilterProxy.index(row, 0)
+				index = self.SortFilterProxy.mapToSource(index)
+				if not index.isValid():
+					continue
+				file = path.join(self.arraydata[index.row()][self.myindex.index('REP_Track')], self.arraydata[index.row()][self.myindex.index('FIL_Track')])
 				listmedia.append(convertUNC(file))
-		return listmedia
+			return listmedia
 
 	def updateScore(self, row, score, namereq='updatescoretrack'):
 		"""Maj Mysql table Albums."""

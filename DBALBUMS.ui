@@ -87,6 +87,15 @@
             <height>400</height>
            </size>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>400</width>
+            <height>400</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 1px solid black;</string>
+          </property>
           <property name="lineWidth">
            <number>0</number>
           </property>
@@ -104,7 +113,7 @@
             <number>0</number>
            </property>
            <property name="bottomMargin">
-            <number>0</number>
+            <number>7</number>
            </property>
           </layout>
          </widget>
@@ -578,6 +587,16 @@
          </widget>
         </item>
         <item>
+         <widget class="QComboBox" name="com_genres">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QComboBox" name="com_family">
           <property name="minimumSize">
            <size>
@@ -631,85 +650,6 @@
            </size>
           </property>
          </spacer>
-        </item>
-        <item>
-         <widget class="QFrame" name="frame">
-          <property name="minimumSize">
-           <size>
-            <width>80</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">border: 1px solid black;</string>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <widget class="QPushButton" name="btn_zoomout">
-           <property name="geometry">
-            <rect>
-             <x>3</x>
-             <y>3</y>
-             <width>16</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">border: none;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-          <widget class="QLabel" name="lab_zoom">
-           <property name="geometry">
-            <rect>
-             <x>22</x>
-             <y>0</y>
-             <width>35</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>35</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">color: lime;background-color: black</string>
-           </property>
-           <property name="text">
-            <string>100%</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="btn_zoomin">
-           <property name="geometry">
-            <rect>
-             <x>60</x>
-             <y>3</y>
-             <width>16</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">border: none;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="btn_themecolor">

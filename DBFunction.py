@@ -3,8 +3,29 @@
 
 from sys import platform
 from os import path, walk
-from PyQt5.QtCore import QProcess, QObject
+from PyQt5.QtCore import (QProcess, QObject, QTime, QtInfoMsg,
+						QtWarningMsg, QtCriticalMsg, QtFatalMsg)
 from PyQt5.QtWidgets import QDesktopWidget
+
+
+# Logging
+def qtmymessagehandler(mode, context, message):
+	curdate = QTime.currentTime().toString('hh:mm:ss')
+	if mode == QtInfoMsg:
+		mode = 'INFO'
+	elif mode == QtWarningMsg:
+		mode = 'WARNING'
+	elif mode == QtCriticalMsg:
+		mode = 'CRITICAL'
+	elif mode == QtFatalMsg:
+		mode = 'FATAL'
+	else:
+		mode = 'DEBUG'
+	print('qt_message_handler: line: {li}, func: {fu}(), file: {fi}, time: {ti}'.format(li=context.line,
+																		 fu=context.function,
+																		 fi=context.file, 
+																		 ti=curdate))
+	print('  {m}: {e}\n'.format(m=mode, e=message))
 
 
 class ThemeColors(QObject):
@@ -122,5 +143,81 @@ def convertUNC(path):
 		path = r""+path.replace('\\\\', '/').replace('\\', '/')
 	return(path)
 
+
+def buildalbumnamehtml(name, label, isrc, year, nbcd, nbtracks, nbmin, nbcovers, RESS_LABS, RESS_ICOS):
+	"""buil label name & album name."""
+	# name + label
+	stylehtml = "text-decoration:none;color: black;"
+	infoslabel = ""
+	infonameal = ""
+	infosayear = ""
+	imglabel = None
+	if '[' in name:
+		textsalbum = name[name.find('[')+1:name.find(']')]
+		infonameal = name.replace('['+textsalbum+']', '')
+		infoslabel += textsalbum.replace('-', ' • ')
+	else:
+		infonameal = name
+	infonameal = infonameal.replace('(2CD)', '')
+	infonameal = infonameal.replace('2CD', '')
+	infonameal = infonameal.replace(' EP ', ' ')
+	infonameal = infonameal.replace('VA - ', '')
+	snbcd = str(nbcd)
+	sctxt = infonameal.split(' - ')[0].rstrip().replace(' ', '_')
+	infonameal = infonameal.replace('('+snbcd+'CD)', '').replace(snbcd+'CD', '')
+	infonameal = infonameal.replace(snbcd+'CD', '').replace(snbcd+'CD', '')
+	infonameal = '<a style="' + stylehtml + '" href="dbfunction://s' + sctxt + '"><b><big>' + infonameal + '</big></b></a>'
+	# label
+	if label != "":
+		if label.find('(')>0:
+			label = label[0:label.find('(')].rstrip()
+		label = label.replace(' - ', ' ')
+		imglabel = RESS_LABS +'/'+ label.replace(' ','_') +'.jpg'
+		if not path.isfile(imglabel):
+			imglabel = None
+		# isrc
+		if isrc != "":
+			infoslabel = '<a style="' + stylehtml + '" href="dbfunction://l'+label.replace(' ', '_')+'">' + label + '[' + isrc + ']' + '</a>'
+		else:
+			infoslabel = '<a style="' + stylehtml + '" href="dbfunction://l'+label.replace(' ', '_')+'">' + label + '</a>'
+	elif infoslabel != "":
+		if infoslabel.find('-') > 0:
+			label = infoslabel.split('-')[0].replace('[', '').rstrip()
+			infoslabel = '<big>' + label + '</big>'
+			isrc = infoslabel.split('-')[1].replace(']', '').lstrip()
+	# year
+	if year != "":
+		infosayear = '<a style="' + stylehtml + '" href="dbfunction://y'+year+'">' + year + '</a>'
+	# nb cd
+	if nbcd<6:
+		infosnbcd = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'cdrom.png') + '" height="17">'
+		infosnbcd = nbcd*infosnbcd
+	else:
+		infosnbcd = displayCounters(nbcd, 'CD')
+	# folder
+	inffolder =  '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'folder.png') + '" height="17">'
+	inffolder = '<a style=' + stylehtml + ' href="dbfunction://f">' + inffolder + '</a>'
+	# tagscan / powershell
+	if platform == "win32":
+		infotags = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'tag.png') + '" height="17">'
+		infotags = '<a style="' + stylehtml + '" href="dbfunction://t">' + infotags + '</a>'
+		infopowe = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'pwr.png') + '" height="17">'
+		infopowe = '<a style="' + stylehtml + '" href="dbfunction://p">' + infopowe + '</a>'
+	else:
+		infotags = infopowe = ''
+	# others
+	infotrack = displayCounters(nbtracks, 'Track')
+	infoduree = displayCounters(nbmin, 'min')
+	infoartco = displayCounters(nbcovers, 'art')
+	if nbcovers>0:
+		infoartco = '<a style="' + stylehtml + '" href="dbfunction://a">' + infoartco + '</a>'
+	infoshtml = '<span>' + infonameal + '</span>' + infosnbcd + ' ' + inffolder + infotags + infopowe + '<br/>'
+	if infoslabel != "":
+		#if infosaisrc != "":
+		#	infoshtml += infoslabel + ' • ' + infosaisrc + ' • '
+		#else:
+		infoshtml += infoslabel + ' • '
+	infoshtml += infotrack + ' • ' + infoartco + ' • ' + infoduree + ' • ' + infosayear
+	return infoshtml, imglabel
 
 

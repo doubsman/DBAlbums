@@ -2,7 +2,9 @@ Param(
 	[parameter(position=0, Mandatory=$true)]
 	[string]$Envt,
 	[parameter(position=1, Mandatory=$true)]
-	[string]$listID_CD)
+	[string]$listID_CD,
+	[parameter(position=1, Mandatory=$false)]
+	[switch]$Force)
 
 ##############################################
 # Construction INVENT
@@ -35,7 +37,7 @@ $LossLess = ($Envt -match "LOSSLESS")
 Foreach ($ID_CD in $listID_CD.split(',')){
 	Super-Title -Label ("uptade album ID=$ID_CD ($crupdate/$nbupdate)") -Start $Start;
 	$crupdate ++
-	Run-UpdateAlbum -ID_CD $ID_CD -LossLess $LossLess
+	Run-UpdateAlbum -ID_CD $ID_CD -LossLess $LossLess -Force $Force
 }
 
 ##############################################

@@ -57,7 +57,7 @@ def foobargetListFilesFromPlaylist(file_path):
 	return(listfiles)
 
 
-def DBFOOBAR(parent, folder):
+def DBFoobar(parent, folder):
 	"""Insert track in database dans update score."""
 	# fill DBFOOBAR
 	footracks = foobarBuildTracksList(folder)
