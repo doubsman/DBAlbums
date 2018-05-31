@@ -1,0 +1,63 @@
+INSTALLATION.......................................................
+-------------------------------------------------------------------
+for Python 3.6.0 installation modules for Windows
+	pip install pymysql (mysql)
+	pip install pypyodbc (sql server)
+	pip install pillow
+	pip install pyQT5
+	pip install pyqtdeploy
+	pip install cx_Freeze
+	extract N:\_INVENT\DBAlbums\LIB\fpl_reader-master.zip
+	python.exe setup.py install
+for Python 3 installation modules for Debian9
+	su
+	apt-get install python3-pymysql
+	apt-get install python3-pip
+	apt-get install python3-tk
+	apt-get install python3-pil
+	apt-get install python3-pil.imagetk
+	pip3 install SIP
+	pip3 install pyqt5 python-qt4-sql
+	apt-get install libqt5multimedia5-plugins
+	pip3 install pypyodbc
+	extract /HOMERSTATION/_LossLess/_INVENT/DBAlbums/LIB/fpl_reader-master.zip
+		python3.exe setup.py install
+
+	
+MOUNT VOLUME LINUX DEBIAN..........................................
+-------------------------------------------------------------------
+# Debian9 Mount volume Music HOMERSTATION
+Add Hostname /etc/hosts
+	Terminal:	su
+	mousepad /etc/hosts
+	add line:
+	192.168.0.250 HOMERSTATION
+install network package
+	Terminal:	su
+	apt-get install sudo
+	apt-get install cifs-utils
+	apt-get install gvfs-backends
+	apt-get install net-tools
+	# Add this repo to the /etc/apt/source.list file
+	deb ftp://ftp.debian.org/debian stable contrib non-free
+	apt-get update
+	apt-get install ttf-mscorefonts-installer
+create folder mount
+	Terminal:	su
+	mkdir -p /HOMERSTATION/_LossLess
+	chmod 777 /HOMERSTATION/_LossLess
+Create credential File:
+	Terminal:	su
+	mousepad  /home/misterdoubs/.smbhomercred
+		username=HomerMusic
+		password=Mus1c4Me
+		domain=WORKGROUP
+	chmod 600 /home/misterdoubs/.smbhomercred
+Add mount:
+	Terminal:	su
+	mousepad /etc/fstab
+	add line:
+	//192.168.0.250/_LossLess /HOMERSTATION/_LossLess cifs _netdev,users,noauto,users,credentials=/home/misterdoubs/.smbmusiccred
+test:
+	mount /HOMERSTATION/_LossLess/
+"""

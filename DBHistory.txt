@@ -1,0 +1,49 @@
+""" DBAlbums History Version : Doubsman dev.
+1.48 signal end process powershell, divide main code
+1.47 integration widget player audio
+1.46 passage QT5
+1.45 version MINI + zoom thunbnails, corrections bugs + test
+1.44 drag and drop folders, super class python3
+1.43 loading refont, artwork player resize, optimize thunbnail, powershell 1.11
+1.42 refont list grid, add album powershell by select folder, jauge v2
+1.41 add connexion sqlserver, store requests, gui whith no connect
+1.40 100% compatible Linux Debian 9 + simplication autocompletion
+1.39 last modified + update only category powershell
+1.38 treeview link thunbnails + upgrade / help .ini
+1.37 New player QT5 v2 (vol+playlist) + multiprocessing
+1.36 Enlarge Display thunbnails + bugs closing
+1.35 centralisation functions player/create sqlite3 / create exe via cx_freeze
+1.34 link tree id <-> mysql id / Full Screen
+1.33 mass update albums + autoincrement id + theme
+1.32 import playlist foobar v2 + dynamic combos
+1.31 DBAlbums.ini
+1.30 import playlist foobar
+1.29 GetExist -> DBAlbums
+1.28 fixed bugs + status bar
+1.27 combos label/year + fast speed viewer artworks
+1.26 viewer artworks
+1.25 gestion import tkinter + stats loading
+1.24 thunbnails + mousewheel + popup
+1.23 thunbnails link treeview
+1.22 thunbnails view
+1.21 Tagscan + sdtout powershell
+1.20 Artworks viewer
+1.19 integration Powershell script
+1.18 Execution Powershell script BUILD_INVENT.ps1 + BUILD_INVENT_updateAlbum.ps1
+1.17 base sqllite (create base + offline mode)
+1.16 score album + track
+1.15 player music pyQT5
+1.14 stats + play music
+1.13 best performance mysql
+1.12 fusion gui albmus/tracks windows
+1.11 fixed bugs
+1.10 refresh buttons + tdc loading
+1.09 extract cover mysql/base64 to file
+1.08 adaptation python 2.7 (py2exe) et 3.5.2
+1.07 combos category/family
+1.06 adaptation Ubuntu + base64
+1.05 autocompletion
+1.04 constants
+1.02 export csv
+1.01 gestion covers
+1.00 search base INVENT mysql TEST/PRODUCTION (05/2016)."""
