@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # GetExist History Version
+#  1.22 thunbnails
 #  1.21 Tagscan + sdtout powershell
 #  1.20 Artworks viewer
 #  1.19 integration Powershell script
@@ -24,14 +25,6 @@
 #  1.01 gestion covers
 #  1.00 search base INVENT mysql TEST/PRODUCTION
 
-# python 2.7
-#import Tkinter
-#from Tkinter import *
-#import ttk
-#import tkFont
-#import tkFileDialog
-#import datetime
-
 # python 3.5.2
 # python3 -m pip install pymysql
 import sys
@@ -46,11 +39,12 @@ from pymysql import connect as connectmysql
 from sqlite3 import connect as connectsqlite3
 from subprocess import check_call, call, Popen, PIPE
 from datetime import datetime
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw, ImageFont
 from csv import writer, QUOTE_ALL
 from io import BytesIO
-from base64 import b64decode, decodestring
+from base64 import b64decode, decodestring, b64encode
 from time import sleep
+from queue import Queue, Empty
 # functions
 from GetExistPlayer import PlayerProcess
 from GetExistCopyDatabaseToSqlite import CopyDatabaseInvent
@@ -58,7 +52,7 @@ from GetExistCopyDatabaseToSqlite import CopyDatabaseInvent
 
 ###################################################################
 # CONSTANTS
-VERS_PROG = '1.21'
+VERS_PROG = '1.22'
 TITL_PROG = "DB Albums v{v} (2016)".format(v=VERS_PROG)
 PATH_PROG = path.dirname(__file__)
 LOGS_PROG = path.join(PATH_PROG, 'Logs')
@@ -86,6 +80,7 @@ SCOR_TRACKS = { 0 : 'not listened',
 # GUI
 WIDT_MAIN = 1280
 HEIG_MAIN = 1024
+WIDT_PICM = 150
 # mysql
 # PRODS
 SERV_PROD = 'homerstation'
@@ -111,6 +106,7 @@ CURT_EVT = 3 # 0 LOSSLESS
 WINS_ICO = "GetExist.ico"
 UNIX_ICO = 'GetExist.png'
 PICT_NCO = 'cd-blank.gif'
+PICM_NCO = 'cd-blank-mini.gif'
 TEXT_NCO = 'No Picture'
 TREE_CO0 = 'gray85'
 TREE_CO1 = 'gray90'
@@ -161,6 +157,7 @@ T_C_WIDTH = (50,150,200,60,30,70,200,200,50)
 ### COVERS
 #  cover blob
 C_REQUEST = "SELECT `MD5`, `Cover64` FROM DBCOVERS WHERE `MD5`='{MD5}'"
+M_REQUEST = "SELECT `MD5`, `MiniCover64` FROM DBCOVERS WHERE `MD5`='{MD5}'"
 
 
 ###################################################################
@@ -305,10 +302,10 @@ def TreeviewSortColumn(tv, col, reverse):
 	# reverse sort next time
 	tv.heading(col, command=lambda	c=col: TreeviewSortColumn(tv, c, not reverse))
 
-def BuildTree(con, cadreresult, req, colWidth, line=15, scroll=False):
+def BuildTree(con, frame, req, colWidth, line=15, scroll=False):
 	"""Build Columns treeview."""
 	col_names = GetListColumns(con, req)
-	tree = Treeview(cadreresult, height=line, columns=col_names, show="headings")
+	tree = Treeview(frame, height=line, columns=col_names, show="headings")
 	tree["columns"] = col_names
 	counter = 0
 	for col_name in col_names:
@@ -320,10 +317,10 @@ def BuildTree(con, cadreresult, req, colWidth, line=15, scroll=False):
 	tree.tag_configure('2', background=TREE_CO2)
 	tree.tag_configure('3', background=TREE_CO3)
 	if scroll:
-		ysb = Scrollbar(cadreresult, orient=VERTICAL)
+		ysb = Scrollbar(frame, orient=VERTICAL)
 		ysb.pack(side=tk.RIGHT, fill=tk.Y)
 		ysb.config(command=tree.yview)
-		xsb = Scrollbar(cadreresult, orient=tk.HORIZONTAL)
+		xsb = Scrollbar(frame, orient=tk.HORIZONTAL)
 		xsb.pack(side=tk.BOTTOM, fill=tk.X)
 		xsb.config(command=tree.xview)
 		tree.configure(yscrollcommand=ysb.set,xscrollcommand=xsb.set)
@@ -341,7 +338,7 @@ def DisplayCounters(num = 0, text = '' ):
 def DisplayStars(star, scorelist):
 	max = len(scorelist)-1
 	txt_score =  scorelist[star]
-	return(txt_score+'  '+star*'★'+(max-star)*'☆')
+	return (txt_score+'  '+star*'★'+(max-star)*'☆')
 
 def BuildIco(Gui):
 	"""Icon windows or linux/mac."""
@@ -361,6 +358,18 @@ def BuildCover(con, pathcover, md5):
 	else:
 		# cover base64/mysql
 		req = C_REQUEST.format(MD5=md5)
+		Tableau = SelectTOTab(con, req)
+		monimage = Image.open(BytesIO(b64decode(Tableau[0][1])))
+	return (monimage)
+
+def BuildMiniCover(con, pathcover, md5):
+	"""Get base64 picture cover mysql/sqlite."""
+	if pathcover[0:len(TEXT_NCO)] == TEXT_NCO: 
+		# no cover
+		monimage = Image.open(PICM_NCO)
+	else:
+		# cover base64/mysql
+		req = M_REQUEST.format(MD5=md5)
 		Tableau = SelectTOTab(con, req)
 		monimage = Image.open(BytesIO(b64decode(Tableau[0][1])))
 	return (monimage)
@@ -492,7 +501,119 @@ class AutocompleteEntry(tk.Entry):
 				self.autocomplete()
 
 
+class VerticalScrolledFrame(Frame):
+	"""A pure Tkinter scrollable frame that actually works!
+	* Use the 'interior' attribute to place widgets inside the scrollable frame
+	* Construct and pack/place/grid normally
+	* This frame only allows vertical scrolling
+	"""
+	def __init__(self, parent, *args, **kw):
+		Frame.__init__(self, parent, *args, **kw)
+		
+		# create a canvas object and a vertical scrollbar for scrolling it
+		vscrollbar = Scrollbar(self, orient=VERTICAL)
+		vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
+		canvas = Canvas(self, bd=0, highlightthickness=0, yscrollcommand=vscrollbar.set, width = WIDT_MAIN, heigh = HEIG_MAIN)
+		canvas.pack(side=LEFT, fill=BOTH, expand=TRUE)
+		vscrollbar.config(command=canvas.yview)
+		
+		# reset the view
+		canvas.xview_moveto(0)
+		canvas.yview_moveto(0)
+		
+		# create a frame inside the canvas which will be scrolled with it
+		self.interior = interior = Frame(canvas)
+		interior_id = canvas.create_window(0, 0, window=interior, anchor=NW)
+		
+		# track changes to the canvas and frame width and sync them,
+		# also updating the scrollbar
+		def _configure_interior(event):
+			# update the scrollbars to match the size of the inner frame
+			size = (interior.winfo_reqwidth(), interior.winfo_reqheight())
+			canvas.config(scrollregion="0 0 %s %s" % size)
+			if interior.winfo_reqwidth() != canvas.winfo_width():
+				# update the canvas's width to fit the inner frame
+				canvas.config(width=interior.winfo_reqwidth())
+		interior.bind('<Configure>', _configure_interior)
+		
+		def _configure_canvas(event):
+			if interior.winfo_reqwidth() != canvas.winfo_width():
+				# update the inner frame's width to fill the canvas
+				canvas.itemconfigure(interior_id, width=canvas.winfo_width())
+		canvas.bind('<Configure>', _configure_canvas)
+
+
 ###################################################################
+# view thunbnails covers
+class AllCoversViewGui():
+	"""Fenetre view cover."""
+	def __init__(self, master, con, tree,  w=WIDT_MAIN, h=HEIG_MAIN):
+		# Windows
+		self.con = con
+		self.master = master
+		self.master.geometry("{w}x{h}".format(w=w,h=h))
+		self.master.resizable(width=False, height=False)
+		BuildIco(self.master)
+		CenterWindows(self.master)
+		
+		# numbers covers by page
+		self.maxCol = int(WIDT_MAIN/WIDT_PICM)
+		self.maxLin = int(HEIG_MAIN/WIDT_PICM)
+		maxCov = self.maxCol*self.maxLin
+		# numbers page
+		self.tree = tree
+		numPag = round(len(self.tree.get_children())/maxCov)
+		#print (str(maxCol)+'*'+str(maxLin)+' '+str(numPag)+'p')
+		
+		self.frame = VerticalScrolledFrame(self.master)
+		self.frame.grid_rowconfigure(0, weight=1)
+		self.frame.grid(row=0, column=0, sticky=N+S+E+W)
+		self.aMenu = tk.Menu(self.frame, tearoff=0)
+		self.aMenu.add_command(label="Quit", command=self.QuitAllCoversViewGui)
+		
+		self.labels = []
+		self.DisplayThunbnails(self.frame, True)
+	
+	def DisplayThunbnails(self, frame, fin=None):
+		curRow = curCol = cptIte = 0
+		for curItem in self.tree.get_children():
+			curLign = self.tree.item(curItem)
+			monimage = BuildMiniCover(self.con, curLign['values'][A_POSITIO['Cover']], curLign['values'][A_POSITIO['MD5']])  
+			photo = ImageTk.PhotoImage(monimage)
+			label = tk.Label(frame.interior, image = photo, text= curItem)
+			label.image = photo
+			label.grid(row=curRow,column=curCol)
+			label.bind("<Button-1>", lambda e,a=curItem: self.InfosAlb(a))
+			label.bind("<Enter>", lambda e: e.widget.config(relief=SOLID))
+			label.bind("<Leave>", lambda e: e.widget.config(relief=FLAT))
+			label.bind("<Button-3>", self.popup)
+			self.labels.append(label)
+			self.master.update_idletasks()
+			cptIte = cptIte + 1
+			# placement
+			curCol = curCol + 1
+			if curCol == self.maxCol:
+				curCol = 0
+				curRow = curRow + 1
+			# fin de page
+			if curRow == self.maxLin+1 and fin: 
+				break
+		print(str(cptIte)+'*covers')
+	
+	def InfosAlb(self, curItem):
+		curLign = self.tree.item(curItem)
+		print(curLign['values'][A_POSITIO['Name']])
+		self.coverWin = tk.Toplevel(self.master)
+		monimage = BuildCover(self.con, curLign['values'][A_POSITIO['Cover']], curLign['values'][A_POSITIO['MD5']])
+		CoverViewGui(self.coverWin, monimage, curLign['values'][A_POSITIO['Name']])
+	
+	def popup(self, event):
+		self.aMenu.post(event.x_root, event.y_root)
+	
+	def QuitAllCoversViewGui(self):
+		self.master.destroy()
+
+
 # LOADING GUI
 class LoadingGui():
 	"""Fenetre loading."""
@@ -510,6 +631,7 @@ class LoadingGui():
 		cadretittle = tk.Frame(self.MyTopLevel, width=380, height=50, bd=3, relief=SUNKEN)
 		cadretittle.pack(fill=tk.BOTH)
 		cadretittle.bind("<Button-1>", self.HideLoadingGui)
+		cadretittle.bind("<Button-3>", self.HideLoadingGui)
 		monimage = Image.open(UNIX_ICO)
 		monimage = monimage.resize((100, 100), Image.ANTIALIAS)
 		photo = ImageTk.PhotoImage(monimage)
@@ -591,6 +713,7 @@ class CoversViewGui():
 		self.master.resizable(width=False, height=False)
 		BuildIco(self.master)
 		self.master.title("reading files covers...")
+		#self.font = ImageFont.truetype("calibri.ttf", 14)
 		# build list covers
 		self.namealbum = namealbum
 		self.fileslist = list(GetListFiles(pathalbum, MASKCOVERS))
@@ -620,6 +743,10 @@ class CoversViewGui():
 				new_height = HEIG_MAIN
 				new_width  = int(new_height * width / height)
 			self.monimage = self.monimage.resize((new_width, new_height), Image.ANTIALIAS)
+		# infos
+		#draw = ImageDraw.Draw(self.monimage)
+		#draw.rectangle(((new_width-124,4),(new_width-3,20)), fill="black")
+		#draw.text((new_width-120,5), "CTRL+c Create Cover", font=self.font, fill=(255,255,0,128))
 		# windows
 		self.master.title("{c}/{n} - {name}  - {w}x{h}<{wo}x{ho}".format(c=(self.counterCov+1), n=(self.numbersCov), w=new_width, h=new_height, name=path.basename(self.currentCov), wo=str(width), ho=str(height)))
 		self.master.geometry("{w}x{h}".format(w=new_width,h=new_height))
@@ -635,45 +762,112 @@ class CoversViewGui():
 	
 	def MakeCover(self, event):
 		file_pictu = getFileNameWithoutExtension(self.currentCov)
-		path_cover = self.currentCov.replace(file_pictu,'cover')
+		file_exten = path.splitext(self.currentCov)[1][1:]
+		path_cover = path.join(path.dirname(self.currentCov), 'cover.' +file_exten )
+		self.master.title("{c}/{n} - create file {name} ".format(c=(self.counterCov+1), n=(self.numbersCov), name=path.basename(path_cover)))
 		self.monimage.save(path_cover)
 	
 	def QuitCoversViewGui(self, event):
 		self.master.destroy()
 
+
 class DisplaySubprocessGui():
 	def __init__(self, master, eCommand, title):
 		# Windows 
 		self.master = master
-		self.master.title(title)
+		self.title = title
+		self.master.title(self.title+' : waiting...')
 		self.master.geometry("{w}x{h}".format(w=WIDT_MAIN,h=600))
-		self.master.attributes('-topmost', True)
 		self.master.resizable(width=False, height=False)
 		BuildIco(self.master)
 		CenterWindows(self.master)
-
 		# Gui
 		customFont = Font(family="Lucida Console", size=8)
-		textarea = tk.Text(master, wrap='word', state='disabled', height=49, width=200, bg='black', fg='green', font=customFont)
-		ysb = Scrollbar(master, orient=tk.VERTICAL)
-		ysb.config(command=textarea.yview)
+		self.textarea = tk.Text(self.master, wrap='word', state='disabled', height=49, width=200, bg='black', fg='snow', font=customFont)
+		ysb = Scrollbar(self.master, orient=tk.VERTICAL)
+		ysb.config(command=self.textarea.yview)
+		self.endline = True
+		ysb.bind("<Button-1>", self.endlineKO)
+		ysb.bind("<ButtonRelease-1>", self.endlineOK)
 		ysb.pack(side=tk.RIGHT, fill=tk.Y)
-		textarea.configure(yscrollcommand=ysb.set)
-		textarea.pack(ipadx=4, padx=4, ipady=4, pady=4, fill=tk.BOTH)
-		button = tk.Button(master, text="Kill", width=15, command=self.QuitDisplaySubprocessGui)
-		button.pack(side=tk.BOTTOM, padx=4, pady=4)
-		
-		# launch process + output
+		self.textarea.configure(yscrollcommand=ysb.set)
+		self.textarea.tag_config("com", foreground="green2")
+		self.textarea.tag_config("nfo", foreground="magenta")
+		self.textarea.tag_config("err", foreground="red2")
+		self.textarea.pack(ipadx=4, padx=4, ipady=4, pady=4, fill=tk.BOTH)
+		self.button = tk.Button(master, text="Kill", width=15, command=self.QuitDisplaySubprocessGui)
+		self.button.pack(side=tk.BOTTOM, anchor=tk.E, padx=4, pady=5)
+		# launch process
 		self.process = Popen(eCommand, stdout=PIPE, stderr=PIPE)
-		for line in iter(self.process.stdout.readline, b''):
-			#sys.stdout.write(str(line))
-			textarea.configure(state='normal')
-			textarea.insert('end', line.decode('cp850'))
-			textarea.see('end')
-			textarea.configure(state='disabled')
-			self.master.update_idletasks()
-		button.configure(text="Quit")
-		
+		# launch thread for output
+		q = Queue(maxsize=1024)  # limit output buffering (may stall subprocess)
+		t = Thread(target=self.reader_thread, args=[q])
+		t.daemon = True # close pipe if GUI process exits
+		t.start()
+		# start update Gui
+		self.update(q) 
+	
+	def endlineOK(self, event):
+		self.endline = True
+	
+	def endlineKO(self, event):
+		self.endline = False
+	
+	def reader_thread(self, q):
+		"""Read subprocess output and put it into the queue."""
+		try:
+			with self.process.stdout as pipe:
+				for line in iter(pipe.readline, b''):
+					q.put(line)
+		finally:
+			q.put(None)
+	
+	def update(self, q):
+		"""Update GUI with items from the queue."""
+		for line in self.iter_except(q.get_nowait, Empty):
+			if line is None:
+				# end buffer
+				self.master.title(self.title+' : completed')
+				self.button.configure(text="Quit")
+				# err
+				self.textarea.configure(state='normal')
+				self.textarea.insert('end', self.process.stderr.read(), 'err')
+				self.textarea.see('end')
+				self.textarea.configure(state='disabled')
+				return
+			else:
+				# update GUI
+				self.textarea.configure(state='normal')
+				line = line.decode('cp850')
+				# colors tags
+				if line.startswith('*') or ('****' in line):
+					ltag = 'com'
+				else:
+					if (line.lstrip()).startswith('|'):
+						ltag = 'nfo'
+					else:
+						if 'error:' in line:
+							ltag = 'err'
+						else:
+							ltag = None
+				self.textarea.insert('end', line, ltag)
+				if self.endline:
+					self.textarea.see('end')
+				self.textarea.configure(state='disabled')
+				self.master.update_idletasks()
+				# display no more than one line per 10 milliseconds
+				break 
+		 # schedule next update
+		self.master.after(10, self.update, q)
+	
+	def iter_except(self, function, exception):
+		"""Works like builtin 2-argument `iter()`, but stops on `exception`."""
+		try:
+			while True:
+				yield function()
+		except exception:
+			return
+	
 	def QuitDisplaySubprocessGui(self):
 		self.process.kill() # exit (zombie!)
 		self.master.destroy()
@@ -690,9 +884,7 @@ class CoverMainGui(tk.Tk):
 		self.resizable(width=True, height=False)
 		self.geometry("{w}x{h}".format(w=WIDT_MAIN, h=HEIG_MAIN))
 		CenterWindows(self)
-		
-		# media
-		self.tplay = None
+		self.bind("<F5>", self.RefreshBase)
 		
 		#### SAISIE
 		cadresaisie = tk.Frame(self)
@@ -702,7 +894,7 @@ class CoverMainGui(tk.Tk):
 		labelDir.pack(side="left", padx=5, pady=5)
 		# ligne de saisie
 		self.var_texte = tk.StringVar(None)
-		self.ligne_texte = AutocompleteEntry(cadresaisie, textvariable=self.var_texte, width=30)
+		self.ligne_texte = AutocompleteEntry(cadresaisie, textvariable=self.var_text, width=30)
 		self.ligne_texte.bind("<Return>", self.OnPressEnter)
 		self.ligne_texte.focus_set()
 		self.ligne_texte.pack(side="left", padx=5, pady=5)
@@ -738,23 +930,22 @@ class CoverMainGui(tk.Tk):
 		
 		#### CONNECT
 		self.con = None
-		self.Envs = self.combo_value.get()
-		self.con, self.MODE_SQLI = ConnectInvent(self.Envs)
+		self.con, self.MODE_SQLI = ConnectInvent(self.combo_value.get())
 		
 		#### LIST ALBUMS
-		self.cadreresult = tk.Frame(self)
-		self.cadreresult.pack(fill=tk.BOTH)
+		self.framealbumlist = tk.Frame(self)
+		self.framealbumlist.pack(fill=tk.BOTH)
 		# tree : compatibilité sqllite
-		self.tree = BuildTree(self.con, self.cadreresult, (Z_REQUEST if self.MODE_SQLI else A_REQUEST), A_C_WIDTH, 22, True)
+		self.tree = BuildTree(self.con, self.framealbumlist, (Z_REQUEST if self.MODE_SQLI else A_REQUEST), A_C_WIDTH, 22, True)
 		# popup menu album
-		self.aMenu = tk.Menu(self.cadreresult, tearoff=0)
+		self.aMenu = tk.Menu(self.framealbumlist, tearoff=0)
 		self.aMenu.add_command(label="View ArtWorks...", command=self.ViewArtWorks)
 		self.aMenu.add_command(label="Open Folder...", command=self.GetFolder)
 		self.aMenu.add_command(label="Export Select Album(s) to...", command=self.ExportAlbums)
 		self.aMenu.add_command(label="Update Album...", command=self.UpdateAlbum)
 		self.aMenu.add_command(label="Open TagScan...", command=self.OpenTagScan)
-		self.tree.bind("<<TreeviewSelect>>", self.SelectTree)
 		self.tree.bind("<Button-3>", self.popupalbum)
+		self.tree.bind("<<TreeviewSelect>>", self.SelectTree)
 		self.tree.pack(side=tk.TOP, anchor=tk.W, fill=tk.BOTH, padx=5, pady=5)
 		
 		#### INFOS ALBUM 
@@ -819,11 +1010,12 @@ class CoverMainGui(tk.Tk):
 		#### BUTTONS
 		cadrebottom = tk.Frame(self)
 		cadrebottom.pack(fill=tk.BOTH)
-		#self.btn_extras = tk.Button(cadrebottom, text='R&D...', width=15, command = self.Extras, state=tk.DISABLED)
-		#self.btn_extras.pack(side=tk.LEFT, padx=5, pady=5)
+		btn_extras = tk.Button(cadrebottom, text='R&D...', width=15, command = self.Extras)
+		btn_extras.pack(side=tk.LEFT, padx=5, pady=5)
 		btn_quitpr = tk.Button(cadrebottom, text="Quit", width=15, command = self.QuitMain).pack(side=tk.RIGHT, padx=20, pady=5)
 		
 		#### LOADING ENVT
+		self.tplay = None
 		self.CurentAlbum = None
 		self.CurentTrack = None
 		self.curalbmd5 = None
@@ -882,7 +1074,12 @@ class CoverMainGui(tk.Tk):
 		# Button
 		self.btn_enrscrtrk.pack_forget()
 	
+	def ChandeDisplayAlbumsList(self):
+		"""Change display list albums."""
+		self.framealbumlist.tkraise()
+	
 	def ModifyScoreAlbum(self, event):
+		"""Modify Score Album."""
 		self.ScoAlbumlb.set(DisplayStars(self.posalbum_scale.get(), SCOR_ALBUMS))
 		if self.ScoreAlbum != self.posalbum_scale.get():
 			self.btn_enrscralb.pack(side=tk.RIGHT, padx=5, pady=5)
@@ -890,6 +1087,7 @@ class CoverMainGui(tk.Tk):
 			self.btn_enrscralb.pack_forget()
 	
 	def ModifyScoreTrack(self, event):
+		"""Modify Score Track."""
 		self.ScoTracklb.set(DisplayStars(self.postrack_scale.get(), SCOR_TRACKS))
 		if self.ScoreTrack != self.postrack_scale.get():
 			self.btn_enrscrtrk.pack(side=tk.RIGHT, padx=5, pady=5)
@@ -897,6 +1095,7 @@ class CoverMainGui(tk.Tk):
 			self.btn_enrscrtrk.pack_forget()
 	
 	def popupalbum(self, event):
+		"""Mennu Album."""
 		# maj selection : only for one selection
 		ListeSelect = self.tree.selection()
 		if len(ListeSelect) == 1 :
@@ -914,14 +1113,17 @@ class CoverMainGui(tk.Tk):
 			self.aMenu.post(event.x_root, event.y_root)
 	
 	def popupbase(self, event):
+		"""Mennu Base."""
 		self.bMenu.post(event.x_root, event.y_root)
 	
 	def QuitMain(self):
+		"""Exit."""
 		# connection close
 		self.con.close()
 		self.destroy()
 	
 	def ConnectEnvt(self, refresh = False):
+		"""Connect Base Environnement."""
 		if self.Envs != self.combo_value.get() or refresh:
 			# Mysql
 			self.Envs = self.combo_value.get()
@@ -950,12 +1152,8 @@ class CoverMainGui(tk.Tk):
 			self.family['values'] = SelectTOTab(self.con, E_REQUEST)
 			self.family.bind("<<ComboboxSelected>>", self.OnPressEnter)
 			self.family.current(0)
-			# first line by defaut
-			if not(refresh):
-				self.CurentAlbum = 'Row_0'
 			# all albums to treeview
 			self.GetSearchAlbums(refresh)
-			#self.tree.selection_set(self.CurentAlbum)
 			# Hide loading
 			self.loadingWin.withdraw()
 	
@@ -1014,6 +1212,8 @@ class CoverMainGui(tk.Tk):
 		else:
 			self.MessageInfo.set("Search Result ({sch}) = nothing".format(sch = self.style_value.get()))
 		if self.tree.get_children():
+			# first line by defaut
+			if not(refresh): self.CurentAlbum = 'Row_0'
 			self.tree.selection_set(self.CurentAlbum)
 			self.tree.focus(self.CurentAlbum)
 		# MAJ ALBUMS INFOS
@@ -1063,13 +1263,8 @@ class CoverMainGui(tk.Tk):
 					self.treealb.insert("", counter, iid='Row_%s'%counter, values = track, tag = tag)
 					counter += 1
 					cpt_len += sum(int(x) * 60 ** i for i,x in enumerate(reversed(track[3].split(":"))))
-				# MAJ SCORE TRACK
-				if counter > 0:
-					# first line by defaut
-					self.CurentTrack = 'Row_0'
-					#self.treealb.selection_set(self.CurentTrack)
-				else:
-					self.CurentTrack = None
+				# first line by defaut
+				if counter > 0: self.CurentTrack = 'Row_0'
 				# MAJ ALBUM NAME
 				txt_album = self.albumname[:100] + "\n{tracks} / {dur} / {cd}".format(tracks = DisplayCounters(counter, 'track'),
 																					 dur = str(int(((cpt_len/60))*10)/10) + ' mins',
@@ -1130,12 +1325,10 @@ class CoverMainGui(tk.Tk):
 		
 	def GetFolder(self):
 		"""Ouvre dossier album dans l'explorateur."""
-		self.curLign = self.tree.item(self.CurentAlbum)
-		openFolder(self.curLign['values'][A_POSITIO['Path']])
+		openFolder(self.AlbumPath)
 	
 	def OpenTagScan(self):
 		"""Ouvre TAGSCAN."""
-		self.curLign = self.treealb.item(self.CurentTrack)
 		OpenComand(TAGS_SCAN, self.AlbumPath)
 	
 	def playmedia(self):
@@ -1195,7 +1388,7 @@ class CoverMainGui(tk.Tk):
 		self.loadingWin.update()
 		self.loadingWin.deiconify()
 	
-	def RefreshBase(self):
+	def RefreshBase(self, event=None):
 		"""Recharge environnement."""
 		self.ConnectEnvt(True)
 	
@@ -1211,11 +1404,10 @@ class CoverMainGui(tk.Tk):
 	
 	def UpdateAlbum(self):
 		"""Execute powershell Script update albums infos."""
-		self.GUIUpdateAlbum = tk.Toplevel(self.master)
 		#p = ExcecutePowershell(PWSH_SCRU, '-Album_IDCD', str(self.Id_CD), '-Envt', self.Envs, '-Logs', LOGS_PROG)
+		self.GUIUpdateAlbum = tk.Toplevel(self.master)
 		eCommand = BuildCommandPowershell(PWSH_SCRU, '-Album_IDCD', str(self.Id_CD), '-Envt', self.Envs, '-Logs', LOGS_PROG)
 		DisplaySubprocessGui(self.GUIUpdateAlbum, eCommand, 'Execution PowerShell : '+path.basename(PWSH_SCRU)+' -Album_IDCD '+str(self.Id_CD)+' -Envt "'+self.Envs+'"')
-		self.ConnectEnvt(True)
 	
 	def BuildInvent(self):
 		"""Execute powershell Script update all albums infos."""
@@ -1224,10 +1416,9 @@ class CoverMainGui(tk.Tk):
 			filescript = PWSH_SCRI.format(mod='LOSSLESS')
 		else:
 			filescript = PWSH_SCRI.format(mod='MP3')
-		#p = ExcecutePowershell(filescript, '-Envt', self.Envs)
 		eCommand = BuildCommandPowershell(filescript, '-Envt', self.Envs)
 		DisplaySubprocessGui(self.GUIBuildInvent, eCommand, 'Execution PowerShell : '+path.basename(filescript)+' -Envt "'+self.Envs+'"')
-		self.ConnectEnvt(True)
+		#self.ConnectEnvt(True)
 	
 	def ViewArtWorks(self):
 		"""views covers storage."""
@@ -1235,12 +1426,15 @@ class CoverMainGui(tk.Tk):
 		CoversViewGui(self.coverWin, self.AlbumPath, self.albumname)
 	
 	def Extras(self):
-		request = A_REQUEST
-		Dict = SelectTODict(self.con, request)
-		print (Dict)
-		for x in Dict:
-			x["Base"]="Invent"
-			print (x["ID"], x["Category"], x["Name"], x["Base"])
+		#request = A_REQUEST
+		#Dict = SelectTODict(self.con, request)
+		#print (Dict)
+		#for x in Dict:
+		#	x["Base"]="Invent"
+		#	print (x["ID"], x["Category"], x["Name"], x["Base"])
+		self.coverEssai = tk.Toplevel(self.master)
+		AllCoversViewGui(self.coverEssai, self.con, self.tree)
+
 
 
 ###################################################################
