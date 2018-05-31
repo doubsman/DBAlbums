@@ -204,8 +204,7 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		# find in name and label
 		elif self.filttext != '':
 			index = self.parent.index(sourceRow, self.parent.myindex.index('NAME'), sourceParent)
-			index2 = self.parent.index(sourceRow, self.parent.myindex.index('LABEL'), sourceParent)
-			if self.filttext.lower() not in self.parent.data(index).value().lower() and self.filttext.lower() not in self.parent.data(index2).lower():
+			if self.filttext.lower() not in self.parent.data(index).value().lower():
 				return False
 		# cumuls
 		index = self.parent.index(sourceRow, self.parent.myindex.index('SIZE'), sourceParent)

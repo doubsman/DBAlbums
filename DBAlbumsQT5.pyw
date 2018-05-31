@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2017, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.58"
+__version__ = "1.60"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -13,9 +13,9 @@ __status__ = "Production"
 from sys import platform, argv, exit
 from os import path, getcwd
 from csv import writer, QUOTE_ALL
-from PyQt5.QtGui import QIcon, QPixmap, QFont
+from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
 from PyQt5.QtCore import (Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSettings, 
-						QSize, QRect, qInstallMessageHandler, qDebug) 
+						QSize, QRect, qInstallMessageHandler, qDebug, QUrl) 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, 
 						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel)
 from PyQt5.QtMultimedia import QMediaPlayer
@@ -75,6 +75,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	configini.beginGroup('programs')
 	TAGS_SCAN = configini.value('tagscan')
 	FOOB_PLAY = configini.value('foobarP')
+	SEAR_DISC = configini.value('discogs')
 	if platform == "darwin" or platform == 'linux':
 		EDIT_TEXT = r'' + configini.value('txt_lin')
 	else:
@@ -146,7 +147,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 		# center, size
 		centerWidget(self)
-		thunnbline = self.HEIG_LHUN
+		self.thunnbline = self.HEIG_LHUN
 		self.resize(self.w_main, self.h_main)
 		
 		# menu bar
@@ -165,15 +166,15 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.btn_findtrack.setIcon(QIcon(path.join(self.RESS_ICOS, 'target.png')))
 		
 		# thunbnails list
-		self.thunbnails = DBThunbnails(self, self.sizeTN, thunnbline)
-		self.thunbnails.setMaximumSize(QSize(16667, (self.sizeTN+4) * thunnbline))
+		self.thunbnails = DBThunbnails(self, self.sizeTN, self.thunnbline)
+		self.thunbnails.setMaximumSize(QSize(16667, (self.sizeTN+4) * self.thunnbline))
 		self.layout2thunbnails.addWidget(self.thunbnails)
 		
 		# minimize ? height main windows
 		sizescreen = QApplication.primaryScreen()
 		if sizescreen.size().height() < (self.h_main):
 			# one line for thunbnails
-			thunnbline = 1
+			self.thunnbline = 1
 			self.resize(self.w_main, self.h_main-self.sizeTN)
 			self.setMinimumSize(self.w_main, self.h_main-self.sizeTN)
 
@@ -245,13 +246,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		# popup base
 		self.menub = QMenu()
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_MessageBoxInformation),
-							"Show Informations  [F1]", self.showLoadingGui)
+							"Show Informations [F1]", self.showLoadingGui)
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_BrowserReload),
 							"Reload base Albums [F5]", lambda: self.connectEnvt(True))
 		self.action_UBP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'update.png')),
-							"Update Base (powershell)...", lambda: self.buildInventPython('UPDATE'))
+							"Update Base...", lambda: self.buildInventPython('UPDATE'))
 		self.action_UBN = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'update.png')),
-							"Add news albums to Base (powershell)...", lambda: self.buildInventPython('NEW'))
+							"Add news albums to Base...", lambda: self.buildInventPython('NEW'))
 		self.action_CSD = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'sql.png')),
 							"Create sqlite database...", self.createLocalBase)
 		self.action_IFP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'foo.png')),
@@ -272,6 +273,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 							"Update Album...", self.updateAlbums)
 		self.action_TAG = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'tag.png')),
 							"Edit Tags (TagScan)...", self.openTagScan)
+		self.action_DIS = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'discogs.png')),
+							"Search www.Discogs.com...", self.searchDiscogs)
 
 		# theme color
 		self.curthe = ThemeColors(self.THEM_COL)
@@ -393,8 +396,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		"""no disply grid list albums."""
 		if self.tbl_albums.isVisible():
 			self.tbl_albums.hide()
+			self.thunbnails.setMaximumSize(QSize(16777215,16777215))
 		else:
 			self.tbl_albums.show()
+			self.thunbnails.setMaximumSize(QSize(16777215, (self.sizeTN+4) * self.thunnbline))
 
 	def applyTheme(self):
 		"""Apply color Theme to main Gui."""
@@ -1108,6 +1113,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	def openTagScan(self):
 		"""Open program TAGs. edit."""
 		runCommand(self.TAGS_SCAN, self.AlbumPath)
+	
+	def searchDiscogs(self):
+		"""Search album in discogs."""
+		command = self.albumname.strip().replace(' ', '+')
+		command = self.SEAR_DISC.replace('NAME', command)
+		QDesktopServices.openUrl(QUrl(command))
 	
 	def buildInventPython(self, typeupdate):
 		"""Browse folder base for update."""

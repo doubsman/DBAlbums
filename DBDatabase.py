@@ -376,8 +376,7 @@ class DBCreateSqLite(QObject):
 				self.copytable(dbsource, dblite, 'COVERS')
 				self.signalchgt.emit((4/5)*100, 'Create FOOBAR...')
 				self.copytable(dbsource, dblite, 'FOOBAR')
-				self.signalchgt.emit((5/5)*100, 'Create FOOBOR...')
-				self.copytable(dbsource, dblite, 'FOOBOR')
+				self.signalchgt.emit((5/5)*100, 'Operations completed')
 		else:
 			qDebug('no create', self.basename)
 	
