@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """ DBAlbums History Version : Doubsman dev.
-1.33 mass update albums + autoincrement id
+1.33 mass update albums + autoincrement id + theme
 1.32 import playlist foobar v2 + dynamic combos 
 1.31 DBAlbums.ini
 1.30 import playlist foobar
@@ -46,7 +46,7 @@ from tkinter import (Tk, Toplevel, Label, Button, Checkbutton, Entry, Canvas,
 					RIDGE, SUNKEN, SOLID, FLAT, N, S, W, E, X, Y, RIGHT, LEFT, 
 					BOTH, TOP, END, BOTTOM, VERTICAL, HORIZONTAL, INSERT, ALL)
 from tkinter.filedialog import asksaveasfile
-from tkinter.ttk import Treeview, Combobox, Scrollbar, Separator
+from tkinter.ttk import Treeview, Combobox, Scrollbar, Separator, Style
 from tkinter.font import Font
 from threading import Thread
 from pymysql import connect as connectmysql
@@ -94,14 +94,18 @@ WINS_ICO = readIni.get('dbalbums', 'wins_icone')
 UNIX_ICO = readIni.get('dbalbums', 'unix_icone')
 PICT_NCO = readIni.get('dbalbums', 'pict_blank')
 PICM_NCO = readIni.get('dbalbums', 'picm_blank')
-ENVT_DEF = readIni.get('dbalbums', 'default_ev')
+ENVT_DEF = readIni.get('dbalbums', 'envt_deflt')
 TREE_CO0 = readIni.get('dbalbums', 'color0_lin')
 TREE_CO1 = readIni.get('dbalbums', 'color1_lin')
 TREE_CO2 = readIni.get('dbalbums', 'color2_lin')
 TREE_CO3 = readIni.get('dbalbums', 'color3_lin')
 THUN_CO0 = readIni.get('dbalbums', 'color0_thu')
 THUN_CO1 = readIni.get('dbalbums', 'color1_thu')
-THUN_MAX = readIni.getint('dbalbums', 'thnail_max')
+THUN_SIZ = readIni.getint('dbalbums', 'thnail_siz')
+THUN_DIS = readIni.getint('dbalbums', 'thnail_dis')
+THUN_DBA = readIni.get('dbalbums', 'picm_endof')
+COVE_SIZ = readIni.getint('dbalbums', 'covers_siz')
+
 # PROG
 TAGS_SCAN = r'' + readIni.get('programs', 'tagscan')
 FOOB_PLAY = r'' + readIni.get('programs', 'foobarP')
@@ -140,7 +144,7 @@ T_C_WIDTH = (50,150,200,60,30,70,200,200,50)
 
 # REQS
 #  autocompletion VW_DBCOMPLETION
-S_REQUEST = "SELECT Synthax FROM VW_DBCOMPLETION ORDER BY Synthax"
+S_REQUEST = "SELECT Synthax FROM VW_DBCOMPLETLISTPUB ORDER BY Synthax"
 #  list albums mysql DBALBUMS
 A_REQUEST = "SELECT ID_CD AS ID, Category, Family, Name, Label, ISRC, " \
 			"`Year`, Size, Length, Qty_CD AS `CD`, Qty_Tracks AS Trks, Qty_covers AS Pic, " \
@@ -360,7 +364,7 @@ def BuildIco(Gui):
 		Gui.iconbitmap(WINS_ICO)
 	else:
 		#linux : os mac non prévu
-		myico = PhotoImage(file=UNIX_ICO)
+		myico = ImageTk.PhotoImage(file=UNIX_ICO)
 		Gui.tk.call('wm', 'iconphoto', Gui._w, myico)
 
 def BuildCover(con, pathcover, md5):
@@ -766,7 +770,7 @@ class CoversArtWorkViewGui():
 		# Windows
 		self.master = master
 		self.master.geometry("{w}x{h}".format(w=WIDT_MAIN,h=HEIG_MAIN))
-		self.master.attributes('-topmost', True)
+		#self.master.attributes('-topmost', True)
 		self.master.title(TITL_PROG+" [view ArtWorks] : reading files covers...")
 		self.master.resizable(width=False, height=False)
 		BuildIco(self.master)
@@ -776,6 +780,7 @@ class CoversArtWorkViewGui():
 		self.nametittle = nametittle
 		fileslist = list(GetListFiles(pathartworks, MASKCOVER))
 		self.numbersCov = len(fileslist)
+		self.pathartworks = pathartworks
 		
 		# build labels thunbnails
 		self.frameThunbnails = VerticalScrolledFrame(self.master , WIDT_MAIN , WIDT_PICM+4)
@@ -806,10 +811,12 @@ class CoversArtWorkViewGui():
 				self.cover = Label(self.framecover, background=THUN_CO0)
 				self.cover.pack(side=TOP, fill=BOTH, expand=TRUE)
 				self.aMenu = Menu(self.framecover, tearoff=0)
+				self.aMenu.add_command(label="Open Folder...", command=self.OpenFolder)
 				self.aMenu.add_command(label="Create cover file...", command=self.CreateFileCover)
-				# only if no cover file
-				if modecreate[0:len(TEXT_NCO)] == TEXT_NCO:
-					self.master.bind("<Button-3>", self.popupThunbnail)
+				self.cover.bind("<Button-3>", self.popupThunbnail)
+				# create cover option only if no cover file
+				if modecreate[0:len(TEXT_NCO)] != TEXT_NCO:
+					self.aMenu.entryconfig(1, state="disabled")
 				# display first artvork
 				self.OnSelectThunbnail(None, 0)
 			# count thunbnails
@@ -819,16 +826,18 @@ class CoversArtWorkViewGui():
 			if curCol == maxCol:
 				curCol = 0
 				curRow = curRow + 1
-		
+
 	def OnSelectThunbnail(self, event, numlabel):
 		curlabel = self.listartwork[numlabel]
 		self.filelist = curlabel.cget('text')
 		self.monimage = self.listimage[numlabel]
-		# measures
+		# display artwork
 		width, height, new_width, new_height = self.ResizeImage(WIDT_MAIN, HEIG_MAIN-WIDT_PICM+4)
 		photo = ImageTk.PhotoImage(self.monimage)
 		self.cover.configure(image = photo)
 		self.cover.image = photo
+		# next
+		self.cover.bind("<Button-1>", lambda event,a=(0 if self.numbersCov==numlabel+1 else numlabel+1): self.OnSelectThunbnail(event,a))
 		# windows
 		self.master.title(TITL_PROG+" : [view ArtWorks: "+self.nametittle+'] {c}/{n} "{name}" A[{w}x{h}] O[{wo}x{ho}]'.format(c=str(numlabel+1), 
 																		 n=str(len(self.listartwork)), 
@@ -855,6 +864,9 @@ class CoversArtWorkViewGui():
 	def popupThunbnail(self, event):
 		self.aMenu.post(event.x_root, event.y_root)
 	
+	def OpenFolder(self):
+		openFolder(self.pathartworks)
+		
 	def CreateFileCover(self):
 		file_pictu = getFileNameWithoutExtension(self.filelist)
 		file_exten = path.splitext(self.filelist)[1][1:]
@@ -978,6 +990,10 @@ class CoverMainGui(Tk):
 		CenterWindows(self)
 		self.bind("<F5>", self.RefreshBase)
 		
+		# Style
+		s=Style()
+		s.theme_use('clam')
+		
 		#### SAISIE
 		cadresaisie = Frame(self)
 		cadresaisie.pack(fill=BOTH)
@@ -1036,7 +1052,7 @@ class CoverMainGui(Tk):
 		self.bMenu.add_command(label="Refresh", command=self.RefreshBase)
 		self.bMenu.add_command(label="Update (powershell)...", command=self.BuildInvent)
 		self.bMenu.add_command(label="Create Local base (sqlite)", command=self.CreateLocalBase)
-		self.bMenu.add_command(label="Import Foobar playlists + Update Score...", command=self.ImportFoobar)
+		self.bMenu.add_command(label="Import Foobar playlists, Update Score...", command=self.ImportFoobar)
 		self.combo.bind("<<ComboboxSelected>>", self.OnComboEnvtChange)
 		self.combo.bind("<Button-3>", self.popupbase)
 		self.combo.pack(side=RIGHT, padx=15, pady=5)
@@ -1049,7 +1065,7 @@ class CoverMainGui(Tk):
 		self.separ= Separator(self.master ,orient=HORIZONTAL)
 		self.separ.pack(side=TOP, fill=BOTH)
 		self.frameThunbnails = VerticalScrolledFrame(self.master , WIDT_MAIN , (WIDT_PICM*2)+(4*2))
-		self.frameThunbnails.pack(side=TOP, anchor=W, fill=BOTH, padx=5, pady=5)
+		self.frameThunbnails.pack(side=TOP, anchor=W, fill=BOTH, padx=0, pady=5)
 		self.framealbumlist = Frame(self)
 		self.framealbumlist.pack(side=TOP, anchor=W, fill=BOTH)
 		# tree : compatibilité sqllite
@@ -1060,7 +1076,7 @@ class CoverMainGui(Tk):
 		self.aMenu.add_command(label="Open Folder...", command=self.GetFolder)
 		self.aMenu.add_command(label="Export Album...", command=self.ExportAlbums)
 		self.aMenu.add_command(label="Update Album...", command=self.UpdateAlbum)
-		self.aMenu.add_command(label="Modify Tags via TagScan...", command=self.OpenTagScan)
+		self.aMenu.add_command(label="Edit Tags (TagScan)...", command=self.OpenTagScan)
 		self.tree.bind("<Button-3>", self.popuptreealbum)
 		self.tree.bind("<<TreeviewSelect>>", self.OnTreeSelectAlbum)
 		self.tree.pack(side=TOP, anchor=W, padx=5, pady=5)
@@ -1070,11 +1086,11 @@ class CoverMainGui(Tk):
 		self.cadrealbum = Frame(self)
 		self.cadrealbum.pack(fill=BOTH)
 		self.labcover = Label(self.cadrealbum)
-		self.labcover.pack(side=LEFT, padx=5, pady=5)
+		self.labcover.pack(side=LEFT, padx=0, pady=5)
 		self.labcover.bind("<Button-1>", self.OnPressCover)
 		# BLANK COVERS
 		monimage = BuildCover(' ', TEXT_NCO, ' ')
-		monimage = monimage.resize((400, 400), Image.ANTIALIAS)
+		monimage = monimage.resize((COVE_SIZ, COVE_SIZ), Image.ANTIALIAS)
 		photo = ImageTk.PhotoImage(monimage)
 		self.labcover.configure(image = photo)
 		self.labcover.image = photo
@@ -1141,7 +1157,7 @@ class CoverMainGui(Tk):
 		self.Envs = None
 		self.ConnectEnvt()
 	
-	def DisplayThunbnails(self, new=True, deb=0, fin=THUN_MAX):
+	def DisplayThunbnails(self, new=True, deb=0, fin=THUN_SIZ):
 		if new:
 			# delete
 			for labelt in self.labels:
@@ -1167,6 +1183,8 @@ class CoverMainGui(Tk):
 				curalbmd5 = curLign['values'][A_POSITIO['MD5']]
 				pathcover = curLign['values'][A_POSITIO['Cover']]
 				albumname = curLign['values'][A_POSITIO['Name']]
+				# no display thunbnails covers
+				if THUN_DIS == 0: pathcover = TEXT_NCO
 				monimage = BuildMiniCover(self.con, pathcover, curalbmd5)
 				label = self.BuildThunbnail(pathcover, albumname.replace(' - ','\n'), monimage, curItem)
 				label.grid(row=curRow,column=curCol)
@@ -1187,9 +1205,8 @@ class CoverMainGui(Tk):
 			# max display, labels for more
 			if cptIte==fin:
 				# add for add more thunbnails
-				monimage = Image.open(UNIX_ICO)
-				monimage = monimage.resize((WIDT_PICM, WIDT_PICM), Image.ANTIALIAS)
-				label = self.BuildThunbnail(UNIX_ICO, "{n} covers display max \n Click for more +{f}...".format(n=str(fin),f=str(fin+fin) if (fin+fin)<(numCov-fin) else str(numCov-fin)), monimage, None)
+				monimage = Image.open(THUN_DBA)
+				label = self.BuildThunbnail(THUN_DBA, "{n} covers display max \n Click for more +{f}...".format(n=str(fin),f=str(fin+fin) if (fin+fin)<(numCov-fin) else str(numCov-fin)), monimage, None)
 				label.grid(row=curRow,column=curCol)
 				label.bind("<Button-1>", lambda e: self.DisplayThunbnails(False,fin,fin+fin))
 				label.bind("<Enter>", lambda event: event.widget.config(relief=SOLID))
@@ -1200,7 +1217,7 @@ class CoverMainGui(Tk):
 				if curCol == maxCol:
 					curCol = 0
 					curRow = curRow + 1
-				label = self.BuildThunbnail(UNIX_ICO, "{n} covers display max \n Click for all +{f}...".format(n=str(fin),f=str(numCov-fin)), monimage, None)
+				label = self.BuildThunbnail(THUN_DBA, "{n} covers display max \n Click for all +{f}...".format(n=str(fin),f=str(numCov-fin)), monimage, None)
 				label.grid(row=curRow,column=curCol)
 				label.bind("<Button-1>", lambda e: self.DisplayThunbnails(False,fin,numCov-fin+1))
 				label.bind("<Enter>", lambda event: event.widget.config(relief=SOLID))
@@ -1211,12 +1228,19 @@ class CoverMainGui(Tk):
 		#print(str(cptIte)+'*covers')
 	
 	def BuildThunbnail(self, pathcover, texte, monimage, curItem):
-		font = ImageFont.truetype("calibri.ttf", 12)
-		if pathcover[0:len(TEXT_NCO)] == TEXT_NCO or pathcover==UNIX_ICO: 
+		try:
+			font = ImageFont.truetype("calibri.ttf", 12)
+		except:
+			font = ImageFont.truetype("arial.ttf", 10)
+		# two first line
+		if pathcover[0:len(TEXT_NCO)] == TEXT_NCO or pathcover==THUN_DBA: 
 			# add text infos
 			draw = ImageDraw.Draw(monimage)
-			w, h = draw.textsize(texte)
-			if h<30: h=30
+			#w, h = draw.textsize(texte)
+			w, h = WIDT_PICM, 30 
+			if '\n' in texte:
+				texte = texte.split('\n')
+				texte = texte[0]+"\n"+texte[1]
 			draw.rectangle(((4,(WIDT_PICM-h)/2),(WIDT_PICM-4,((WIDT_PICM-h)/2)+h)), fill=THUN_CO0)
 			draw.text((6,((WIDT_PICM-h)/2)+4), texte, font=font, fill=THUN_CO1)
 		photo = ImageTk.PhotoImage(monimage)
@@ -1306,6 +1330,10 @@ class CoverMainGui(Tk):
 	
 	def popupbase(self, event):
 		"""Mennu Base."""
+		if self.MODE_SQLI:
+			self.aMenu.entryconfig(3, state="disabled")
+		else:
+			self.aMenu.entryconfig(3, state="normal")
 		self.bMenu.post(event.x_root, event.y_root)
 	
 	def popupthunbnailsalbum(self, event):
@@ -1351,8 +1379,8 @@ class CoverMainGui(Tk):
 			if len(ListeSelect) > 1 :
 				self.aMenu.entryconfig(0, state="disabled")
 				self.aMenu.entryconfig(1, state="disabled")
-				self.aMenu.entryconfig(2, label="Export "+ DisplayCounters(len(ListeSelect), 'Album cover/csv') +"...")
-				self.aMenu.entryconfig(3, label="Update "+ DisplayCounters(len(ListeSelect), 'Album Select') +"...")
+				self.aMenu.entryconfig(2, label="Export "+ DisplayCounters(len(ListeSelect), 'Album')+"cover/csv...")
+				self.aMenu.entryconfig(3, label="Update "+ DisplayCounters(len(ListeSelect), 'Album') +"...")
 				self.aMenu.entryconfig(4, state="disabled")
 				self.aMenu.post(event.x_root, event.y_root)
 	
@@ -1397,7 +1425,7 @@ class CoverMainGui(Tk):
 	
 	def GetSearchAlbums(self, refresh = False):
 		"""Search Albums."""
-		self.config(cursor="wait")
+		self.config(cursor="watch")
 		txt_search = self.var_texte.get()
 		# SEARCH IN TRACKS
 		if self.searchtracks.get() == 1:
@@ -1449,15 +1477,19 @@ class CoverMainGui(Tk):
 								cpt_trk += row[A_POSITIO['Qty_Tracks']]
 								cpt_siz += row[A_POSITIO['Size']]
 								cpt_len += sum(int(x) * 60 ** i for i,x in enumerate(reversed(row[A_POSITIO['Length']].split(":"))))
-		# FILL COMBOS
-		liststyle.sort(reverse=True)
-		self.Combostyle['values'] = [DISP_CJOKER,] + liststyle
-		listfamil.sort()
-		self.Combofamily['values'] = [DISP_CJOKER,] + listfamil
-		listlabel.sort()
-		self.Combolabelm['values'] = [DISP_CJOKER,] + listlabel
-		listeyear.sort(reverse=True)
-		self.Comboyearc['values'] = [DISP_CJOKER,] + listeyear
+		# FILL COMBOS IF NO SELECT
+		if self.Combostyle_value.get() == DISP_CJOKER:
+			liststyle.sort(reverse=True)
+			self.Combostyle['values'] = [DISP_CJOKER,] + liststyle
+		if self.Combofamily_value.get() == DISP_CJOKER:
+			listfamil.sort()
+			self.Combofamily['values'] = [DISP_CJOKER,] + listfamil
+		if self.Combolabelm_value.get() == DISP_CJOKER:
+			listlabel.sort()
+			self.Combolabelm['values'] = [DISP_CJOKER,] + listlabel
+		if self.Comboyearc_value.get() == DISP_CJOKER:
+			listeyear.sort(reverse=True)
+			self.Comboyearc['values'] = [DISP_CJOKER,] + listeyear
 		# DISPLAY THUNBNAILS
 		self.DisplayThunbnails()
 		# DISPLAY STATS SEARCH
@@ -1544,13 +1576,16 @@ class CoverMainGui(Tk):
 				# first line by defaut
 				if counter > 0: self.CurentTrack = 'Row_0'
 				# MAJ ALBUM NAME
-				txt_album = self.albumname[:100] + "\n{tracks} • {dur} • {cd}".format(tracks = DisplayCounters(counter, 'track'),
-																					 dur = str(int(((cpt_len/60))*10)/10) + ' mins',
-																					 cd = DisplayCounters(curLign['values'][A_POSITIO['Qty_CD']], 'CD'))
+				widhtlabel = WIDT_MAIN - COVE_SIZ
+				txt_album = self.albumname + "\n{year} • {tracks} • {dur} • {cd} • {art}".format(year=str(curLign['values'][A_POSITIO['Year']]),
+																		tracks = DisplayCounters(counter, 'track'),
+																		dur = DisplayCounters(int(((cpt_len/60)*10)/10),'min'),
+																		cd = DisplayCounters(curLign['values'][A_POSITIO['Qty_CD']], 'CD'),
+																		art = DisplayCounters(curLign['values'][A_POSITIO['Qty_covers']], 'ArtWork'))
 				self.stralbumname.set(txt_album)
 				# MAJ COVERS
 				monimage = BuildCover(self.con, self.pathcover, self.curalbmd5)
-				monimage = monimage.resize((400, 400), Image.ANTIALIAS)
+				monimage = monimage.resize((COVE_SIZ, COVE_SIZ), Image.ANTIALIAS)
 				photo = ImageTk.PhotoImage(monimage)
 				self.labcover.configure(image = photo)
 				self.labcover.image = photo
@@ -1576,7 +1611,7 @@ class CoverMainGui(Tk):
 			self.stralbumname.set('')
 			# BLANK COVERS
 			monimage = BuildCover(' ', TEXT_NCO, ' ')
-			monimage = monimage.resize((400, 400), Image.ANTIALIAS)
+			monimage = monimage.resize((COVE_SIZ, COVE_SIZ), Image.ANTIALIAS)
 			photo = ImageTk.PhotoImage(monimage)
 			self.labcover.configure(image = photo)
 			self.labcover.image = photo
