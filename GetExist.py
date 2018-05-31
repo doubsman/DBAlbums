@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # GetExist History Version
+#  1.24 mousewheel
 #  1.23 thunbnails + treeview
 #  1.22 thunbnails
 #  1.21 Tagscan + sdtout powershell
@@ -53,7 +54,7 @@ from GetExistCopyDatabaseToSqlite import CopyDatabaseInvent
 
 ###################################################################
 # CONSTANTS
-VERS_PROG = '1.23'
+VERS_PROG = '1.24'
 TITL_PROG = "DB Albums v{v} (2017)".format(v=VERS_PROG)
 PATH_PROG = path.dirname(__file__)
 LOGS_PROG = path.join(PATH_PROG, 'Logs')
@@ -108,12 +109,13 @@ WINS_ICO = "GetExist.ico"
 UNIX_ICO = 'GetExist.png'
 PICT_NCO = 'img-cd-blank.gif'
 PICM_NCO = 'img-cd-blank-mini.jpg'
-PIVN_NCO = 'img-next.jpg'
 TEXT_NCO = 'No Picture'
 TREE_CO0 = 'gray85'
 TREE_CO1 = 'gray90'
 TREE_CO2 = 'lightSteelBlue1'
 TREE_CO3 = 'snow'
+THUN_CO0 = 'black'
+THUN_CO1 = 'white'
 # REQS
 # combo Category
 D_REQUEST = "SELECT '*' AS Category UNION SELECT Category from DBALBUMS group by Category"
@@ -503,49 +505,12 @@ class AutocompleteEntry(tk.Entry):
 				self.autocomplete()
 
 
-class VerticalScrolledFrame_old(Frame):
+class VerticalScrolledFrame(Frame):
 	"""A pure Tkinter scrollable frame that actually works!
 	* Use the 'interior' attribute to place widgets inside the scrollable frame
 	* Construct and pack/place/grid normally
 	* This frame only allows vertical scrolling
 	"""
-	def __init__(self, parent, w, h, *args, **kw):
-		Frame.__init__(self, parent, *args, **kw)
-		
-		# create a canvas object and a vertical scrollbar 
-		vscrollbar = Scrollbar(self, orient=VERTICAL)
-		vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
-		canvas = Canvas(self, bd=0, highlightthickness=0, yscrollcommand=vscrollbar.set, width = w, heigh = h)
-		canvas.pack(side=LEFT, fill=BOTH, expand=TRUE)
-		vscrollbar.config(command=canvas.yview)
-		
-		# reset the view
-		canvas.xview_moveto(0)
-		canvas.yview_moveto(0)
-		
-		# create a frame inside the canvas which will be scrolled with it
-		self.interior = interior = Frame(canvas)
-		interior_id = canvas.create_window(0, 0, window=interior, anchor=NW)
-		
-		# track changes to the canvas and frame width and sync them,
-		# also updating the scrollbar
-		def _configure_interior(event):
-			# update the scrollbars to match the size of the inner frame
-			size = (interior.winfo_reqwidth(), interior.winfo_reqheight())
-			canvas.config(scrollregion="0 0 %s %s" % size)
-			if interior.winfo_reqwidth() != canvas.winfo_width():
-				# update the canvas's width to fit the inner frame
-				canvas.config(width=interior.winfo_reqwidth())
-		interior.bind('<Configure>', _configure_interior)
-		
-		def _configure_canvas(event):
-			if interior.winfo_reqwidth() != canvas.winfo_width():
-				# update the inner frame's width to fill the canvas
-				canvas.itemconfigure(interior_id, width=canvas.winfo_width())
-		canvas.bind('<Configure>', _configure_canvas)
-
-
-class VerticalScrolledFrame(Frame):
 	def __init__(self, parent, canv_w , canv_h , *args, **kwargs):
 		super().__init__(parent, *args, **kwargs)
 
@@ -682,7 +647,7 @@ class CoverViewGui():
 
 class CoversViewGui():
 	"""Fenetre view covers."""
-	def __init__(self, master, pathalbum, namealbum):
+	def __init__(self, master, pathcover, pathalbum, namealbum):
 		# Windows
 		self.master = master
 		self.master.attributes('-topmost', True)
@@ -698,7 +663,9 @@ class CoversViewGui():
 		self.label.bind("<Button-3>", self.nextCov)
 		self.label.bind("<Button-1>", self.QuitCoversViewGui)
 		self.label.pack()
-		self.master.bind("<Control-Key-c>", self.MakeCover)
+		# only if no cover file
+		if pathcover[0:len(TEXT_NCO)] == TEXT_NCO:
+			self.master.bind("<Control-Key-c>", self.CreateFileCover)
 		self.nextCov(None)
 	
 	def nextCov(self, event):
@@ -730,10 +697,8 @@ class CoversViewGui():
 		self.counterCov += 1
 		if self.counterCov == self.numbersCov:
 			self.counterCov = 0
-		sleep(4)
-		del draw
 	
-	def MakeCover(self, event):
+	def CreateFileCover(self, event):
 		file_pictu = getFileNameWithoutExtension(self.currentCov)
 		file_exten = path.splitext(self.currentCov)[1][1:]
 		path_cover = path.join(path.dirname(self.currentCov), 'cover.' +file_exten )
@@ -922,7 +887,7 @@ class CoverMainGui(tk.Tk):
 		self.aMenu.add_command(label="Update Album...", command=self.UpdateAlbum)
 		self.aMenu.add_command(label="Open TagScan...", command=self.OpenTagScan)
 		self.tree.bind("<Button-3>", self.popupalbum)
-		self.tree.bind("<<TreeviewSelect>>", self.OnSelectAlbum)
+		self.tree.bind("<<TreeviewSelect>>", self.OnTreeSelectAlbum)
 		self.tree.pack(side=tk.TOP, anchor=tk.W, padx=5, pady=5)
 		
 		#### INFOS ALBUM 
@@ -993,11 +958,14 @@ class CoverMainGui(tk.Tk):
 		self.Envs = None
 		self.ConnectEnvt()
 	
-	def DisplayThunbnails(self, new=True, deb=0, fin=500):
+	def DisplayThunbnails(self, new=True, deb=0, fin=300):
 		if new:
+			# delete
 			for labelt in self.labels:
 				labelt.destroy()
+			self.frameThunbnails.canv.yview_moveto(0)
 		else:
+			# del label for more
 			self.labels[len(self.labels)-1].destroy()
 		numCov = len(self.tree.get_children())
 		maxCol = int(WIDT_MAIN/WIDT_PICM)
@@ -1010,48 +978,53 @@ class CoverMainGui(tk.Tk):
 				pathcover = curLign['values'][A_POSITIO['Cover']]
 				albumname = curLign['values'][A_POSITIO['Name']]
 				monimage = BuildMiniCover(self.con, pathcover, curalbmd5)
-				label = self.BuildThunbnailLabel(pathcover, albumname.replace('-','\n'), monimage, curItem)
+				label = self.BuildThunbnail(pathcover, albumname.replace('-','\n'), monimage, curItem)
 				label.grid(row=curRow,column=curCol)
-				label.bind("<Button-1>", lambda e,a=curItem: self.OnSelectThunbnail(a))
-				label.bind("<Button-3>", lambda e,a=curItem: self.popupthunbnailsalbum(e, a))
-				label.bind("<Enter>", lambda e: e.widget.config(relief=SOLID))
-				label.bind("<Leave>", lambda e: e.widget.config(relief=FLAT))
+				label.bind("<Button-1>", lambda event,a=curItem: self.OnSelectThunbnail(event,a))
+				label.bind("<Button-3>", self.popupthunbnailsalbum)
+				label.bind("<Enter>", lambda event: event.widget.config(relief=SOLID))
+				label.bind("<Leave>", lambda event: event.widget.config(relief=FLAT))
 				self.labels.append(label)
 			# count thunbnails
 			cptIte = cptIte + 1
-			# placement
+			# position
 			curCol = curCol + 1
 			if curCol == maxCol:
 				curCol = 0
 				curRow = curRow + 1
 				self.update_idletasks()
-			# fin d'affichage
+			# max display, label for more
 			if fin==cptIte :
-				monimage = Image.open(PIVN_NCO)
-				label = self.BuildThunbnailLabel(PIVN_NCO, str(fin)+' covers display max \nselect for more... ', monimage, None)
+				monimage = Image.open(UNIX_ICO)
+				monimage = monimage.resize((WIDT_PICM, WIDT_PICM), Image.ANTIALIAS)
+				label = self.BuildThunbnail(UNIX_ICO, str(fin)+' covers display max \nselect for more... ', monimage, None)
 				label.grid(row=curRow,column=curCol)
 				label.bind("<Enter>", lambda e: self.DisplayThunbnails(False,fin,fin+fin))
 				self.labels.append(label)
 				break
-		print(str(cptIte)+'*covers')
+		#print(str(cptIte)+'*covers')
 	
-	def BuildThunbnailLabel(self, pathcover, texte, monimage, curItem):
+	def BuildThunbnail(self, pathcover, texte, monimage, curItem):
 		hfont = 12
 		font = ImageFont.truetype("calibri.ttf", hfont)
-		if pathcover[0:len(TEXT_NCO)] == TEXT_NCO or pathcover==PIVN_NCO: 
-			# blank add infos
+		if pathcover[0:len(TEXT_NCO)] == TEXT_NCO or pathcover==UNIX_ICO: 
+			# add text infos
 			draw = ImageDraw.Draw(monimage)
-			draw.rectangle(((4,WIDT_PICM/2),(WIDT_PICM-4,(WIDT_PICM/2)+hfont*2)), fill='black')
-			draw.text((5,WIDT_PICM/2), texte, font=font, fill='white')
+			draw.rectangle(((4,WIDT_PICM/2),(WIDT_PICM-4,(WIDT_PICM/2)+hfont*2)), fill=THUN_CO0)
+			draw.text((5,WIDT_PICM/2), texte, font=font, fill=THUN_CO1)
 		photo = ImageTk.PhotoImage(monimage)
 		label = tk.Label(self.frameThunbnails.interior, image = photo, text= curItem)
 		label.image = photo
 		return(label)
 	
-	def OnSelectThunbnail(self, curItem):
+	def OnSelectThunbnail(self, event, curItem):
 		"""Display album infos."""
 		self.CurentAlbum = curItem
+		# select item
 		self.tree.selection_set(self.CurentAlbum)
+		# scroll
+		self.tree.see(self.CurentAlbum)
+		# cursor
 		self.tree.focus(self.CurentAlbum)
 	
 	def OnComboEnvtChange(self, event):
@@ -1066,7 +1039,7 @@ class CoverMainGui(tk.Tk):
 		monimage = BuildCover(self.con, self.pathcover, self.curalbmd5)
 		CoverViewGui(self.coverWin, monimage, self.albumname)
 	
-	def OnSelectAlbum(self, event):
+	def OnTreeSelectAlbum(self, event):
 		"""Display album infos."""
 		if self.tree.get_children():
 			self.tree.focus()
@@ -1127,8 +1100,15 @@ class CoverMainGui(tk.Tk):
 		"""Mennu Base."""
 		self.bMenu.post(event.x_root, event.y_root)
 	
-	def popupthunbnailsalbum(self, event, curItem):
+	def popupthunbnailsalbum(self, event):
 		"""Mennu Thunbnails."""
+		curItem = event.widget.cget('text')
+		self.CurentAlbum = curItem
+		self.tree.selection_set(self.CurentAlbum)
+		self.tree.see(self.CurentAlbum)
+		self.tree.focus(self.CurentAlbum)
+		# maj infos albums
+		self.GetInfosAlbum(self.CurentAlbum, True)
 		curLign = self.tree.item(curItem)
 		if curLign['values'][A_POSITIO['Qty_covers']] == 0 or not(path.exists(self.AlbumPath)):
 			self.aMenu.entryconfig(0, state="disabled")
@@ -1142,9 +1122,12 @@ class CoverMainGui(tk.Tk):
 		# maj selection : only for one selection
 		ListeSelect = self.tree.selection()
 		if len(ListeSelect) == 1 :
+			# select item
 			self.CurentAlbum = self.tree.identify('item',event.x,event.y)
 			self.tree.selection_set(self.CurentAlbum)
+			self.tree.see(self.CurentAlbum)
 			self.tree.focus(self.CurentAlbum)
+			# maj infos albums
 			self.GetInfosAlbum(self.CurentAlbum, True)
 		if self.tree.get_children():
 			curLign = self.tree.item(self.CurentAlbum)
@@ -1463,7 +1446,7 @@ class CoverMainGui(tk.Tk):
 	def ViewArtWorks(self):
 		"""views covers storage."""
 		self.coverWin = tk.Toplevel(self.master)
-		CoversViewGui(self.coverWin, self.AlbumPath, self.albumname)
+		CoversViewGui(self.coverWin, self.pathcover, self.AlbumPath, self.albumname)
 	
 
 
