@@ -3,7 +3,7 @@
 from sys import argv,  exit
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QApplication, QWidget
-from DBDatabase import getrequest, buildTabFromRequest, connectDatabase
+from DBDatabase import DBFuncBase, connectDatabase, getrequest
 
 class DBPThreadsListStyle(QThread):
 	finished = pyqtSignal(list)
@@ -17,7 +17,7 @@ class DBPThreadsListStyle(QThread):
 	def run(self):
 		# your logic here
 		request = getrequest('listgenres')
-		listgenres = buildTabFromRequest(request)
+		listgenres = DBFuncBase().sqlToArray(request)
 		liststyles = []
 		for row in listgenres:
 			id_cd = row[0]

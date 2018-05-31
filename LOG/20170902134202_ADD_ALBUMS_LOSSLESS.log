@@ -1,0 +1,119 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170902134202
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt LOSSLESS -TypeOpe "UPDATE|UPDATE|UPDATE|UPDATE" -AlbumInfos "124|125|126|62" -Category "TECHNO|TECHNO|TECHNO|TECHNO" -Family "Physique|Physique|Physique|Physique" -Force
+ID de processus : 3096
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 13:42:02 -- Durée: 0 sec -- START ADD_ALBUMS_LOSSLESS *******************************************************************************************
+********** 13:42:03 -- Durée: 1 sec -- UPDATE: 124 (1/4) ***************************************************************************************************
+
+ID_CD Name                                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                     
+----- ----                                        ---------- ------ --------- ---------- ---- ------   ----                                                     
+  124 VA - Hotel Costes 5 by Stephane Pompougnac          15      1         1          3 2002 01:12:39 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\09\VA - Hote...
+
+ODR_Track FIL_Track    TAG_Albumartists TAG_Artists                                                    TAG_Album      TAG_length TAG_Genres
+--------- ---------    ---------------- -----------                                                    ---------      ---------- ----------
+01        CDImage.flac Various          Hippiehaus - Galaxy                                            Hotel Costes 5 00:05:20             
+02        CDImage.flac Various          Rouge Rouge - l'Amour                                          Hotel Costes 5 00:03:35             
+03        CDImage.flac Various          Physics - Leaving Monte Carlo                                  Hotel Costes 5 00:04:31             
+04        CDImage.flac Various          Streamer - Zwing Ting                                          Hotel Costes 5 00:05:18             
+05        CDImage.flac Various          Cam starring Anggun - Summer in Paris                          Hotel Costes 5 00:05:48             
+06        CDImage.flac Various          Clémentine - Les Champs Elysées (Stéphane Pompougnac Remix)    Hotel Costes 5 00:04:50             
+07        CDImage.flac Various          The Strike Boys - Cocaine is a sin                             Hotel Costes 5 00:03:01             
+08        CDImage.flac Various          Vision - Ponger Star                                           Hotel Costes 5 00:04:51             
+09        CDImage.flac Various          Gabin - Doo Uap, Doo Uap, Doo Uap                              Hotel Costes 5 00:03:35             
+10        CDImage.flac Various          Janice hosted by BSG - Voodoo Bliss (Aaron Bingle's Azure Mix) Hotel Costes 5 00:05:17             
+11        CDImage.flac Various          Minus 8 - Starlight                                            Hotel Costes 5 00:05:28             
+12        CDImage.flac Various          Limbo Experience - Illusion (Rollercone Remix)                 Hotel Costes 5 00:04:35             
+13        CDImage.flac Various          Dublex Inc. - Tocáme                                           Hotel Costes 5 00:04:47             
+14        CDImage.flac Various          Louie Austen - One night in Rio                                Hotel Costes 5 00:06:26             
+15        CDImage.flac Various          Fantastic Plastic Machine - Steppin' out (Costes re-edit)      Hotel Costes 5 00:05:17
+********** 13:42:08 -- Durée: 6 sec -- UPDATE: 125 (2/4) ***************************************************************************************************
+
+ID_CD Name                                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                     
+----- ----                                        ---------- ------ --------- ---------- ---- ------   ----                                                     
+  125 VA - Hotel Costes 6 by Stephane Pompougnac          14      1         1          3 2003 01:05:10 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\09\VA - Hote...
+
+ODR_Track FIL_Track    TAG_Albumartists TAG_Artists                        TAG_Album        TAG_length TAG_Genres
+--------- ---------    ---------------- -----------                        ---------        ---------- ----------
+01        CDImage.flac Various Artists  Slow Train                         Hotel Costes - 6 00:04:31             
+02        CDImage.flac Various Artists  Stigmato Inc                       Hotel Costes - 6 00:03:38             
+03        CDImage.flac Various Artists  Emanuelsantarromana                Hotel Costes - 6 00:03:14             
+04        CDImage.flac Various Artists  3-11 Porter                        Hotel Costes - 6 00:05:50             
+05        CDImage.flac Various Artists  Tosca                              Hotel Costes - 6 00:05:38             
+06        CDImage.flac Various Artists  Stephane Pompougnac                Hotel Costes - 6 00:05:09             
+07        CDImage.flac Various Artists  Barbara Mendes                     Hotel Costes - 6 00:02:49             
+08        CDImage.flac Various Artists  Minus 8                            Hotel Costes - 6 00:04:56             
+09        CDImage.flac Various Artists  Dutch Rhyhtm Combo                 Hotel Costes - 6 00:06:04             
+10        CDImage.flac Various Artists  Fingathing                         Hotel Costes - 6 00:02:53             
+11        CDImage.flac Various Artists  Spiro Projecto And Josefina Sanner Hotel Costes - 6 00:06:28             
+12        CDImage.flac Various Artists  Zimpala                            Hotel Costes - 6 00:04:03             
+13        CDImage.flac Various Artists  Grand Palace                       Hotel Costes - 6 00:04:08             
+14        CDImage.flac Various Artists  Dr Jazz's Universal Remedy         Hotel Costes - 6 00:05:49
+********** 13:42:13 -- Durée: 11 sec -- UPDATE: 126 (3/4) **************************************************************************************************
+
+ID_CD Name                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                 ---------- ------ --------- ---------- ---- ------   ----                                                                   
+  126 VA - Hotel Costes 7          16      1         1          5 2004 01:14:24 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\09\VA - Hotel Costes 7 (2004)
+
+ODR_Track FIL_Track    TAG_Albumartists TAG_Artists                                 TAG_Album      TAG_length TAG_Genres
+--------- ---------    ---------------- -----------                                 ---------      ---------- ----------
+01        CDImage.flac Various Artists  Mark Rae Feat. Veba                         Hotel Costes 7 00:05:13             
+02        CDImage.flac Various Artists  The Fort Knox Five                          Hotel Costes 7 00:03:47             
+03        CDImage.flac Various Artists  Rodney Hunter                               Hotel Costes 7 00:05:26             
+04        CDImage.flac Various Artists  Bobby Hughes Combination                    Hotel Costes 7 00:04:41             
+05        CDImage.flac Various Artists  Only Child                                  Hotel Costes 7 00:05:12             
+06        CDImage.flac Various Artists  Club Des Belugas                            Hotel Costes 7 00:04:31             
+07        CDImage.flac Various Artists  Watch Tv                                    Hotel Costes 7 00:02:42             
+08        CDImage.flac Various Artists  Trinity Fm                                  Hotel Costes 7 00:02:50             
+09        CDImage.flac Various Artists  Slow Train                                  Hotel Costes 7 00:05:17             
+10        CDImage.flac Various Artists  Mo'horizons                                 Hotel Costes 7 00:05:15             
+11        CDImage.flac Various Artists  Dolphin Boy                                 Hotel Costes 7 00:07:25             
+12        CDImage.flac Various Artists  Paolo Fedreghini                            Hotel Costes 7 00:05:50             
+13        CDImage.flac Various Artists  Takumi Kato                                 Hotel Costes 7 00:04:57             
+14        CDImage.flac Various Artists  Claude Monnet Presents Monica Nogueira      Hotel Costes 7 00:03:44             
+15        CDImage.flac Various Artists  The Limp Twins                              Hotel Costes 7 00:03:22             
+16        CDImage.flac Various Artists  Thievery Corporation Feat. Emiliana Torrini Hotel Costes 7 00:04:12
+********** 13:42:16 -- Durée: 15 sec -- UPDATE: 62 (4/4) ***************************************************************************************************
+
+ID_CD Name                                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                            
+----- ----                                 ---------- ------ --------- ---------- ---- ------   ----                                                            
+   62 Kruder & Dorfmeister - G Stone Book          14      1         1          1 2000 01:12:46 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\06\Kruder & Dorfmei...
+
+ODR_Track FIL_Track                                TAG_Albumartists     TAG_Artists          TAG_Album    TAG_length TAG_Genres
+--------- ---------                                ----------------     -----------          ---------    ---------- ----------
+01        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:06:19             
+02        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:05:08             
+03        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:05:25             
+04        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:06:37             
+05        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:00:10             
+06        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:04:30             
+07        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:06:43             
+08        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:07:54             
+09        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:04:57             
+10        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:05:10             
+11        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:02:46             
+12        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:05:40             
+13        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:05:10             
+14        Kruder & Dorfmeister - G Stone Book.flac Kruder & Dorfmeister Kruder & Dorfmeister G Stone Book 00:06:17
+      | remove \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\LOG\20170828015238_ADD_ALBUMS_LOSSLESS_TEST.log
+********** 13:42:19 -- Durée: 17 sec -- END ****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170902134219
+**********************

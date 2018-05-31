@@ -25,8 +25,7 @@ from Ui_DBALBUMS import Ui_MainWindow
 from DBFunction import (buildCommandPowershell, runCommand, openFolder, centerWidget,
 						displayCounters, displayStars, ThemeColors, qtmymessagehandler, 
 						buildalbumnamehtml)
-from DBDatabase import (connectDatabase, getrequest, copyDatabaseInvent, execSqlFile, 
-						buildTabFromRequest, buildFileCover, extractCoverb64)
+from DBDatabase import DBFuncBase, connectDatabase, getrequest, DBCreateSqLite
 from DBSLoading import DBloadingGui
 from DBTProcess import DBProcessGui
 from DBAlbsMini import DBAlbumsQT5Mini
@@ -278,6 +277,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 							"Update Album...", self.updateAlbums)
 		self.action_TAG = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'tag.png')),
 							"Edit Tags (TagScan)...", self.openTagScan)
+							
 
 		# theme color
 		self.curthe = ThemeColors(self.THEM_COL)
@@ -608,7 +608,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.tbl_albums.scrollTo(index)
 					self.displayAlbum()
 					# autocompletion list
-					autoList = buildTabFromRequest(getrequest('autocompletion', self.modsql))
+					autoList = DBFuncBase().sqlToArray(getrequest('autocompletion', self.modsql))
 					self.com_autcom = QCompleter(autoList, self.lin_search)
 					self.com_autcom.setCaseSensitivity(Qt.CaseInsensitive)
 					self.lin_search.setCompleter(self.com_autcom)
@@ -696,8 +696,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.coveral = QPixmap(self.PICM_NCO)
 					self.labelcover.updateLabel(self.AlbumPath)
 				else:
-					self.labelcover.updateLabel(None)
-					self.coveral = extractCoverb64(self.curMd5, self.PICM_NCO)
+					#self.labelcover.updateLabel(None)
+					self.labelcover.updateLabel(self.AlbumPath)
+					self.coveral = DBFuncBase().sqlToPixmap(self.curAlb, self.PICM_NCO)
 				self.coveral = self.coveral.scaled(self.COVE_SIZ, self.COVE_SIZ, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
 				self.labelcover.setPixmap(self.coveral)
 
@@ -1072,7 +1073,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			QMessageBox.critical(self, 'Foobar2000 playlists operations', 'Problem import files fpl playlist from : ' + self.FOOB_PLAY)
 		else:
 			# synchro score sql
-			execSqlFile(self, self.FOOB_UPSC, 9)
+			DBFuncBase(self).execSqlFile(self, self.FOOB_UPSC, 9)
 		self.updateStatusBar('Foobar2000 playlists finished', 5000)
 		QMessageBox.information(self,'Foobar2000 import playlists', 'Operation successfull')
 
@@ -1106,7 +1107,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		if path.isfile(filename):
 			remove(filename)
 		logname = QDateTime.currentDateTime().toString('yyMMddhhmmss') + "_COPY_DATABASE_TO_SQLITE_" + self.envits + ".log"
-		copyDatabaseInvent(self, self.dbbase,  filename, path.join(self.LOGS_PROG, logname))
+		DBCreateSqLite().copyDatabaseInvent(self, self.dbbase,  filename, path.join(self.LOGS_PROG, logname))
 		self.updateStatusBar("Create Database SQLite :"+filename+" Successfull", 7000)
 		QMessageBox.information(self,'Create Database SQLite', 'Operation successfull')
 
@@ -1142,7 +1143,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					filecover = path.join(path.dirname(filename), self.tableMdlAlb.getData(ind, 'Name'))
 					extension = ((self.tableMdlAlb.getData(ind, 'Cover'))[-4:]).replace('.', '')
 					filecover = filecover+'.'+extension
-					buildFileCover(filecover, self.tableMdlAlb.getData(ind, 'MD5'))
+					DBFuncBase().sqlImageToFile(filecover, self.tableMdlAlb.getData(ind, 'ID_CD'))
 				self.statusBar().showMessage('Export covers Albums /n Create covers Sucessfull to :'+path.dirname(filename), 7000)
 				openFolder(path.dirname(filename))
 	

@@ -1,0 +1,48 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170829235936
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt LOSSLESS -TypeOpe UPDATE -AlbumInfos 792
+ID de processus : 13176
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 23:59:36 -- Durée: 0 sec -- START ADD_ALBUMS_LOSSLESS *******************************************************************************************
+********** 23:59:37 -- Durée: 1 sec -- UPDATE: 792 (1/1) ***************************************************************************************************
+#year
+
+ID_CD Name                   Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                   ---------- ------ --------- ---------- ---- ------   ----                                                                 
+  792 Air - Pocket Symphony          12      1         1          1 2007 00:48:00 \\HOMERSTATION\_LossLess\TECHNO\Download\Air - Pocket Symphony (2007)
+
+ODR_Track FIL_Track                  TAG_Albumartists TAG_Artists TAG_Album       TAG_length TAG_Genres             
+--------- ---------                  ---------------- ----------- ---------       ---------- ----------             
+01 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:04:03   Ambient Pop, Trip-Hop; 
+02 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:05:02   Ambient Pop, Trip-Hop; 
+03 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:04:02   Ambient Pop, Trip-Hop; 
+04 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:03:28   Ambient Pop, Trip-Hop; 
+05 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:04:18   Ambient Pop, Trip-Hop; 
+06 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:04:07   Ambient Pop, Trip-Hop; 
+07 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:03:52   Ambient Pop, Trip-Hop; 
+08 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:03:04   Ambient Pop, Trip-Hop; 
+09 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:03:33   Ambient Pop, Trip-Hop; 
+10 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:03:35   Ambient Pop, Trip-Hop; 
+11 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:04:34   Ambient Pop, Trip-Hop; 
+12 ;      Air - Pocket Symphony.flac Air              Air         Pocket Symphony 00:04:22   Ambient Pop, Trip-Hop;
+********** 23:59:40 -- Durée: 4 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170829235940
+**********************

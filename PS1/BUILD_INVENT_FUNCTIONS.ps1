@@ -1,13 +1,13 @@
 ############################################################################################
 # Construction INVENT
-$version = '1.13';
+$version = '1.15';
 
 #################
 $TXTNOPICTURE = 'No Picture'
 # base de données  
 $Tbl_Albums = "DBALBUMS";
 $Tbl_Tracks = "DBTRACKS";
-$Tbl_Covers = "DBCOVERS";
+$Tbl_Covers = "DBPIXMAPS";
 $Tbl_Errors = "DBERRORS";
 # globaux
 $global:AlBumArtDownloader = 'C:\Program Files\AlbumArtDownloader\AlbumArt.exe';
@@ -109,9 +109,9 @@ Function Run-UpdateAlbum{
 				# DELETE ALBUMS
 				$reqStr = "DELETE FROM $Tbl_Tracks WHERE ``ID_CD``="+$Album_Exist.ID_CD;
 				$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
-				$reqStr = "DELETE FROM $Tbl_Covers WHERE ``MD5``='"+$Album_Exist.MD5+"'";
-				$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
 				$reqStr = "DELETE FROM $Tbl_Albums WHERE ``ID_CD``="+$Album_Exist.ID_CD;
+				$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
+				$reqStr = "DELETE COV FROM $Tbl_Covers COV WHERE ``ID_CD``="+$Album_Exist.ID_CD;
 				$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
 				Continue
 			} ELse {
@@ -169,10 +169,6 @@ Function Run-UpdateAlbum{
 			$reqStr = "DELETE FROM $Tbl_Tracks WHERE ``ID_CD``="+$Album_Exist.ID_CD;
 			$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
 			ArrayToMySQL -MySqlCon $MySqlCon -TabPower $TAGS_Result -TblMysql $Tbl_Tracks -colAutoincrement 'ID_TRACK';
-			# ENR COVER
-			$reqStr = "DELETE FROM $Tbl_Covers WHERE ``MD5``='"+[string]$Album_Exist.MD5+"'";
-			$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
-			Covers-ToMySQL -MySqlCon $MySqlCon -PathCover $Album_Result.cover -MD5 $Album_Result.MD5;
 			
 			Write-host ($Album_Result | Select-Object ID_CD, Name, Qty_Tracks, Qty_CD, Qty_Audio, Qty_covers, Year, Length, Path | Format-Table | Out-String -width 160)
 			Write-host ($TAGS_Result | Select-Object ODR_Track, FIL_Track, TAG_Albumartists, TAG_Artists, TAG_Album, TAG_Length, TAG_Genres | Format-Table | Out-String -width 160)
@@ -249,7 +245,6 @@ Function Run-AddNewAlbum{
 	$Album_Result.ID_CD = $lastID
 	$TAGS_Result | ForEach-Object { $_.ID_CD=$lastID }
 	ArrayToMySQL -MySqlCon $MySqlCon -TabPower $TAGS_Result -TblMysql $Tbl_Tracks -colAutoincrement 'ID_TRACK';
-	Covers-ToMySQL -MySqlCon $MySqlCon -PathCover $Album_Result.cover -MD5 $Album_Result.MD5;
 	
 	Write-host ($Album_Result | Select-Object ID_CD, Name, Qty_Tracks, Qty_CD, Qty_Audio, Qty_covers, Year, Length, Path | Format-Table | Out-String -width 160)
 	Write-host ($TAGS_Result | Select-Object ODR_Track, FIL_Track, TAG_Albumartists, TAG_Artists, TAG_Album, TAG_Length, TAG_Genres | Format-Table | Out-String -width 160)
@@ -348,10 +343,8 @@ Function Get-ListeAlb{
 				$Album_Result.Statut ="PRESENT"
 				UpdateLineFromArrayToMySQL -MySqlCon $MySqlCon -TabPower $Album_Result -TblMysql $Tbl_Albums -Key "ID_CD"
 				$Album_Result.Statut = "UPDATE"
-				# DELETE COVERS TRACKS
+				# DELETE TRACKS
 				$reqStr = "DELETE TRK FROM $Tbl_Tracks TRK WHERE ``ID_CD``="+$Album_Exist.ID_CD;
-				$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
-				$reqStr = "DELETE COV FROM $Tbl_Covers COV WHERE ``MD5``='"+$Album_Exist.MD5+"'";
 				$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr
 			}
 			{@("NEW") -contains $_ } {
@@ -370,8 +363,6 @@ Function Get-ListeAlb{
 				$TAGS_Result | ForEach-Object { $_.Statut='PRESENT' }
 				ArrayToMySQL -MySqlCon $MySqlCon -TabPower $TAGS_Result -TblMysql $Tbl_Tracks -colAutoincrement 'ID_TRACK';
 				$TAGS_Result | ForEach-Object { $_.Statut=$StatutBackup }
-				# ENR COVER
-				Covers-ToMySQL -MySqlCon $MySqlCon -PathCover $Album_Result.cover -MD5 $Album_Result.MD5;
 			}
 		}
 		Write-Host  ("`r"+' '*6+"{5,-9} | {0:00000} | ({1}) | {2:00000} | ({3}) | {4,-111}" -f $global:Compteur, $Album_Result.Statut[0], [int32]$Album_Result.ID_CD, $Album_Result.Typ_Tag, ($Album_Rep.Name).PadRight(111,' '), $Album_Result.Category);
@@ -1201,69 +1192,6 @@ Function ArrayToMySQL{
 }
 
 
-# Write Cover
-Function Cover-ToMySQL{
-	param ([parameter(Mandatory = $true)][PSObject] $MySqlCon,
-		   [parameter(Mandatory = $true)][string] $PathCover,
-		   [parameter(Mandatory = $true)][string] $MD5)
-	If (!($PathCover.startswith($TXTNOPICTURE))){
-		If ((Get-ChildItem -LiteralPath $PathCover).Length -gt 400000){
-			$ResizeCov = ($env:TEMP+'\cover_resized.jpg');
-			$TempflCov = ($env:TEMP+'\cover.jpg')
-			Copy-Item -LiteralPath $PathCover -Destination $TempflCov -force
-			Resize-Image -Height 400 -MaintainRatio -ImagePath $TempflCov
-			$ImgBase64 = [Convert]::ToBase64String((Get-Content -LiteralPath $ResizeCov -Encoding byte));
-			If (Test-Path $ResizeCov) { Remove-Item -literalPath $ResizeCov};
-		} Else {
-			$ImgBase64 = [Convert]::ToBase64String((Get-Content -LiteralPath $PathCover -Encoding byte));
-		}
-		$Requete = "DELETE FROM $Tbl_Covers WHERE ``MD5``= '$MD5'";
-		$Result = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $Requete;
-		$Requete = "INSERT INTO $Tbl_Covers (``MD5``,``Cover64``) VALUES ('$MD5','$ImgBase64')";
-		$Result = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $Requete;
-	}
-}
-
-# Write Cover
-Function Covers-ToMySQL{
-	param ([parameter(Mandatory = $true)][PSObject] $MySqlCon,
-		   [parameter(Mandatory = $true)][string] $PathCover,
-		   [parameter(Mandatory = $true)][string] $MD5,
-		   [parameter(Mandatory = $false)][Switch] $Mini)
-	If (!($PathCover.startswith($TXTNOPICTURE))){
-		# cover
-		$rand = New-Object System.Random
-		$ResizeCov = $env:TEMP+'\cover_resized_'+[string]$rand.next(100000,9999999)+'.jpg';
-		$TempflCov = $env:TEMP+'\cover_temp_'+[string]$rand.next(100000,9999999)+'.jpg';
-		Copy-Item -LiteralPath $PathCover -Destination $TempflCov -force
-		If (!($Mini)){
-			If ((Get-ChildItem -LiteralPath $PathCover).Length -gt 400000){
-				Resize-Image -OutputPath $ResizeCov -Height 400 -MaintainRatio -ImagePath $TempflCov
-				$Cover = [Convert]::ToBase64String((Get-Content -LiteralPath $ResizeCov -Encoding byte));
-			} Else {
-				$Cover = [Convert]::ToBase64String((Get-Content -LiteralPath $TempflCov -Encoding byte));
-			}
-			If (Test-Path $ResizeCov) { Remove-Item -literalPath $ResizeCov};
-			# sql
-			$Requete = "DELETE FROM $Tbl_Covers WHERE ``MD5``= '$MD5'";
-			$Result = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $Requete;
-			$Requete = "INSERT INTO $Tbl_Covers (``MD5``,``Cover64``) VALUES ('$MD5','$Cover')";
-			$Result = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $Requete;
-		} 
-		Resize-Image -OutputPath $ResizeCov -Height 150 -Width 150 -ImagePath $TempflCov
-		$CMini = [Convert]::ToBase64String((Get-Content -LiteralPath $ResizeCov -Encoding byte));
-		If (Test-Path $ResizeCov) { Remove-Item -literalPath $ResizeCov};
-		If (Test-Path $TempflCov) { Remove-Item -literalPath $TempflCov};
-		# sql
-		$Requete = "UPDATE $Tbl_Covers SET ``MiniCover64``='$CMini' WHERE ``MD5``= '$MD5'";
-		$Result = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $Requete;
-		# test
-		#$Content = [System.Convert]::FromBase64String($CMini)
-		#Set-Content -Path ($env:TEMP+'\cover-essai.jpg') -Value $Content -Encoding Byte	
-	}
-}
-
-
 # Write-Host Waiting
 Function Super-Waiting{
 	param ([parameter(Mandatory = $False)][Int32]  $Seconds=5,
@@ -1301,112 +1229,5 @@ Function PurgeLog{
 	$nbfiles = (Get-ChildItem -LiteralPath ($Path) -file | Where-Object { ($_.name -match $NameLog) } | Measure-Object).count
 	If ($nbfiles -gt $Retention){
 		Get-ChildItem -LiteralPath ($Path) -file | Where-Object { ($_.name -match $NameLog) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Retention) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname} | Out-Null
-	}
-}
-
-# resize picture
-<#
-.SYNOPSIS
-   Resize an image
-.DESCRIPTION
-   Resize an image based on a new given height or width or a single dimension and a maintain ratio flag.
-   The execution of this CmdLet creates a new file named "OriginalName_resized" and maintains the original
-   file extension
-.PARAMETER Width
-   The new width of the image. Can be given alone with the MaintainRatio flag
-.PARAMETER Height
-   The new height of the image. Can be given alone with the MaintainRatio flag
-.PARAMETER ImagePath
-   The path to the image being resized
-.PARAMETER MaintainRatio
-   Maintain the ratio of the image by setting either width or height. Setting both width and height and also this parameter
-   results in an error
-.PARAMETER Percentage
-   Resize the image *to* the size given in this parameter. It's imperative to know that this does not resize by the percentage but to the percentage of
-   the image.
-.EXAMPLE
-   Resize-Image -Height 45 -Width 45 -ImagePath "Path/to/image.jpg"
-.EXAMPLE
-   Resize-Image -Height 45 -MaintainRatio -ImagePath "Path/to/image.jpg"
-.EXAMPLE
-   #Resize to 50% of the given image
-   Resize-Image -Percentage 50 -ImagePath "Path/to/image.jpg"
-.NOTES
-   Written By:
-   Christopher Walker
-#>
-Function Resize-Image() {
-	[CmdLetBinding(
-		SupportsShouldProcess=$true,
-		PositionalBinding=$false,
-		ConfirmImpact="Medium",
-		DefaultParameterSetName="Absolute"
-	)]
-	Param (
-		[Parameter(Mandatory=$True)]
-		[ValidateScript({
-			$_ | ForEach-Object {
-				Test-Path $_
-			}
-		})][String[]]$ImagePath,
-		[Parameter(Mandatory=$True)][String[]]$OutputPath,
-		[Parameter(Mandatory=$False)][Switch]$MaintainRatio,
-		[Parameter(Mandatory=$False, ParameterSetName="Absolute")][Int]$Height,
-		[Parameter(Mandatory=$False, ParameterSetName="Absolute")][Int]$Width,
-		[Parameter(Mandatory=$False, ParameterSetName="Percent")][Double]$Percentage
-	)
-	Begin {
-		If ($Width -and $Height -and $MaintainRatio) {
-			Throw "Absolute Width and Height cannot be given with the MaintainRatio parameter."
-		}
- 
-		If (($Width -xor $Height) -and (-not $MaintainRatio)) {
-			Throw "MaintainRatio must be set with incomplete size parameters (Missing height or width without MaintainRatio)"
-		}
- 
-		If ($Percentage -and $MaintainRatio) {
-			Write-Warning "The MaintainRatio flag while using the Percentage parameter does nothing"
-		}
-	}
-	Process {
-		ForEach ($Image in $ImagePath) {
-			$Path = (Resolve-Path $Image).Path
-			$OldImage = New-Object -TypeName System.Drawing.Bitmap -ArgumentList $Path
-			$OldHeight = $OldImage.Height
-			$OldWidth = $OldImage.Width
- 
-			If ($MaintainRatio) {
-				$OldHeight = $OldImage.Height
-				$OldWidth = $OldImage.Width
-				If ($Height) {
-					$Width = $OldWidth / $OldHeight * $Height
-				}
-				If ($Width) {
-					$Height = $OldHeight / $OldWidth * $Width
-				}
-			}
- 
-			If ($Percentage) {
-				$Percentage = ($Percentage / 100)
-				$Height = $OldHeight * $Percentage
-				$Width = $OldWidth * $Percentage
-			}
- 
-			$Bitmap = New-Object -TypeName System.Drawing.Bitmap -ArgumentList $Width, $Height
-			$NewImage = [System.Drawing.Graphics]::FromImage($Bitmap)
-			 
-			#Retrieving the best quality possible
-			$NewImage.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
-			$NewImage.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
-			$NewImage.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
-			 
-			$NewImage.DrawImage($OldImage, $(New-Object -TypeName System.Drawing.Rectangle -ArgumentList 0, 0, $Width, $Height))
-			If ($PSCmdlet.ShouldProcess("Resized image based on $Path", "saved to $OutputPath")) {
-				$Bitmap.Save($OutputPath)
-			}
-			$OldImage.Dispose()
-			$Bitmap.Dispose()
-			$NewImage.Dispose()
-		}
 	}
 }

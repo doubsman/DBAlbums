@@ -7,15 +7,16 @@ from hashlib import md5
 from datetime import datetime
 from time import ctime
 from PyQt5.QtCore import QObject, pyqtSignal, QSettings
-from DBFunction import getListFolders, getListFiles, getFolderSize
-from DBDatabase import buildlistcategory
+from DBFunction import getListFolders, getListFiles, getFolderSize, buildlistcategory
 
 
 class BuildInvent(QObject):
 	# signal
 	signalthunchgt = pyqtSignal(int, str)		# signal browse
 	# global
-	families =  {"Physique":"Colonne", "Label/Physique":"Labels", "Download":"Download" }
+	families =  {	"Physique"			: "Colonne", 
+					"Label/Physique"	: "Labels", 
+					"Download"			: "Download" }
 	mask_amedias = ('.flac','.ape','.wma','.mp3','.wv','.aac','.mpc')
 	A_POSITIO = (	'Category', 'Family', 'Name', 'Label', 'ISRC',
 					'Qty_Tracks', 'Qty_CD', 'Year', 'Length', 'Size',
@@ -192,7 +193,6 @@ class BuildInvent(QObject):
 		return list_idupdate + list_pathadd + list_iddelet
 
 
-
 class BuildActions(QObject):
 	# signal
 	signalthunchgt = pyqtSignal(int, str)		# signal action database
@@ -231,9 +231,9 @@ class BuildActions(QObject):
 		#updatealbum = self.albumExist(folder)
 		pass
 	
-def deleteAlbum(self, idcd):
-	"""Delete Album in database."""
-	pass
+	def deleteAlbum(self, idcd):
+		"""Delete Album in database."""
+		pass
 
 
 

@@ -8,9 +8,10 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import (Qt, qDebug, pyqtSignal, qInstallMessageHandler,
 						pyqtSlot, QSettings, QThread)
 from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle
+from PyQt5.QtSql import QSqlQuery
 from DBFunction import (buildCommandPowershell, centerWidget, qtmymessagehandler,
 						displayCounters, openFolder, ThemeColors)
-from DBDatabase import connectDatabase, getrequest, buildTabFromRequest
+from DBDatabase import DBFuncBase, connectDatabase, getrequest
 from DBTProcess import DBProcessGui
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpFunc import BuildInvent
@@ -65,6 +66,8 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	TITL_PROG = TITL_PROG + " : Update Database"
 	WIDT_MAIN = int(configini.value('wgui_width'))
 	HEIG_MAIN = int(configini.value('wgui_heigh'))
+	WIDT_PICM = int(configini.value('thun_csize'))
+	TEXT_NCO = configini.value('text_nocov')
 	WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
 	UNIX_ICO = path.join(PATH_PROG, 'IMG', configini.value('unix_icone'))
 	THEM_COL = configini.value('name_theme')
@@ -96,6 +99,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		
 		self.btn_quit.clicked.connect(lambda e: self.destroy())
 		self.btn_action.clicked.connect(self.realiseActions)
+		self.btn_actioncover.clicked.connect(self.releaseInsertCovers)
 		self.btn_action.setEnabled(False)
 		self.lcdTime.setSegmentStyle(QLCDNumber.Flat)
 		self.applyTheme()
@@ -128,9 +132,10 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		
 		self.btn_quit.setText('Quit')
 		if len(self.prepareInvent.list_action) > 0:
-			self.btn_action.setEnabled(True)
 			if self.checkBoxStart.isChecked():
 				self.realiseActions()
+			else:
+				self.btn_action.setEnabled(True)	
 	
 	def onBuild(self, percent, message):
 		"""Display advance browsinf folders."""
@@ -148,14 +153,14 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	def realiseActions(self):
 		"""Execute Actions Update."""
 		self.btn_action.setEnabled(False)
-		listactions = self.prepareInvent.getListIds()
+		listactionspwr = self.prepareInvent.getListIds()
 		# release Actions
-		if listactions:
+		if listactionspwr:
 			lstcate = []
 			lstfami = []
 			lstacti = []
 			lstpath = []
-			for pathadd in listactions:
+			for pathadd in listactionspwr:
 				lstcate.append(pathadd[0])
 				lstfami.append(pathadd[1])
 				lstacti.append(pathadd[2])
@@ -169,6 +174,17 @@ class InventGui(QWidget, Ui_UpdateWindows):
 														'-Force')
 			DBProcessGui(exeprocess, params, 'Add ' + displayCounters(len(lstacti), "Album "), self.WIDT_MAIN, self.HEIG_MAIN-150)
 			#pro.signalend.connect(lambda: self.parent.connectEnvt(True))
+	
+	def releaseInsertCovers(self):
+		request = "SELECT DBALBUMS.ID_CD, DBALBUMS.Cover FROM DBALBUMS " \
+					"LEFT JOIN DBPIXMAPS ON DBALBUMS.ID_CD = DBPIXMAPS.ID_CD " \
+					"WHERE DBPIXMAPS.ID_CD IS NULL AND DBALBUMS.Cover<>'{textnopic}'"
+		request = request.format(textnopic = self.TEXT_NCO)
+		query = QSqlQuery(request)
+		query.exec_()
+		while query.next():
+			DBFuncBase().imageToSql( query.value(1), query.value(0), self.WIDT_PICM)
+			
 
 	def getFolder(self):
 		"""Open album folder."""
@@ -205,14 +221,15 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.tbl_update.setStyleSheet(gridstyle)
 
 
+
 if __name__ == '__main__':
 	app = QApplication(argv)
 	# debug
 	qInstallMessageHandler(qtmymessagehandler)
-	envt = 'LOSSLESS'
+	envt = 'LOSSLESS_TEST'
 	boolconnect, dbbase, modsql, rootDk, listcategory = connectDatabase(envt)
 	req = getrequest('albumslist', modsql)
-	list_albums = buildTabFromRequest(req)
+	list_albums = DBFuncBase().sqlToArray(req)
 	curthe = ThemeColors('brown')
 	prepareInvent = InventGui(list_albums,
 								listcategory,

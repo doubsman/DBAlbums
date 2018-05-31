@@ -57,6 +57,9 @@ class Ui_UpdateWindows(object):
         self.checkBoxStart.setChecked(True)
         self.checkBoxStart.setObjectName("checkBoxStart")
         self.horizontalLayout_2.addWidget(self.checkBoxStart)
+        self.btn_actioncover = QtWidgets.QPushButton(UpdateWindows)
+        self.btn_actioncover.setObjectName("btn_actioncover")
+        self.horizontalLayout_2.addWidget(self.btn_actioncover)
         self.btn_action = QtWidgets.QPushButton(UpdateWindows)
         self.btn_action.setObjectName("btn_action")
         self.horizontalLayout_2.addWidget(self.btn_action)
@@ -74,8 +77,9 @@ class Ui_UpdateWindows(object):
         UpdateWindows.setWindowTitle(_translate("UpdateWindows", "Form"))
         self.lab_result.setText(_translate("UpdateWindows", "TextLabel"))
         self.lab_advance.setText(_translate("UpdateWindows", "TextLabel"))
-        self.checkBoxStart.setText(_translate("UpdateWindows", "Start Update directly"))
-        self.btn_action.setText(_translate("UpdateWindows", "Update"))
+        self.checkBoxStart.setText(_translate("UpdateWindows", "Start directly"))
+        self.btn_actioncover.setText(_translate("UpdateWindows", "Insert Image"))
+        self.btn_action.setText(_translate("UpdateWindows", "Release"))
         self.btn_quit.setText(_translate("UpdateWindows", "Abort"))
 
 

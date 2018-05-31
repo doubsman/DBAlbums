@@ -1,9 +1,11 @@
-INSTALLATION.......................................................
+INSTALLATION PYTHON LIBS...........................................
 -------------------------------------------------------------------
 for Python 3.6.0 installation modules for Windows
 	pip install pymysql (mysql)
 	pip install pypyodbc (sql server)
 	pip install pillow
+	pip install mutagen
+	pip install CueParser
 	pip install pyQT5
 	pip install pyqtdeploy
 	pip install cx_Freeze
@@ -17,6 +19,7 @@ for Python 3 installation modules for Debian9
 	apt-get install python3-pil
 	apt-get install python3-pil.imagetk
 	apt-get install python3-pyqt5.qtmultimedia
+	apt-get install python3-mutagen ????
 	pip3 install SIP
 	pip3 install pyqt5
 	apt-get install libqt5multimedia5-plugins

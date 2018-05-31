@@ -28,20 +28,22 @@ class CoverViewGui(QWidget):
 	def __init__(self, cover, namealbum, w, h, parent=None):
 		super(CoverViewGui, self).__init__(parent)
 		self.resize(w, h)
+		self.setMaximumSize(w, h)
+		self.setMinimumSize(cover.width(), cover.height())
 		self.setWindowFlags(Qt.WindowStaysOnTopHint)
 		self.setWindowFlags(Qt.WindowTitleHint)
 		self.setWindowFlags(Qt.WindowSystemMenuHint)
 		self.setWindowFlags(Qt.WindowCloseButtonHint)
 		self.setWindowIcon(QIcon(WINS_ICO))
-		self.setWindowTitle("{name} - displaying[{w}x{h}] orignal[{wo}x{ho}]".format(w=w, h=h, name=namealbum, wo=str(cover.width()), ho=str(cover.height())))
 		centerWidget(self)
-		covdi = cover.scaled(w, h, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
-		label = QLabel(self)
-		label.setPixmap(covdi)
-		label.mousePressEvent = lambda e: self.destroy()
+		self.namealbum = namealbum
+		self.cover = cover
+		self.label = QLabel(self)
+		self.resizeEvent(None)
+		self.label.mousePressEvent = lambda e: self.destroy()
 		posit = QGridLayout(self)
 		posit.setContentsMargins(0, 0, 0, 0)
-		posit.addWidget(label, 0, 0)
+		posit.addWidget(self.label, 0, 0)
 		self.setLayout(posit)
 		self.show()
 
@@ -49,6 +51,17 @@ class CoverViewGui(QWidget):
 	def keyPressEvent(self, event):
 		if event.key() == Qt.Key_Escape:
 			self.destroy()
+
+	@pyqtSlot()
+	def resizeEvent(self, event):
+		"""Widget size move."""
+		covdi = self.cover.scaled(self.width(), self.height(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+		self.label.setPixmap(covdi)
+		self.setWindowTitle("{name} - displaying[{w}x{h}] orignal[{wo}x{ho}]".format(w = self.width(),
+																					h = self.height(),
+																					name = self.namealbum,
+																					wo = str(self.cover.width()),
+																					ho = str(self.cover.height())))
 
 
 # ##################################################################

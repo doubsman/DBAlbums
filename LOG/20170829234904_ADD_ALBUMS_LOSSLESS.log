@@ -1,0 +1,31 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170829234904
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt LOSSLESS -TypeOpe "UPDATE|UPDATE|UPDATE|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|DELETE" -AlbumInfos "792|555|3790|\\HOMERSTATION\_LossLess\TECHNO\Labels\Cocoon Recordings\[COR12117] Extrawelt & Dominik Eulberg - ...A Little Further (2014)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum V105] Extrawelt - Mind Over Doesn't Matter (2008)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - Rapafromage EP [Diva Records] (Italy) (2010)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - All Night Long! [Lift'In Rec] (2009)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - Chroniques Variees EP [Inlab Recordings] (2012)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - Et La Pluie Tomba EP [HGM037] (2012)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - Flocon de Neige [Hungry Music] (2014)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - Good Night My Love [Parquet Recordings] (2013)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - Mellotron [Hungry Music] (2016)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - Nocturne [Hungry Music] (2017)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - Purple Sunset [Stereo Seven Plus] (2010)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Worakls\Worakls - Toi - Cerisier Blanc [Hungry Music] (2015)|\\HOMERSTATION\_LossLess\TECHNO\Download\N'to - La Cle Des Champs [Hungry Music] (2016)|\\HOMERSTATION\_LossLess\TECHNO\Download\Stereoclip - Airplane Lesson [Hungry Music] (2017)|\\HOMERSTATION\_LossLess\TECHNO\Download\VA - Remix EP 01 [Hungry Music] (2016)|3135" -Category "TECHNO|TECHNO|TRANCE|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO" -Family "Download|Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Download|Download|Download|" -Force
+ID de processus : 15672
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 23:49:04 -- Durée: 0 sec -- START ADD_ALBUMS_LOSSLESS *******************************************************************************************
+********** 23:49:05 -- Durée: 1 sec -- UPDATE: 792 (1/19) **************************************************************************************************
+#year
+#pb tag track
+PS>Erreur de terminaison () : « Erreur système. »
+********** 23:49:06 -- Durée: 2 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170829234906
+**********************

@@ -93,7 +93,7 @@
        <item>
         <widget class="QCheckBox" name="checkBoxStart">
          <property name="text">
-          <string>Start Update directly</string>
+          <string>Start directly</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -101,9 +101,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="btn_actioncover">
+         <property name="text">
+          <string>Insert Image</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="btn_action">
          <property name="text">
-          <string>Update</string>
+          <string>Release</string>
          </property>
         </widget>
        </item>

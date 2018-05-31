@@ -1,0 +1,89 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170902125828
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt LOSSLESS -TypeOpe "UPDATE|UPDATE|UPDATE" -AlbumInfos "874|853|395" -Category "TECHNO|TECHNO|TECHNO" -Family "Download|Download|Physique" -Force
+ID de processus : 7052
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 12:58:28 -- Durée: 0 sec -- START ADD_ALBUMS_LOSSLESS *******************************************************************************************
+********** 12:58:29 -- Durée: 1 sec -- UPDATE: 874 (1/3) ***************************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+  874 VA - We Are Reasonable People          12      1        12          2 1998 01:03:39 \\HOMERSTATION\_LossLess\TECHNO\Download\VA - We Are Reasonable Peo...
+
+ODR_Track FIL_Track                                                       TAG_Albumartists TAG_Artists        TAG_Album                TAG_length TAG_Genres    
+--------- ---------                                                       ---------------- -----------        ---------                ---------- ----------    
+1-01      01 - Squarepusher & AFX - Freeman Hardy & Willis Acid.flac      Various          Squarepusher / AFX We Are Reasonable People 00:05:42   Techno/Drum...
+1-02      02 - Boards of Canada - Orange Romeda.flac                      Various          Boards Of Canada   We Are Reasonable People 00:04:51   Techno/Drum...
+1-03      03 - Broadcast - Hammer Without a Master.flac                   Various          Broadcast          We Are Reasonable People 00:04:59   Techno/Drum...
+1-04      04 - Plaid - Ilasas.flac                                        Various          Plaid              We Are Reasonable People 00:04:23   Techno/Drum...
+1-05      05 - Autechre - Stop Look Listen.flac                           Various          Autechre           We Are Reasonable People 00:07:26   Techno/Drum...
+1-06      06 - Nightmares on Wax - Fishtail Parker.flac                   Various          Nightmares On Wax  We Are Reasonable People 00:05:09   Techno/Drum...
+1-07      07 - Jimi Tenor - Wear My Bikini.flac                           Various          Jimi Tenor         We Are Reasonable People 00:04:13   Techno/Drum...
+1-08      08 - Plone - Plaything.flac                                     Various          Plone              We Are Reasonable People 00:04:15   Techno/Drum...
+1-09      09 - Red Snapper - 4 Dead Monks [original demo].flac            Various          Red Snapper        We Are Reasonable People 00:05:06   Techno/Drum...
+1-10      10 - Mira Calix - Umchunga Locks.flac                           Various          Mira Calix         We Are Reasonable People 00:04:51   Techno/Drum...
+1-11      11 - Two Lone Swordsmen - Circulation.flac                      Various          Two Lone Swordsmen We Are Reasonable People 00:06:53   Techno/Drum...
+1-12      12 - Mark Bell - A Salute to Those People Who Say Fuck You.flac Various          Mark Bell          We Are Reasonable People 00:05:50   Techno/Drum...
+********** 12:58:35 -- Durée: 7 sec -- UPDATE: 853 (2/3) ***************************************************************************************************
+
+ID_CD Name                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                               
+----- ----                 ---------- ------ --------- ---------- ---- ------   ----                                                               
+  853 The KLF - Chill Out          14      1         1          5 1990 00:44:20 \\HOMERSTATION\_LossLess\TECHNO\Download\The KLF - Chill Out (1990)
+
+ODR_Track FIL_Track                TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                ---------------- ----------- --------- ---------- ----------
+01        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:01:47             
+02        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:01:29             
+03        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:03:01             
+04        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:02:35             
+05        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:07:41             
+06        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:01:09             
+07        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:03:01             
+08        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:09:25             
+09        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:05:56             
+10        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:01:16             
+11        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:03:34             
+12        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:01:42             
+13        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:01:27             
+14        The KLF - Chill Out.flac KLF              KLF         Chill Out 00:00:17
+********** 12:58:40 -- Durée: 12 sec -- UPDATE: 395 (3/3) **************************************************************************************************
+
+ID_CD Name                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                        ---------- ------ --------- ---------- ---- ------   ----                                                                     
+  395 Dave Seaman - Back To Mine          11      1         1          1 1999 01:04:10 \\HOMERSTATION\_LossLess\TECHNO\Colonne 4\06\Dave Seaman - Back To Min...
+
+ODR_Track FIL_Track                       TAG_Albumartists TAG_Artists          TAG_Album                  TAG_length TAG_Genres
+--------- ---------                       ---------------- -----------          ---------                  ---------- ----------
+01        dave_seaman_-_back_to_mine.flac Various          Midi Brotherhood     Dave Seaman / Back to Mine 00:01:11             
+02        dave_seaman_-_back_to_mine.flac Various          Craig Armstrong      Dave Seaman / Back to Mine 00:06:03             
+03        dave_seaman_-_back_to_mine.flac Various          Genetica             Dave Seaman / Back to Mine 00:08:31             
+04        dave_seaman_-_back_to_mine.flac Various          Sasha                Dave Seaman / Back to Mine 00:08:25             
+05        dave_seaman_-_back_to_mine.flac Various          Global Communication Dave Seaman / Back to Mine 00:08:56             
+06        dave_seaman_-_back_to_mine.flac Various          Depeche Mode         Dave Seaman / Back to Mine 00:06:00             
+07        dave_seaman_-_back_to_mine.flac Various          Sneaker Pimps        Dave Seaman / Back to Mine 00:07:02             
+08        dave_seaman_-_back_to_mine.flac Various          Desert               Dave Seaman / Back to Mine 00:05:22             
+09        dave_seaman_-_back_to_mine.flac Various          D*Note               Dave Seaman / Back to Mine 00:03:29             
+10        dave_seaman_-_back_to_mine.flac Various          Angel Baby           Dave Seaman / Back to Mine 00:02:22             
+11        dave_seaman_-_back_to_mine.flac Various          Lamb                 Dave Seaman / Back to Mine 00:06:49
+      | remove \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\LOG\20170828015150_ADD_ALBUMS_LOSSLESS_TEST.log
+********** 12:58:43 -- Durée: 15 sec -- END ****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170902125843
+**********************

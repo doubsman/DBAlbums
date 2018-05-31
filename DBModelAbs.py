@@ -5,7 +5,7 @@ from os import path
 from PyQt5.QtCore import Qt, QVariant, QSettings, QModelIndex, pyqtSignal, QSortFilterProxyModel, QAbstractTableModel
 from PyQt5.QtSql import QSqlQuery
 from PyQt5.QtGui import QColor
-from DBDatabase import getrequest, buildTabFromRequest
+from DBDatabase import DBFuncBase, getrequest
 from DBFunction import convertUNC
 
 FILE__INI = 'DBAlbums.ini'
@@ -23,14 +23,14 @@ class ModelDBAbstract(QAbstractTableModel):
 	"""Abstract model for qtableview."""
 	signalthubuild = pyqtSignal(float, str)		# build base
 	
-	def __init__(self, parent, colsname, colswrapper, req):
+	def __init__(self, parent, colsname, req):
 		"""Init Model Abstract."""
 		super(ModelDBAbstract, self).__init__(parent)
 		self.parent = parent
-		self.myindex = colswrapper
 		self.columns = colsname
 		self.request = req
-		self.arraydata = None
+		self.arraydata = []
+		self.myindex = []
 		# fill array
 		self.refresh()
 	
@@ -39,7 +39,7 @@ class ModelDBAbstract(QAbstractTableModel):
 		query = QSqlQuery()
 		query.setForwardOnly(True)
 		query.exec_(self.request)
-		self.arraydata = []
+		self.myindex = DBFuncBase().getListColumns(query)
 		cpt = 1
 		tot = query.size() 
 		while query.next():
@@ -137,7 +137,7 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 	def updateFilters(self, filttext, filtcate=None, filtfami=None, filtyear=None, filtlabl=None, filtgenr=None, filtintk=False):
 		"""Update vars filter."""
 		if filtintk and filttext != '':
-			self.listidtxt = buildTabFromRequest((getrequest('tracksinsearch')).format(search=filttext))
+			self.listidtxt = DBFuncBase().sqlToArray((getrequest('tracksinsearch')).format(search=filttext))
 		else:
 			self.listidtxt = []
 		if  filtgenr is not None:
@@ -145,7 +145,7 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 				filtsearch = '%'+filtgenr+'%'
 			else:
 				filtsearch = ''
-			self.listidsty = buildTabFromRequest((getrequest('tracksgesearch')).format(search=filtsearch))
+			self.listidsty = DBFuncBase().sqlToArray((getrequest('tracksgesearch')).format(search=filtsearch))
 		else:
 			self.listidsty = []
 		self.filttext = filttext
@@ -240,11 +240,6 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 class ModelTableAlbumsABS(ModelDBAbstract):
 	
 	# ## definition list albums
-	# columns position 0-19 wrapper
-	A_POSITIO = (	'Category', 'Family', 'Name', 'Label', 'ISRC',
-					'Qty_Tracks', 'Qty_CD', 'Year', 'Length', 'Size',
-					'Score', 'Qty_covers', 'Date_Insert', 'Date_Modifs', 'Position',
-					'Typ_Tag', 'Path', 'Cover', 'MD5', 'ID_CD')
 	# columns grid name
 	A_COLNAME = (	'Category', 'Family', 'Name', 'Label', 'ISRC',
 					'Trk', 'CD', 'Year', 'Time', 'Size',
@@ -260,7 +255,7 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 	
 	def __init__(self, parent, *args):
 		"""Init model."""
-		super(ModelTableAlbumsABS, self).__init__(parent, self.A_COLNAME, self.A_POSITIO, *args)
+		super(ModelTableAlbumsABS, self).__init__(parent, self.A_COLNAME, *args)
 		# init sums
 		self.parent = parent
 		
@@ -304,10 +299,10 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 			albumname = albumname.replace(' - ', '\n')
 			# no cover or no display thunbnails covers (thnail_nod = 1)
 			if THUN_NOD == 0 or pathcover == TEXT_NCO:
-				Curalbmd5 = None
+				idcd = None
 			else:
-				Curalbmd5 = self.getData(index.row(), 'MD5')
-			listthun.append([Curalbmd5, index.row(), albumname])
+				idcd = self.getData(index.row(), 'ID_CD')
+			listthun.append([idcd, index.row(), albumname])
 		# add thunnails add
 		return listthun
 	
@@ -341,9 +336,6 @@ class ProxyModelTracks(QSortFilterProxyModel):
 class ModelTableTracksABS(ModelDBAbstract):
 	
 	# ## definition list tracks
-	# columns position 0-8 wrapper
-	T_POSITIO = (	'ODR_Track', 'TAG_Artists', 'TAG_Title', 'TAG_length',
-					'Score', 'TAG_Genres', 'FIL_Track', 'REP_Track', 'ID_TRACK')
 	# columns grid name
 	T_COLNAME = (	'N°', 'Artist', 'Title', 'Time',
 					'Score', 'Style', 'File', 'Folder', 'ID_TRACK')
@@ -354,7 +346,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 					
 	def __init__(self, parent, txtsearch, *args):
 		"""Init model."""
-		super(ModelTableTracksABS, self).__init__(parent, self.T_COLNAME, self.T_POSITIO, *args)
+		super(ModelTableTracksABS, self).__init__(parent, self.T_COLNAME, *args)
 		self.parent = parent
 		self.txtsearch = txtsearch	
 		

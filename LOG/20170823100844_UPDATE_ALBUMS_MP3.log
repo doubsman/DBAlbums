@@ -1,0 +1,893 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170823100845
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -listID_CD 2427,13188,13239,1451,6450,7687,7694,7686,12803,12733,12725,13798,13797,13689,13690,13768,13765,13794,13647,13635,13785,12923,13682,13786,13753,1034,1039,977,522,495,858,533,530,502,523,12966,13502,13496,13490,13489,13486,13484,13476,7689,7688,7685,7684,7683,7681,7680,7679,5836,5826,5784,5712,5457,5438,5115,4193 -Envt MP3 -Force
+ID de processus : 15592
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+                      
+                      
+                      
+                      
+### ### ###### ###### 
+### ### ## ###     ## 
+####### ##  ###   ### 
+####### ## ###  ####  
+####### #####      ## 
+##   ## ##         ###
+##   ## ##         ## 
+##   #####     #####
+********** 10:08:45 -- Durée: 1 sec -- START UPDATE_ALBUMS_MP3 *********************************************************************************************
+********** 10:08:46 -- Durée: 2 sec -- uptade album ID=2427 (1/59) *****************************************************************************************
+
+#year
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : [0680] Belinda Carlisle - A Place On Earth - The Greatest Hits (2CD Limited Edition) -> \\HOMERSTATION\_Mp3\Rock Artists\1000 Top Albums\[0680] Belinda Carlisle - A Place On Earth - The Greatest Hits (2CD Limited Edition)
+           | probleme Qty_CD virtuelcd:1|repcd:2
+
+ID_CD Name                                                                                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path            
+----- ----                                                                                 ---------- ------ --------- ---------- ---- ------   ----            
+ 2427 [0680] Belinda Carlisle - A Place On Earth - The Greatest Hits (2CD Limited Edition)         28      2        28          0    0 02:14:05 \\HOMERSTATIO...
+
+ODR_Track FIL_Track                                              TAG_Albumartists TAG_Artists      TAG_Album                                                    
+--------- ---------                                              ---------------- -----------      ---------                                                    
+2-01      01 - Heaven Is A Place On Earth (Heavenly Version).mp3                  Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-01      01 - Heaven Is A Place On Earth.mp3                                     Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-02      02 - I Get Weak (12' Version).mp3                                       Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-02      02 - I Get Weak.mp3                                                     Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-03      03 - Circle In The Sand (Beach Party Mix).mp3                           Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-03      03 - Circle In The Sand.mp3                                             Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-04      04 - Leave A Light On.mp3                                               Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-04      04 - World Without You (Extended Worldwide Mix).mp3                     Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+2-05      05 - (We Want) The Same Thing (Summer Remix).mp3                        Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-05      05 - La Luna.mp3                                                        Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-06      06 - (We Want) The Same Thing.mp3                                       Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-06      06 - Summer Rain (Justin Strauss Mix).mp3                               Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+2-07      07 - Live Your Life Be Free (Club Mix).mp3                              Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-07      07 - Summer Rain.mp3                                                    Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-08      08 - Live Your Life Be Free.mp3                                         Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-08      08 - Only A Dream.mp3                                                   Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-09      09 - Do You Feel Like I Feel .mp3                                       Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-09      09 - The Air You Breathe.mp3                                            Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+2-10      10 - Little Black Book (Little Black Mix).mp3                           Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-10      10 - Little Black Book.mp3                                              Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-11      11 - Big Scary Animal.mp3                                               Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-12      12 - In Too Deep.mp3                                                    Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-13      13 - California.mp3                                                     Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-14      14 - Always Breaking My Heart.mp3                                       Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-15      15 - Love In The Key Of C.mp3                                           Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-16      16 - Feels Like I've Known You Forever.mp3                              Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-17      17 - A Prayer For Everyone.mp3                                          Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-18      18 - All God's Children.mp3                                             Belinda Carlisle A Place On Earth - The Greatest Hits
+********** 10:09:02 -- Durée: 18 sec -- uptade album ID=13188 (2/59) ***************************************************************************************
+
+ID_CD Name                                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                             
+----- ----                                ---------- ------ --------- ---------- ---- ------   ----                                                             
+13188 Aphex Twin - Analogue Bubblebath 5           8      1         8          4 1995 00:45:08 \\HOMERSTATION\_Mp3\Techno Artists\Aphex Twin\Aphex Twin - Ana...
+
+ODR_Track FIL_Track                  TAG_Albumartists TAG_Artists TAG_Album             TAG_length TAG_Genres
+--------- ---------                  ---------------- ----------- ---------             ---------- ----------
+01        Aphex Twin 01 Untitled.mp3                  Aphex Twin  Analogue Bubblebath 5 00:09:21   Other     
+02        Aphex Twin 02 Untitled.mp3                  Aphex Twin  Analogue Bubblebath 5 00:05:57   Other     
+03        Aphex Twin 03 Untitled.mp3                  Aphex Twin  Analogue Bubblebath 5 00:00:33   Other     
+04        Aphex Twin 04 Untitled.mp3                  Aphex Twin  Analogue Bubblebath 5 00:04:26   Other     
+05        Aphex Twin 05 Untitled.mp3                  Aphex Twin  Analogue Bubblebath 5 00:06:44   Other     
+06        Aphex Twin 06 Untitled.mp3                  Aphex Twin  Analogue Bubblebath 5 00:06:19   Other     
+07        Aphex Twin 07 Untitled.mp3                  Aphex Twin  Analogue Bubblebath 5 00:04:54   Other     
+08        Aphex Twin 08 Untitled.mp3                  Aphex Twin  Analogue Bubblebath 5 00:06:53   Other
+********** 10:09:09 -- Durée: 25 sec -- uptade album ID=13239 (3/59) ***************************************************************************************
+
+ID_CD Name                                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                  
+----- ----                                           ---------- ------ --------- ---------- ---- ------   ----                                                  
+13239 Kruder & Dorfmeister - The K&D sessions (MPC)          21      2        21          2 1998 02:07:02 \\HOMERSTATION\_Mp3\Techno Artists\Kruder & Dorfmei...
+
+ODR_Track FIL_Track                                         TAG_Albumartists TAG_Artists        TAG_Album        TAG_length TAG_Genres 
+--------- ---------                                         ---------------- -----------        ---------        ---------- ---------- 
+2-01      01 - David Holmes - Gone.mpc                                       Kruder Dorfmeister The K&D Sessions 00:08:30   Drum & Bass
+1-01      01 - Roni Size - Heroes.mpc                                        Kruder Dorfmeister The K&D Sessions 00:06:31   Drum & Bass
+1-02      02 - Alex Reece - Jazz Master.mpc                                  Kruder Dorfmeister The K&D Sessions 00:08:21   Drum & Bass
+2-02      02 - Sofa Surfers - Sofa Rockers.mpc                               Kruder Dorfmeister The K&D Sessions 00:04:31   Drum & Bass
+1-03      03 - Count Basic - Speechless.mpc                                  Kruder Dorfmeister The K&D Sessions 00:06:38   Drum & Bass
+2-03      03 - Mama Oliver - Eastwest Stoned.mpc                             Kruder Dorfmeister The K&D Sessions 00:05:12   Drum & Bass
+2-04      04 - Bomb the Bass - Bug Powder Dust Dub.mpc                       Kruder Dorfmeister The K&D Sessions 00:06:21   Drum & Bass
+1-04      04 - Rocker's HiFi - Going Under.mpc                               Kruder Dorfmeister The K&D Sessions 00:08:38   Drum & Bass
+1-05      05 - Bomb the Bass - Bug Powder Dust.mpc                           Kruder Dorfmeister The K&D Sessions 00:07:21   Drum & Bass
+2-05      05 - Kruder & Dorfmeister - Boogie Woogie.mpc                      Kruder Dorfmeister The K&D Sessions 00:03:21   Drum & Bass
+1-06      06 - Aphrodelics - Rollin' on chrome.mpc                           Kruder Dorfmeister The K&D Sessions 00:05:40   Drum & Bass
+2-06      06 - SIN - Where Shall I Turn.mpc                                  Kruder Dorfmeister The K&D Sessions 00:05:54   Drum & Bass
+2-07      07 - Bone Thugs 'N Harmony - 1st Of Tha Month.mpc                  Kruder Dorfmeister The K&D Sessions 00:05:50   Drum & Bass
+1-07      07 - Depeche Mode - Useless.mpc                                    Kruder Dorfmeister The K&D Sessions 00:06:14   Drum & Bass
+1-08      08 - Count Basic - Gotta Jazz.mpc                                  Kruder Dorfmeister The K&D Sessions 00:05:33   Drum & Bass
+2-08      08 - Kruder & Dorfmeister - Lexicon.mpc                            Kruder Dorfmeister The K&D Sessions 00:01:07   Drum & Bass
+2-09      09 - Knowtoryous - Bomberclaad Joint.mpc                           Kruder Dorfmeister The K&D Sessions 00:03:48   Drum & Bass
+1-09      09 - Rainer Trüby Trio - Donaueschingen.mpc                        Kruder Dorfmeister The K&D Sessions 00:06:56   Drum & Bass
+1-10      10 - Lamb - Trans Fatty Acid.mpc                                   Kruder Dorfmeister The K&D Sessions 00:08:32   Drum & Bass
+2-10      10 - Rocker's HiFi - Going Under Evil.mpc                          Kruder Dorfmeister The K&D Sessions 00:04:31   Drum & Bass
+2-11      11 - Strange Cargo - Million Town.mpc                              Kruder Dorfmeister The K&D Sessions 00:07:33   Drum & Bass
+********** 10:09:20 -- Durée: 1 min(s) -- uptade album ID=1451 (4/59) **************************************************************************************
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : John Digweed - MMII (Mixed & Unmixed) -> \\HOMERSTATION\_Mp3\Techno Artists\John Digweed\John Digweed - MMII (Mixed & Unmixed)
+
+ID_CD Name                                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                           
+----- ----                                  ---------- ------ --------- ---------- ---- ------   ----                                                           
+ 1451 John Digweed - MMII (Mixed & Unmixed)          9      1         9          4 2002 02:26:24 \\HOMERSTATION\_Mp3\Techno Artists\John Digweed\John Digweed...
+
+ODR_Track FIL_Track                                                          TAG_Albumartists TAG_Artists         TAG_Album TAG_length TAG_Genres               
+--------- ---------                                                          ---------------- -----------         --------- ---------- ----------               
+1-01      01 - Bermuda Triangle - Mooger Fooger.mp3                          John Digweed     Bermuda Triangle    MMII      00:10:49   Progressive House Brea...
+1-02      02 - Pollon - Lonely Planet.mp3                                    John Digweed     Pollon              MMII      00:07:04   Progressive House Brea...
+1-03      03 - 108 Grand - Te Quiero (Darren Emerson Remix).mp3              John Digweed     108 Grand           MMII      00:09:45   Progressive House Brea...
+1-04      04 - Flash Brothers - Protect The Sense.mp3                        John Digweed     Flash Brothers      MMII      00:11:06   Progressive House Brea...
+1-05      05 - Spooky - Belong (Vocal Club Mix).mp3                          John Digweed     Spooky              MMII      00:08:44   Progressive House Brea...
+1-06      06 - Mandalay - Deep Love (Charlie May Remix).mp3                  John Digweed     Mandalay            MMII      00:08:19   Progressive House Brea...
+1-07      07 - Shakespear's Sister - Black Sky (Dub Extravaganza Part 2).mp3 John Digweed     Shakespear's Sister MMII      00:10:37   Progressive House Brea...
+1-08      08 - James Holden - I Have Put Out The Light.mp3                   John Digweed     James Holden        MMII      00:08:52   Progressive House Brea...
+1-09      John Digweed - MMII.mp3                                                             John Digweed        MMII      01:11:08   Progressive House Brea...
+********** 10:09:31 -- Durée: 1 min(s) -- uptade album ID=6450 (5/59) **************************************************************************************
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : [F188] Laurent Garnier - excess luggage Rexclub + BBC Mix -> \\HOMERSTATION\_Mp3\Techno Labels\F Communications\[F188] Laurent Garnier - excess luggage Rexclub + BBC Mix
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : [F188] Laurent Garnier - excess luggage Rexclub + BBC Mix -> \\HOMERSTATION\_Mp3\Techno Labels\F Communications\[F188] Laurent Garnier - excess luggage Rexclub + BBC Mix
+
+ID_CD Name                                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                              
+----- ----                                               ---------- ------ --------- ---------- ---- ------   ----                                              
+ 6450 Laurent Garnier - excess luggage Rexclub + BBC Mix         32      2        32          3 2003 02:22:27 \\HOMERSTATION\_Mp3\Techno Labels\F Communicati...
+
+ODR_Track FIL_Track                                            TAG_Albumartists TAG_Artists               TAG_Album      TAG_length TAG_Genres              
+--------- ---------                                            ---------------- -----------               ---------      ---------- ----------              
+2-01      01-Gil Scott-Heron - The Vulture.mpc                 Laurent Garnier  Gil Scott-Heron           Excess Luggage 00:04:35   House/Techno/Trance/Acid
+1-01      01-Scan X - Wasterland.mpc                           Laurent Garnier  Scan X                    Excess Luggage 00:06:05   House/Techno/Trance/Acid
+2-02      02-Don Byron - Alien.mpc                             Laurent Garnier  Don Byron                 Excess Luggage 00:04:23   House/Techno/Trance/Acid
+1-02      02-Laurent Garnier - Crispy Bacon.mpc                Laurent Garnier  Laurent Garnier           Excess Luggage 00:03:51   House/Techno/Trance/Acid
+1-03      03-Jeff Mills - The Bells.mpc                        Laurent Garnier  Jeff Mills                Excess Luggage 00:03:16   House/Techno/Trance/Acid
+2-03      03-Professor Griff - A.i.d.s.mpc                     Laurent Garnier  Professor Griff           Excess Luggage 00:01:11   House/Techno/Trance/Acid
+2-04      04-Funky Fresh Few Feat Wig - 24.7.mpc               Laurent Garnier  Funky Fresh Few           Excess Luggage 00:03:54   House/Techno/Trance/Acid
+1-04      04-Red Planet - Stardancer.mpc                       Laurent Garnier  Martian, The              Excess Luggage 00:05:00   House/Techno/Trance/Acid
+2-05      05-Clouddead - Grey.mpc                              Laurent Garnier  cLOUDDEAD                 Excess Luggage 00:00:59   House/Techno/Trance/Acid
+1-05      05-Marco Carola - Steam Ep , Middle 1.mpc            Laurent Garnier  Locomotive                Excess Luggage 00:02:14   House/Techno/Trance/Acid
+1-06      06-Technasia - Descent.mpc                           Laurent Garnier  Technasia                 Excess Luggage 00:05:54   House/Techno/Trance/Acid
+2-06      06-The Streets - Turn The Page.mpc                   Laurent Garnier  Streets, The              Excess Luggage 00:02:59   House/Techno/Trance/Acid
+1-07      07-Marshall Jefferson - The Cow.mpc                  Laurent Garnier  Marshall Jefferson        Excess Luggage 00:04:27   House/Techno/Trance/Acid
+2-07      07-Octave One - Black Water.mpc                      Laurent Garnier  Octave One                Excess Luggage 00:05:10   House/Techno/Trance/Acid
+2-08      08-Eric Borgo & Oxia - Freaky Games.mpc              Laurent Garnier  Eric Borgo & Oxia         Excess Luggage 00:04:37   House/Techno/Trance/Acid
+1-08      08-Ron Trent - Altered State.mpc                     Laurent Garnier  Ron Trent                 Excess Luggage 00:04:28   House/Techno/Trance/Acid
+2-09      09-Adonis - We're Rocking Down The House.mpc         Laurent Garnier  Adonis                    Excess Luggage 00:02:24   House/Techno/Trance/Acid
+1-09      09-Dj Gilb'r - Pressure (Laurent Garnier Remix).mpc  Laurent Garnier  DJ Gilb'R                 Excess Luggage 00:06:06   House/Techno/Trance/Acid
+2-10      10-Heiko Laux - Hypnomarchin'.mpc                    Laurent Garnier  Heiko Laux                Excess Luggage 00:04:22   House/Techno/Trance/Acid
+1-10      10-Jamies Anderson - Dolphin (Dave Angel Rework).mpc Laurent Garnier  Jamie Anderson            Excess Luggage 00:03:45   House/Techno/Trance/Acid
+1-11      11-T Quest - Upiter.mpc                              Laurent Garnier  T Quest                   Excess Luggage 00:05:08   House/Techno/Trance/Acid
+2-11      11-Ur 3000 - Inspiration.mpc                         Laurent Garnier  Underground Resistance    Excess Luggage 00:05:42   House/Techno/Trance/Acid
+2-12      12-Frank Hunter - The Shinobi.mpc                    Laurent Garnier  Frank Hunter              Excess Luggage 00:03:53   House/Techno/Trance/Acid
+1-12      12-Richard Bartz & Dj Hell - Take A Shot.mpc         Laurent Garnier  DJ Hell vs. Richard Bartz Excess Luggage 00:02:42   House/Techno/Trance/Acid
+2-13      13-Laurent Garnier - Sambou.mpc                      Laurent Garnier  Laurent Garnier           Excess Luggage 00:08:38   House/Techno/Trance/Acid
+1-13      13-Teste - The Wipe (Sam Dynamic).mpc                Laurent Garnier  Teste                     Excess Luggage 00:04:28   House/Techno/Trance/Acid
+2-14      14-Carlton - What's So Funny (Laughapella).mpc       Laurent Garnier  Carlton                   Excess Luggage 00:00:10   House/Techno/Trance/Acid
+1-14      14-Lil Louis And The World - French Kiss.mpc         Laurent Garnier  Lil Louis And The World   Excess Luggage 00:05:54   House/Techno/Trance/Acid
+1-15      15-Donna Summer - Love To Love You.mpc               Laurent Garnier  Donna Summer              Excess Luggage 00:07:40   House/Techno/Trance/Acid
+2-15      15-Laurent Garnier & Sangoma - First Reaction.mpc    Laurent Garnier  Laurent Garnier & Sangoma Excess Luggage 00:06:30   House/Techno/Trance/Acid
+2-16      16-Saul Williams - Tao Of Now.mpc                    Laurent Garnier  Saul Williams             Excess Luggage 00:03:55   House/Techno/Trance/Acid
+2-17      17-Orbital - Belfast.mpc                             Laurent Garnier  Orbital                   Excess Luggage 00:08:06   House/Techno/Trance/Acid
+********** 10:09:53 -- Durée: 1 min(s) -- uptade album ID=7687 (6/59) **************************************************************************************
+
+ID_CD Name                             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                
+----- ----                             ---------- ------ --------- ---------- ---- ------   ----                                                                
+ 7687 Marcin Czubala - The Octopus ep           2      1         2          2 2007 00:14:14 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 025] Marcin Cz...
+
+ODR_Track FIL_Track                                      TAG_Albumartists TAG_Artists    TAG_Album      TAG_length TAG_Genres
+--------- ---------                                      ---------------- -----------    ---------      ---------- ----------
+02        marcin czubala - consigliere [mobilee025].mp3                   marcin czubala the octopus ep 00:07:49   minimal   
+01        marcin czubala - copafamiglia [mobilee025].mp3                  marcin czubala the octopus ep 00:06:25   minimal
+********** 10:09:55 -- Durée: 1 min(s) -- uptade album ID=7694 (7/59) **************************************************************************************
+
+           | Correction DATE manquante [REM DATE 2008] ANNEE dossier (2008) <> ANNEE cue () : [mobilee cd004] Back To Back Vol Two - Mixed By Gummihz (2008) -> \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee cd004] Back To Back Vol Two - Mixed By Gummihz (2008)
+           | probleme Qty_CD virtuelcd:1|repcd:2
+
+ID_CD Name                                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                        
+----- ----                                     ---------- ------ --------- ---------- ---- ------   ----                                                        
+ 7694 Back To Back Vol Two - Mixed By Gummihz          10      2        10          1 2008 02:18:24 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee cd004]...
+
+ODR_Track FIL_Track                                   TAG_Albumartists       TAG_Artists TAG_Album                  TAG_length TAG_Genres
+--------- ---------                                   ----------------       ----------- ---------                  ---------- ----------
+1-01      01 - pan-pot feat. vincenzo - faces.mp3     Pan-Pot Feat. Vincenzo             back to back vol.02 (cd-1) 00:07:02             
+2-10      01 - the mix.mp3                            gummihz                gummihz     back to back vol.02 (cd-2) 01:10:40             
+1-02      02 - gummihz - song for a muse.mp3          Gummihz                            back to back vol.02 (cd-1) 00:07:16             
+1-03      03 - sebo k - too hot.mp3                   Sebo K                             back to back vol.02 (cd-1) 00:05:39             
+1-04      04 - anja schneider - belize.mp3            Anja Schneider                     back to back vol.02 (cd-1) 00:07:49             
+1-05      05 - marc antona - one more sugar.mp3       Marc Antona                        back to back vol.02 (cd-1) 00:06:47             
+1-06      06 - jennifer cardini - august in paris.mp3 Jennifer Cardini                   back to back vol.02 (cd-1) 00:08:39             
+1-07      07 - sleeper thief - cenotes.mp3            Sleeper Thief                      back to back vol.02 (cd-1) 00:08:29             
+1-08      08 - marco resmann - gouache.mp3            Marco Resmann                      back to back vol.02 (cd-1) 00:09:23             
+1-09      09 - gummihz - point of view.mp3            Gummihz                            back to back vol.02 (cd-1) 00:06:41
+********** 10:10:02 -- Durée: 1 min(s) -- uptade album ID=7686 (8/59) **************************************************************************************
+
+ID_CD Name                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                    
+----- ----                         ---------- ------ --------- ---------- ---- ------   ----                                                                    
+ 7686 Marco Resmann - Watercolour           2      1         2          3 2007 00:18:29 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 021] Marco Resmann...
+
+ODR_Track FIL_Track                               TAG_Albumartists TAG_Artists     TAG_Album      TAG_length TAG_Genres        
+--------- ---------                               ---------------- -----------     ---------      ---------- ----------        
+02        RESMANN,_Marco_-_Gouache_(original).mp3                  RESMANN, Marco  Watercolour EP 00:09:21   Minimal Tech House
+01        RESMANN,_Marco_-_Tempera_(original).mp3                  RESMANN, Marco  Watercolour EP 00:09:08   Minimal Tech House
+********** 10:10:16 -- Durée: 2 min(s) -- uptade album ID=12803 (9/59) *************************************************************************************
+
+ID_CD Name                                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                   
+----- ----                                          ---------- ------ --------- ---------- ---- ------   ----                                                   
+12803 VA - Goa Session Compiled By Liquid Soul-2CD          18      1        18          3 2014 02:22:33 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshin...
+
+ODR_Track FIL_Track                                                           TAG_Albumartists TAG_Artists                        TAG_Album                     
+--------- ---------                                                           ---------------- -----------                        ---------                     
+01        101-motion_drive_and_vertex_-_transcendence-gem.mp3                                  Motion Drive & Vertex              Goa Session Compiled By Liq...
+02        102-liquid_soul_-_i_see_the_spirit-gem.mp3                                           Liquid Soul                        Goa Session Compiled By Liq...
+03        103-liquid_soul_-_precious-gem.mp3                                                   Liquid Soul                        Goa Session Compiled By Liq...
+04        104-liquid_soul_and_dj_dream_-_liquid_dream-gem.mp3                                  Liquid Soul & Dj Dream             Goa Session Compiled By Liq...
+05        105-yotopia_-_misperception-gem.mp3                                                  Yotopia                            Goa Session Compiled By Liq...
+06        106-liquid_soul_and_electric_universe_-_liquid_universe-gem.mp3                      Liquid Soul & Electric Universe    Goa Session Compiled By Liq...
+07        107-zyce_and_talpa_-_rip_and_sweet-gem.mp3                                           Zyce & Talpa                       Goa Session Compiled By Liq...
+08        108-ticon_-_hops_and_hades-gem.mp3                                                   Ticon                              Goa Session Compiled By Liq...
+09        109-protonica_-_floating_point_(liquid_soul_remix)-gem.mp3                           Protonica                          Goa Session Compiled By Liq...
+01        201-bouncerz_-_mood_swing-gem.mp3                                                    Bouncerz                           Goa Session Compiled By Liq...
+02        202-invisible_reality_vs_kingpink_-_sun_explosion-gem.mp3                            Invisible Reality vs Kingpink      Goa Session Compiled By Liq...
+03        203-liquid_soul_and_zyce_feat._solar_kid_-_we_come_in_peace-gem.mp3                  Liquid Soul & Zyce Feat. Solar Kid Goa Session Compiled By Liq...
+04        204-liquid_soul_and_captain_hook_-_liquid_hook-gem.mp3                               Liquid Soul & Captain Hook         Goa Session Compiled By Liq...
+05        205-freq_-_dreambody_(liquid_soul_and_orison_remix)-gem.mp3                          Freq                               Goa Session Compiled By Liq...
+06        206-liquid_soul_and_symbolic_-_different_reality-gem.mp3                             Liquid Soul & Symbolic             Goa Session Compiled By Liq...
+07        207-gaudium_-_anyone_out_there-gem.mp3                                               Gaudium                            Goa Session Compiled By Liq...
+08        208-ilai_vs_vandeta_-_alien_disinformation-gem.mp3                                   Ilai vs Vandeta                    Goa Session Compiled By Liq...
+09        209-lifeforms_-_mind_experience-gem.mp3                                              Lifeforms                          Goa Session Compiled By Liq...
+********** 10:10:27 -- Durée: 2 min(s) -- uptade album ID=12733 (10/59) ************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+12733 VA - Goa Trance Vol. 17          18      1        18          3 2011 02:25:51 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)...
+
+ODR_Track FIL_Track                                                     TAG_Albumartists TAG_Artists         TAG_Album          TAG_length TAG_Genres 
+--------- ---------                                                     ---------------- -----------         ---------          ---------- ---------- 
+01        101-ovnimoon_-_gathering_of_angels_(zyce_remix)-gem.mp3                        Ovnimoon            Goa Trance Vol. 17 00:07:45   Psychedelic
+02        102-zyce_-_absorb_(manmachine_remix)-gem.mp3                                   Zyce                Goa Trance Vol. 17 00:09:29   Psychedelic
+03        103-sideform_-_legacy-gem.mp3                                                  Sideform            Goa Trance Vol. 17 00:09:01   Psychedelic
+04        104-u-recken_-_carousels-gem.mp3                                               U-Recken            Goa Trance Vol. 17 00:07:58   Psychedelic
+05        105-u-recken_vs._basic_-_georgina_(basic_remix)-gem.mp3                        U-Recken vs. Basic  Goa Trance Vol. 17 00:08:15   Psychedelic
+06        106-outsiders_-_new_dream_arrive-gem.mp3                                       Outsiders           Goa Trance Vol. 17 00:06:59   Psychedelic
+07        107-yahel_-_soul_(kamasutrance_remix)-gem.mp3                                  Yahel               Goa Trance Vol. 17 00:07:24   Psychedelic
+08        108-plastic_vibe_-_gray_skies-gem.mp3                                          Plastic Vibe        Goa Trance Vol. 17 00:08:39   Psychedelic
+09        109-project_redux_-_neverspace-gem.mp3                                         Project Redux       Goa Trance Vol. 17 00:06:33   Psychedelic
+10        201-motion_drive_-_in_the_dirt_(aerospace_remix)-gem.mp3                       Motion Drive        Goa Trance Vol. 17 00:08:58   Psychedelic
+11        202-interactive_noise_-_eternal_light-gem.mp3                                  Interactive Noise   Goa Trance Vol. 17 00:06:58   Psychedelic
+12        203-neelix_-_take_a_ride-gem.mp3                                               Neelix              Goa Trance Vol. 17 00:06:35   Psychedelic
+13        204-moontales_-_all_about_music-gem.mp3                                        Moontales           Goa Trance Vol. 17 00:07:57   Psychedelic
+14        205-klopfgeister_-_good_by_goa_(suduaya_remix)-gem.mp3                         Klopfgeister        Goa Trance Vol. 17 00:09:51   Psychedelic
+15        206-intense_sanity_-_feel_like_i_know_(reverse_remix)-gem.mp3                  Intense Sanity      Goa Trance Vol. 17 00:09:30   Psychedelic
+16        207-rocky_and_ace_ventura_-_serotonin_overdose-gem.mp3                         Rocky & Ace Ventura Goa Trance Vol. 17 00:08:18   Psychedelic
+17        208-infinity_-_free_frequency-gem.mp3                                          Infinity            Goa Trance Vol. 17 00:08:29   Psychedelic
+18        209-phaxe_-_twist_n_spin-gem.mp3                                               Phaxe               Goa Trance Vol. 17 00:07:10   Psychedelic
+********** 10:10:36 -- Durée: 2 min(s) -- uptade album ID=12725 (11/59) ************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+12725 VA - Goa Culture Vol. III-2CD          18      1        18          3 2011 02:23:14 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (an...
+
+ODR_Track FIL_Track                                            TAG_Albumartists TAG_Artists             TAG_Album            TAG_length TAG_Genres 
+--------- ---------                                            ---------------- -----------             ---------            ---------- ---------- 
+01        101-infinity_and_athena_etana_-_fuenja_magna-gem.mp3                  Infinity & Athena Etana Goa Culture Vol. III 00:07:57   Psychedelic
+02        102-ushika_-_blue_moment-gem.mp3                                      Ushika                  Goa Culture Vol. III 00:09:50   Psychedelic
+03        103-funk_truck_-_beyond_and_over-gem.mp3                              Funk Truck              Goa Culture Vol. III 00:07:53   Psychedelic
+04        104-solaris_vibe_-_rush_hour-gem.mp3                                  Solaris Vibe            Goa Culture Vol. III 00:06:46   Psychedelic
+05        105-sideform_-_high_priest-gem.mp3                                    Sideform                Goa Culture Vol. III 00:07:40   Psychedelic
+06        106-suntree_-_the_big_bang-gem.mp3                                    Suntree                 Goa Culture Vol. III 00:08:45   Psychedelic
+07        107-krunch_-_smooth-gem.mp3                                           Krunch                  Goa Culture Vol. III 00:07:02   Psychedelic
+08        108-basic_-_5ll-gem.mp3                                               Basic                   Goa Culture Vol. III 00:09:03   Psychedelic
+09        109-mind_complex_-_criminality_(part_2)-gem.mp3                       Mind Complex            Goa Culture Vol. III 00:07:49   Psychedelic
+10        201-zyce_-_consequences-gem.mp3                                       Zyce                    Goa Culture Vol. III 00:07:34   Psychedelic
+11        202-mindwave_-_inner_sense-gem.mp3                                    Mindwave                Goa Culture Vol. III 00:08:37   Psychedelic
+12        203-e-clip_-_midnight_express-gem.mp3                                 E-Clip                  Goa Culture Vol. III 00:07:49   Psychedelic
+13        204-middle_mode_-_deep_habits-gem.mp3                                 Middle Mode             Goa Culture Vol. III 00:08:16   Psychedelic
+14        205-manmachine_-_pretoria-gem.mp3                                     ManMachine              Goa Culture Vol. III 00:08:01   Psychedelic
+15        206-ovnimoon_and_rigel_-_we_burn_incense-gem.mp3                      Ovnimoon & Rigel        Goa Culture Vol. III 00:07:44   Psychedelic
+16        207-bitkit_-_global_quest_for_change-gem.mp3                          Bitkit                  Goa Culture Vol. III 00:07:23   Psychedelic
+17        208-micky_noise_-_miniballistic-gem.mp3                               Micky Noise             Goa Culture Vol. III 00:07:33   Psychedelic
+18        209-mind_complex_-_echoes_of_atlantis-gem.mp3                         Mind Complex            Goa Culture Vol. III 00:07:33   Psychedelic
+********** 10:10:46 -- Durée: 2 min(s) -- uptade album ID=13798 (12/59) ************************************************************************************
+
+ID_CD Name                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                        ---------- ------ --------- ---------- ---- ------   ----                                                                     
+13798 VA - YSE In The Box Vol 11          25      1        25          2 2017 03:23:13 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (angla...
+
+ODR_Track FIL_Track                                                 TAG_Albumartists TAG_Artists     TAG_Album              TAG_length TAG_Genres     
+--------- ---------                                                 ---------------- -----------     ---------              ---------- ----------     
+01        01 - Streamers - Power Of Emotion.mp3                     VA               Streamers       YSE In The Box Vol. 11 00:08:59   Psy, Goa Trance
+02        02 - Plastic Vibe - Clicktopya.mp3                        VA               Plastic Vibe    YSE In The Box Vol. 11 00:07:19   Psy, Goa Trance
+03        03 - Fire Starter - Shooting Stars.mp3                    VA               Fire Starter    YSE In The Box Vol. 11 00:07:57   Psy, Goa Trance
+04        04 - Plasma Corp - Next Level.mp3                         VA               Plasma Corp     YSE In The Box Vol. 11 00:09:09   Psy, Goa Trance
+05        05 - Simply Wave - Want To Be.mp3                         VA               Simply Wave     YSE In The Box Vol. 11 00:07:53   Psy, Goa Trance
+06        06 - The Chromatic - Everlasting.mp3                      VA               The Chromatic   YSE In The Box Vol. 11 00:08:18   Psy, Goa Trance
+07        07 - Lyctum - The Eclipse (feat. Sideform).mp3            VA               Lyctum          YSE In The Box Vol. 11 00:07:22   Psy, Goa Trance
+08        08 - Sonic Entity - Sonic Mode (feat. Middle Mode).mp3    VA               Sonic Entity    YSE In The Box Vol. 11 00:08:56   Psy, Goa Trance
+09        09 - Rigel - Dance Your Way To Heaven (feat Jonna Li).mp3 VA               Rigel           YSE In The Box Vol. 11 00:08:30   Psy, Goa Trance
+10        10 - Copycat - Elixir.mp3                                 VA               Copycat         YSE In The Box Vol. 11 00:07:36   Psy, Goa Trance
+11        11 - Sideform - Chameleon (Nerso Remix).mp3               VA               Sideform        YSE In The Box Vol. 11 00:06:52   Psy, Goa Trance
+12        12 - Static Movement - Monster.mp3                        VA               Static Movement YSE In The Box Vol. 11 00:09:19   Psy, Goa Trance
+13        13 - Saga - Brain Washer.mp3                              VA               Saga            YSE In The Box Vol. 11 00:08:52   Psy, Goa Trance
+14        14 - Tripy - Turn D Knob.mp3                              VA               Tripy           YSE In The Box Vol. 11 00:08:40   Psy, Goa Trance
+15        15 - Radial! - Watch Out.mp3                              VA               Radial!         YSE In The Box Vol. 11 00:08:18   Psy, Goa Trance
+16        16 - Tristate - Minute Dose.mp3                           VA               Tristate        YSE In The Box Vol. 11 00:06:52   Psy, Goa Trance
+17        17 - Sideform - Eternal Light.mp3                         VA               Sideform        YSE In The Box Vol. 11 00:07:52   Psy, Goa Trance
+18        18 - Rigel - Free Your Mind.mp3                           VA               Rigel           YSE In The Box Vol. 11 00:08:55   Psy, Goa Trance
+19        19 - E-Clip - Midnight Express.mp3                        VA               E-Clip          YSE In The Box Vol. 11 00:07:50   Psy, Goa Trance
+20        20 - Sonic Entity - Human Engineers.mp3                   VA               Sonic Entity    YSE In The Box Vol. 11 00:09:29   Psy, Goa Trance
+21        21 - Manmachine - Elves.mp3                               VA               ManMachine      YSE In The Box Vol. 11 00:08:06   Psy, Goa Trance
+22        22 - Sun Project - We Are Not Here (Groove Version).mp3   VA               Sun Project     YSE In The Box Vol. 11 00:07:56   Psy, Goa Trance
+23        23 - Champa - A Train Trip.mp3                            VA               Champa          YSE In The Box Vol. 11 00:07:22   Psy, Goa Trance
+24        24 - Twina - Get What You Give.mp3                        VA               Twina           YSE In The Box Vol. 11 00:06:58   Psy, Goa Trance
+25        25 - E-Clip - Chandra (Manmachine Remix).mp3              VA               E-Clip          YSE In The Box Vol. 11 00:07:56   Psy, Goa Trance
+********** 10:10:56 -- Durée: 2 min(s) -- uptade album ID=13797 (13/59) ************************************************************************************
+
+ID_CD Name                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                              
+----- ----                               ---------- ------ --------- ---------- ---- ------   ----                                                              
+13797 VA - Goa Session by Zen Mechanics          18      1        18          2 2017 02:29:56 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion...
+
+ODR_Track FIL_Track                                                                            TAG_Albumartists TAG_Artists     TAG_Album                    TAG
+                                                                                                                                                             _le
+                                                                                                                                                             ngt
+                                                                                                                                                             h  
+--------- ---------                                                                            ---------------- -----------     ---------                    ---
+01        01-zen_mechanics-mechanical_dreams-d0a441b9.mp3                                                       Zen Mechanics   Goa Session by Zen Mechanics 00:
+02        02-divination-caper_town-ae46d490.mp3                                                                 Divination      Goa Session by Zen Mechanics 00:
+03        03-yestermorrow-quantum_hologram-be412897.mp3                                                         Yestermorrow    Goa Session by Zen Mechanics 00:
+04        04-zentura-nova_era-8d153476.mp3                                                                      Zentura         Goa Session by Zen Mechanics 00:
+05        05-zen_mechanics-portals_of_perception-e894683f.mp3                                                   Zen Mechanics   Goa Session by Zen Mechanics 00:
+06        06-shanko-deep_space_traveler-d438b1ef.mp3                                                            Shanko          Goa Session by Zen Mechanics 00:
+07        07-nertum-stargazing-d1efdeaa.mp3                                                                     Nertum          Goa Session by Zen Mechanics 00:
+08        08-james_monro-expansion-bd4439e0.mp3                                                                 James Monro     Goa Session by Zen Mechanics 00:
+09        09-zen_mechanics-naked_stoned_and_exalted_(symbolic_and_audiotec_remix)-a644ca0f.mp3                  Zen Mechanics   Goa Session by Zen Mechanics 00:
+10        10-zentura-sonic_masala_(lifeforms_remix)-5f3b0c55.mp3                                                Zentura         Goa Session by Zen Mechanics 00:
+11        11-desert_dwellers-view_from_laniakea_(hujaboy_remix)-a0694b6d.mp3                                    Desert Dwellers Goa Session by Zen Mechanics 00:
+12        12-bumbling_loons-stingray-ebc0caf5.mp3                                                               Bumbling Loons  Goa Session by Zen Mechanics 00:
+13        13-humanoids-shamanic_cube-d76c94a2.mp3                                                               Humanoids       Goa Session by Zen Mechanics 00:
+14        14-vertical_mode-codes_of_dna-924ecd8e.mp3                                                            Vertical Mode   Goa Session by Zen Mechanics 00:
+15        15-divination-shot_in_the_dark-3aba1b5a.mp3                                                           Divination      Goa Session by Zen Mechanics 00:
+16        16-dual_resonance-dune-333723f8.mp3                                                                   Dual Resonance  Goa Session by Zen Mechanics 00:
+17        17-materia-complicated_arrangements-46fec3c8.mp3                                                      Materia         Goa Session by Zen Mechanics 00:
+18        18-brainiac-monstrum-a49011d9.mp3                                                                     Brainiac        Goa Session by Zen Mechanics 00:
+********** 10:11:16 -- Durée: 3 min(s) -- uptade album ID=13689 (14/59) ************************************************************************************
+
+ID_CD Name                                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                             
+----- ----                                ---------- ------ --------- ---------- ---- ------   ----                                                             
+13689 Parallel Dialog - Defined By Light           2      1         2          1 2017 00:14:33 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Uxmal Records (mexique)\...
+
+ODR_Track FIL_Track                               TAG_Albumartists TAG_Artists     TAG_Album        TAG_length TAG_Genres 
+--------- ---------                               ---------------- -----------     ---------        ---------- ---------- 
+1-01      01-parallel_dialog-defined_by_light.mp3                  Parallel Dialog Defined By Light 00:06:31   Psychedelic
+1-02      02-parallel_dialog-synapsis.mp3                          Parallel Dialog Defined By Light 00:08:03   Psychedelic
+********** 10:11:29 -- Durée: 3 min(s) -- uptade album ID=13690 (15/59) ************************************************************************************
+
+ID_CD Name                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                           
+----- ----                  ---------- ------ --------- ---------- ---- ------   ----                                                                           
+13690 Releasse - Andromeda           2      1         2          1 2017 00:14:34 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Uxmal Records (mexique)\[UXM282] Relea...
+
+ODR_Track FIL_Track                              TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres 
+--------- ---------                              ---------------- ----------- --------- ---------- ---------- 
+01        01-releasse_-_andromeda-barghest.mp3                    Releasse    Andromeda 00:06:39   Psychedelic
+02        02-releasse_-_cyborg_twin-barghest.mp3                  Releasse    Andromeda 00:07:55   Psychedelic
+********** 10:11:36 -- Durée: 3 min(s) -- uptade album ID=13768 (16/59) ************************************************************************************
+
+ID_CD Name                                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                            
+----- ----                                 ---------- ------ --------- ---------- ---- ------   ----                                                            
+13768 Ritmo - Adventures (Phanatic Remix)           1      1         1          1 2017 00:07:33 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danemark...
+
+ODR_Track FIL_Track                                           TAG_Albumartists TAG_Artists TAG_Album                   TAG_length TAG_Genres 
+--------- ---------                                           ---------------- ----------- ---------                   ---------- ---------- 
+01        01-ritmo_-_adventures_(phanatic_remix)-barghest.mp3                  Ritmo       Adventures (Phanatic Remix) 00:07:33   Psychedelic
+********** 10:11:41 -- Durée: 3 min(s) -- uptade album ID=13765 (17/59) ************************************************************************************
+
+ID_CD Name              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                               
+----- ----              ---------- ------ --------- ---------- ---- ------   ----                                                                               
+13765 VA - Dubiquinone          21      1        21          1 2017 01:57:51 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Hadra Records (france)\VA - Dubiquinone (2...
+
+ODR_Track FIL_Track                                                      TAG_Albumartists TAG_Artists         TAG_Album   TAG_length TAG_Genres
+--------- ---------                                                      ---------------- -----------         ---------   ---------- ----------
+01        01-torma_in_dub-interestelar_roots-5f646f63.mp3                                 Tor.Ma in Dub       Dubiquinone 00:06:12   Electronic
+02        02-add_simeon-anablue-fed1274f.mp3                                              Add Simeon          Dubiquinone 00:07:16   Electronic
+03        03-kaya_project-the_octagon_dub-a658927b.mp3                                    Kaya Project        Dubiquinone 00:06:13   Electronic
+04        04-uzul-ethnik_soul-0173d0b4.mp3                                                Uzul                Dubiquinone 00:03:49   Electronic
+05        05-bbrain-razaman_mash_it-a8124712.mp3                                          B.Brain             Dubiquinone 00:04:27   Electronic
+06        06-dubmatix-fly-efb98f1a.mp3                                                    Dubmatix            Dubiquinone 00:03:47   Electronic
+07        07-vibronics-mosiah-9e4861d6.mp3                                                Vibronics           Dubiquinone 00:04:03   Electronic
+08        08-vital_riddim-run_it-5b6bfb55.mp3                                             Vital Riddim        Dubiquinone 00:04:28   Electronic
+09        09-tetra_hydro_k-tetra_hadra_k-1314f18e.mp3                                     Tetra Hydro K       Dubiquinone 00:05:19   Electronic
+10        10-yumandub-follow_me-54d3a42d.mp3                                              Yuman'dub           Dubiquinone 00:04:20   Electronic
+11        11-step_high-aurora-374b5ef8.mp3                                                Step High           Dubiquinone 00:07:31   Electronic
+12        12-sea_side-tombstones_and_joints_at_punta_cometa-42981b52.mp3                  Sea Side            Dubiquinone 00:06:32   Electronic
+13        13-winston_dub_project-dub_awaken-b7bfdc12.mp3                                  Winston Dub Project Dubiquinone 00:04:50   Electronic
+14        14-saadji-nawa_atar_(bbrain_remix)-b45e9d1a.mp3                                 Saadji              Dubiquinone 00:04:39   Electronic
+15        15-vlastur_nuage-escalier-62958cdd.mp3                                          Vlastur, nUagE      Dubiquinone 00:05:07   Electronic
+16        16-drrtywulvz-liquid_dance-0ff12d4e.mp3                                         DRRTYWULVZ          Dubiquinone 00:04:53   Electronic
+17        17-smoke_sign_enki-there_and_back_again-f80990cd.mp3                            Smoke Sign, Enki    Dubiquinone 00:07:46   Electronic
+18        18-chris_komus-the_shortest_day_of_the_year-51e01f31.mp3                        Chris Komus         Dubiquinone 00:07:23   Electronic
+19        19-desert_dwellers-misty_mountain_(nanda_remix)-1b8ce49c.mp3                    Desert Dwellers     Dubiquinone 00:05:21   Electronic
+20        20-lakay-psyndi_dub-be087f36.mp3                                                Lakay               Dubiquinone 00:06:14   Electronic
+21        21-symbolico-knocking_from_inside-fbe95c70.mp3                                  Symbolico           Dubiquinone 00:07:42   Electronic
+********** 10:12:01 -- Durée: 3 min(s) -- uptade album ID=13794 (18/59) ************************************************************************************
+
+ID_CD Name                                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                     
+----- ----                                        ---------- ------ --------- ---------- ---- ------   ----                                                     
+13794 Mad Tribe - Amazing Tales From Outer Space           9      1         9          2 2017 01:13:44 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Tip Records (lon...
+
+ODR_Track FIL_Track                                                     TAG_Albumartists TAG_Artists TAG_Album                      TAG_length TAG_Genres 
+--------- ---------                                                     ---------------- ----------- ---------                      ---------- ---------- 
+01        01-mad_tribe_-_amazing_tales-gem.mp3                                           Mad Tribe   Amazing Tales From Outer Space 00:08:21   Psychedelic
+02        02-mad_tribe_-_mad_robots-gem.mp3                                              Mad Tribe   Amazing Tales From Outer Space 00:08:07   Psychedelic
+03        03-mad_tribe_-_out_of_this_world_(episodes_1_and_2)-gem.mp3                    Mad Tribe   Amazing Tales From Outer Space 00:08:42   Psychedelic
+04        04-mad_tribe_-_drop_the_bomb-gem.mp3                                           Mad Tribe   Amazing Tales From Outer Space 00:08:10   Psychedelic
+05        05-mad_tribe_-_electric_kool_a(c)id_test-gem.mp3                               Mad Tribe   Amazing Tales From Outer Space 00:07:44   Psychedelic
+06        06-mad_tribe_-_lsd_party_kicking_in-gem.mp3                                    Mad Tribe   Amazing Tales From Outer Space 00:08:36   Psychedelic
+07        07-mad_tribe_-_lsd_party_meltdown-gem.mp3                                      Mad Tribe   Amazing Tales From Outer Space 00:08:13   Psychedelic
+08        08-mad_tribe_-_joint_oclock-gem.mp3                                            Mad Tribe   Amazing Tales From Outer Space 00:07:40   Psychedelic
+09        09-mad_tribe_-_party_planners_(ft._electric_universe)-gem.mp3                  Mad Tribe   Amazing Tales From Outer Space 00:08:11   Psychedelic
+********** 10:12:24 -- Durée: 4 min(s) -- uptade album ID=13647 (19/59) ************************************************************************************
+
+ID_CD Name         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                                    
+----- ----         ---------- ------ --------- ---------- ---- ------   ----                                                                                    
+13647 D-Tek - PWM           2      1         2          3 2016 00:14:30 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Planet B.E.N. Records (tokyo-japan-germany)\[PB...
+
+ODR_Track FIL_Track                   TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres 
+--------- ---------                   ---------------- ----------- --------- ---------- ---------- 
+01        01-d-tek_-_pwm-barghest.mp3                  D-Tek       PWM       00:07:12   Psychedelic
+02        02-d-tek_-_u96-barghest.mp3                  D-Tek       PWM       00:07:17   Psychedelic
+********** 10:12:34 -- Durée: 4 min(s) -- uptade album ID=13635 (20/59) ************************************************************************************
+           | probleme Qty_CD virtuelcd:2|repcd:1
+
+ID_CD Name                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                              
+----- ----                               ---------- ------ --------- ---------- ---- ------   ----                                                              
+13635 VA - Mysteries Of Psytrance Vol 6          19      1        19          3 2017 02:33:44 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Ovnimoon Records (chili-u...
+
+ODR_Track FIL_Track                                                                     TAG_Albumartists TAG_Artists               TAG_Album                    
+--------- ---------                                                                     ---------------- -----------               ---------                    
+1-01      101-ovnimoon_-_the_source_(the_digital_blonde_rmx)-mycel.mp3                                   Ovnimoon                  Mysteries Of Psytrance Vol. 6
+1-02      102-spiritual_mode_-_universe_inside_you-mycel.mp3                                             Spiritual Mode            Mysteries Of Psytrance Vol. 6
+1-03      103-egoflame_-_breath_of_life-mycel.mp3                                                        Egoflame                  Mysteries Of Psytrance Vol. 6
+1-04      104-isralienn_and_fluxuss_-_the_human_centipede_vs_nozomi_shirayuki-mycel.mp3                  Isralienn & Fluxuss       Mysteries Of Psytrance Vol. 6
+1-05      105-kri_samadhi_-_exdisco-mycel.mp3                                                            Kri Samadhi               Mysteries Of Psytrance Vol. 6
+1-06      106-psilocybian_-_digital_forest_creatures-mycel.mp3                                           Psilocybian               Mysteries Of Psytrance Vol. 6
+1-07      107-random_-_no_more_mr._nice_psy-mycel.mp3                                                    Random                    Mysteries Of Psytrance Vol. 6
+1-08      108-rishi_-_shanti_matter-mycel.mp3                                                            Rishi                     Mysteries Of Psytrance Vol. 6
+1-09      109-moaiact_-_calculated-mycel.mp3                                                             Moaiact                   Mysteries Of Psytrance Vol. 6
+1-10      110-upavas_-_questionable_methods-mycel.mp3                                                    Upavas                    Mysteries Of Psytrance Vol. 6
+2-01      201-psydeva_-_clarity-mycel.mp3                                                                Psydeva                   Mysteries Of Psytrance Vol. 6
+2-02      202-life_extension_and_highwave_-_mind_control-mycel.mp3                                       Life Extension & Highwave Mysteries Of Psytrance Vol. 6
+2-03      203-supersonic_birds_-_fluorescence_from_india-mycel.mp3                                       Supersonic Birds          Mysteries Of Psytrance Vol. 6
+2-04      204-centavra_project_-_alien_moon-mycel.mp3                                                    Centavra Project          Mysteries Of Psytrance Vol. 6
+2-05      205-oxi_-_volcano-mycel.mp3                                                                    Oxi                       Mysteries Of Psytrance Vol. 6
+2-06      206-nerplex_-_dimension_of_time-mycel.mp3                                                      Nerplex                   Mysteries Of Psytrance Vol. 6
+2-07      207-ion_invader_-_because-mycel.mp3                                                            Ion Invader               Mysteries Of Psytrance Vol. 6
+2-08      208-hasche_-_jungle_of_clouds-mycel.mp3                                                        Hasche                    Mysteries Of Psytrance Vol. 6
+2-09      209-h-sunrise_-_immersium-mycel.mp3                                                            H-Sunrise                 Mysteries Of Psytrance Vol. 6
+********** 10:12:46 -- Durée: 4 min(s) -- uptade album ID=13785 (21/59) ************************************************************************************
+
+ID_CD Name                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                           
+----- ----                  ---------- ------ --------- ---------- ---- ------   ----                                                                           
+13785 2Spirals - Kundalini           7      1         7          1 2017 00:49:55 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Ovnimoon Records (chili-usa)\[OVNILP92...
+
+ODR_Track FIL_Track                            TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                            ---------------- ----------- --------- ---------- ----------
+01        01-2spirals-muladhara-9489a83b.mp3                    2Spirals    Kundalini 00:07:28   Electronic
+02        02-2spirals-svadhistana-1884d9c0.mp3                  2Spirals    Kundalini 00:06:34   Electronic
+03        03-2spirals-manipura-55b09260.mp3                     2Spirals    Kundalini 00:06:48   Electronic
+04        04-2spirals-anahata-a28f0046.mp3                      2Spirals    Kundalini 00:07:01   Electronic
+05        05-2spirals-vishudda-ecb1f6ab.mp3                     2Spirals    Kundalini 00:07:14   Electronic
+06        06-2spirals-ajna-4844fde6.mp3                         2Spirals    Kundalini 00:06:38   Electronic
+07        07-2spirals-sahasrara-7b567d82.mp3                    2Spirals    Kundalini 00:08:13   Electronic
+********** 10:13:05 -- Durée: 4 min(s) -- uptade album ID=12923 (22/59) ************************************************************************************
+
+ID_CD Name                                             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                
+----- ----                                             ---------- ------ --------- ---------- ---- ------   ----                                                
+12923 VA - Mechanics Of Awakening compiled By Nomolos           9      1         1          3 2011 01:16:28 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Zenon Recor...
+
+ODR_Track FIL_Track                              TAG_Albumartists TAG_Artists       TAG_Album                                  TAG_length TAG_Genres
+--------- ---------                              ---------------- -----------       ---------                                  ---------- ----------
+01        01-va_-_mechanics_of_awakening-upe.mp3 VA               Sensient          Mechanics of Awakening-Compiled by Nomolos 00:11:05             
+02        01-va_-_mechanics_of_awakening-upe.mp3 VA               Cujorius One      Mechanics of Awakening-Compiled by Nomolos 00:07:06             
+03        01-va_-_mechanics_of_awakening-upe.mp3 VA               Opsy              Mechanics of Awakening-Compiled by Nomolos 00:05:57             
+04        01-va_-_mechanics_of_awakening-upe.mp3 VA               Hefty Output      Mechanics of Awakening-Compiled by Nomolos 00:06:08             
+05        01-va_-_mechanics_of_awakening-upe.mp3 VA               Hypogeo           Mechanics of Awakening-Compiled by Nomolos 00:07:28             
+06        01-va_-_mechanics_of_awakening-upe.mp3 VA               Cold Project      Mechanics of Awakening-Compiled by Nomolos 00:08:47             
+07        01-va_-_mechanics_of_awakening-upe.mp3 VA               One Tasty Morsel  Mechanics of Awakening-Compiled by Nomolos 00:11:21             
+08        01-va_-_mechanics_of_awakening-upe.mp3 VA               Sonic Tickle      Mechanics of Awakening-Compiled by Nomolos 00:09:02             
+09        01-va_-_mechanics_of_awakening-upe.mp3 VA               Product Placement Mechanics of Awakening-Compiled by Nomolos 00:09:34
+********** 10:13:13 -- Durée: 4 min(s) -- uptade album ID=13682 (23/59) ************************************************************************************
+
+ID_CD Name                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                            ---------- ------ --------- ---------- ---- ------   ----                                                                 
+13682 Aquafeel - Shades Of Confusion           1      1         1          1 2017 00:06:29 \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TE...
+
+ODR_Track FIL_Track                                 TAG_Albumartists TAG_Artists TAG_Album           TAG_length TAG_Genres 
+--------- ---------                                 ---------------- ----------- ---------           ---------- ---------- 
+01        01-aquafeel_-_shades_of_confusion-gem.mp3                  Aquafeel    Shades Of Confusion 00:06:29   Psychedelic
+********** 10:13:17 -- Durée: 5 min(s) -- uptade album ID=13786 (24/59) ************************************************************************************
+
+ID_CD Name                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                              
+----- ----                               ---------- ------ --------- ---------- ---- ------   ----                                                              
+13786 Paradox Side - Rise Of The Planet           3      1         3          1 2017 00:21:21 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Power House Records (amer...
+
+ODR_Track FIL_Track                                       TAG_Albumartists TAG_Artists  TAG_Album          TAG_length TAG_Genres
+--------- ---------                                       ---------------- -----------  ---------          ---------- ----------
+01        01-paradox_side-rise_of_the_planet-9fa45c06.mp3                  Paradox Side Rise Of The Planet 00:06:51   Electronic
+02        02-paradox_side-evolution_seconds-3262efc9.mp3                   Paradox Side Rise Of The Planet 00:06:57   Electronic
+03        03-paradox_side-filtering_emotions-f5996e6a.mp3                  Paradox Side Rise Of The Planet 00:07:32   Electronic
+********** 10:13:27 -- Durée: 5 min(s) -- uptade album ID=13753 (25/59) ************************************************************************************
+
+ID_CD Name                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                        ---------- ------ --------- ---------- ---- ------   ----                                                                     
+13753 Kundalini - Bogluntanamera           2      1         2          1 2017 00:14:46 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Boom! records (netherlands)\[boo...
+
+ODR_Track FIL_Track                                  TAG_Albumartists TAG_Artists TAG_Album      TAG_length TAG_Genres 
+--------- ---------                                  ---------------- ----------- ---------      ---------- ---------- 
+01        01-kundalini_-_bogluntanamera-barghest.mp3                  Kundalini   Bogluntanamera 00:07:09   Psychedelic
+02        02-kundalini_-_peaky_woods-barghest.mp3                     Kundalini   Bogluntanamera 00:07:37   Psychedelic
+********** 10:13:33 -- Durée: 5 min(s) -- uptade album ID=1034 (26/59) *************************************************************************************
+
+ID_CD Name                                                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                        
+----- ----                                                     ---------- ------ --------- ---------- ---- ------   ----                                        
+ 1034 Carl Craig - More Songs About Food And Revolutionary Art         15      1        15          1 2003 01:14:00 \\HOMERSTATION\_Mp3\Acid\Carl Craig - Mor...
+
+ODR_Track FIL_Track                                                   TAG_Albumartists TAG_Artists TAG_Album                                   TAG_length TAG_Ge
+                                                                                                                                                          nres  
+--------- ---------                                                   ---------------- ----------- ---------                                   ---------- ------
+01        Carl Craig - 01. Es. 30.mp3                                                  Carl Craig  more songs about food and revolutionary art 00:02:27   misc  
+02        Carl Craig - 02. Televised Green Smoke.mp3                                   Carl Craig  more songs about food and revolutionary art 00:06:17   misc  
+03        Carl Craig - 03. Goodbye World.mp3                                           Carl Craig  more songs about food and revolutionary art 00:03:32   misc  
+04        Carl Craig - 04. Alien Talk.mp3                                              Carl Craig  more songs about food and revolutionary art 00:00:31   misc  
+05        Carl Craig - 05. Red Lights.mp3                                              Carl Craig  more songs about food and revolutionary art 00:07:40   misc  
+06        Carl Craig - 06. Dreamland.mp3                                               Carl Craig  more songs about food and revolutionary art 00:06:06   misc  
+07        Carl Craig - 07. Butterfly.mp3                                               Carl Craig  more songs about food and revolutionary art 00:07:30   misc  
+08        Carl Craig - 08. Act 2.mp3                                                   Carl Craig  more songs about food and revolutionary art 00:00:32   misc  
+09        Carl Craig - 09. Dominos.mp3                                                 Carl Craig  more songs about food and revolutionary art 00:07:02   misc  
+10        Carl Craig - 10. At Les.mp3                                                  Carl Craig  more songs about food and revolutionary art 00:06:09   misc  
+11        Carl Craig - 11. Suspiria.mp3                                                Carl Craig  more songs about food and revolutionary art 00:04:05   misc  
+12        Carl Craig - 12. As Time Goes By (Sitting Under A Tree).mp3                  Carl Craig  more songs about food and revolutionary art 00:05:13   misc  
+13        Carl Craig - 13. Attitude.mp3                                                Carl Craig  more songs about food and revolutionary art 00:03:01   misc  
+14        Carl Craig - 14. Frustration.mp3                                             Carl Craig  more songs about food and revolutionary art 00:06:58   misc  
+15        Carl Craig - 15. Food And Art (Spirit Of Revolution).mp3                     Carl Craig  more songs about food and revolutionary art 00:06:57   misc
+********** 10:13:40 -- Durée: 5 min(s) -- uptade album ID=1039 (27/59) *************************************************************************************
+
+ID_CD Name                             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                           
+----- ----                             ---------- ------ --------- ---------- ---- ------   ----                                                           
+ 1039 Storm # au Zenith (Paris) (MPC)          11      1        11          3 1995 01:09:01 \\HOMERSTATION\_Mp3\Acid\Storm # au Zenith (Paris) (MPC) (1995)
+
+ODR_Track FIL_Track                                                       TAG_Albumartists TAG_Artists                                     TAG_Album            
+--------- ---------                                                       ---------------- -----------                                     ---------            
+01        01-Fred 3 (Cari Lekebusch)-Clap your hands - Missile.mpc                         Fred 3 (Cari Lekebusch)                         Storm # au Zenith ...
+02        02-LFO-Tied up (Sweep Mix) - Warp.mpc                                            LFO                                             Storm # au Zenith ...
+03        03-Ralphie Dee-Blip Trip - Mentality.mpc                                         Ralphie Dee                                     Storm # au Zenith ...
+04        04-Silicium (Eric Napora-Chassang)-Arachnoid - Step 2 House.mpc                  Silicium (Eric Napora-Chassang)                 Storm # au Zenith ...
+05        05-Daft Punk-Rollin' and scratchin' - Soma.mpc                                   Daft Punk                                       Storm # au Zenith ...
+06        06-Subtractive Synthesis (Damon Wild)-3-2 - Synewave.mpc                         Subtractive Synthesis (Damon Wild)              Storm # au Zenith ...
+07        07-Dj Kevin-Un jeudi soir... - Unreleased.mpc                                    Dj Kevin                                        Storm # au Zenith ...
+08        08-Drax 3 (Thomas P. Heckmann)-Phosphene - Trope Recordings.mpc                  Drax 3 (Thomas P. Heckmann)                     Storm # au Zenith ...
+09        09-Talamus-Analorgy - Hexagonal.mpc                                              Talamus                                         Storm # au Zenith ...
+10        10-Dj Kortex-So what   - Unreleased.mpc                                          Dj Kortex                                       Storm # au Zenith ...
+11        11-Radio Mentale (Radio Mentale & Olivier Degorce).mpc                           Radio Mentale (Radio Mentale & Olivier Degorce) Storm # au Zenith ...
+********** 10:13:48 -- Durée: 5 min(s) -- uptade album ID=977 (28/59) **************************************************************************************
+
+ID_CD Name                                                                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                           
+----- ----                                                                  ---------- ------ --------- ---------- ---- ------   ----                           
+  977 Daft Punk - Tron Legacy (2010) Original Motion Picture Soundtrack OST         50      1        50          1 2010 02:14:10 \\HOMERSTATION\_Mp3\Electro\...
+
+ODR_Track FIL_Track                       TAG_Albumartists TAG_Artists TAG_Album                                        TAG_length TAG_Genres       
+--------- ---------                       ---------------- ----------- ---------                                        ---------- ----------       
+01        01 Overture.mp3                                  Daft Punk   TRON: Legacy                                     00:02:31   Bandes originales
+01        01-daft_punk-encom_part_i.mp3                    Daft Punk   Tron Legacy (Special Edition Bonus Disc) OST     00:03:53   Soundtrack       
+01        01overture.mp3                                   Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:02:28   Soundtrack       
+02        02 The Grid.mp3                                  Daft Punk   TRON: Legacy                                     00:01:37   Bandes originales
+02        02-daft_punk-encom_part_ii.mp3                   Daft Punk   Tron Legacy (Special Edition Bonus Disc) OST     00:02:18   Soundtrack       
+02        02-the_grid.mp3                                  Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:01:37   Soundtrack       
+03        03 The Son of Flynn.mp3                          Daft Punk   TRON: Legacy                                     00:01:36   Bandes originales
+03        03-daft_punk-round_one.mp3                       Daft Punk   Tron Legacy (Special Edition Bonus Disc) OST     00:01:41   Soundtrack       
+03        03-the_son_of_flynn.mp3                          Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:01:35   Soundtrack       
+04        04 Recognizer.mp3                                Daft Punk   TRON: Legacy                                     00:02:38   Bandes originales
+04        04-daft_punk-castor.mp3                          Daft Punk   Tron Legacy (Special Edition Bonus Disc) OST     00:02:19   Soundtrack       
+05        05 Armory.mp3                                    Daft Punk   TRON: Legacy                                     00:02:04   Bandes originales
+05        05-armory.mp3                                    Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:02:03   Soundtrack       
+05        05-daft_punk-reflections.mp3                     Daft Punk   Tron Legacy (Special Edition Bonus Disc) OST     00:02:42   Soundtrack       
+06        06 Arena.mp3                                     Daft Punk   TRON: Legacy                                     00:01:34   Bandes originales
+06        06-arena.mp3                                     Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:01:33   Soundtrack       
+07        07 Rinzler.mp3                                   Daft Punk   TRON: Legacy                                     00:02:18   Bandes originales
+07        07-rinzle.mp3                                    Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:02:18   Soundtrack       
+08        08 The Game Has Changed.mp3                      Daft Punk   TRON: Legacy                                     00:03:26   Bandes originales
+08        08-the_game_has_changed.mp3                      Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:03:26   Soundtrack       
+09        09 Outlands.mp3                                  Daft Punk   TRON: Legacy                                     00:02:43   Bandes originales
+09        09-outlands.mp3                                  Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:02:43   Soundtrack       
+10        10 Adagio for Tron.mp3                           Daft Punk   TRON: Legacy                                     00:04:12   Bandes originales
+10        10-adagio_for_tron.mp3                           Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:04:11   Soundtrack       
+11        11 Nocturne.mp3                                  Daft Punk   TRON: Legacy                                     00:01:42   Bandes originales
+11        11-nocturne.mp3                                  Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:01:42   Soundtrack       
+12        12 End of Line.mp3                               Daft Punk   TRON: Legacy                                     00:02:37   Bandes originales
+12        12-end_of_line.mp3                               Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:02:37   Soundtrack       
+13        13 Derezzed.mp3                                  Daft Punk   TRON: Legacy                                     00:01:45   Bandes originales
+13        13-derezzed.mp3                                  Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:01:44   Soundtrack       
+14        14 Fall.mp3                                      Daft Punk   TRON: Legacy                                     00:01:23   Bandes originales
+14        14-fall.mp3                                      Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:01:23   Soundtrack       
+15        15 Solar Sailer.mp3                              Daft Punk   TRON: Legacy                                     00:02:43   Bandes originales
+15        15-solar_sailer.mp3                              Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:02:42   Soundtrack       
+16        16 Rectifier.mp3                                 Daft Punk   TRON: Legacy                                     00:02:15   Bandes originales
+16        16-rectifier.mp3                                 Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:02:14   Soundtrack       
+17        17 Disc Wars.mp3                                 Daft Punk   TRON: Legacy                                     00:04:12   Bandes originales
+17        17-disc_wars.mp3                                 Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:04:12   Soundtrack       
+18        18 C.L.U..mp3                                    Daft Punk   TRON: Legacy                                     00:04:40   Bandes originales
+18        18-c.l.u.mp3                                     Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:04:39   Soundtrack       
+19        19 Arrival.mp3                                   Daft Punk   TRON: Legacy                                     00:02:01   Bandes originales
+19        19-arrival.mp3                                   Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:02:01   Soundtrack       
+20        20 Flynn Lives.mp3                               Daft Punk   TRON: Legacy                                     00:03:23   Bandes originales
+20        20-flynn_lives.mp3                               Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:03:22   Soundtrack       
+21        21 Tron Legacy (End Titles).mp3                  Daft Punk   TRON: Legacy                                     00:03:18   Bandes originales
+21        21-tron_legacy_(end_titles).mp3                  Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:03:18   Soundtrack       
+22        22 Finale.mp3                                    Daft Punk   TRON: Legacy                                     00:04:24   Bandes originales
+22        22-finale.mp3                                    Daft Punk   Tron Legacy (Original Motion Picture Soundtrack) 00:04:23   Soundtrack       
+23        23 Father and Son.mp3                            Daft Punk   TRON: Legacy                                     00:03:13   Bandes originales
+24        24 Outlands, Pt. II.mp3                          Daft Punk   TRON: Legacy                                     00:02:54   Bandes originales
+********** 10:14:02 -- Durée: 5 min(s) -- uptade album ID=522 (29/59) **************************************************************************************
+
+ID_CD Name                                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                        
+----- ----                                     ---------- ------ --------- ---------- ---- ------   ----                                                        
+  522 Audision - Surface to Surface [and015cd]         12      1        12          3 2009 01:13:07 \\HOMERSTATION\_Mp3\Techno\Audision - Surface to Surface ...
+
+ODR_Track FIL_Track                              TAG_Albumartists TAG_Artists TAG_Album          TAG_length TAG_Genres
+--------- ---------                              ---------------- ----------- ---------          ---------- ----------
+01        01-audision--ffm_by_night-dh.mp3                        Audision    Surface To Surface 00:08:09   House     
+02        02-audision--prelude-dh.mp3                             Audision    Surface To Surface 00:06:11   House     
+03        03-audision--beta_range-dh.mp3                          Audision    Surface To Surface 00:08:37   House     
+04        04-audision--aurora-dh.mp3                              Audision    Surface To Surface 00:06:21   House     
+05        05-audision--red_sky-dh.mp3                             Audision    Surface To Surface 00:06:16   House     
+06        06-audision--phase_flow-dh.mp3                          Audision    Surface To Surface 00:07:28   House     
+07        07-audision--interlude-dh.mp3                           Audision    Surface To Surface 00:03:12   House     
+08        08-audision--mind_journey-dh.mp3                        Audision    Surface To Surface 00:05:30   House     
+09        09-audision--industry_park-dh.mp3                       Audision    Surface To Surface 00:04:17   House     
+10        10-audision--outside_my_window-dh.mp3                   Audision    Surface To Surface 00:06:07   House     
+11        11-audision--outro-dh.mp3                               Audision    Surface To Surface 00:03:11   House     
+12        12-audision--forty_one_spalding-dh.mp3                  Audision    Surface To Surface 00:07:49   House
+********** 10:14:10 -- Durée: 5 min(s) -- uptade album ID=495 (30/59) **************************************************************************************
+
+ID_CD Name                                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                      
+----- ----                                       ---------- ------ --------- ---------- ---- ------   ----                                                      
+  495 Abe Duque - Whe The Fever Breaks [ADR-016]         14      1        14          3 2006 01:12:45 \\HOMERSTATION\_Mp3\Techno\Abe Duque - Whe The Fever Br...
+
+ODR_Track FIL_Track                                                         TAG_Albumartists TAG_Artists TAG_Album                                              
+--------- ---------                                                         ---------------- ----------- ---------                                              
+01        Abe Duque - 01 - I'm Not Your Baby (with Tijana T.).mp3                            Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+02        Abe Duque - 02 - Whe The Fever Breaks.mp3                                          Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+03        Abe Duque - 03 - Disco Nights (with Blake Baxter).mp3                              Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+04        Abe Duque - 04 - Ghost Dance (with Tijana T.).mp3                                  Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+05        Abe Duque - 05 - Pounce.mp3                                                        Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+06        Abe Duque - 06 - Who's Got Da Flave Again (with Blake Baxter).mp3                  Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+07        Abe Duque - 07 - Turn Down The Lights (with Acid Maria).mp3                        Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+08        Abe Duque - 08 - Let Go.mp3                                                        Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+09        Abe Duque - 09 - Goldstar.mp3                                                      Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+10        Abe Duque - 10 - Following Conditions (with Gennaro Le Fosse).mp3                  Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+11        Abe Duque - 11 - Outlook.mp3                                                       Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+12        Abe Duque - 12 - From Fire of Flame.mp3                                            Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+13        Abe Duque - 13 - Consult.mp3                                                       Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+14        Abe Duque - 14 - Take Me to Heaven (with Gennaro Le Fosse).mp3                     Abe Duque   Abe Duque - Whe The Fever Breaks (ADR-016) 2006 Abe ...
+********** 10:14:18 -- Durée: 6 min(s) -- uptade album ID=858 (31/59) **************************************************************************************
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : U60311 Compilation Techno Division Vol 3 Mixed by Carl Cox -> \\HOMERSTATION\_Mp3\Techno\U60311 Compilation Techno Division Vol 3 Mixed by Carl Cox
+
+ID_CD Name                                                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                      
+----- ----                                                       ---------- ------ --------- ---------- ---- ------   ----                                      
+  858 U60311 Compilation Techno Division Vol 3 Mixed by Carl Cox          2      1         2          1    0 02:00:05 \\HOMERSTATION\_Mp3\Techno\U60311 Compi...
+
+ODR_Track FIL_Track                                                 TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                                                 ---------------- ----------- --------- ---------- ----------
+00        U60311.Compilation.Techno.Division.Vol.3.Carl.Cox.CD1.mp3                                        01:00:41             
+00        U60311.Compilation.Techno.Division.Vol.3.Carl.Cox.CD2.mp3                                        00:59:23
+********** 10:14:21 -- Durée: 6 min(s) -- uptade album ID=533 (32/59) **************************************************************************************
+
+ID_CD Name                   Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                   
+----- ----                   ---------- ------ --------- ---------- ---- ------   ----                                                   
+  533 Booka Shade - Memento          14      1        14          3 2004 01:01:45 \\HOMERSTATION\_Mp3\Techno\Booka Shade - Memento (2004)
+
+ODR_Track FIL_Track                                 TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                                 ---------------- ----------- --------- ---------- ----------
+01        01 - Booka Shade - Vertigo.mp3                             Booka Shade Memento   00:06:42   Electronic
+02        02 - Booka Shade - Double identity.mp3                     Booka Shade Memento   00:05:02   Electronic
+03        03 - Booka Shade - Memento.mp3                             Booka Shade Memento   00:04:33   Electronic
+04        04 - Booka Shade - On and on.mp3                           Booka Shade Memento   00:04:39   Electronic
+05        05 - Booka Shade - Friend for a night.mp3                  Booka Shade Memento   00:06:02   Electronic
+06        06 - Booka Shade - Mr. torrance.mp3                        Booka Shade Memento   00:02:33   Electronic
+07        07 - Booka Shade - Frantic.mp3                             Booka Shade Memento   00:05:11   Electronic
+08        08 - Booka Shade - Something physical.mp3                  Booka Shade Memento   00:04:27   Electronic
+09        09 - Booka Shade - s.t.a.r.r.z.mp3                         Booka Shade Memento   00:06:11   Electronic
+10        10 - Booka Shade - Larmee des ombres.mp3                   Booka Shade Memento   00:01:40   Electronic
+11        11 - Booka Shade - Cha.mp3                                 Booka Shade Memento   00:03:49   Electronic
+12        12 - Booka Shade - 16 mm.mp3                               Booka Shade Memento   00:00:54   Electronic
+13        13 - Booka Shade - Noisy man.mp3                           Booka Shade Memento   00:03:22   Electronic
+14        14 - Booka Shade - Moonstruck.mp3                          Booka Shade Memento   00:06:39   Electronic
+********** 10:14:32 -- Durée: 6 min(s) -- uptade album ID=530 (33/59) **************************************************************************************
+
+ID_CD Name                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                       
+----- ----                       ---------- ------ --------- ---------- ---- ------   ----                                                       
+  530 Bloody Mary - Black pearl          13      1        13          3 2009 01:25:16 \\HOMERSTATION\_Mp3\Techno\Bloody Mary - Black pearl (2009)
+
+ODR_Track FIL_Track                                                TAG_Albumartists TAG_Artists TAG_Album   TAG_length TAG_Genres
+--------- ---------                                                ---------------- ----------- ---------   ---------- ----------
+01        01-Bloody Mary-Black Pearl.mp3                                            Bloody Mary Black pearl 00:06:36             
+02        02-Bloody Mary-Sed Non Satiata (Feat. Argenis Brito).mp3                  Bloody Mary Black pearl 00:06:30             
+03        03-Bloody Mary-Sinina.mp3                                                 Bloody Mary Black pearl 00:06:06             
+04        04-Bloody Mary-Moesta Et Errabunda.mp3                                    Bloody Mary Black pearl 00:06:52             
+05        05-Bloody Mary-Semper Eadem (Feat. Danton Eeeprom).mp3                    Bloody Mary Black pearl 00:05:39             
+06        06-Bloody Mary-Spleen.mp3                                                 Bloody Mary Black pearl 00:06:10             
+07        07-Bloody Mary-Duellum.mp3                                                Bloody Mary Black pearl 00:08:04             
+08        08-Bloody Mary-Confession.mp3                                             Bloody Mary Black pearl 00:06:19             
+09        09-Bloody Mary-A Une Passante.mp3                                         Bloody Mary Black pearl 00:05:18             
+10        10-Bloody Mary-Elevation.mp3                                              Bloody Mary Black pearl 00:03:37             
+11        11-Bloody Mary-Interlude.mp3                                              Bloody Mary Black pearl 00:08:01             
+12        12-Bloody Mary-Black Pearl (Sascha Funke Remix).mp3                       Bloody Mary Black pearl 00:08:01             
+13        13-Bloody Mary-Black Pearl (Jay Haze Edit).mp3                            Bloody Mary Black pearl 00:08:04
+********** 10:14:38 -- Durée: 6 min(s) -- uptade album ID=502 (34/59) **************************************************************************************
+
+ID_CD Name                                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                 
+----- ----                                            ---------- ------ --------- ---------- ---- ------   ----                                                 
+  502 Akiko Kiyama - 7 Years [District Of Corruption]         11      1        11          3 2008 01:11:52 \\HOMERSTATION\_Mp3\Techno\Akiko Kiyama - 7 Years ...
+
+ODR_Track FIL_Track                                       TAG_Albumartists TAG_Artists  TAG_Album                                           TAG_length TAG_Genre
+                                                                                                                                                       s        
+--------- ---------                                       ---------------- -----------  ---------                                           ---------- ---------
+01        Akiko Kiyama - 01 - Hakobi (801).mp3                             Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:06:55   Electr...
+02        Akiko Kiyama - 02 - Ant.mp3                                      Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:06:36   Electr...
+03        Akiko Kiyama - 03 - I Was Weak in the Knees.mp3                  Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:06:04   Electr...
+04        Akiko Kiyama - 04 - Isotape.mp3                                  Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:06:11   Electr...
+05        Akiko Kiyama - 05 - Scattered.mp3                                Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:06:39   Electr...
+06        Akiko Kiyama - 06 - Bite a Plum.mp3                              Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:08:12   Electr...
+07        Akiko Kiyama - 07 - Let Me Burn You Book.mp3                     Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:06:31   Electr...
+08        Akiko Kiyama - 08 - Kebbo in the Picture.mp3                     Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:06:20   Electr...
+09        Akiko Kiyama - 09 - Sirsana.mp3                                  Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:06:19   Electr...
+10        Akiko Kiyama - 10 - You Won't Speak to Me.mp3                    Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:05:51   Electr...
+11        Akiko Kiyama - 11 - The Innocent.mp3                             Akiko Kiyama Akiko Kiyama - 7 Years 2008 Kompakt Records by Dado 00:06:14   Electr...
+********** 10:14:46 -- Durée: 6 min(s) -- uptade album ID=523 (35/59) **************************************************************************************
+
+ID_CD Name                                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                          
+----- ----                                ---------- ------ --------- ---------- ---- ------   ----                                                          
+  523 Avicii - Levels  www.PsyNation.com           2      1         2          5 2011 00:09:32 \\HOMERSTATION\_Mp3\Techno\Avicii_-_Levels__www.PsyNation.com_
+
+ODR_Track FIL_Track                              TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                              ---------------- ----------- --------- ---------- ----------
+01        01. Avicii - Levels (Radio Edit).mp3   Avicii           Avicii      Levels    00:03:56   Electronic
+02        02. Avicii - Levels (Original Mix).mp3 Avicii           Avicii      Levels    00:05:36   Electronic
+********** 10:14:51 -- Durée: 6 min(s) -- uptade album ID=12966 (36/59) ************************************************************************************
+
+ID_CD Name                                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                    
+----- ----                                         ---------- ------ --------- ---------- ---- ------   ----                                                    
+12966 Deepchord presents Echospace - liumin (2CD)          21      2         2          7 2010 02:32:15 \\HOMERSTATION\_Mp3\Techno\Deepchord presents Echospa...
+
+ODR_Track FIL_Track                                           TAG_Albumartists             TAG_Artists                  TAG_Album      TAG_length TAG_Genres
+--------- ---------                                           ----------------             -----------                  ---------      ---------- ----------
+1-01      101-deepchord_presents_echospace-liumin.mp3         DeepChord presents Echospace DeepChord presents Echospace Liumin         00:05:42             
+1-02      101-deepchord_presents_echospace-liumin.mp3         DeepChord presents Echospace DeepChord presents Echospace Liumin         00:07:33             
+1-03      101-deepchord_presents_echospace-liumin.mp3         DeepChord presents Echospace DeepChord presents Echospace Liumin         00:09:24             
+1-04      101-deepchord_presents_echospace-liumin.mp3         DeepChord presents Echospace DeepChord presents Echospace Liumin         00:10:22             
+1-05      101-deepchord_presents_echospace-liumin.mp3         DeepChord presents Echospace DeepChord presents Echospace Liumin         00:12:04             
+1-06      101-deepchord_presents_echospace-liumin.mp3         DeepChord presents Echospace DeepChord presents Echospace Liumin         00:06:45             
+1-07      101-deepchord_presents_echospace-liumin.mp3         DeepChord presents Echospace DeepChord presents Echospace Liumin         00:10:28             
+1-08      101-deepchord_presents_echospace-liumin.mp3         DeepChord presents Echospace DeepChord presents Echospace Liumin         00:10:13             
+1-09      101-deepchord_presents_echospace-liumin.mp3         DeepChord presents Echospace DeepChord presents Echospace Liumin         00:00:00             
+2-01      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:08:06             
+2-02      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:06:46             
+2-03      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:04:32             
+2-04      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:04:22             
+2-05      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:03:58             
+2-06      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:06:55             
+2-07      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:06:10             
+2-08      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:06:40             
+2-09      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:13:43             
+2-10      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:04:07             
+2-11      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:07:54             
+2-12      201-deepchord_presents_echospace-liumin_reduced.mp3 DeepChord presents Echospace DeepChord presents Echospace Liumin Reduced 00:06:31
+********** 10:15:14 -- Durée: 6 min(s) -- uptade album ID=13502 (37/59) ************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Similar Minds [BMSS Records] (2017)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:15 -- Durée: 7 min(s) -- uptade album ID=13496 (38/59) ************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Somatic Cell - Radical Particle [0641243150826] (2017)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:15 -- Durée: 7 min(s) -- uptade album ID=13490 (39/59) ************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Mystic - Curious Effects [0641243150819] (2017)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:16 -- Durée: 7 min(s) -- uptade album ID=13489 (40/59) ************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Moon Tripper - Spiritual Space [0641243150901] (2017)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:16 -- Durée: 7 min(s) -- uptade album ID=13486 (41/59) ************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Kundalini - Miditating [0641243150840] (2017)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:17 -- Durée: 7 min(s) -- uptade album ID=13484 (42/59) ************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Exolon - Spiritual Voices [0641243150864] (2017)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:18 -- Durée: 7 min(s) -- uptade album ID=13476 (43/59) ************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Aumni - Vagabond [0641243150833] (2017)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:18 -- Durée: 7 min(s) -- uptade album ID=7689 (44/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 027] Marc Antona - One More Sugar
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:19 -- Durée: 7 min(s) -- uptade album ID=7688 (45/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 026] Anja Schneider - Loop De Mer [mobilee026]
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:20 -- Durée: 7 min(s) -- uptade album ID=7685 (46/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 020] Marcin Czubala - Super Constellation
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:21 -- Durée: 7 min(s) -- uptade album ID=7684 (47/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 019] Jennifer Cardini & Shonky - August In Paris
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:22 -- Durée: 7 min(s) -- uptade album ID=7683 (48/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 017] pan-pot & sebo k - mobilee back to back remix series vol. 03
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:22 -- Durée: 7 min(s) -- uptade album ID=7681 (49/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 009] gummihz - select & bounce 2006
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:23 -- Durée: 7 min(s) -- uptade album ID=7680 (50/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 005] Pan-Pot - Obscenity EP
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:24 -- Durée: 7 min(s) -- uptade album ID=7679 (51/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 003] Anja Schneider & Sebo K - Side Leaps & Rancho Relaxo
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:24 -- Durée: 7 min(s) -- uptade album ID=5836 (52/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2016\Lupin - Dreamblaster [0641243150659] (2016)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:24 -- Durée: 7 min(s) -- uptade album ID=5826 (53/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2016\Dark Soho - ReForm [0641243150710] (2016)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:26 -- Durée: 7 min(s) -- uptade album ID=5784 (54/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2015\Lupin - Ritmo Galactico (2015)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:26 -- Durée: 7 min(s) -- uptade album ID=5712 (55/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2014\Champa - Hiya Hiya [BMSS Records] (2014)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:27 -- Durée: 7 min(s) -- uptade album ID=5457 (56/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2012\ManMachine_-_Animate_Reality_(BMSSDigiSun011)-WEB-2012-gEm
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:27 -- Durée: 7 min(s) -- uptade album ID=5438 (57/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2012\Hypnocoustics_-_Ashtamangala_2012
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:27 -- Durée: 7 min(s) -- uptade album ID=5115 (58/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2011\Atma - Music Revolution WEB (BMSS Records)(2011)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:28 -- Durée: 7 min(s) -- uptade album ID=4193 (59/59) *************************************************************************************
+...path modified \\HOMERSTATION\_Mp3\Psytrance\_years\2007\Psyground_-_The_Hill-Promo-2007-BMSS-CD
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 10:15:29 -- Durée: 7 min(s) -- END **************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170823101529
+**********************

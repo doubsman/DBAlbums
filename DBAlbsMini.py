@@ -6,7 +6,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QTableView, QPushButton,
 							QMenu, QLineEdit, QStyle, QAbstractItemView, QCompleter)
-from DBDatabase import connectDatabase, getrequest, extractCoverb64, buildTabFromRequest
+from DBDatabase import DBFuncBase, connectDatabase, getrequest
 from DBFunction import displayCounters, centerWidget, openFolder, ThemeColors
 from DBModelAbs import ModelTableAlbumsABS	# model tables
 from DBArtworks import CoverViewGui			# viewer image b64
@@ -53,7 +53,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		
 		boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.ENVT_DEF)
 		
-		autoList = buildTabFromRequest(getrequest('autocompletion', self.modsql))
+		autoList = DBFuncBase().sqlToArray(getrequest('autocompletion', self.modsql))
 		self.com_autcom = QCompleter(autoList, self.textsearch)
 		self.com_autcom.setCaseSensitivity(Qt.CaseInsensitive)
 		self.textsearch.setCompleter(self.com_autcom)
@@ -94,8 +94,8 @@ class DBAlbumsQT5Mini(QMainWindow):
 		indexes = self.model.SortFilterProxy.mapToSource(indexes[0])
 		self.currow = indexes.row()
 		albumname = self.model.getData(self.currow, 'Name')
-		curMd5 = self.model.getData(self.currow, 'MD5')
-		coveral = extractCoverb64(curMd5, self.PICM_NCO)
+		idcd = self.model.getData(self.currow, 'ID_CD')
+		coveral = DBFuncBase().sqlToPixmap(idcd, self.PICM_NCO)
 		CoverViewGui(coveral, albumname, self.h_main, self.h_main)
 	
 	def popUpTreeAlbums(self, position):

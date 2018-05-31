@@ -3,11 +3,10 @@
 
 from sys import argv, executable
 from os import system, path
-from base64 import b64decode
 from PyQt5.QtGui import QPixmap, QPainter, QFont
 from PyQt5.QtCore import Qt, pyqtSlot, QSize, pyqtSignal, QRect, QSettings, qDebug
 from PyQt5.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QScrollArea, QLayout, QLabel
-from DBDatabase import getrequest, buildTabFromRequest
+from DBDatabase import DBFuncBase, getrequest
 
 # path
 if getattr(system, 'frozen', False):
@@ -33,17 +32,17 @@ configini.endGroup()
 # ##################################################################
 class TNLabel(QLabel):
 	"""Build label from thunbnail."""
-	def __init__(self, parent, labelpixmap, labelmd5, labelsize, labelname, labeltext='', booltxt=False):
+	def __init__(self, parent, labelpixmap, labelid, labelsize, labelname, labeltext='', booltxt=False):
 		super(TNLabel,  self).__init__(parent)
 		self.parent = parent
 		# build picture
-		if labelmd5 is None and labelpixmap is None:
+		if labelid is None and labelpixmap is None:
 			# no cover : blank
 			labelpixmap = QPixmap(PICM_NCO)
 			booltxt = True
-		elif labelmd5 is not None:
-			# extract b64 picture
-			labelpixmap, booltxt = self.extractCoverb64(labelmd5)
+		elif labelid is not None:
+			# extract picture
+			labelpixmap, booltxt = self.extractCover(labelid)
 		# resize 
 		if labelpixmap.width() != labelsize or labelpixmap.height() != labelsize:
 			qDebug('resize picture')
@@ -80,21 +79,23 @@ class TNLabel(QLabel):
 		painter.end()
 		return labelpixmap
 
-	def extractCoverb64(self, md5, namerequest='minicover'):
-		"""Get base64 picture cover."""
-		request = (getrequest(namerequest)).format(MD5=md5)
+	def extractCover(self, idcd, namerequest='thumbnailpix'):
+		"""Get base picture cover."""
+		booltxt = True
+		request = (getrequest(namerequest)).format(id=idcd)
 		try:
-			coverb64 = buildTabFromRequest(request)[0]
-			cover = b64decode(coverb64)
-			labelpixmap = QPixmap()
-			labelpixmap.loadFromData(cover)
-			booltxt = False
+			cover = DBFuncBase().sqlToArray(request)
+			if len(cover) > 0:
+				labelpixmap = QPixmap()
+				labelpixmap.loadFromData(cover[0])
+				booltxt = False
+			else:
+				labelpixmap = QPixmap(PICM_NCO)
 		except:
 			pass
-			qDebug('err thunbnail read : '+str(md5))
+			qDebug('err thunbnail read : '+str(idcd))
 			labelpixmap = QPixmap(PICM_NCO)
-			booltxt = True
-		return (labelpixmap, booltxt)
+		return labelpixmap, booltxt
 
 
 # ##################################################################
@@ -161,7 +162,7 @@ class DBThunbnails(QWidget):
 		return (self.gridthunbnails.count())
 		
 	def addthunbails(self, listthunbnails, sizetn=None,  new=True, deb=0, fin=100, total=9999):
-		"""Build thunbails. list = [md5, id, labelname] or list = [image]."""
+		"""Build thunbails. list = [id, rowgrid, albumname] or list = [image]."""
 		qDebug("Start Add Thunbnails")
 		self.stopbuild = False
 		self.isbuilder = True
@@ -190,10 +191,10 @@ class DBThunbnails(QWidget):
 			# 2 modes : list or pathcover
 			if isinstance(thundesc, list):
 				# build cover b64 from md5
-				albummd5 = thundesc[0]
+				albumid = thundesc[0]
 				albumrow = thundesc[1]
 				albumname = (thundesc[2]).replace(' - ', '\n')
-				label = TNLabel(self.parent, None, albummd5, self.thunbsize,  albumrow, albumname)
+				label = TNLabel(self.parent, None, albumid, self.thunbsize,  albumrow, albumname)
 			else:
 				# only path cover
 				mythunb = QPixmap(listthunbnails[cpt])
@@ -212,7 +213,7 @@ class DBThunbnails(QWidget):
 		if total > fin:
 			# add for add more thunbnails
 			monimage = QPixmap(THUN_DBA)
-			mmessage = "{n} covers displaying \n Click for more...".format(n=str(fin))
+			mmessage = "{n} covers displaying \n Click for more...".format(n=str(self.getTotalThunbnails()))
 			label = TNLabel(self.parent, monimage, None, self.thunbsize, 999999, mmessage, True)
 			label.mousePressEvent = (lambda event, n=999999: self.onSelectThunbnail(n))
 			self.gridthunbnails.addWidget(label, self.currow, self.curcol)

@@ -1,0 +1,37 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170823200645
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt MP3 -TypeOpe UPDATE -AlbumInfos 13810
+ID de processus : 11032
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 20:06:45 -- Durée: 0 sec -- START ADD_ALBUMS_MP3 ************************************************************************************************
+********** 20:06:46 -- Durée: 1 sec -- UPDATE: 13810 (1/1) *************************************************************************************************
+
+ID_CD Name             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                          
+----- ----             ---------- ------ --------- ---------- ---- ------   ----                                                                          
+13810 nhar - hexoflip           2      1         2          1 2006 00:13:06 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 008] nhar - hexoflip (2006)
+
+ODR_Track FIL_Track                     TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                     ---------------- ----------- --------- ---------- ----------
+01        01 - nhar - hexoflip {2b}.mp3                  nhar        hexoflip  00:06:49   2b        
+02        02 - nhar - silkcut {2b}.mp3                   nhar        hexoflip  00:06:17   2b
+********** 20:06:52 -- Durée: 7 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170823200652
+**********************

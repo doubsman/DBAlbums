@@ -1,0 +1,1203 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170823204455
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt MP3 -TypeOpe "UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD" -AlbumInfos "2427|13239|1451|6450|858|\\HOMERSTATION\_Mp3\Psytrance\_years\2014\VA - Psy Trance Treasures Vol 2 (2014)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Deedrah, Shanti, MODERN8 - Soaring With The Angels EP (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Genetrick - In the Lions Den [DOPDIGI104] (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Oforia - Call To Mind (Original Mix) [MDMA Music] (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Universal Frequencies Vol  5 [Digital Om] (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Xerox - Piece of Mind [HMHD114] (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Progressive Package Compiled by DJ Arnox (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Records (germany)\[10123854] Katharsis And Boom Duck And Gravitech - El Acido (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Records (germany)\[10122789] Emphacis - Music Travel (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)\[YSE398] VA - Goa Culture Vol 25 (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)\[YSE-DEP-066] VA - Burning Spear (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Digital Nature (israel)\[DNDI183] Cathar - Strong Acid (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Uxmal Records (mexique)\[UXM294] Kedarnath - Between Worlds (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danemark)\[IBOGADIGITAL358] Vini Vici - Ravers Army (Original Mix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danemark)\[IBOGADIGITAL353] Ace Ventura And Rocky Tilbor - Dr Lupo (Rising Dust Remix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Prog On Syndicate (germany)\[10123975] Querox And Monod - Zaga (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Iono Music (germany)\[INM1DIGI268] Ilai, Atomizers - Say It Louder (Original Mix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR434] Ranji - Power of Acid (Pop Art Remix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR435] Zac DePetro And Matte - Chapter I (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR438] Titans - Eternal Vibrations (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR442] Berg And Zanon - Dugly Dagly (Feat  Trio Mandili) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR431] VA - Wild Vision (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Ovnimoon Records (chili-usa)\[OVNIEP252] Floating Planet - Peak Experience (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\DNA Records (israel)\[DND064] Quantum on DNA - Hellfire (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0133] Shake - Redemption (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0129] VA - Summer Festival Collection (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0130] Zyce and Suduaya - Pure Light (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0131] Flegma - Soul Protector (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0132] Talpa and Purple Hayes - Born this Way (2014)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Power House Records (american)\[PWRCD040] VA - Progress To Goa Vol 2 By Random And Dr Spook (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANODIGI130] Pogo & Djantrix - Rejoicer (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANODIGI131] Dickster & Space Tribe - Turn On The World EP (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANOCD052] VA - Nano Sonic Sound System Vol 5 (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150932] Shreder - Kawabunga (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150833] Aumni - Vagabond (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150864] Exolon - Spiritual Voices (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150857] H-Sunrise - Orange Pulsation (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150918] Ibojima - Mental Extension (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150840] Kundalini - Miditating (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150888] Mind Lab - Mind Sets (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150901] Moon Tripper - Spiritual Space (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150819] Mystic - Curious Effects (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150826] Somatic Cell - Radical Particle (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150710] Dark Soho - ReForm (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150659] Lupin - Dreamblaster (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN007] Hypnocoustics - Ashtamangala (2012)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN011] ManMachine - Animate Reality (2012)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD015] Lupin - Ritmo Galactico (2015)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN026] Champa - Hiya Hiya (2014)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD710] Psyground - The Hill (promo) (2007)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGI088] VA - Similar Minds (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN004] Astral Gnomix - One Touch EP (2011)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060147128659] VA - Transmissions (2012)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD013] Odiolab - Medieval (2015)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150543] Reversed Logic - Crystal Spirit EP (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD016] The Key - The Light Within The Darkness (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD012] VA - Multiverse Chronicles (2015)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150550] Mind Lab - Inner Engineering (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150802] Dark Nebula & Scatterbrain - The Flying Sorcerers (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD005] Atma - Music Revolution (2011)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150949] Somatic Cell & Psilocybian - Voices (Original Mix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222630] VA - Trancefusion Chapter 2 (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222623] VA - Trancefusion Chapter 1 (2017)" -Category "ROCK|TECHNO|TECHNO|TECHNO|TECHNO|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE" -Family "Download|Download|Download|Label/Physique|Download|Download|Download|Download|Download|Download|Download|Download|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique" -Force
+ID de processus : 17696
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 20:44:56 -- Durée: 0 sec -- START ADD_ALBUMS_MP3 ************************************************************************************************
+********** 20:44:57 -- Durée: 1 sec -- UPDATE: 2427 (1/68) *************************************************************************************************
+PS>Erreur de terminaison (Run-UpdateAlbum) : « Impossible de trouver un paramètre positionnel acceptant l'argument « True ». »
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+
+********** 20:44:57 -- Durée: 2 sec -- UPDATE: 13239 (2/68) ************************************************************************************************
+PS>Erreur de terminaison (Run-UpdateAlbum) : « Impossible de trouver un paramètre positionnel acceptant l'argument « True ». »
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+
+********** 20:44:57 -- Durée: 2 sec -- UPDATE: 1451 (3/68) *************************************************************************************************
+PS>Erreur de terminaison (Run-UpdateAlbum) : « Impossible de trouver un paramètre positionnel acceptant l'argument « True ». »
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+
+********** 20:44:57 -- Durée: 2 sec -- UPDATE: 6450 (4/68) *************************************************************************************************
+PS>Erreur de terminaison (Run-UpdateAlbum) : « Impossible de trouver un paramètre positionnel acceptant l'argument « True ». »
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+
+********** 20:44:57 -- Durée: 2 sec -- UPDATE: 858 (5/68) **************************************************************************************************
+PS>Erreur de terminaison (Run-UpdateAlbum) : « Impossible de trouver un paramètre positionnel acceptant l'argument « True ». »
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+Run-UpdateAlbum : Impossible de trouver un paramètre positionnel acceptant l'argument « True ».
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1:53 : 3
++         Run-UpdateAlbum -ID_CD $aidcd -LossLess $LossLess -Force $For ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Run-UpdateAlbum], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Run-UpdateAlbum
+
+********** 20:44:57 -- Durée: 2 sec -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2014\VA - Psy Trance Treasures Vol 2 (2014) (6/68) *****
+********** 20:44:57 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                
+----- ----                             ---------- ------ --------- ---------- ---- ------   ----                                                                
+13900 VA - Psy Trance Treasures Vol 2          99      1        99          1 2014 12:42:03 \\HOMERSTATION\_Mp3\Psytrance\_years\2014\VA - Psy Trance Treasur...
+
+ODR_Track FIL_Track                                                                             TAG_Albumartists TAG_Artists                                    
+--------- ---------                                                                             ---------------- -----------                                    
+01        01.  Monolock - In The Beginning.mp3                                                  Various          Monolock                                       
+02        02.  Shogan - Mind Pulse.mp3                                                          Various          Shogan                                         
+03        03.  Ascent - Rays Of The Sun.mp3                                                     Various          Ascent                                         
+04        04.  Astral Sense - My Beloved.mp3                                                    Various          Astral Sense                                   
+05        05.  Elepho - Iron Stage.mp3                                                          Various          Elepho                                         
+06        06.  Crossfire - Move On.mp3                                                          Various          Crossfire                                      
+07        07.  PulsarThaihanuLiquid Sound - Here I Am.mp3                                       Various          Pulsar Thaihanu Liquid Sound                   
+08        08.  Synergic - Equally.mp3                                                           Various          Synergic                                       
+09        09.  Necton - Turn Up The Heat.mp3                                                    Various          Necton                                         
+10        10.  Ovnimoon feat Via AxisItomLab - Galactic Mantra (2011 remix).mp3                 Various          Ovnimoon feat Via Axis ItomLab                 
+11        11.  Argon SphereCosmonauticaKnock Out - Cosmo Sphere (Knock Out remix).mp3           Various          Argon Sphere Cosmonautica Knock Out            
+12        12.  Elgiva - Morning Sun.mp3                                                         Various          Elgiva                                         
+13        13.  Mirok - Rock From The Speaker.mp3                                                Various          Mirok                                          
+14        14.  Solar System - 3 Days.mp3                                                        Various          Solar System                                   
+15        15.  YabyumElectrypnose - Freeze.mp3                                                  Various          Yabyum Electrypnose                            
+16        16.  QuantizeBratz - The Triangle.mp3                                                 Various          Quantize Bratz                                 
+17        17.  Phoenix Family feat Treavor Moontribe &amp; Kepi - Higher Sensory Perception.mp3 Various          Phoenix Family feat Treavor Moontribe &amp; ...
+18        18.  Predators - Acropolis.mp3                                                        Various          Predators                                      
+19        19.  Virtual LightAya - Nuclear Sun (Aya remix).mp3                                   Various          Virtual Light Aya                              
+20        20.  Enertopia feat Aural Invasion - Electric Nataraja.mp3                            Various          Enertopia feat Aural Invasion                  
+21        21.  Quantum Leap - Rakia.mp3                                                         Various          Quantum Leap                                   
+22        22.  Ancient - The Mind.mp3                                                           Various          Ancient                                        
+23        23.  Mind Storm feat Biokinetix - Daily Doses.mp3                                     Various          Mind Storm feat Biokinetix                     
+24        24.  Wavelogix - L.I.S.A.mp3                                                          Various          Wavelogix                                      
+25        25.  Astro-D - Morningstory.mp3                                                       Various          Astro-D                                        
+26        26.  Bodhisattva 1320 - Nocturnal Trancendance.mp3                                    Various          Bodhisattva 1320                               
+27        27.  Tesla Principle - New Life.mp3                                                   Various          Tesla Principle                                
+28        28.  Wizack Twizack - Crystal Castle.mp3                                              Various          Wizack Twizack                                 
+29        29.  01-N - Vesper.mp3                                                                Various          01-N                                           
+30        30.  WeiRdelTritostep - Weird Step.mp3                                                Various          WeiRdel Tritostep                              
+31        31.  Roboteknic - Collective Consciousness.mp3                                        Various          Roboteknic                                     
+32        32.  Theseus - Core Function.mp3                                                      Various          Theseus                                        
+33        33.  Fliperama - Made In China.mp3                                                    Various          Fliperama                                      
+34        34.  Kinesis - Zero Dimension.mp3                                                     Various          Kinesis                                        
+35        35.  BiokinetixGemini - Encredible Experience (Gemini remix).mp3                      Various          Biokinetix Gemini                              
+36        36.  EtienneMeta - Dark Magic (Meta remix).mp3                                        Various          Etienne Meta                                   
+37        37.  Drumatix - Neutrino Oscillation.mp3                                              Various          Drumatix                                       
+38        38.  ElectrypnoseElectronic Concept - 5h Countdown (Electronic Concept remix).mp3     Various          Electrypnose Electronic Concept                
+39        39.  Fiery Storm - Poltergeist.mp3                                                    Various          Fiery Storm                                    
+40        40.  EXtended Memory - Ayahuasca.mp3                                                  Various          EXtended Memory                                
+41        41.  Mind Portal - H.U.S.O.mp3                                                        Various          Mind Portal                                    
+42        42.  ELement9 - Flow Like Water.mp3                                                   Various          ELement9                                       
+43        43.  Digital Sun - Back To Roots.mp3                                                  Various          Digital Sun                                    
+44        44.  Analog Minds - Zebra.mp3                                                         Various          Analog Minds                                   
+45        45.  Frix - Front Treasure.mp3                                                        Various          Frix                                           
+46        46.  Travma - The Reality.mp3                                                         Various          Travma                                         
+47        47.  JoshLive - Lets See Now.mp3                                                      Various          JoshLive                                       
+48        48.  Frosty Fennic - Frosty Fields.mp3                                                Various          Frosty Fennic                                  
+49        49.  ImixBogi - Funky Hoover (Bogi remix).mp3                                         Various          Imix Bogi                                      
+50        50.  Jirah - Durenan.mp3                                                              Various          Jirah                                          
+51        51.  Gen - Imaginary Time.mp3                                                         Various          Gen                                            
+52        52.  Archeos - Go Forth.mp3                                                           Various          Archeos                                        
+53        53.  Perfect Havoc - Psy Will Never Die.mp3                                           Various          Perfect Havoc                                  
+54        54.  SeggaeIxwan - SaikoNaut.mp3                                                      Various          Seggae Ixwan                                   
+55        55.  Dahaka - Astral Connection.mp3                                                   Various          Dahaka                                         
+56        56.  Bell Size Park - The Octopus Ride (Progressive Aggressive mix).mp3               Various          Bell Size Park                                 
+57        57.  Synchrosphere - Second MIracle.mp3                                               Various          Synchrosphere                                  
+58        58.  The Backup Team - Teoria Del Azar.mp3                                            Various          The Backup Team                                
+59        59.  Kalilaskov AsSelect Project - Eliza Roza.mp3                                     Various          Kalilaskov As Select Project                   
+60        60.  Kode6 - Crazy Vein.mp3                                                           Various          Kode6                                          
+61        61.  Labyr1nth - Trimurti (Deep mix).mp3                                              Various          Labyr1nth                                      
+62        62.  Mental FlowThe Citizen - Micromax (The Citizen remix).mp3                        Various          Mental Flow The Citizen                        
+63        63.  Psypheric - Psychotropic Virus.mp3                                               Various          Psypheric                                      
+64        64.  Seven - Interconnected.mp3                                                       Various          Seven                                          
+65        65.  Maiia303 - Sky In Diamonds.mp3                                                   Various          Maiia303                                       
+66        66.  Lost Shaman - Event Horizon.mp3                                                  Various          Lost Shaman                                    
+67        67.  Lectro Spektral Daze - A Million Volts.mp3                                       Various          Lectro Spektral Daze                           
+68        68.  Progressive Intention - Malinalco.mp3                                            Various          Progressive Intention                          
+69        69.  Midi Junkies - Abstract Paradise.mp3                                             Various          Midi Junkies                                   
+70        70.  ManMachine - The Second.mp3                                                      Various          ManMachine                                     
+71        71.  Shalys - Relax.mp3                                                               Various          Shalys                                         
+72        72.  Meta - Amorphous.mp3                                                             Various          Meta                                           
+73        73.  Micro Scan - Broken Tension.mp3                                                  Various          Micro Scan                                     
+74        74.  Outreach - System Destruction.mp3                                                Various          Outreach                                       
+75        75.  Terrasun - Psychedelic Inc.mp3                                                   Various          Terrasun                                       
+76        76.  Shiva Shambho - Spiritual Revenge.mp3                                            Various          Shiva Shambho                                  
+77        77.  Oxi - Gemini Astroid.mp3                                                         Various          Oxi                                            
+78        78.  Stuntproject - Lawless.mp3                                                       Various          Stuntproject                                   
+79        79.  Passion Project - New Day.mp3                                                    Various          Passion Project                                
+80        80.  Terapeutica - More Time.mp3                                                      Various          Terapeutica                                    
+81        81.  Psilicyber - A Timely Collective.mp3                                             Various          Psilicyber                                     
+82        82.  Quazax - Manipulation.mp3                                                        Various          Quazax                                         
+83        83.  Random - Design Possibilities.mp3                                                Various          Random                                         
+84        84.  Spyral Tech - Digital Galaxy.mp3                                                 Various          Spyral Tech                                    
+85        85.  Psypien - Elephants.mp3                                                          Various          Psypien                                        
+86        86.  MegadropRandomHelios - Vapor Where.mp3                                           Various          Megadrop Random Helios                         
+87        87.  Paraforce - The Giants Rule The Land.mp3                                         Various          Paraforce                                      
+88        88.  Tricossoma - Psychosomatic Reorder.mp3                                           Various          Tricossoma                                     
+89        89.  Meteor Burn - Power Puff Girls.mp3                                               Various          Meteor Burn                                    
+90        90.  Enigma Machine - Alien Antics.mp3                                                Various          Enigma Machine                                 
+91        91.  Mindwarped - Darkmatter (remix).mp3                                              Various          Mindwarped                                     
+92        92.  Subliminal Insane - Travel To M-104.mp3                                          Various          Subliminal Insane                              
+93        93.  Triscele - Unattainable.mp3                                                      Various          Triscele                                       
+94        94.  Kali, Elemental - Zion (Elemental remix).mp3                                     Various          Kali, Elemental                                
+95        95.  Virtual Objects - Senses.mp3                                                     Various          Virtual Objects                                
+96        96.  Psychoz - Vamos A Festa.mp3                                                      Various          Psychoz                                        
+97        97.  Z Ekel - Z3k.mp3                                                                 Various          Z Ekel                                         
+98        98.  Adrian FederHarmony - Before.mp3                                                 Various          Adrian Feder Harmony                           
+99        99.  Liquid Space &amp; Doctor Goa - The Experience.mp3                               Various          Liquid Space &amp; Doctor Goa
+********** 20:45:19 -- Durée: 23 sec -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Deedrah, Shanti, MODERN8 - Soaring With The Angels EP (2017) (7/68) *
+********** 20:45:19 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+		  | Extraction Cover :\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Deedrah, Shanti, MODERN8 - Soaring With The Angels EP (2017)\cover.jpg
+
+ID_CD Name                                                   Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                          
+----- ----                                                   ---------- ------ --------- ---------- ---- ------   ----                                          
+13901 Deedrah, Shanti, MODERN8 - Soaring With The Angels EP           2      1         2          1 2017 00:12:54 \\HOMERSTATION\_Mp3\Psytrance\_years\2017\D...
+
+ODR_Track FIL_Track                                                     TAG_Albumartists TAG_Artists              TAG_Album               TAG_length TAG_Genres
+--------- ---------                                                     ---------------- -----------              ---------               ---------- ----------
+01        Deedrah, Shanti, MODERN8 - Soaring With The Angels, Pt. 1.mp3                  Deedrah, Shanti, MODERN8 Soaring With The Angels 00:06:51   Psy-Trance
+02        Deedrah, Shanti, MODERN8 - Soaring With The Angels, Pt. 2.mp3                  Deedrah, Shanti, MODERN8 Soaring With The Angels 00:06:03   Psy-Trance
+********** 20:45:25 -- Durée: 30 sec -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Genetrick - In the Lions Den [DOPDIGI104] (2017) (8/68) *
+********** 20:45:25 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                      
+----- ----                                       ---------- ------ --------- ---------- ---- ------   ----                                                      
+13902 Genetrick - In the Lions Den [DOPDIGI104]           2      1         2          1 2017 00:16:35 \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Genetrick - I...
+
+ODR_Track FIL_Track                                               TAG_Albumartists TAG_Artists              TAG_Album             TAG_length TAG_Genres 
+--------- ---------                                               ---------------- -----------              ---------             ---------- ---------- 
+01        01-genetrick_-_lions_den-eup.mp3                                         Genetrick                In The Lion's Den WEB 00:08:10   Psychedelic
+02        02-genetrick_and_out_of_range_-_evoke_the_world-eup.mp3                  Genetrick & Out Of Range In The Lion's Den WEB 00:08:25   Psychedelic
+********** 20:45:28 -- Durée: 1 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Oforia - Call To Mind (Original Mix) [MDMA Music] (2017) (9/68) *
+********** 20:45:28 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+		  | Extraction Cover :\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Oforia - Call To Mind (Original Mix) [MDMA Music] (2017)\cover.jpg
+
+ID_CD Name                                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                              
+----- ----                                               ---------- ------ --------- ---------- ---- ------   ----                                              
+13903 Oforia - Call To Mind (Original Mix) [MDMA Music]           1      1         1          1 2017 00:07:41 \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Ofori...
+
+ODR_Track FIL_Track                                TAG_Albumartists TAG_Artists TAG_Album    TAG_length TAG_Genres
+--------- ---------                                ---------------- ----------- ---------    ---------- ----------
+01        Oforia - Call To Mind (Original Mix).mp3                  Oforia      Call To Mind 00:07:41   Psy-Trance
+********** 20:45:35 -- Durée: 1 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Universal Frequencies Vol  5 [Digital Om] (2017) (10/68) *
+********** 20:45:35 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+		  | Extraction Cover :\\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Universal Frequencies Vol  5 [Digital Om] (2017)\cover.jpg
+
+ID_CD Name                                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                 
+----- ----                                            ---------- ------ --------- ---------- ---- ------   ----                                                 
+13904 VA - Universal Frequencies Vol  5 [Digital Om]          30      1        30          2 2017 03:52:36 \\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Uni...
+
+ODR_Track FIL_Track                                                              TAG_Albumartists TAG_Artists                          TAG_Album                
+--------- ---------                                                              ---------------- -----------                          ---------                
+01        01. Genetrick - Jungle Dreams.mp3                                                       Genetrick                            Universal Frequencies ...
+02        02. Atacama - Entice.mp3                                                                Atacama                              Universal Frequencies ...
+03        03. Maitika - Feel the Future.mp3                                                       Maitika                              Universal Frequencies ...
+04        04. Atacama & Jakaan - Etro's Protector.mp3                                             Atacama & Jakaan                     Universal Frequencies ...
+05        05. Liquid Soul - Synthetic Vibes (StarLab Remix).mp3                                   Liquid Soul                          Universal Frequencies ...
+06        06. Relativ - Subreality.mp3                                                            Relativ                              Universal Frequencies ...
+07        07. Daniel Lesden - Arrival.mp3                                                         Daniel Lesden                        Universal Frequencies ...
+08        08. Out of Range - Alona.mp3                                                            Out of Range                         Universal Frequencies ...
+09        09. Starlab (IN) - Tokyo Teleport (Sabretooth Remix).mp3                                Starlab (IN)                         Universal Frequencies ...
+10        10. Relativ - Human Being.mp3                                                           Relativ                              Universal Frequencies ...
+11        11. Daniel Lesden - Pangea Proxima.mp3                                                  Daniel Lesden                        Universal Frequencies ...
+12        12. Audiofire (UK) - Beat of the Drum.mp3                                               Audiofire (UK)                       Universal Frequencies ...
+13        13. Stryker & Starlab (IN) - ilbechin.mp3                                               Stryker & Starlab (IN)               Universal Frequencies ...
+14        14. Out of Range - Spiritual Science.mp3                                                Out of Range                         Universal Frequencies ...
+15        15. Shivatree - Heavy Stuff.mp3                                                         Shivatree                            Universal Frequencies ...
+16        16. Mirok - Endorphin Overdose.mp3                                                      Mirok                                Universal Frequencies ...
+17        17. Daniel Lesden - Ignition (Waveform Remix).mp3                                       Daniel Lesden                        Universal Frequencies ...
+18        18. Hypnoise & Tat - Pianezzi.mp3                                                       Hypnoise & Tat                       Universal Frequencies ...
+19        19. Middle Mode - Afrika (Sabretooth Remix).mp3                                         Middle Mode                          Universal Frequencies ...
+20        20. Shivatree - The Core.mp3                                                            Shivatree                            Universal Frequencies ...
+21        21. Zephirus Kane & Pogo & Hypnocoustics - Planes of Consciousness.mp3                  Zephirus Kane & Pogo & Hypnocoustics Universal Frequencies ...
+22        22. Lunatica - Wonders Machine.mp3                                                      Lunatica                             Universal Frequencies ...
+23        23. Burn In Noise & Shekinah - Tune In.mp3                                              Burn In Noise & Shekinah             Universal Frequencies ...
+24        24. Middle Mode & Lunatica - The Lunar Mode.mp3                                         Middle Mode & Lunatica               Universal Frequencies ...
+25        25. Ajja - Juicy Shrooms (Imaginarium Remix).mp3                                        Ajja                                 Universal Frequencies ...
+26        26. Imaginarium - Everything Vibrates.mp3                                               Imaginarium                          Universal Frequencies ...
+27        27. Djantrix - Secret Story.mp3                                                         Djantrix                             Universal Frequencies ...
+28        28. Djantrix & Spirit Architect - Vortex.mp3                                            Djantrix & Spirit Architect          Universal Frequencies ...
+29        29. Lunatica - Me In You.mp3                                                            Lunatica                             Universal Frequencies ...
+30        30. Imaginarium & Reversed Logic - Lucid Dreaming.mp3                                   Imaginarium & Reversed Logic         Universal Frequencies ...
+********** 20:45:45 -- Durée: 1 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Xerox - Piece of Mind [HMHD114] (2017) (11/68) *
+********** 20:45:46 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                
+----- ----                             ---------- ------ --------- ---------- ---- ------   ----                                                                
+13905 Xerox - Piece of Mind [HMHD114]           2      1         2          1 2017 00:15:46 \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Xerox - Piece of Mind [...
+
+ODR_Track FIL_Track                                TAG_Albumartists TAG_Artists     TAG_Album         TAG_length TAG_Genres 
+--------- ---------                                ---------------- -----------     ---------         ---------- ---------- 
+01        01-xerox_-_piece_of_mind-eup.mp3                          Xerox           Piece of Mind WEB 00:07:14   Psychedelic
+02        02-xerox_and_volcano_-_supernova-eup.mp3                  Xerox & Volcano Piece of Mind WEB 00:08:32   Psychedelic
+********** 20:45:50 -- Durée: 1 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Progressive Package Compiled by DJ Arnox (2017) (12/68) *
+********** 20:45:50 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                  
+----- ----                                           ---------- ------ --------- ---------- ---- ------   ----                                                  
+13906 VA - Progressive Package Compiled by DJ Arnox          12      1        12          1 2017 01:21:05 \\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Prog...
+
+ODR_Track FIL_Track                                TAG_Albumartists TAG_Artists   TAG_Album                                  TAG_length TAG_Genres 
+--------- ---------                                ---------------- -----------   ---------                                  ---------- ---------- 
+01        01. Mono - Gemu No Otokonoko.mp3                          Mono          Progressive Package (Compiled by DJ Arnox) 00:07:39   Psychedelic
+02        02. Drop the Pain - Loveless.mp3                          Drop The Pain Progressive Package (Compiled by DJ Arnox) 00:06:37   Psychedelic
+03        03. First Aid - Sunday Morning.mp3                        First Aid     Progressive Package (Compiled by DJ Arnox) 00:06:58   Psychedelic
+04        04. Infuso - Deep Distance.mp3                            Infuso        Progressive Package (Compiled by DJ Arnox) 00:08:04   Psychedelic
+05        05. Larix - Let It Go.mp3                                 Larix         Progressive Package (Compiled by DJ Arnox) 00:06:58   Psychedelic
+06        06. Nikelodeon - Sorrows Walk.mp3                         Nikelodeon    Progressive Package (Compiled by DJ Arnox) 00:05:14   Psychedelic
+07        07. Quantum Zero - Unreal Waves.mp3                       Quantum Zero  Progressive Package (Compiled by DJ Arnox) 00:06:37   Psychedelic
+08        08. Yan & Yin - Shanti Om.mp3                             Yan & Yin     Progressive Package (Compiled by DJ Arnox) 00:05:30   Psychedelic
+09        09. Slow Brain - Perfect Groove.mp3                       Slow Brain    Progressive Package (Compiled by DJ Arnox) 00:07:52   Psychedelic
+10        10. Lovegun - Ayahuasca.mp3                               Lovegun       Progressive Package (Compiled by DJ Arnox) 00:07:13   Psychedelic
+11        11. Redge - Everything Was Different.mp3                  Redge         Progressive Package (Compiled by DJ Arnox) 00:06:20   Psychedelic
+12        12. Authentic - Stranger.mp3                              Authentic     Progressive Package (Compiled by DJ Arnox) 00:06:04   Psychedelic
+********** 20:45:57 -- Durée: 1 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Records (germany)\[10123854] Katharsis And Boom Duck And Gravitech - El Acido (2017) (13/68) *
+********** 20:45:57 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                               
+----- ----                                              ---------- ------ --------- ---------- ---- ------   ----                                               
+13907 Katharsis And Boom Duck And Gravitech - El Acido           1      1         1          1 2017 00:06:36 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Reco...
+
+ODR_Track FIL_Track                                                        TAG_Albumartists TAG_Artists                       TAG_Album TAG_length TAG_Genres 
+--------- ---------                                                        ---------------- -----------                       --------- ---------- ---------- 
+01        01-katharsis_and_boom_duck_and_gravitech_-_el_acido-barghest.mp3                  Katharsis & Boom Duck & Gravitech El Acido  00:06:36   Psychedelic
+********** 20:46:06 -- Durée: 1 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Records (germany)\[10122789] Emphacis - Music Travel (2017) (14/68) *
+********** 20:46:06 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+13908 Emphacis - Music Travel           4      1         4          1 2017 00:25:57 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Records (germany)\[10122789] ...
+
+ODR_Track FIL_Track                                 TAG_Albumartists TAG_Artists TAG_Album    TAG_length TAG_Genres 
+--------- ---------                                 ---------------- ----------- ---------    ---------- ---------- 
+01        01-emphacis_-_aztecs_opera-barghest.mp3                    Emphacis    Music Travel 00:06:55   Psychedelic
+02        02-emphacis_-_sun_of_croatia-barghest.mp3                  Emphacis    Music Travel 00:06:27   Psychedelic
+03        03-emphacis_-_keine_angst-barghest.mp3                     Emphacis    Music Travel 00:06:38   Psychedelic
+04        04-emphacis_-_wo_ist_fred-barghest.mp3                     Emphacis    Music Travel 00:05:57   Psychedelic
+********** 20:46:13 -- Durée: 1 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)\[YSE398] VA - Goa Culture Vol 25 (2017) (15/68) *
+********** 20:46:13 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+PS>Erreur de terminaison (New-Object) : « Exception lors de l'appel de « .ctor » avec « 1 » argument(s) : « Le paramètre n'est pas valide. » »
+New-Object : Exception lors de l'appel de « .ctor » avec « 1 » argument(s) : « Le paramètre n'est pas valide. »
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\BUILD_INVENT_FUNCTIONS.ps1:1374 : 16
++ ... $OldImage = New-Object -TypeName System.Drawing.Bitmap -ArgumentList  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [New-Object], MethodInvocationException
+    + FullyQualifiedErrorId : ConstructorInvokedThrowException,Microsoft.PowerShell.Commands.NewObjectCommand
+New-Object : Exception lors de l'appel de « .ctor » avec « 1 » argument(s) : « Le paramètre n'est pas valide. »
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\BUILD_INVENT_FUNCTIONS.ps1:1374 : 16
++ ... $OldImage = New-Object -TypeName System.Drawing.Bitmap -ArgumentList  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [New-Object], MethodInvocationException
+    + FullyQualifiedErrorId : ConstructorInvokedThrowException,Microsoft.PowerShell.Commands.NewObjectCommand
+
+Exception lors de l'appel de « DrawImage » avec « 2 » argument(s) : « La valeur ne peut pas être null.
+Nom du paramètre : image »
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\BUILD_INVENT_FUNCTIONS.ps1:1403 : 37
++ ... OldImage, $(New-Object -TypeName System.Drawing.Rectangle -ArgumentLi ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
+    + FullyQualifiedErrorId : ArgumentNullException
+Exception lors de l'appel de « DrawImage » avec « 2 » argument(s) : « La valeur ne peut pas être null.
+Nom du paramètre : image »
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\BUILD_INVENT_FUNCTIONS.ps1:1403 : 37
++ ... OldImage, $(New-Object -TypeName System.Drawing.Rectangle -ArgumentLi ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
+    + FullyQualifiedErrorId : ArgumentNullException
+
+Impossible d’appeler une méthode dans une expression Null.
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\BUILD_INVENT_FUNCTIONS.ps1:1407 : 4
++             $OldImage.Dispose()
++             ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+Impossible d’appeler une méthode dans une expression Null.
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\BUILD_INVENT_FUNCTIONS.ps1:1407 : 4
++             $OldImage.Dispose()
++             ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+13909 VA - Goa Culture Vol 25          18      1        18          1 2017 02:15:06 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)...
+
+ODR_Track FIL_Track                                         TAG_Albumartists TAG_Artists   TAG_Album            TAG_length TAG_Genres
+--------- ---------                                         ---------------- -----------   ---------            ---------- ----------
+01        01-kiraz-the_upside_down-sfh.mp3                                   Kiraz         Goa Culture, Vol. 25 00:06:55   Trance    
+02        02-ritmo-all_at_once_(rocky_tilbor_remix)-sfh.mp3                  Ritmo         Goa Culture, Vol. 25 00:08:17   Trance    
+03        03-cosmic_tone-boombay-sfh.mp3                                     Cosmic Tone   Goa Culture, Vol. 25 00:08:08   Trance    
+04        04-kristallklar-extrasensory-sfh.mp3                               Kristallklar  Goa Culture, Vol. 25 00:07:27   Trance    
+05        05-serenity_flux-woodrose_seeds-sfh.mp3                            Serenity Flux Goa Culture, Vol. 25 00:07:33   Trance    
+06        06-impact-time_travel-sfh.mp3                                      Impact        Goa Culture, Vol. 25 00:06:34   Trance    
+07        07-divination-higher_consciousness-sfh.mp3                         Divination    Goa Culture, Vol. 25 00:07:52   Trance    
+08        08-bezonance-living_in_a_dream-sfh.mp3                             Bezonance     Goa Culture, Vol. 25 00:06:59   Trance    
+09        09-e-clip-sundowning-sfh.mp3                                       E-Clip        Goa Culture, Vol. 25 00:08:59   Trance    
+10        10-phanatic-the_dark_side_of_the_universe-sfh.mp3                  Phanatic      Goa Culture, Vol. 25 00:07:39   Trance    
+11        11-spade-haze-sfh.mp3                                              Spade         Goa Culture, Vol. 25 00:06:43   Trance    
+12        12-system_nipel-free_spirit-sfh.mp3                                System Nipel  Goa Culture, Vol. 25 00:07:16   Trance    
+13        13-electro_sun-singularity-sfh.mp3                                 Electro Sun   Goa Culture, Vol. 25 00:08:27   Trance    
+14        14-phanatic-mandala-sfh.mp3                                        Phanatic      Goa Culture, Vol. 25 00:07:13   Trance    
+15        15-dottex-diligence-sfh.mp3                                        Dottex        Goa Culture, Vol. 25 00:06:46   Trance    
+16        16-ananda_shake-spirit_zone-sfh.mp3                                Ananda Shake  Goa Culture, Vol. 25 00:07:32   Trance    
+17        17-electro_sun-daily_life-sfh.mp3                                  Electro Sun   Goa Culture, Vol. 25 00:07:28   Trance    
+18        18-delirious-lucid_dreaming-sfh.mp3                                Delirious     Goa Culture, Vol. 25 00:07:17   Trance
+********** 20:46:22 -- Durée: 1 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)\[YSE-DEP-066] VA - Burning Spear (2017) (16/68) *
+********** 20:46:22 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                             
+----- ----                ---------- ------ --------- ---------- ---- ------   ----                                                                             
+13910 VA - Burning Spear           3      1         3          1 2017 00:22:51 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)\[YSE...
+
+ODR_Track FIL_Track                                                                  TAG_Albumartists TAG_Artists           TAG_Album         TAG_length TAG_Gen
+                                                                                                                                                         res    
+--------- ---------                                                                  ---------------- -----------           ---------         ---------- -------
+01        01-drukverdeler_and_dj_bim_-_into_the_vortex_(serenity_flux_remix)-eup.mp3                  Drukverdeler & Dj Bim Burning Spear WEB 00:07:36   Psyc...
+02        02-serenity_flux_-_senses_expended_(drukverdeler_and_dj_bim_remix)-eup.mp3                  Serenity Flux         Burning Spear WEB 00:08:07   Psyc...
+03        03-dj_bim_and_ellinio_-_burning_spear-eup.mp3                                               DJ Bim & Ellinio      Burning Spear WEB 00:07:07   Psyc...
+********** 20:46:27 -- Durée: 2 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Digital Nature (israel)\[DNDI183] Cathar - Strong Acid (2017) (17/68) *
+********** 20:46:27 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                           
+----- ----                  ---------- ------ --------- ---------- ---- ------   ----                                                                           
+13911 Cathar - Strong Acid           2      1         2          1 2017 00:14:39 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Digital Nature (israel)\[DNDI183] Cath...
+
+ODR_Track FIL_Track                          TAG_Albumartists TAG_Artists TAG_Album       TAG_length TAG_Genres 
+--------- ---------                          ---------------- ----------- ---------       ---------- ---------- 
+01        01-cathar_-_gods_never_die-eup.mp3 Cathar           Cathar      Strong Acid WEB 00:07:29   Psychedelic
+02        02-cathar_-_strong_acid-eup.mp3    Cathar           Cathar      Strong Acid WEB 00:07:11   Psychedelic
+********** 20:46:31 -- Durée: 2 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Uxmal Records (mexique)\[UXM294] Kedarnath - Between Worlds (2017) (18/68) *
+********** 20:46:31 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                        ---------- ------ --------- ---------- ---- ------   ----                                                                     
+13912 Kedarnath - Between Worlds           2      1         2          1 2017 00:15:40 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Uxmal Records (mexique)\[UXM294]...
+
+ODR_Track FIL_Track                                                TAG_Albumartists TAG_Artists TAG_Album      TAG_length TAG_Genres 
+--------- ---------                                                ---------------- ----------- ---------      ---------- ---------- 
+01        01-kedarnath_-_the_art_of_living-barghest.mp3                             Kedarnath   Between Worlds 00:07:41   Psychedelic
+02        02-kedarnath_-_om_namo_bhagavate_vasudevaya-barghest.mp3                  Kedarnath   Between Worlds 00:07:59   Psychedelic
+********** 20:46:38 -- Durée: 2 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danemark)\[IBOGADIGITAL358] Vini Vici - Ravers Army (Original Mix) (2017) (19/68) *
+********** 20:46:38 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                    Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                         
+----- ----                                    ---------- ------ --------- ---------- ---- ------   ----                                                         
+13913 Vini Vici - Ravers Army (Original Mix)           1      1         1          1 2017 00:07:26 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danem...
+
+ODR_Track FIL_Track                                  TAG_Albumartists TAG_Artists TAG_Album   TAG_length TAG_Genres
+--------- ---------                                  ---------------- ----------- ---------   ---------- ----------
+01        Vini Vici - Ravers Army (Original Mix).mp3                  Vini Vici   Ravers Army 00:07:26   Psy-Trance
+********** 20:46:40 -- Durée: 2 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danemark)\[IBOGADIGITAL353] Ace Ventura And Rocky Tilbor - Dr Lupo (Rising Dust Remix) (2017) (20/68) *
+********** 20:46:40 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                     
+----- ----                                                        ---------- ------ --------- ---------- ---- ------   ----                                     
+13914 Ace Ventura And Rocky Tilbor - Dr Lupo (Rising Dust Remix)           1      1         1          1 2017 00:07:28 \\HOMERSTATION\_Mp3\Psytrance\_Labels\...
+
+ODR_Track FIL_Track                                                                  TAG_Albumartists TAG_Artists                TAG_Album                   TAG
+                                                                                                                                                             _le
+                                                                                                                                                             ngt
+                                                                                                                                                             h  
+--------- ---------                                                                  ---------------- -----------                ---------                   ---
+01        01-ace_ventura_and_rocky_tilbor_-_dr_lupo_(rising_dust_remix)-barghest.mp3                  Ace Ventura & Rocky Tilbor Dr Lupo (Rising Dust Remix) 00:
+********** 20:46:54 -- Durée: 2 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Prog On Syndicate (germany)\[10123975] Querox And Monod - Zaga (2017) (21/68) *
+********** 20:46:54 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+13915 Querox And Monod - Zaga           1      1         1          1 2017 00:06:15 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Prog On Syndicate (germany)\[101239...
+
+ODR_Track FIL_Track                               TAG_Albumartists TAG_Artists    TAG_Album TAG_length TAG_Genres 
+--------- ---------                               ---------------- -----------    --------- ---------- ---------- 
+01        01-querox_and_monod_-_zaga-barghest.mp3                  Querox & Monod Zaga      00:06:15   Psychedelic
+********** 20:47:06 -- Durée: 2 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Iono Music (germany)\[INM1DIGI268] Ilai, Atomizers - Say It Louder (Original Mix) (2017) (22/68) *
+********** 20:47:06 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                 
+----- ----                                            ---------- ------ --------- ---------- ---- ------   ----                                                 
+13916 Ilai, Atomizers - Say It Louder (Original Mix)           1      1         1          1 2017 00:07:46 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Iono Music (...
+
+ODR_Track FIL_Track                                          TAG_Albumartists TAG_Artists     TAG_Album     TAG_length TAG_Genres
+--------- ---------                                          ---------------- -----------     ---------     ---------- ----------
+01        Ilai, Atomizers - Say It Louder (Original Mix).mp3                  Ilai, Atomizers Say It Louder 00:07:46   Psy-Trance
+********** 20:47:09 -- Durée: 2 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR434] Ranji - Power of Acid (Pop Art Remix) (2017) (23/68) *
+********** 20:47:09 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                   Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                          
+----- ----                                   ---------- ------ --------- ---------- ---- ------   ----                                                          
+13917 Ranji - Power of Acid (Pop Art Remix)           1      1         1          1 2017 00:07:10 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings...
+
+ODR_Track FIL_Track                                             TAG_Albumartists TAG_Artists TAG_Album                     TAG_length TAG_Genres 
+--------- ---------                                             ---------------- ----------- ---------                     ---------- ---------- 
+01        01-ranji_-_power_of_acid_(pop_art_remix)-barghest.mp3                  Ranji       Power of Acid (Pop Art Remix) 00:07:10   Psychedelic
+********** 20:47:19 -- Durée: 2 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR435] Zac DePetro And Matte - Chapter I (2017) (24/68) *
+********** 20:47:19 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                              
+----- ----                               ---------- ------ --------- ---------- ---- ------   ----                                                              
+13918 Zac DePetro And Matte - Chapter I           2      1         2          1 2017 00:13:37 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (ge...
+
+ODR_Track FIL_Track                                                TAG_Albumartists TAG_Artists         TAG_Album TAG_length TAG_Genres 
+--------- ---------                                                ---------------- -----------         --------- ---------- ---------- 
+01        01-zac_depetro_and_matte_-_the_journey-barghest.mp3                       Zac DePetro & Matte Chapter I 00:07:33   Psychedelic
+02        02-zac_depetro_and_matte_-_the_power_of_now-barghest.mp3                  Zac DePetro & Matte Chapter I 00:06:04   Psychedelic
+********** 20:47:27 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR438] Titans - Eternal Vibrations (2017) (25/68) *
+********** 20:47:27 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                    
+----- ----                         ---------- ------ --------- ---------- ---- ------   ----                                                                    
+13919 Titans - Eternal Vibrations           2      1         2          1 2017 00:13:23 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)...
+
+ODR_Track FIL_Track                                   TAG_Albumartists TAG_Artists TAG_Album          TAG_length TAG_Genres 
+--------- ---------                                   ---------------- ----------- ---------          ---------- ---------- 
+01        01-titans_-_eternal_vibrations-barghest.mp3                  Titans      Eternal Vibrations 00:06:17   Psychedelic
+02        02-titans_-_power_dream-barghest.mp3                         Titans      Eternal Vibrations 00:07:05   Psychedelic
+********** 20:47:34 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR442] Berg And Zanon - Dugly Dagly (Feat  Trio Mandili) (2017) (26/68) *
+********** 20:47:34 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+		  | Extraction Cover :\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR442] Berg And Zanon - Dugly Dagly (Feat  Trio Mandili) (2017)\cover.jpg
+
+ID_CD Name                                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                              
+----- ----                                               ---------- ------ --------- ---------- ---- ------   ----                                              
+13920 Berg And Zanon - Dugly Dagly (Feat  Trio Mandili)           1      1         1          2 2017 00:05:24 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tune...
+
+ODR_Track FIL_Track                                                TAG_Albumartists TAG_Artists  TAG_Album                        TAG_length TAG_Genres 
+--------- ---------                                                ---------------- -----------  ---------                        ---------- ---------- 
+01        01-berg_and_zanon_-_dugly_dagly_(feat._trio_mandili).mp3                  Berg & Zanon Dugly Dagly (Feat. Trio Mandili) 00:05:24   Psychedelic
+********** 20:47:40 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR431] VA - Wild Vision (2017) (27/68) *
+********** 20:47:40 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                               
+----- ----              ---------- ------ --------- ---------- ---- ------   ----                                                                               
+13921 VA - Wild Vision          20      1        20          1 2017 02:24:28 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR431]...
+
+ODR_Track FIL_Track                                            TAG_Albumartists TAG_Artists    TAG_Album   TAG_length TAG_Genres
+--------- ---------                                            ---------------- -----------    ---------   ---------- ----------
+01        01-future_people-wild_vision-34dbdd.mp3                               Future People  Wild Vision 00:07:18   Trance    
+02        02-ranji-power_of_acid_(out_now_remix)-6e5e59.mp3                     Ranji          Wild Vision 00:06:52   Trance    
+03        03-symphonix-lost_in_this_moment-7bbf15.mp3                           Symphonix      Wild Vision 00:06:06   Trance    
+04        04-vini_vici-universe_inside_me-e1c4d1.mp3                            Vini Vici      Wild Vision 00:08:02   Trance    
+05        05-morten_granau-letting_go-bf3501.mp3                                Morten Granau  Wild Vision 00:05:41   Trance    
+06        06-phanatic-the_dark_side_of_the_universe-6f8cad.mp3                  Phanatic       Wild Vision 00:07:41   Trance    
+07        07-face_off_(isr)-spiritual_experience-22e5fa.mp3                     Face Off (ISR) Wild Vision 00:08:31   Trance    
+08        08-future_people-beelzebub-3fbf00.mp3                                 Future People  Wild Vision 00:06:40   Trance    
+09        09-no_comment-round_trip-868463.mp3                                   No Comment     Wild Vision 00:07:23   Trance    
+10        10-vibe_tribe-alternate_reality-cdc424.mp3                            Vibe Tribe     Wild Vision 00:08:01   Trance    
+11        11-wider-chemical_export-d5d089.mp3                                   Wider          Wild Vision 00:07:15   Trance    
+12        12-orpheus-render-a7670d.mp3                                          Orpheus        Wild Vision 00:06:39   Trance    
+13        13-originals-north_leads-efa409.mp3                                   Originals      Wild Vision 00:07:32   Trance    
+14        14-out_now-hypnotized-2bd350.mp3                                      Out Now        Wild Vision 00:07:33   Trance    
+15        15-abc-nature_of_reality-fe44ba.mp3                                   ABC            Wild Vision 00:06:32   Trance    
+16        16-pop_art-the_guru-c4af53.mp3                                        Pop Art        Wild Vision 00:06:47   Trance    
+17        17-future_people-dawn_of_sanity-5616ea.mp3                            Future People  Wild Vision 00:07:11   Trance    
+18        18-metronome-what_goes_up_must_come_down-433d19.mp3                   Metronome      Wild Vision 00:07:45   Trance    
+19        19-kopel-shanghai-4bfa42.mp3                                          Kopel          Wild Vision 00:07:20   Trance    
+20        20-osher-human_emotion-ed5d04.mp3                                     Osher          Wild Vision 00:07:39   Trance
+********** 20:47:47 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Ovnimoon Records (chili-usa)\[OVNIEP252] Floating Planet - Peak Experience (2017) (28/68) *
+********** 20:47:47 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+Remove-Item : Impossible de supprimer l'élément C:\Users\Mister doubs\AppData\Local\Temp\cover_temp_7708418.jpg: Vous 
+ne disposez pas des droits d’accès suffisants pour effectuer cette opération.
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\BUILD_INVENT_FUNCTIONS.ps1:1256 : 31
++ ...     If (Test-Path $TempflCov) { Remove-Item -literalPath $TempflCov};
++                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : PermissionDenied: (C:\Users\MISTER...emp_7708418.jpg:FileInfo) [Remove-Item], IOException
+    + FullyQualifiedErrorId : RemoveFileSystemItemUnAuthorizedAccess,Microsoft.PowerShell.Commands.RemoveItemCommand
+Remove-Item : Impossible de supprimer l'élément C:\Users\Mister doubs\AppData\Local\Temp\cover_temp_7708418.jpg: Vous
+ne disposez pas des droits d’accès suffisants pour effectuer cette opération.
+Au caractère \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\BUILD_INVENT_FUNCTIONS.ps1:1256 : 31
++ ...     If (Test-Path $TempflCov) { Remove-Item -literalPath $TempflCov};
++                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : PermissionDenied: (C:\Users\MISTER...emp_7708418.jpg:FileInfo) [Remove-Item], IOExceptio
+   n
+    + FullyQualifiedErrorId : RemoveFileSystemItemUnAuthorizedAccess,Microsoft.PowerShell.Commands.RemoveItemCommand
+
+ID_CD Name                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                              
+----- ----                               ---------- ------ --------- ---------- ---- ------   ----                                                              
+13922 Floating Planet - Peak Experience           3      1         3          1 2017 00:17:48 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Ovnimoon Records (chili-u...
+
+ODR_Track FIL_Track                                       TAG_Albumartists TAG_Artists     TAG_Album       TAG_length TAG_Genres
+--------- ---------                                       ---------------- -----------     ---------       ---------- ----------
+01        01-floating_planet-peak_experience-ec9220db.mp3                  Floating Planet Peak Experience 00:04:28   Ambient   
+02        02-floating_planet-lukmabahu-98827fcb.mp3                        Floating Planet Peak Experience 00:06:44   Ambient   
+03        03-floating_planet-hyperborea-7ae12ee5.mp3                       Floating Planet Peak Experience 00:06:36   Ambient
+********** 20:47:53 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\DNA Records (israel)\[DND064] Quantum on DNA - Hellfire (2017) (29/68) *
+********** 20:47:53 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                      
+----- ----                       ---------- ------ --------- ---------- ---- ------   ----                                                                      
+13923 Quantum on DNA - Hellfire           1      1         1          1 2017 00:07:56 \\HOMERSTATION\_Mp3\Psytrance\_Labels\DNA Records (israel)\[DND064] Qua...
+
+ODR_Track FIL_Track                                 TAG_Albumartists TAG_Artists    TAG_Album TAG_length TAG_Genres 
+--------- ---------                                 ---------------- -----------    --------- ---------- ---------- 
+01        01-quantum_on_dna_-_hellfire-barghest.mp3                  Quantum on DNA Hellfire  00:07:56   Psychedelic
+********** 20:47:59 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0133] Shake - Redemption (2017) (30/68) *
+********** 20:47:59 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                             
+----- ----                ---------- ------ --------- ---------- ---- ------   ----                                                                             
+13924 Shake - Redemption          10      1        10          1 2017 01:18:08 \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0133] Shak...
+
+ODR_Track FIL_Track                                     TAG_Albumartists TAG_Artists       TAG_Album       TAG_length TAG_Genres 
+--------- ---------                                     ---------------- -----------       ---------       ---------- ---------- 
+01        01-shake_-_redemption-eup.mp3                                  Shake             Redemption  WEB 00:07:23   Psychedelic
+02        02-shake_and_magnus_-_modifier-eup.mp3                         Shake & Magnus    Redemption  WEB 00:08:37   Psychedelic
+03        03-shake_-_crystal_clear-eup.mp3                               Shake             Redemption  WEB 00:09:41   Psychedelic
+04        04-shake_-_interval-eup.mp3                                    Shake             Redemption  WEB 00:06:57   Psychedelic
+05        05-shake_and_tresde_-_matching_colors-eup.mp3                  Shake & Tresde    Redemption  WEB 00:06:29   Psychedelic
+06        06-shake_and_twonezero_-_legacy-eup.mp3                        Shake & Twonezero Redemption  WEB 00:08:44   Psychedelic
+07        07-shake_-_preda2r_(album_mix)-eup.mp3                         Shake             Redemption  WEB 00:07:42   Psychedelic
+08        08-jaia_-_mai_mai_(shake_remix)-eup.mp3                        Jaia              Redemption  WEB 00:08:43   Psychedelic
+09        09-shake_-_concious_activation-eup.mp3                         Shake             Redemption  WEB 00:07:10   Psychedelic
+10        10-shake_-_ascending-eup.mp3                                   Shake             Redemption  WEB 00:06:42   Psychedelic
+********** 20:48:04 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0129] VA - Summer Festival Collection (2017) (31/68) *
+********** 20:48:04 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                
+----- ----                             ---------- ------ --------- ---------- ---- ------   ----                                                                
+13925 VA - Summer Festival Collection          40      1        40          1 2017 04:57:53 \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[T...
+
+ODR_Track FIL_Track                                                                  TAG_Albumartists TAG_Artists       TAG_Album                  TAG_length TA
+                                                                                                                                                              G_
+                                                                                                                                                              Ge
+                                                                                                                                                              nr
+                                                                                                                                                              es
+--------- ---------                                                                  ---------------- -----------       ---------                  ---------- --
+1-01      01. Zyce - Shiva (Original Mix).mp3                                        Various Artists  Zyce              Summer Festival Collection 00:06:44     
+1-02      02. Flegma - Sensory System (Original Mix).mp3                             Various Artists  Flegma            Summer Festival Collection 00:07:31     
+1-03      03. Waveform - Hallucinations (Original Mix).mp3                           Various Artists  Waveform          Summer Festival Collection 00:07:22     
+1-04      04. Shake - Preda2r (Original Mix).mp3                                     Various Artists  Shake             Summer Festival Collection 00:07:47     
+1-05      05. Arhetip - Transience (Original Mix).mp3                                Various Artists  Arhetip           Summer Festival Collection 00:07:42     
+1-06      06. Talpa - Violenty Happy (Original Mix).mp3                              Various Artists  Talpa             Summer Festival Collection 00:07:03     
+1-07      07. Lyktum - Cosmic Web Cut 2 (Original Mix).mp3                           Various Artists  Lyktum            Summer Festival Collection 00:07:40     
+1-08      08. Sonic Entity - Tidal (Original Mix).mp3                                Various Artists  Sonic Entity      Summer Festival Collection 00:06:37     
+1-09      09. Flegma - Human Planet (2017 Edit).mp3                                  Various Artists  Flegma            Summer Festival Collection 00:07:00     
+1-10      10. Waveform - Intelligent Machines (Original Mix).mp3                     Various Artists  Waveform          Summer Festival Collection 00:07:28     
+1-11      11. Talpa - Fading Away (Original Mix).mp3                                 Various Artists  Talpa             Summer Festival Collection 00:05:56     
+1-12      12. Flegma - Capacity (Original Mix).mp3                                   Various Artists  Flegma            Summer Festival Collection 00:07:54     
+1-13      13. Liquid Soul - The Protocol (Original Mix).mp3                          Various Artists  Liquid Soul       Summer Festival Collection 00:06:58     
+1-14      14. Waveform - Ancient Power (Original Mix).mp3                            Various Artists  Waveform          Summer Festival Collection 00:08:11     
+1-15      15. Sonic Entity - The Grid (Original Mix).mp3                             Various Artists  Sonic Entity      Summer Festival Collection 00:07:29     
+1-16      16. Genetrick - Mongol (Original Mix).mp3                                  Various Artists  Genetrick         Summer Festival Collection 00:07:54     
+1-17      17. Molok - Road To The East (Original Mix).mp3                            Various Artists  Molok             Summer Festival Collection 00:07:46     
+1-18      18. Zen Mechanics - Flux (Original Mix).mp3                                Various Artists  Zen Mechanics     Summer Festival Collection 00:10:03     
+1-19      19. Freaked Frequency - Perfect Harmony (Original Mix) (feat. Modern8).mp3 Various Artists  Freaked Frequency Summer Festival Collection 00:06:52     
+1-20      20. Flegma - Rotation (Original Mix).mp3                                   Various Artists  Flegma            Summer Festival Collection 00:07:45     
+1-21      21. Liquid Soul - We Come In Peace (Talpa Remix) (feat. Solar Kid).mp3     Various Artists  Liquid Soul       Summer Festival Collection 00:05:52     
+1-22      22. Aquafeel - Shades Of Confusion (Original Mix).mp3                      Various Artists  Aquafeel          Summer Festival Collection 00:06:29     
+1-23      23. Zyce - Extraterrestrial (Flegma Remix).mp3                             Various Artists  Zyce              Summer Festival Collection 00:07:08     
+1-24      24. Ectima - Everything Is Possible (Original Mix).mp3                     Various Artists  Ectima            Summer Festival Collection 00:07:32     
+1-25      25. Talpa - La La La (Original Mix).mp3                                    Various Artists  Talpa             Summer Festival Collection 00:06:00     
+1-26      26. Sonic Entity - Terraform (Original Mix).mp3                            Various Artists  Sonic Entity      Summer Festival Collection 00:07:15     
+1-27      27. Zyce - World Rebirth Party (Arhetip Remix).mp3                         Various Artists  Zyce              Summer Festival Collection 00:08:01     
+1-28      28. Flegma - Nimbus (Original Mix).mp3                                     Various Artists  Flegma            Summer Festival Collection 00:07:07     
+1-29      29. Arhetip - Meteor (Original Mix).mp3                                    Various Artists  Arhetip           Summer Festival Collection 00:08:47     
+1-30      30. Sonic Species - Dust Rising (Relativ Remix).mp3                        Various Artists  Sonic Species     Summer Festival Collection 00:08:50     
+1-31      31. Zyce - Black Sheep In A Herd Of Geese (Original Mix).mp3               Various Artists  Zyce              Summer Festival Collection 00:07:27     
+1-32      32. Zyce - Apollo 13 (Original Mix).mp3                                    Various Artists  Zyce              Summer Festival Collection 00:07:29     
+1-33      33. Sonic Entity - Dreamcatcher (Original Mix).mp3                         Various Artists  Sonic Entity      Summer Festival Collection 00:06:44     
+1-34      34. Shake - Colonizing (Original Mix).mp3                                  Various Artists  Shake             Summer Festival Collection 00:07:07     
+1-35      35. Vertex - Hemija (Original Mix) (feat. Subliminal Codes).mp3            Various Artists  Vertex            Summer Festival Collection 00:08:20     
+1-36      36. Orison - 20 Degrees Above The Horizon (Original Mix).mp3               Various Artists  Orison            Summer Festival Collection 00:06:44     
+1-37      37. Float - Planewave (Original Mix).mp3                                   Various Artists  Float             Summer Festival Collection 00:07:36     
+1-38      38. Visua - Geminorum (Original Mix).mp3                                   Various Artists  Visua             Summer Festival Collection 00:07:28     
+1-39      39. Subliminal Codes - In The Now (Original Mix).mp3                       Various Artists  Subliminal Codes  Summer Festival Collection 00:08:13     
+1-40      40. Vertex - Welcome To Serbia (Original Mix).mp3                          Various Artists  Vertex            Summer Festival Collection 00:08:04
+********** 20:48:19 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0130] Zyce and Suduaya - Pure Light (2017) (32/68) *
+********** 20:48:19 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+13926 Zyce and Suduaya - Pure Light           1      1         1          1 2017 00:07:08 \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TES...
+
+ODR_Track FIL_Track                                TAG_Albumartists TAG_Artists    TAG_Album      TAG_length TAG_Genres 
+--------- ---------                                ---------------- -----------    ---------      ---------- ---------- 
+01        01-zyce_and_suduaya_-_pure_light-eup.mp3                  Zyce & Suduaya Pure Light WEB 00:07:08   Psychedelic
+********** 20:48:21 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0131] Flegma - Soul Protector (2017) (33/68) *
+********** 20:48:21 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+13927 Flegma - Soul Protector           1      1         1          1 2017 00:09:04 \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0131]...
+
+ODR_Track FIL_Track                          TAG_Albumartists TAG_Artists TAG_Album          TAG_length TAG_Genres 
+--------- ---------                          ---------------- ----------- ---------          ---------- ---------- 
+01        01-flegma_-_soul_protector-eup.mp3                  Flegma      Soul Protector WEB 00:09:04   Psychedelic
+********** 20:48:25 -- Durée: 3 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0132] Talpa and Purple Hayes - Born this Way (2014) (34/68) *
+********** 20:48:25 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                    Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                         
+----- ----                                    ---------- ------ --------- ---------- ---- ------   ----                                                         
+13928 Talpa and Purple Hayes - Born this Way           1      1         1          1 2014 00:06:58 \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (ser...
+
+ODR_Track FIL_Track                                         TAG_Albumartists TAG_Artists          TAG_Album         TAG_length TAG_Genres 
+--------- ---------                                         ---------------- -----------          ---------         ---------- ---------- 
+01        01-talpa_and_purple_hayes_-_born_this_way-eup.mp3                  Talpa & Purple Hayes Born This Way WEB 00:06:58   Psychedelic
+********** 20:48:28 -- Durée: 4 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Power House Records (american)\[PWRCD040] VA - Progress To Goa Vol 2 By Random And Dr Spook (2017) (35/68) *
+********** 20:48:28 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                              
+----- ----                                               ---------- ------ --------- ---------- ---- ------   ----                                              
+13929 VA - Progress To Goa Vol 2 By Random And Dr Spook          18      1        18          1 2017 02:26:23 \\HOMERSTATION\_Mp3\Psytrance\_Labels\Power Hou...
+
+ODR_Track FIL_Track                                                        TAG_Albumartists TAG_Artists     TAG_Album                                           
+--------- ---------                                                        ---------------- -----------     ---------                                           
+01        01-enarxis-future_reality-29f03560.mp3                                            Enarxis         Progress To Goa, Vol. 2: Progressive Psychedelic ...
+02        02-shogan-blast-3ee1146b.mp3                                                      Shogan          Progress To Goa, Vol. 2: Progressive Psychedelic ...
+03        03-elegy-the_nexus-f8663371.mp3                                                   Elegy           Progress To Goa, Vol. 2: Progressive Psychedelic ...
+04        04-anyma-take_a_deep_breath-444cfa1c.mp3                                          Anyma           Progress To Goa, Vol. 2: Progressive Psychedelic ...
+05        05-akbal-conjuro-ccb05380.mp3                                                     Akbal           Progress To Goa, Vol. 2: Progressive Psychedelic ...
+06        06-soundspirit-love_on_acid-50c2ccab.mp3                                          SoundSpirit     Progress To Goa, Vol. 2: Progressive Psychedelic ...
+07        07-algae_bloom-spiral_galaxy-101e63ab.mp3                                         Algae Bloom     Progress To Goa, Vol. 2: Progressive Psychedelic ...
+08        08-owntrip-slow_vibrations-224d74c9.mp3                                           Owntrip         Progress To Goa, Vol. 2: Progressive Psychedelic ...
+09        09-aesis_alien-andante_ma_non_troppo-c60637a9.mp3                                 Aesis Alien     Progress To Goa, Vol. 2: Progressive Psychedelic ...
+10        10-lost_shaman-the_sentiel-87c7ded0.mp3                                           Lost Shaman     Progress To Goa, Vol. 2: Progressive Psychedelic ...
+11        11-bionic_delay-tetrahedron_grid-6c24b7fe.mp3                                     Bionic Delay    Progress To Goa, Vol. 2: Progressive Psychedelic ...
+12        12-vuchur-visions-cdd30390.mp3                                                    Vuchur          Progress To Goa, Vol. 2: Progressive Psychedelic ...
+13        13-spinney_lainey-flow_(a_robot_comes_to_her_remix)-77bdb8b7.mp3                  Spinney Lainey  Progress To Goa, Vol. 2: Progressive Psychedelic ...
+14        14-conexion_mental-viaje_astral-890e4414.mp3                                      Conexion Mental Progress To Goa, Vol. 2: Progressive Psychedelic ...
+15        15-raptor-spiritualis_technology-c22efaec.mp3                                     Raptor          Progress To Goa, Vol. 2: Progressive Psychedelic ...
+16        16-autorun-miss_robot-884c040f.mp3                                                AutoRun         Progress To Goa, Vol. 2: Progressive Psychedelic ...
+17        17-electic-dharma-00913bdf.mp3                                                    Electic         Progress To Goa, Vol. 2: Progressive Psychedelic ...
+18        18-kalilaskov_as-gone_to_mars-523edacc.mp3                                        Kalilaskov AS   Progress To Goa, Vol. 2: Progressive Psychedelic ...
+********** 20:48:39 -- Durée: 4 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANODIGI130] Pogo & Djantrix - Rejoicer (2017) (36/68) *
+********** 20:48:39 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                        ---------- ------ --------- ---------- ---- ------   ----                                                                     
+13930 Pogo & Djantrix - Rejoicer           1      1         1          1 2017 00:07:37 \\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\...
+
+ODR_Track FIL_Track                      TAG_Albumartists TAG_Artists     TAG_Album TAG_length TAG_Genres 
+--------- ---------                      ---------------- -----------     --------- ---------- ---------- 
+01        Pogo & Djantrix - Rejoicer.mp3                  Pogo & Djantrix Rejoicer  00:07:37   Psychedelic
+********** 20:48:44 -- Durée: 4 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANODIGI131] Dickster & Space Tribe - Turn On The World EP (2017) (37/68) *
+********** 20:48:44 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                  
+----- ----                                           ---------- ------ --------- ---------- ---- ------   ----                                                  
+13931 Dickster & Space Tribe - Turn On The World EP           2      1         2          1 2017 00:15:03 \\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records ...
+
+ODR_Track FIL_Track                                         TAG_Albumartists TAG_Artists            TAG_Album         TAG_length TAG_Genres 
+--------- ---------                                         ---------------- -----------            ---------         ---------- ---------- 
+01        1. Dickster & Space Tribe - Turn On The World.mp3                  Dickster & Space Tribe Turn On The World 00:07:16   Psychedelic
+02        2. Dickster & Space Tribe - Sky Never Ends.mp3                     Dickster & Space Tribe Turn On The World 00:07:47   Psychedelic
+********** 20:48:50 -- Durée: 4 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANOCD052] VA - Nano Sonic Sound System Vol 5 (2017) (38/68) *
+********** 20:48:50 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                             
+----- ----                                ---------- ------ --------- ---------- ---- ------   ----                                                             
+13932 VA - Nano Sonic Sound System Vol 5          18      1        18          1 2017 02:12:16 \\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south ...
+
+ODR_Track FIL_Track                                                                 TAG_Albumartists TAG_Artists          TAG_Album                       TAG_le
+                                                                                                                                                          ngth  
+--------- ---------                                                                 ---------------- -----------          ---------                       ------
+01        01-sad_paradise-amplify_(original_mix)-af7acab7.mp3                                        Sad Paradise         Nano Sonic Sound System, Vol. 5 00:...
+02        02-altruism-timo_(original_mix_)-1024a819.mp3                                              Altruism             Nano Sonic Sound System, Vol. 5 00:...
+03        03-headroom_(sa)-50_shades_of_bass_(original_mix)-7d94c32c.mp3                             Headroom (SA)        Nano Sonic Sound System, Vol. 5 00:...
+04        04-avalon-galactic_groover_(james_west_remix)_(original_mix)-02e4d1cd.mp3                  Avalon               Nano Sonic Sound System, Vol. 5 00:...
+05        05-waio-gan_jar_(original_mix)-a593aef3.mp3                                                Waio                 Nano Sonic Sound System, Vol. 5 00:...
+06        06-killerwatts-hooked_(original_mix)-97d55341.mp3                                          Killerwatts          Nano Sonic Sound System, Vol. 5 00:...
+07        07-tristan-mimosa_dosa_(original_mix)-e441afe8.mp3                                         Tristan              Nano Sonic Sound System, Vol. 5 00:...
+08        08-pogo-out_of_this_world_(original_mix)-4dc946ca.mp3                                      Pogo                 Nano Sonic Sound System, Vol. 5 00:...
+09        09-audioform-fuzion_(original_mix)-dc67fd06.mp3                                            Audioform            Nano Sonic Sound System, Vol. 5 00:...
+10        10-earthspace-no_rest_for_the_blast_(original_mix)-e9c49dc3.mp3                            Earthspace           Nano Sonic Sound System, Vol. 5 00:...
+11        11-dickster-elastic_dreams_(original_mix)-31c89165.mp3                                     Dickster             Nano Sonic Sound System, Vol. 5 00:...
+12        12-laughing_buddha-cymatics_(original_mix)-30bdc0ae.mp3                                    Laughing Buddha      Nano Sonic Sound System, Vol. 5 00:...
+13        13-outside_the_universe-god_intoxicated_state_(original_mix)-e4b52c15.mp3                  Outside The Universe Nano Sonic Sound System, Vol. 5 00:...
+14        14-avalon-shiva_(original_mix)-7246189f.mp3                                                Avalon               Nano Sonic Sound System, Vol. 5 00:...
+15        15-circuit_breakers-new_horizons_(original_mix)-9a1f57d8.mp3                               Circuit Breakers     Nano Sonic Sound System, Vol. 5 00:...
+16        16-groove_addict-groovy_roots_(original_mix)-f15fbd22.mp3                                  Groove Addict        Nano Sonic Sound System, Vol. 5 00:...
+17        17-menog-time_to_party_(original_mix)-e29d797f.mp3                                         Menog                Nano Sonic Sound System, Vol. 5 00:...
+18        18-sonic_species-trance_is_life_(original_mix)-2c432bd4.mp3                                Sonic Species        Nano Sonic Sound System, Vol. 5 00:...
+********** 20:49:01 -- Durée: 4 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150932] Shreder - Kawabunga (2017) (39/68) *
+********** 20:49:01 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                            
+----- ----                 ---------- ------ --------- ---------- ---- ------   ----                                                                            
+13933 Shreder - Kawabunga           2      1         2          1 2017 00:13:42 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150932] Shreder - ...
+
+ODR_Track FIL_Track                             TAG_Albumartists TAG_Artists TAG_Album     TAG_length TAG_Genres 
+--------- ---------                             ---------------- ----------- ---------     ---------- ---------- 
+01        01-shreder_-_kawabunga-eup.mp3        Shred'er         Shred'er    Kawabunga WEB 00:06:39   Psychedelic
+02        02-shreder_-_you_like_crystal-eup.mp3 Shred'er         Shred'er    Kawabunga WEB 00:07:03   Psychedelic
+********** 20:49:09 -- Durée: 4 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150833] Aumni - Vagabond (2017) (40/68) *
+********** 20:49:09 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                               
+----- ----              ---------- ------ --------- ---------- ---- ------   ----                                                                               
+13934 Aumni - Vagabond           2      1         2          1 2017 00:13:54 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150833] Aumni - Vagab...
+
+ODR_Track FIL_Track                            TAG_Albumartists TAG_Artists TAG_Album    TAG_length TAG_Genres 
+--------- ---------                            ---------------- ----------- ---------    ---------- ---------- 
+01        01-aumni_-_vagabond-eup.mp3                           Aumni       Vagabond WEB 00:07:12   Psychedelic
+02        02-aumni_-_suspension_points-eup.mp3                  Aumni       Vagabond WEB 00:06:42   Psychedelic
+********** 20:49:16 -- Durée: 4 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150864] Exolon - Spiritual Voices (2017) (41/68) *
+********** 20:49:16 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                      
+----- ----                       ---------- ------ --------- ---------- ---- ------   ----                                                                      
+13935 Exolon - Spiritual Voices           2      1         2          1 2017 00:16:13 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150864] Exol...
+
+ODR_Track FIL_Track                                       TAG_Albumartists TAG_Artists          TAG_Album            TAG_length TAG_Genres 
+--------- ---------                                       ---------------- -----------          ---------            ---------- ---------- 
+01        01-exolon_-_spiritual_voices-eup.mp3                             Exolon               Spiritual Voices WEB 00:08:31   Psychedelic
+02        02-exolon_and_bunker_jack_-_enchantable-eup.mp3                  Exolon & Bunker Jack Spiritual Voices WEB 00:07:42   Psychedelic
+********** 20:49:21 -- Durée: 4 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150857] H-Sunrise - Orange Pulsation (2017) (42/68) *
+********** 20:49:21 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+13936 H-Sunrise - Orange Pulsation           2      1         2          1 2017 00:18:05 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150857] H...
+
+ODR_Track FIL_Track                                   TAG_Albumartists TAG_Artists TAG_Album            TAG_length TAG_Genres 
+--------- ---------                                   ---------------- ----------- ---------            ---------- ---------- 
+01        01-h-sunrise_-_orange_pulsation-eup.mp3     H-Sunrise        H-Sunrise   Orange Pulsation WEB 00:08:48   Psychedelic
+02        02-h-sunrise_-_impermanent_universe-eup.mp3 H-Sunrise        H-Sunrise   Orange Pulsation WEB 00:09:17   Psychedelic
+********** 20:49:25 -- Durée: 4 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150918] Ibojima - Mental Extension (2017) (43/68) *
+********** 20:49:25 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                        ---------- ------ --------- ---------- ---- ------   ----                                                                     
+13937 Ibojima - Mental Extension           1      1         1          1 2017 00:07:16 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150918] Ibo...
+
+ODR_Track FIL_Track                                          TAG_Albumartists TAG_Artists TAG_Album            TAG_length TAG_Genres 
+--------- ---------                                          ---------------- ----------- ---------            ---------- ---------- 
+01        01-ibojima_-_mental_extension_feat._jackvi-eup.mp3                  Ibojima     Mental Extension WEB 00:07:16   Psychedelic
+********** 20:49:30 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150840] Kundalini - Miditating (2017) (44/68) *
+********** 20:49:30 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                    Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                         
+----- ----                    ---------- ------ --------- ---------- ---- ------   ----                                                                         
+13938 Kundalini - Miditating           2      1         2          1 2017 00:14:35 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150840] Kundali...
+
+ODR_Track FIL_Track                         TAG_Albumartists TAG_Artists TAG_Album      TAG_length TAG_Genres 
+--------- ---------                         ---------------- ----------- ---------      ---------- ---------- 
+01        01-kundalini_-_in_time-eup.mp3                     Kundalini   Miditating WEB 00:07:04   Psychedelic
+02        02-kundalini_-_miditating-eup.mp3                  Kundalini   Miditating WEB 00:07:30   Psychedelic
+********** 20:49:34 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150888] Mind Lab - Mind Sets (2017) (45/68) *
+********** 20:49:34 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                           
+----- ----                  ---------- ------ --------- ---------- ---- ------   ----                                                                           
+13939 Mind Lab - Mind Sets           2      1         2          1 2017 00:15:41 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150888] Mind Lab ...
+
+ODR_Track FIL_Track                         TAG_Albumartists TAG_Artists TAG_Album     TAG_length TAG_Genres 
+--------- ---------                         ---------------- ----------- ---------     ---------- ---------- 
+01        01-mind_lab_-_the_setting-eup.mp3 Mind Lab         Mind Lab    Mind Sets WEB 00:08:04   Psychedelic
+02        02-mind_lab_-_sitaram-eup.mp3     Mind Lab         Mind Lab    Mind Sets WEB 00:07:37   Psychedelic
+********** 20:49:39 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150901] Moon Tripper - Spiritual Space (2017) (46/68) *
+********** 20:49:39 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                            ---------- ------ --------- ---------- ---- ------   ----                                                                 
+13940 Moon Tripper - Spiritual Space           2      1         2          1 2017 00:23:57 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150901]...
+
+ODR_Track FIL_Track                                 TAG_Albumartists TAG_Artists  TAG_Album           TAG_length TAG_Genres 
+--------- ---------                                 ---------------- -----------  ---------           ---------- ---------- 
+01        01-moon_tripper_-_spiritual_space-eup.mp3 Moon Tripper     Moon Tripper Spiritual Space WEB 00:15:44   Psychedelic
+02        02-moon_tripper_-_hypnoia-eup.mp3         Moon Tripper     Moon Tripper Spiritual Space WEB 00:08:14   Psychedelic
+********** 20:49:43 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150819] Mystic - Curious Effects (2017) (47/68) *
+********** 20:49:43 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                      Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                       
+----- ----                      ---------- ------ --------- ---------- ---- ------   ----                                                                       
+13941 Mystic - Curious Effects           2      1         2          1 2017 00:15:24 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150819] Mysti...
+
+ODR_Track FIL_Track                           TAG_Albumartists TAG_Artists TAG_Album           TAG_length TAG_Genres 
+--------- ---------                           ---------------- ----------- ---------           ---------- ---------- 
+01        01-mystic_-_curious_effects-eup.mp3                  Mystic      Curious Effects WEB 00:07:01   Psychedelic
+02        02-mystic_-_real-eup.mp3                             Mystic      Curious Effects WEB 00:08:22   Psychedelic
+********** 20:49:48 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150826] Somatic Cell - Radical Particle (2017) (48/68) *
+********** 20:49:48 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                
+----- ----                             ---------- ------ --------- ---------- ---- ------   ----                                                                
+13942 Somatic Cell - Radical Particle           2      1         2          1 2017 00:18:28 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150826...
+
+ODR_Track FIL_Track                                        TAG_Albumartists TAG_Artists  TAG_Album            TAG_length TAG_Genres 
+--------- ---------                                        ---------------- -----------  ---------            ---------- ---------- 
+01        01-somatic_cell_-_factor_of_the_universe-eup.mp3 Somatic Cell     Somatic Cell Radical Particle WEB 00:08:37   Psychedelic
+02        02-somatic_cell_-_lost_in_valhalla-eup.mp3       Somatic Cell     Somatic Cell Radical Particle WEB 00:09:52   Psychedelic
+********** 20:49:52 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150710] Dark Soho - ReForm (2016) (49/68) *
+********** 20:49:52 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                             
+----- ----                ---------- ------ --------- ---------- ---- ------   ----                                                                             
+13943 Dark Soho - ReForm           2      1         2          1 2016 00:14:35 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150710] Dark Soho -...
+
+ODR_Track FIL_Track                          TAG_Albumartists TAG_Artists TAG_Album   TAG_length TAG_Genres 
+--------- ---------                          ---------------- ----------- ---------   ---------- ---------- 
+01        01-dark_soho_-_desert_rain-eup.mp3                  Dark Soho   Re:Form WEB 00:07:30   Psychedelic
+02        02-dark_soho_-_default-eup.mp3                      Dark Soho   Re:Form WEB 00:07:06   Psychedelic
+********** 20:49:56 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150659] Lupin - Dreamblaster (2016) (50/68) *
+********** 20:49:56 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                           
+----- ----                  ---------- ------ --------- ---------- ---- ------   ----                                                                           
+13944 Lupin - Dreamblaster           1      1         1          1 2016 00:08:44 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150659] Lupin - D...
+
+ODR_Track FIL_Track                       TAG_Albumartists TAG_Artists TAG_Album    TAG_length TAG_Genres 
+--------- ---------                       ---------------- ----------- ---------    ---------- ---------- 
+01        01-lupin_-_dreamblaster-eup.mp3                  Lupin       Dreamblaster 00:08:44   Psychedelic
+********** 20:50:01 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN007] Hypnocoustics - Ashtamangala (2012) (51/68) *
+********** 20:50:01 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+13945 Hypnocoustics - Ashtamangala           3      1         3          1 2012 00:26:00 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN007] ...
+
+ODR_Track FIL_Track                                TAG_Albumartists TAG_Artists   TAG_Album    TAG_length TAG_Genres 
+--------- ---------                                ---------------- -----------   ---------    ---------- ---------- 
+01        01-hypnocoustics_-_altjira_earth-gem.mp3                  Hypnocoustics Ashtamangala 00:08:34   Psychedelic
+02        02-hypnocoustics_-_full_spectrum-gem.mp3                  Hypnocoustics Ashtamangala 00:08:42   Psychedelic
+03        03-hypnocoustics_-_ashtamangala-gem.mp3                   Hypnocoustics Ashtamangala 00:08:44   Psychedelic
+********** 20:50:04 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN011] ManMachine - Animate Reality (2012) (52/68) *
+********** 20:50:04 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+13946 ManMachine - Animate Reality           3      1         3          0 2012 00:27:34 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN011] ...
+
+ODR_Track FIL_Track                                       TAG_Albumartists TAG_Artists TAG_Album       TAG_length TAG_Genres 
+--------- ---------                                       ---------------- ----------- ---------       ---------- ---------- 
+01        01-manmachine_-_animate_reality-gem.mp3                          ManMachine  Animate Reality 00:08:32   Psychedelic
+02        02-manmachine_-_drops_of_madness-gem.mp3                         ManMachine  Animate Reality 00:08:06   Psychedelic
+03        03-manmachine_-_into_the_state_of_peace-gem.mp3                  ManMachine  Animate Reality 00:10:56   Psychedelic
+********** 20:50:06 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD015] Lupin - Ritmo Galactico (2015) (53/68) *
+********** 20:50:06 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+13947 Lupin - Ritmo Galactico          10      1        10          1 2015 01:18:34 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD015] Lupin - Ri...
+
+ODR_Track FIL_Track                                          TAG_Albumartists TAG_Artists          TAG_Album       TAG_length TAG_Genres 
+--------- ---------                                          ---------------- -----------          ---------       ---------- ---------- 
+01        01-lupin_-_boomshakalaka-gem.mp3                                    Lupin                Ritmo Galactico 00:07:39   Psychedelic
+02        02-lupin_and_owntrip_-_trancepirados-gem.mp3                        Lupin & Owntrip      Ritmo Galactico 00:06:48   Psychedelic
+03        03-lupin_-_ritmo_galactico-gem.mp3                                  Lupin                Ritmo Galactico 00:08:07   Psychedelic
+04        04-egorythmia_-_arctic_dawn_(lupin_remix)-gem.mp3                   Egorythmia           Ritmo Galactico 00:08:11   Psychedelic
+05        05-lupin_-_zenanda-gem.mp3                                          Lupin                Ritmo Galactico 00:08:14   Psychedelic
+06        06-lupin_and_hypnoxock_-_psyblaster-gem.mp3                         Lupin & Hypnoxock    Ritmo Galactico 00:07:39   Psychedelic
+07        07-lupin_-_fractal_rush-gem.mp3                                     Lupin                Ritmo Galactico 00:08:04   Psychedelic
+08        08-lupin_and_sonic_entity_-_invasion-gem.mp3                        Lupin & Sonic Entity Ritmo Galactico 00:07:35   Psychedelic
+09        09-lupin_-_tribu-gem.mp3                                            Lupin                Ritmo Galactico 00:08:35   Psychedelic
+10        10-lupin_and_helber_gun_-_future_harmonics-gem.mp3                  Lupin  & Helber Gun  Ritmo Galactico 00:07:42   Psychedelic
+********** 20:50:13 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN026] Champa - Hiya Hiya (2014) (54/68) *
+********** 20:50:13 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                             
+----- ----                ---------- ------ --------- ---------- ---- ------   ----                                                                             
+13948 Champa - Hiya Hiya           3      1         3          2 2014 00:22:47 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN026] Champa - H...
+
+ODR_Track FIL_Track                              TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                              ---------------- ----------- --------- ---------- ----------
+1-01      01-champa_-_beyond_known_space-gem.mp3 Champa           Champa      Hiya Hiya 00:07:40   Psy-Trance
+1-02      02-champa_-_tomorrow_land-gem.mp3      Champa           Champa      Hiya Hiya 00:07:14   Psy-Trance
+1-03      03-champa_-_hiya_hiya-gem.mp3          Champa           Champa      Hiya Hiya 00:07:53   Psy-Trance
+********** 20:50:18 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD710] Psyground - The Hill (promo) (2007) (55/68) *
+********** 20:50:18 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+13949 Psyground - The Hill (promo)           3      1         3          3 2007 00:20:23 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD710] Psygr...
+
+ODR_Track FIL_Track                          TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres 
+--------- ---------                          ---------------- ----------- --------- ---------- ---------- 
+01        01-Psyground_-_The_Hill-BMSS.mp3                    Psyground   The Hill  00:06:39   Psychedelic
+02        02-Psyground_-_Deeper-BMSS.mp3                      Psyground   The Hill  00:07:38   Psychedelic
+03        03-Psyground_-_The_Ending-BMSS.mp3                  Psyground   The Hill  00:06:06   Psychedelic
+********** 20:50:34 -- Durée: 6 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGI088] VA - Similar Minds (2017) (56/68) *
+********** 20:50:34 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                             
+----- ----                ---------- ------ --------- ---------- ---- ------   ----                                                                             
+13950 VA - Similar Minds          10      1        10          1 2017 01:22:13 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGI088] VA - Similar ...
+
+ODR_Track FIL_Track                                                                                       TAG_Albumartists TAG_Artists                          
+--------- ---------                                                                                       ---------------- -----------                          
+1-01      1. Sephira & The Hang Playing Hedge Monkeys – Top Mast feat. The Hang Playing Hedge Monkeys.mp3 Various          Sephira Feat. Hang Playing Hedge M...
+1-10      10. Delightful Imperfections – Faze (Sephira Remix).mp3                                         Various          Delightful Imperfections             
+1-02      2. Grains Of Sound – Pulsar (Bmss Edit).mp3                                                     Various          Grains Of Sound                      
+1-03      3. Lab's Cloud – Woman Sensitivity.mp3                                                          Various          Lab's Cloud                          
+1-04      4. Maluns & Nibana – Heavy Dreamers.mp3                                                         Various          Nibana and Maluns                    
+1-05      5. Flexagon – Dawn.mp3                                                                          Various          Flexagon                             
+1-06      6. Chronos – Limit Breaker (Live Version).mp3                                                   Various          Chronos                              
+1-07      7. Psyonysus – Exit Samsara.mp3                                                                 Various          Psyonysus                            
+1-08      8. Flux Natura – Same Heart.mp3                                                                 Various          Flux Natura                          
+1-09      9. Sysyphe & BBrain & Sysyphe – The Antidote.mp3                                                Various          BBrain and Sysyphe
+********** 20:50:43 -- Durée: 6 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN004] Astral Gnomix - One Touch EP (2011) (57/68) *
+********** 20:50:43 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+13951 Astral Gnomix - One Touch EP           3      1         3          1 2011 00:26:22 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN004] ...
+
+ODR_Track FIL_Track                                      TAG_Albumartists TAG_Artists   TAG_Album TAG_length TAG_Genres 
+--------- ---------                                      ---------------- -----------   --------- ---------- ---------- 
+01        01-astral_gnomix_-_fatal_insonic-fym.mp3                        Astral Gnomix One Touch 00:09:35   Psychedelic
+02        02-astral_gnomix_-_spiritual_dimension-fym.mp3                  Astral Gnomix One Touch 00:06:41   Psychedelic
+03        03-astral_gnomix_-_techno_galaxy-fym.mp3                        Astral Gnomix One Touch 00:10:06   Psychedelic
+********** 20:50:56 -- Durée: 6 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060147128659] VA - Transmissions (2012) (58/68) *
+********** 20:50:56 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                             
+----- ----                ---------- ------ --------- ---------- ---- ------   ----                                                                             
+13952 VA - Transmissions          23      1        23          1 2012 02:59:11 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060147128659] VA - Transm...
+
+ODR_Track FIL_Track                                                                                              TAG_Albumartists TAG_Artists                   
+--------- ---------                                                                                              ---------------- -----------                   
+01        01-Elegy_-_Low_Red_Moon-PyS.mp3                                                                                         Elegy                         
+02        02-Yan_Gecko_-_Beyond_Perception-PyS.mp3                                                                                Yan Gecko                     
+03        03-Egorythmia_-_The_Ressurected-PyS.mp3                                                                                 Egorythmia                    
+04        04-Ovnimoon_And_Lightsourceand_Armin_Guentherand_Colin_Piscopo_-_Ithe_Source_(Lightsource_RMX)-PyS.mp3                  Ovnimoon And Lightsourceand...
+05        05-Zyce_-_Technology_(Zyce_2012_RMX)-PyS.mp3                                                                            Zyce                          
+06        06-Soul_Kontakt_-_Initiation-PyS.mp3                                                                                    Soul Kontakt                  
+07        07-Spirit_Architect_-_The_Fortress-PyS.mp3                                                                              Spirit Architect              
+08        08-Hypnocoustics_-_Into_The_Ninth-PyS.mp3                                                                               Hypnocoustics                 
+09        09-Meller_And_Pikachu_-_Rise_Of_The_Machines-PyS.mp3                                                                    Meller And Pikachu            
+10        10-Sephira_-_More_Than_Human-PyS.mp3                                                                                    Sephira                       
+11        11-Sonic_Entity_-_The_Object-PyS.mp3                                                                                    Sonic Entity                  
+12        12-Hypnoise_-_Demetrium-PyS.mp3                                                                                         Hypnoise                      
+13        13-Headroom_And_Zen_Mechanics_And_Tron_And_Paticio_Tron_Pinero_-_Cbr_(Tron_RMX)-PyS.mp3                                 Headroom And Zen Mechanics ...
+14        14-Tantrix_-_Catch_23-PyS.mp3                                                                                           Tantrix                       
+15        15-Ying_Yang_Monx_-_16th_Love-PyS.mp3                                                                                   Ying Yang Monx                
+16        16-Rigel_-_Tsunami_(Remix)-PyS.mp3                                                                                      Rigel                         
+17        17-Pulsar_And_Thaihanu_-_The_World_Is_Changed-PyS.mp3                                                                   Pulsar And Thaihanu           
+18        18-Sonic_Species_And_Avalon_-_Back_To_Reality-PyS.mp3                                                                   Sonic Species And Avalon      
+19        19-Spirit_Architect_-_Anti_Gravity-PyS.mp3                                                                              Spirit Architect              
+20        20-Braincell_And_Interconnekted_And_Gilbert_Cordina_-_Witches_In_Nature_(Interconnekted_RMX)-PyS.mp3                    Braincell And Interconnekte...
+21        21-Mirok_-_Dark_Glow-PyS.mp3                                                                                            Mirok                         
+22        22-Point_And_Cylon_And_Takeo_Namiki_-_Flip_Side_(Cylon_RMX)-PyS.mp3                                                     Point And Cylon And Takeo N...
+23        23-Via_Axis_-_Lost_In_Space-PyS.mp3                                                                                     Via Axis
+********** 20:51:07 -- Durée: 6 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD013] Odiolab - Medieval (2015) (59/68) *
+********** 20:51:07 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                             
+----- ----                ---------- ------ --------- ---------- ---- ------   ----                                                                             
+13953 Odiolab - Medieval           9      1         9          1 2015 01:18:49 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD013] Odiolab - Medie...
+
+ODR_Track FIL_Track                        TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                        ---------------- ----------- --------- ---------- ----------
+01        01-odiolab_-_psyltarello-gem.mp3                  Odiolab     Medieval  00:10:09   Ambient   
+02        02-odiolab_-_mamaragan-gem.mp3                    Odiolab     Medieval  00:09:36   Ambient   
+03        03-odiolab_-_ammonite-gem.mp3                     Odiolab     Medieval  00:06:45   Ambient   
+04        04-odiolab_-_pangaea-gem.mp3                      Odiolab     Medieval  00:09:04   Ambient   
+05        05-odiolab_-_medieval-gem.mp3                     Odiolab     Medieval  00:08:30   Ambient   
+06        06-odiolab_-_black_sea-gem.mp3                    Odiolab     Medieval  00:07:20   Ambient   
+07        07-odiolab_-_archetype-gem.mp3                    Odiolab     Medieval  00:08:09   Ambient   
+08        08-odiolab_-_pneuma-gem.mp3                       Odiolab     Medieval  00:10:43   Ambient   
+09        09-odiolab_-_narcissus-gem.mp3                    Odiolab     Medieval  00:08:33   Ambient
+********** 20:51:20 -- Durée: 6 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150543] Reversed Logic - Crystal Spirit EP (2016) (60/68) *
+********** 20:51:20 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                             
+----- ----                                ---------- ------ --------- ---------- ---- ------   ----                                                             
+13954 Reversed Logic - Crystal Spirit EP           2      1         2          1 2016 00:14:55 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150...
+
+ODR_Track FIL_Track                                     TAG_Albumartists TAG_Artists    TAG_Album TAG_length TAG_Genres
+--------- ---------                                     ---------------- -----------    --------- ---------- ----------
+00        01-reversed_logic_-_evolution_of_the_mind.mp3                  Reversed Logic           00:07:41             
+00        02-reversed_logic_-_crystal_spirit.mp3                         Reversed Logic           00:07:14
+********** 20:51:26 -- Durée: 7 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD016] The Key - The Light Within The Darkness (2016) (61/68) *
+********** 20:51:26 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                        
+----- ----                                     ---------- ------ --------- ---------- ---- ------   ----                                                        
+13955 The Key - The Light Within The Darkness           9      1         9          1 2016 01:11:27 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSC...
+
+ODR_Track FIL_Track                                    TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                                    ---------------- ----------- --------- ---------- ----------
+00        1. The Key - Magic Wind.mp3                                                         00:08:25             
+00        2. The Key - Birth Of A New Flower.mp3                                              00:09:04             
+00        3. The Key - The Source Of This Energy.mp3                                          00:07:44             
+00        4. The Key - Trance Mantra.mp3                                                      00:08:20             
+00        5. The Key - The Voice Of The Universe.mp3                                          00:07:50             
+00        6. The Key - Enlightened Souls.mp3                                                  00:07:25             
+00        7. The Key - Mindfulness.mp3                                                        00:07:34             
+00        8. The Key - Feel The Present.mp3                                                   00:07:43             
+00        9. The Key - Tridimensional Abstractions.mp3                                        00:07:22
+********** 20:51:34 -- Durée: 7 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD012] VA - Multiverse Chronicles (2015) (62/68) *
+********** 20:51:34 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                        ---------- ------ --------- ---------- ---- ------   ----                                                                     
+13956 VA - Multiverse Chronicles          10      1        10          1 2015 01:17:43 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD012] VA - Mu...
+
+ODR_Track FIL_Track                                             TAG_Albumartists TAG_Artists                TAG_Album                                  TAG_lengt
+                                                                                                                                                       h        
+--------- ---------                                             ---------------- -----------                ---------                                  ---------
+01        01-manmachine_-_telekinesis-gem.mp3                                    Manmachine                 Multiverse Chronicles Compiled By DJ Tsubi 00:08:09 
+02        02-datacult_-_kinetic-gem.mp3                                          Datacult                   Multiverse Chronicles Compiled By DJ Tsubi 00:07:05 
+03        03-labyr1nth_-_save_the_rainforest-gem.mp3                             Labyr1nth                  Multiverse Chronicles Compiled By DJ Tsubi 00:07:56 
+04        04-braincell_-_reactivation_of_the_mind-gem.mp3                        Braincell                  Multiverse Chronicles Compiled By DJ Tsubi 00:07:22 
+05        05-psilocybian_-_fatline-gem.mp3                                       PsiloCybian                Multiverse Chronicles Compiled By DJ Tsubi 00:07:47 
+06        06-spiritcat_-_throne_of_the_soul-gem.mp3                              Spiritcat                  Multiverse Chronicles Compiled By DJ Tsubi 00:07:36 
+07        07-para_halu_(feat._dj_tsubi)_-_5th_dimension-gem.mp3                  Para Halu (Feat. DJ Tsubi) Multiverse Chronicles Compiled By DJ Tsubi 00:08:24 
+08        08-aurafood_-_yage-gem.mp3                                             Aurafood                   Multiverse Chronicles Compiled By DJ Tsubi 00:07:09 
+09        09-sequoya_-_multiverse-gem.mp3                                        Sequoya                    Multiverse Chronicles Compiled By DJ Tsubi 00:08:42 
+10        10-hadron_orchestra_-_gliese_dub-gem.mp3                               Hadron Orchestra           Multiverse Chronicles Compiled By DJ Tsubi 00:07:34
+********** 20:51:40 -- Durée: 7 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150550] Mind Lab - Inner Engineering (2016) (63/68) *
+********** 20:51:40 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+		  | Extraction Cover :\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150550] Mind Lab - Inner Engineering (2016)\cover.jpg
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+13957 Mind Lab - Inner Engineering           2      1         2          1 2016 00:16:00 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150550] M...
+
+ODR_Track FIL_Track                           TAG_Albumartists TAG_Artists TAG_Album         TAG_length TAG_Genres 
+--------- ---------                           ---------------- ----------- ---------         ---------- ---------- 
+01        01-mind_lab_-_inner_engineering.mp3                  Mind Lab    Inner Engineering 00:07:42   Psychedelic
+02        02-mind_lab_-_theologue.mp3                          Mind Lab    Inner Engineering 00:08:18   Psychedelic
+********** 20:51:44 -- Durée: 7 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150802] Dark Nebula & Scatterbrain - The Flying Sorcerers (2017) (64/68) *
+********** 20:51:44 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+		  | Extraction Cover :\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150802] Dark Nebula & Scatterbrain - The Flying Sorcerers (2017)\cover.jpg
+
+ID_CD Name                                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                              
+----- ----                                               ---------- ------ --------- ---------- ---- ------   ----                                              
+13958 Dark Nebula & Scatterbrain - The Flying Sorcerers           2      1         2          1 2017 00:16:07 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Reco...
+
+ODR_Track FIL_Track                                                               TAG_Albumartists TAG_Artists                TAG_Album            TAG_length TA
+                                                                                                                                                              G_
+                                                                                                                                                              Ge
+                                                                                                                                                              nr
+                                                                                                                                                              es
+--------- ---------                                                               ---------------- -----------                ---------            ---------- --
+01        01. Dark Nebula & Scatterbrain - Everything Vibrates (Original Mix).mp3                  Dark Nebula & Scatterbrain The Flying Sorcerers 00:07:51   Ps
+02        02. Dark Nebula & Scatterbrain - We Got Stoned (Original Mix).mp3                        Dark Nebula & Scatterbrain The Flying Sorcerers 00:08:17   Ps
+********** 20:51:48 -- Durée: 7 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD005] Atma - Music Revolution (2011) (65/68) *
+********** 20:51:48 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+13959 Atma - Music Revolution          10      1        10          1 2011 01:12:34 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD005] Atma - Mus...
+
+ODR_Track FIL_Track                          TAG_Albumartists TAG_Artists TAG_Album        TAG_length TAG_Genres
+--------- ---------                          ---------------- ----------- ---------        ---------- ----------
+1-01      01 - Atma - The Outer Limits.mp3   Atma             Atma        Music Revolution 00:07:02   Psy-Trance
+1-02      02 - Atma - Freedom.mp3            Atma             Atma        Music Revolution 00:07:30   Psy-Trance
+1-03      03 - Atma - Forbidden Paradise.mp3 Atma             Atma        Music Revolution 00:06:40   Psy-Trance
+1-04      04 - Atma - Music Revolution.mp3   Atma             Atma        Music Revolution 00:07:13   Psy-Trance
+1-05      05 - Atma - Disturbing Silence.mp3 Atma             Atma        Music Revolution 00:06:39   Psy-Trance
+1-06      06 - Atma - Into The Void.mp3      Atma             Atma        Music Revolution 00:07:25   Psy-Trance
+1-07      07 - Atma - Space Conquest.mp3     Atma             Atma        Music Revolution 00:07:38   Psy-Trance
+1-08      08 - Atma - It's Time.mp3          Atma             Atma        Music Revolution 00:07:41   Psy-Trance
+1-09      09 - Atma - When We Dream.mp3      Atma             Atma        Music Revolution 00:07:05   Psy-Trance
+1-10      10 - Atma - The Guide.mp3          Atma             Atma        Music Revolution 00:07:42   Psy-Trance
+********** 20:51:56 -- Durée: 7 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150949] Somatic Cell & Psilocybian - Voices (Original Mix) (2017) (66/68) *
+********** 20:51:56 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                             
+----- ----                                                ---------- ------ --------- ---------- ---- ------   ----                                             
+13960 Somatic Cell & Psilocybian - Voices (Original Mix)           1      1         1          1 2017 00:08:11 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Rec...
+
+ODR_Track FIL_Track                                              TAG_Albumartists TAG_Artists               TAG_Album TAG_length TAG_Genres
+--------- ---------                                              ---------------- -----------               --------- ---------- ----------
+01        Somatic Cell & Psilocybian - Voices (Original Mix).mp3                  Psilocybian, Somatic Cell Voices    00:08:11   Psy-Trance
+********** 20:51:59 -- Durée: 7 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222630] VA - Trancefusion Chapter 2 (2017) (67/68) *
+********** 20:51:59 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                    
+----- ----                         ---------- ------ --------- ---------- ---- ------   ----                                                                    
+13961 VA - Trancefusion Chapter 2          11      1        11          1 2017 01:28:24 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222630] VA...
+
+ODR_Track FIL_Track                                                                            TAG_Albumartists TAG_Artists                 TAG_Album           
+--------- ---------                                                                            ---------------- -----------                 ---------           
+01        01-atmos_-_the_only_process_(captain_hook_remix).mp3                                                  Atmos                       Trancefusion Chap...
+02        02-soul_seeker_-_melodramatic.mp3                                                                     Soul Seeker                 Trancefusion Chap...
+03        03-etnica_and_pleiadians_-_plasma_light_(imaginarium_remix).mp3                                       Etnica & Pleiadians         Trancefusion Chap...
+04        04-somatic_cell_-_grieg_on_e.mp3                                                                      Somatic Cell                Trancefusion Chap...
+05        05-cosmosis_-_gift_of_the_gods_(sabretooth_remix).mp3                                                 Cosmosis                    Trancefusion Chap...
+06        06-try2fly_and_spirit_architect_-_keep_going_(sabretooth_remix).mp3                                   Try2fly & Spirit Architect  Trancefusion Chap...
+07        07-m-theory_-_transcend_humanity.mp3                                                                  M-Theory                    Trancefusion Chap...
+08        08-moon_tripper_-_tarantism.mp3                                                                       Moon Tripper                Trancefusion Chap...
+09        09-soul_kontakt_&_boom_shankar_-_simulated_reality_(etnica_and_pleiadians_remix).mp3                  Soul Kontakt & Boom Shankar Trancefusion Chap...
+10        10-solar_spectrum_-_twisted_modules_(original_mix).mp3                                                Solar Spectrum              Trancefusion Chap...
+11        11-pettra_-_brazil.mp3                                                                                Pettra                      Trancefusion Chap...
+********** 20:52:07 -- Durée: 7 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222623] VA - Trancefusion Chapter 1 (2017) (68/68) *
+********** 20:52:07 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                    
+----- ----                         ---------- ------ --------- ---------- ---- ------   ----                                                                    
+13962 VA - Trancefusion Chapter 1          11      1        11          1 2017 01:23:08 \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222623] VA...
+
+ODR_Track FIL_Track                                                                TAG_Albumartists      TAG_Artists           TAG_Album                        
+--------- ---------                                                                ----------------      -----------           ---------                        
+01        01. Electrypnose - Me and My Misunderstood Something (Original Mix).mp3  Electrypnose          Electrypnose          Trancefusion Chapter 1 (Compil...
+02        02. Aumni - Inner Call (Original Mix).mp3                                Aumni                 Aumni                 Trancefusion Chapter 1 (Compil...
+03        03. The Key - The Voice of the Universe (Lupin Remix) (Original Mix).mp3 The Key               The Key               Trancefusion Chapter 1 (Compil...
+04        04. Ascent - Makaranga (Original Mix).mp3                                Ascent                Ascent                Trancefusion Chapter 1 (Compil...
+05        05. Shivatree - In My Head (Original Mix).mp3                            Shivatree             Shivatree             Trancefusion Chapter 1 (Compil...
+06        06. Mystic - Three Panthers (Original Mix).mp3                           Mystic                Mystic                Trancefusion Chapter 1 (Compil...
+07        07. Hujaboy - Nothing but the Truth (Original Mix).mp3                   Hujaboy               Hujaboy               Trancefusion Chapter 1 (Compil...
+08        08. Reversed Logic - Quantum Flashes (Original Mix).mp3                  Reversed Logic        Reversed Logic        Trancefusion Chapter 1 (Compil...
+09        09. Psilocybian - Glowsticks (Original Mix).mp3                          Psilocybian           Psilocybian           Trancefusion Chapter 1 (Compil...
+10        10. Savage Circuit - World Gone Mad (Original Mix).mp3                   Savage Circuit        Savage Circuit        Trancefusion Chapter 1 (Compil...
+11        11. Dark Nebula, Datacult - Beyond That Door (Original Mix).mp3          Dark Nebula, Datacult Dark Nebula, Datacult Trancefusion Chapter 1 (Compil...
+********** 20:52:12 -- Durée: 7 min(s) -- END **************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170823205212
+**********************

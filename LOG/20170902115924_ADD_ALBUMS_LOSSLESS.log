@@ -1,0 +1,100 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170902115924
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt LOSSLESS -TypeOpe "UPDATE|UPDATE|UPDATE|ADD|DELETE" -AlbumInfos "2878|996|430|\\HOMERSTATION\_LossLess\TRANCE\Labels\Iono Records\[inm1digi116] Suntree - The Future EP (2013)|3461" -Category "REGGAE|TECHNO|TECHNO|TRANCE|TECHNO" -Family "Label/Physique|Label/Physique|Physique|Label/Physique|" -Force
+ID de processus : 4996
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 11:59:24 -- Durée: 0 sec -- START ADD_ALBUMS_LOSSLESS *******************************************************************************************
+********** 11:59:25 -- Durée: 1 sec -- UPDATE: 2878 (1/5) **************************************************************************************************
+
+ID_CD Name                                                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                      
+----- ----                                                       ---------- ------ --------- ---------- ---- ------   ----                                      
+ 2878 Bob Marley & The Wailers - Catch A Fire (MFSL) [UDCD 654]           9      1         1          4 1973 00:36:11 \\HOMERSTATION\_LossLess\REGGAE\Labels\...
+
+ODR_Track FIL_Track                                    TAG_Albumartists         TAG_Artists              TAG_Album                      TAG_length TAG_Genres
+--------- ---------                                    ----------------         -----------              ---------                      ---------- ----------
+01        Bob Marley & The Wailers - Catch A Fire.flac Bob Marley & The Wailers Bob Marley & The Wailers Catch A Fire (MFSL) [UDCD 654] 00:04:14   Reggae    
+02        Bob Marley & The Wailers - Catch A Fire.flac Bob Marley & The Wailers Bob Marley & The Wailers Catch A Fire (MFSL) [UDCD 654] 00:02:55   Reggae    
+03        Bob Marley & The Wailers - Catch A Fire.flac Bob Marley & The Wailers Bob Marley & The Wailers Catch A Fire (MFSL) [UDCD 654] 00:02:46   Reggae    
+04        Bob Marley & The Wailers - Catch A Fire.flac Bob Marley & The Wailers Bob Marley & The Wailers Catch A Fire (MFSL) [UDCD 654] 00:03:56   Reggae    
+05        Bob Marley & The Wailers - Catch A Fire.flac Bob Marley & The Wailers Bob Marley & The Wailers Catch A Fire (MFSL) [UDCD 654] 00:03:59   Reggae    
+06        Bob Marley & The Wailers - Catch A Fire.flac Bob Marley & The Wailers Bob Marley & The Wailers Catch A Fire (MFSL) [UDCD 654] 00:05:34   Reggae    
+07        Bob Marley & The Wailers - Catch A Fire.flac Bob Marley & The Wailers Bob Marley & The Wailers Catch A Fire (MFSL) [UDCD 654] 00:03:38   Reggae    
+08        Bob Marley & The Wailers - Catch A Fire.flac Bob Marley & The Wailers Bob Marley & The Wailers Catch A Fire (MFSL) [UDCD 654] 00:03:59   Reggae    
+09        Bob Marley & The Wailers - Catch A Fire.flac Bob Marley & The Wailers Bob Marley & The Wailers Catch A Fire (MFSL) [UDCD 654] 00:05:10   Reggae
+********** 11:59:30 -- Durée: 6 sec -- UPDATE: 996 (2/5) ***************************************************************************************************
+
+ID_CD Name                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                      
+----- ----                       ---------- ------ --------- ---------- ---- ------   ----                                                                      
+  996 VA - Chris Tietjen - Zwei          11      1         1          1 2007 01:13:33 \\HOMERSTATION\_LossLess\TECHNO\Labels\Cocoon Recordings\[CORMIX017] VA...
+
+ODR_Track FIL_Track                                TAG_Albumartists  TAG_Artists       TAG_Album TAG_length TAG_Genres
+--------- ---------                                ----------------  -----------       --------- ---------- ----------
+01        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:07:39   Techno    
+02        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:05:19   Techno    
+03        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:05:46   Techno    
+04        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:09:15   Techno    
+05        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:05:07   Techno    
+06        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:06:07   Techno    
+07        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:08:07   Techno    
+08        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:05:40   Techno    
+09        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:06:29   Techno    
+10        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:08:07   Techno    
+11        VA- Cocoon Recordings - Zwei - 2007.flac Cocoon Recordings Cocoon Recordings Zwei      00:05:57   Techno
+********** 11:59:33 -- Durée: 9 sec -- UPDATE: 430 (3/5) ***************************************************************************************************
+
+ID_CD Name                                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                            
+----- ----                                 ---------- ------ --------- ---------- ---- ------   ----                                                            
+  430 Red Snapper - Our Aim is to Satisfy          11      1        11          1 2000 00:57:02 \\HOMERSTATION\_LossLess\TECHNO\Colonne 4\07\Red Snapper - Ou...
+
+ODR_Track FIL_Track                                          TAG_Albumartists TAG_Artists TAG_Album                         TAG_length TAG_Genres
+--------- ---------                                          ---------------- ----------- ---------                         ---------- ----------
+1-01      Red Snapper - 01 - Keeping Pigs Together.flac      Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:05:23   Leftfield 
+1-02      Red Snapper - 02 - Some Kind of Kink.flac          Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:05:27   Leftfield 
+1-03      Red Snapper - 03 - Shellback.flac                  Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:05:43   Leftfield 
+1-04      Red Snapper - 04 - Don't Go Nowhere.flac           Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:04:50   Leftfield 
+1-05      Red Snapper - 05 - The Rake.flac                   Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:05:15   Leftfield 
+1-06      Red Snapper - 06 - The Rough & the Quick.flac      Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:05:06   Leftfield 
+1-07      Red Snapper - 07 - Bussing.flac                    Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:05:25   Leftfield 
+1-08      Red Snapper - 08 - I Stole Your Car.flac           Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:04:16   Leftfield 
+1-09      Red Snapper - 09 - Alaska Street.flac              Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:05:01   Leftfield 
+1-10      Red Snapper - 10 - Belladonna.flac                 Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:04:28   Leftfield 
+1-11      Red Snapper - 11 - They're Hanging Me Tonight.flac Red Snapper      Red Snapper Our Aim Is To Satisfy Red Snapper 00:06:10   Leftfield
+********** 11:59:38 -- Durée: 14 sec -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_LossLess\TRANCE\Labels\Iono Records\[inm1digi116] Suntree - The Future EP (2013) (4/5) *
+********** 11:59:38 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+ 4750 Suntree - The Future EP           4      1         4          2 2013 00:36:43 \\HOMERSTATION\_LossLess\TRANCE\Labels\Iono Records\[inm1digi116] Suntree...
+
+ODR_Track FIL_Track                              TAG_Albumartists TAG_Artists            TAG_Album  TAG_length TAG_Genres                   
+--------- ---------                              ---------------- -----------            ---------  ---------- ----------                   
+1-01      01. Suntree – Light of darkness.flac   Suntree          Suntree                The Future 00:09:00   Psy-Trance/Progressive Trance
+1-02      02. Suntree & Antigravity – Biiig.flac Suntree          Suntree & Anti-Gravity The Future 00:08:14   Psy-Trance/Progressive Trance
+1-03      03. Suntree – The Future.flac          Suntree          Suntree                The Future 00:10:11   Psy-Trance/Progressive Trance
+1-04      04. Suntree – Lolita.flac              Suntree          Suntree                The Future 00:09:18   Psy-Trance/Progressive Trance
+********** 11:59:39 -- Durée: 15 sec -- UPDATE: 3461 (5/5) *************************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Download\Dusty Kid - III [ISOLA 001] (2013)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+      | remove \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\LOG\20170828014824_ADD_ALBUMS_LOSSLESS_TEST.log
+********** 11:59:41 -- Durée: 17 sec -- END ****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170902115941
+**********************

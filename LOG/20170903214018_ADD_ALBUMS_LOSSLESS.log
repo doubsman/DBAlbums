@@ -1,0 +1,847 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170903214018
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt LOSSLESS -TypeOpe "UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|DELETE|DELETE|DELETE|DELETE|DELETE|DELETE|DELETE|DELETE|DELETE|DELETE|DELETE|DELETE" -AlbumInfos "2801|2300|145|147|148|149|150|151|152|153|154|155|156|146|108|1322|236|836|835|838|840|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD24] Dominik Eulberg - Diorama (2011)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD20] VA - 100 (2008)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD09] Process - Re'Processed - Interkontinentale Remixe (2CD) (2002)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD19] Dominik Eulberg - Heimische Gefilde (2007)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD16] Dominik Eulberg - Flora und Fauna (2004)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD18] VA - Elektronische Musik Interkontinental Vol. 5 (2006)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD14] VA - Elektronische Musik Interkontinental Vol. 3 (2004)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD07] VA - Elektronische Musik Interkontinental (2001)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum V132] Applescal - Welcome To The Woods EP (2010)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD21] Applescal - Slave's Commitment (2009)|\\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD12] Detalles - Shapes of Summer (2003)|4597|3743|2682|323|322|321|309|308|307|306|305|304" -Category "REGGAE|ROCK|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|REGGAE|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO" -Family "Physique|Physique|Physique|Physique|Physique|Physique|Physique|Physique|Physique|Physique|Physique|Physique|Physique|Physique|Physique|Label/Physique|Physique|Download|Download|Download|Download|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique||||||||||||" -Force
+ID de processus : 13224
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 21:40:18 -- Durée: 1 sec -- START ADD_ALBUMS_LOSSLESS *******************************************************************************************
+********** 21:40:20 -- Durée: 2 sec -- UPDATE: 2801 (1/44) *************************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+ 2801 Gregory Isaacs - Soon Forward          10      1         1          6 1979 00:37:33 \\HOMERSTATION\_LossLess\REGGAE\Colonne 8\06\Gregory Isaacs - Soon ...
+
+ODR_Track FIL_Track                          TAG_Albumartists TAG_Artists    TAG_Album    TAG_length TAG_Genres
+--------- ---------                          ---------------- -----------    ---------    ---------- ----------
+01        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:03:49   Reggae    
+02        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:03:09   Reggae    
+03        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:03:36   Reggae    
+04        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:04:03   Reggae    
+05        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:03:32   Reggae    
+06        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:03:16   Reggae    
+07        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:03:44   Reggae    
+08        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:02:49   Reggae    
+09        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:03:04   Reggae    
+10        Gregory Isaacs - Soon Forward.flac Gregory Isaacs   Gregory Isaacs Soon Forward 00:06:31   Reggae
+********** 21:40:23 -- Durée: 5 sec -- UPDATE: 2300 (2/44) *************************************************************************************************
+#year
+           | probleme Qty_CD virtuelcd:1|repcd:2
+
+ID_CD Name                   Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                   ---------- ------ --------- ---------- ---- ------   ----                                                                   
+ 2300 Queen - Greatest Hits          34      2        34         26 1992 02:14:24 \\HOMERSTATION\_LossLess\ROCK\Colonne 6\03\Queen - Greatest Hits (1992)
+
+ODR_Track FIL_Track                                       TAG_Albumartists TAG_Artists TAG_Album            TAG_length TAG_Genres                  
+--------- ---------                                       ---------------- ----------- ---------            ---------- ----------                  
+2-01      01. Queen – A Kind of Magic.flac                Queen            Queen       Greatest Hits I & II 00:04:23   Hard Rock/Pop Rock/Synth-pop
+1-01      01. Queen – Bohemian Rhapsody.flac              Queen            Queen       Greatest Hits I & II 00:05:58   Hard Rock/Pop Rock/Synth-pop
+1-02      02. Queen – Another One Bites The Dust.flac     Queen            Queen       Greatest Hits I & II 00:03:37   Hard Rock/Pop Rock/Synth-pop
+2-02      02. Queen – Under Pressure.flac                 Queen            Queen       Greatest Hits I & II 00:03:57   Hard Rock/Pop Rock/Synth-pop
+1-03      03. Queen – Killer Queen.flac                   Queen            Queen       Greatest Hits I & II 00:03:02   Hard Rock/Pop Rock/Synth-pop
+2-03      03. Queen – Radio Ga Ga.flac                    Queen            Queen       Greatest Hits I & II 00:05:43   Hard Rock/Pop Rock/Synth-pop
+1-04      04. Queen – Fat Bottomed Girls.flac             Queen            Queen       Greatest Hits I & II 00:03:25   Hard Rock/Pop Rock/Synth-pop
+2-04      04. Queen – I Want It All.flac                  Queen            Queen       Greatest Hits I & II 00:04:02   Hard Rock/Pop Rock/Synth-pop
+1-05      05. Queen – Bicycle Race.flac                   Queen            Queen       Greatest Hits I & II 00:03:04   Hard Rock/Pop Rock/Synth-pop
+2-05      05. Queen – I Want to Break Free.flac           Queen            Queen       Greatest Hits I & II 00:04:19   Hard Rock/Pop Rock/Synth-pop
+2-06      06. Queen – Innuendo.flac                       Queen            Queen       Greatest Hits I & II 00:06:28   Hard Rock/Pop Rock/Synth-pop
+1-06      06. Queen – You're My Best Friend.flac          Queen            Queen       Greatest Hits I & II 00:02:52   Hard Rock/Pop Rock/Synth-pop
+1-07      07. Queen – Don't Stop Me Now.flac              Queen            Queen       Greatest Hits I & II 00:03:32   Hard Rock/Pop Rock/Synth-pop
+2-07      07. Queen – It's a Hard Life.flac               Queen            Queen       Greatest Hits I & II 00:04:10   Hard Rock/Pop Rock/Synth-pop
+2-08      08. Queen – Breakthru.flac                      Queen            Queen       Greatest Hits I & II 00:04:09   Hard Rock/Pop Rock/Synth-pop
+1-08      08. Queen – Save Me.flac                        Queen            Queen       Greatest Hits I & II 00:03:49   Hard Rock/Pop Rock/Synth-pop
+1-09      09. Queen – Crazy Little Thing Called Love.flac Queen            Queen       Greatest Hits I & II 00:02:44   Hard Rock/Pop Rock/Synth-pop
+2-09      09. Queen – Who Wants to Live Forever.flac      Queen            Queen       Greatest Hits I & II 00:04:57   Hard Rock/Pop Rock/Synth-pop
+2-10      10. Queen – Headlong.flac                       Queen            Queen       Greatest Hits I & II 00:04:33   Hard Rock/Pop Rock/Synth-pop
+1-10      10. Queen – Somebody To Love.flac               Queen            Queen       Greatest Hits I & II 00:04:58   Hard Rock/Pop Rock/Synth-pop
+1-11      11. Queen – Now I'm Here.flac                   Queen            Queen       Greatest Hits I & II 00:04:15   Hard Rock/Pop Rock/Synth-pop
+2-11      11. Queen – The Miracle.flac                    Queen            Queen       Greatest Hits I & II 00:04:55   Hard Rock/Pop Rock/Synth-pop
+1-12      12. Queen – Good Old-Fashioned Lover Boy.flac   Queen            Queen       Greatest Hits I & II 00:02:56   Hard Rock/Pop Rock/Synth-pop
+2-12      12. Queen – I’m Going Slightly Mad.flac         Queen            Queen       Greatest Hits I & II 00:04:08   Hard Rock/Pop Rock/Synth-pop
+1-13      13. Queen – Play The Game.flac                  Queen            Queen       Greatest Hits I & II 00:03:33   Hard Rock/Pop Rock/Synth-pop
+2-13      13. Queen – The Invisible Man.flac              Queen            Queen       Greatest Hits I & II 00:03:59   Hard Rock/Pop Rock/Synth-pop
+1-14      14. Queen – Flash.flac                          Queen            Queen       Greatest Hits I & II 00:02:48   Hard Rock/Pop Rock/Synth-pop
+2-14      14. Queen – Hammer to Fall.flac                 Queen            Queen       Greatest Hits I & II 00:03:41   Hard Rock/Pop Rock/Synth-pop
+2-15      15. Queen – Friends Will Be Friends.flac        Queen            Queen       Greatest Hits I & II 00:04:09   Hard Rock/Pop Rock/Synth-pop
+1-15      15. Queen – Seven Seas Of Rhye.flac             Queen            Queen       Greatest Hits I & II 00:02:50   Hard Rock/Pop Rock/Synth-pop
+2-16      16. Queen – The Show Must Go On.flac            Queen            Queen       Greatest Hits I & II 00:04:24   Hard Rock/Pop Rock/Synth-pop
+1-16      16. Queen – We Will Rock You.flac               Queen            Queen       Greatest Hits I & II 00:02:03   Hard Rock/Pop Rock/Synth-pop
+2-17      17. Queen – One Vision.flac                     Queen            Queen       Greatest Hits I & II 00:04:03   Hard Rock/Pop Rock/Synth-pop
+1-17      17. Queen – We Are The Champions.flac           Queen            Queen       Greatest Hits I & II 00:03:01   Hard Rock/Pop Rock/Synth-pop
+********** 21:40:33 -- Durée: 15 sec -- UPDATE: 145 (3/44) *************************************************************************************************
+
+ID_CD Name                   Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                   ---------- ------ --------- ---------- ---- ------   ----                                                                     
+  145 Cafe Del Mar - Vol 01          12      1         1          1 1994 01:16:35 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 01 (1994)
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists            TAG_Album        TAG_length TAG_Genres
+--------- ---------   ---------------- -----------            ---------        ---------- ----------
+01        CDImage.wav Various          Jose Padilla           Cafe Del Mar - 1 00:07:39             
+02        CDImage.wav Various          William Orbit          Cafe Del Mar - 1 00:06:18             
+03        CDImage.wav Various          Sabres Of Paradise     Cafe Del Mar - 1 00:04:17             
+04        CDImage.wav Various          Penguin Cafe Orchestra Cafe Del Mar - 1 00:02:59             
+05        CDImage.wav Various          Sun Electric           Cafe Del Mar - 1 00:04:29             
+06        CDImage.wav Various          Leftfield              Cafe Del Mar - 1 00:06:07             
+07        CDImage.wav Various          Sisterlove             Cafe Del Mar - 1 00:09:01             
+08        CDImage.wav Various          Underworld             Cafe Del Mar - 1 00:09:02             
+09        CDImage.wav Various          Ver Vlads              Cafe Del Mar - 1 00:06:36             
+10        CDImage.wav Various          A Man Called Adam      Cafe Del Mar - 1 00:06:48             
+11        CDImage.wav Various          Obiman                 Cafe Del Mar - 1 00:06:25             
+12        CDImage.wav Various          Tabula Rasa            Cafe Del Mar - 1 00:06:54
+********** 21:40:35 -- Durée: 17 sec -- UPDATE: 147 (4/44) *************************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+  147 Cafe del Mar - vol 03 (tres)          13      1         1          1 1996 01:18:37 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe del Mar - vol 03 (...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists  TAG_Album TAG_length TAG_Genres
+--------- ---------   ---------------- -----------  --------- ---------- ----------
+01        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:06:14             
+02        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:06:19             
+03        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:05:57             
+04        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:06:50             
+05        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:07:59             
+06        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:03:27             
+07        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:06:43             
+08        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:05:45             
+09        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:05:25             
+10        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:06:41             
+11        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:07:19             
+12        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:06:10             
+13        CDImage.wav Cafe Del Mar     Cafe Del Mar Volume 3  00:03:48
+********** 21:40:40 -- Durée: 22 sec -- UPDATE: 148 (5/44) *************************************************************************************************
+
+ID_CD Name                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                            ---------- ------ --------- ---------- ---- ------   ----                                                                 
+  148 Cafe Del Mar - Vol 04 (Cuatro)          14      1        14          1 1997 01:18:27 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 04...
+
+ODR_Track FIL_Track                                                        TAG_Albumartists TAG_Artists                      TAG_Album                     TAG_l
+                                                                                                                                                           ength
+--------- ---------                                                        ---------------- -----------                      ---------                     -----
+1-01      (01) [Jose Padilla] Que Bonito.flac                              Various          Jose Padilla                     Café Del Mar - Volumen Cuatro 00...
+1-02      (02) [John Martyn] Sunshines Better (Talvin Singh).flac          Various          John Martyn                      Café Del Mar - Volumen Cuatro 00...
+1-03      (03) [Indo-Aminata] Leo Leo.flac                                 Various          Indo Aminata                     Café Del Mar - Volumen Cuatro 00...
+1-04      (04) [Paco Fernandez] Grillos.flac                               Various          Paco Fernandez                   Café Del Mar - Volumen Cuatro 00...
+1-05      (05) [Voices of Kwahn A.D.] Return Journey.flac                  Various          Voices Of Kwahn A.D.             Café Del Mar - Volumen Cuatro 00...
+1-06      (06) [Les Jumeaux] Miracle Road.flac                             Various          Les Jumeaux                      Café Del Mar - Volumen Cuatro 00...
+1-07      (07) [Wasis Diop feat. Lena Fiagbe] No Sant (Flytronix Mix).flac Various          Wasis Diop Featuring Lena Fiagbe Café Del Mar - Volumen Cuatro 00...
+1-08      (08) [Levitation] Out Of Time.flac                               Various          Levitation                       Café Del Mar - Volumen Cuatro 00...
+1-09      (09) [Fila Brazillia] Place De La Concorde.flac                  Various          Fila Brazillia                   Café Del Mar - Volumen Cuatro 00...
+1-10      (10) [Chicane] Offshore (Ambient Mix).flac                       Various          Chicane                          Café Del Mar - Volumen Cuatro 00...
+1-11      (11) [Afterlife] 5th & Avenida.flac                              Various          Afterlife                        Café Del Mar - Volumen Cuatro 00...
+1-12      (12) [Karen Ramirez] Troubled Girl (Spanish Version).flac        Various          Karen Ramirez                    Café Del Mar - Volumen Cuatro 00...
+1-13      (13) [Phil Mison] Lula.flac                                      Various          Phil Mison                       Café Del Mar - Volumen Cuatro 00...
+1-14      (14) [Stan Getz] Street Tattoo.flac                              Various          Stan Getz                        Café Del Mar - Volumen Cuatro 00...
+********** 21:40:43 -- Durée: 25 sec -- UPDATE: 149 (6/44) *************************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+  149 Cafe del Mar - vol 05 (Cinco)          15      1         1          2 1998 01:18:28 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe del Mar - vol 05 ...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists  TAG_Album     TAG_length TAG_Genres
+--------- ---------   ---------------- -----------  ---------     ---------- ----------
+01        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:05:15             
+02        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:07:21             
+03        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:03:48             
+04        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:05:01             
+05        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:06:13             
+06        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:03:44             
+07        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:03:26             
+08        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:04:56             
+09        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:05:41             
+10        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:07:05             
+11        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:05:05             
+12        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:06:46             
+13        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:05:37             
+14        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:05:17             
+15        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Cinco 00:03:13
+********** 21:40:45 -- Durée: 27 sec -- UPDATE: 150 (7/44) *************************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+  150 Cafe Del Mar - Vol 06 (Seis)          15      1         1          1 1999 01:16:48 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 06 (...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists                                       TAG_Album                   TAG_length TAG_Genres
+--------- ---------   ---------------- -----------                                       ---------                   ---------- ----------
+01        CDImage.wav Various Artists  Talvin Singh                                      Cafe Del Mar - Volumen Seis 00:05:51             
+02        CDImage.wav Various Artists  Afterlife                                         Cafe Del Mar - Volumen Seis 00:05:14             
+03        CDImage.wav Various Artists  A New Funky Generation                            Cafe Del Mar - Volumen Seis 00:03:47             
+04        CDImage.wav Various Artists  DZihan & Kamien                                   Cafe Del Mar - Volumen Seis 00:07:15             
+05        CDImage.wav Various Artists  Mandalay                                          Cafe Del Mar - Volumen Seis 00:04:35             
+06        CDImage.wav Various Artists  Humate                                            Cafe Del Mar - Volumen Seis 00:07:02             
+07        CDImage.wav Various Artists  Endorphin                                         Cafe Del Mar - Volumen Seis 00:03:08             
+08        CDImage.wav Various Artists  Nitin Sawhney                                     Cafe Del Mar - Volumen Seis 00:05:59             
+09        CDImage.wav Various Artists  Rae & Christian                                   Cafe Del Mar - Volumen Seis 00:05:15             
+10        CDImage.wav Various Artists  Bugge Wesseltoft                                  Cafe Del Mar - Volumen Seis 00:07:03             
+11        CDImage.wav Various Artists  Paco Fernandez/Levitation Feat. Cathy Battistessa Cafe Del Mar - Volumen Seis 00:04:23             
+12        CDImage.wav Various Artists  Marc Collin                                       Cafe Del Mar - Volumen Seis 00:04:12             
+13        CDImage.wav Various Artists  José Padilla                                      Cafe Del Mar - Volumen Seis 00:05:36             
+14        CDImage.wav Various Artists  Moonrock                                          Cafe Del Mar - Volumen Seis 00:03:46             
+15        CDImage.wav Various Artists  Dusty Springfield                                 Cafe Del Mar - Volumen Seis 00:03:42
+********** 21:40:50 -- Durée: 1 min(s) -- UPDATE: 151 (8/44) ***********************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+  151 Cafe Del Mar - Vol 07 (Siete)          13      1         1          1 2000 01:07:08 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 07 ...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists  TAG_Album TAG_length TAG_Genres
+--------- ---------   ---------------- -----------  --------- ---------- ----------
+01        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:05:34             
+02        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:06:03             
+03        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:06:05             
+04        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:04:55             
+05        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:05:24             
+06        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:04:21             
+07        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:03:58             
+08        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:06:17             
+09        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:04:11             
+10        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:06:48             
+11        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:03:43             
+12        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:04:53             
+13        CDImage.wav Café Del Mar     Café Del Mar Vol.7     00:04:56
+********** 21:40:53 -- Durée: 1 min(s) -- UPDATE: 152 (9/44) ***********************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+  152 Cafe Del Mar - Vol 08 (Ocho)          11      1         1          1 2001 00:57:13 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 08 (...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists        TAG_Album               TAG_length TAG_Genres
+--------- ---------   ---------------- -----------        ---------               ---------- ----------
+01        CDImage.wav Various Artists  Goldfrapp          Café Del Mar  Vol. Ocho 00:03:09             
+02        CDImage.wav Various Artists  Thomas Newman      Café Del Mar  Vol. Ocho 00:04:08             
+03        CDImage.wav Various Artists  Afterlife          Café Del Mar  Vol. Ocho 00:06:30             
+04        CDImage.wav Various Artists  Dido               Café Del Mar  Vol. Ocho 00:07:50             
+05        CDImage.wav Various Artists  Mari Boine         Café Del Mar  Vol. Ocho 00:04:49             
+06        CDImage.wav Various Artists  Mark de Clive-Lowe Café Del Mar  Vol. Ocho 00:05:55             
+07        CDImage.wav Various Artists  Ben Onono          Café Del Mar  Vol. Ocho 00:04:01             
+08        CDImage.wav Various Artists  Illumination       Café Del Mar  Vol. Ocho 00:05:25             
+09        CDImage.wav Various Artists  Digby Jones        Café Del Mar  Vol. Ocho 00:06:14             
+10        CDImage.wav Various Artists  Scripture          Café Del Mar  Vol. Ocho 00:04:52             
+11        CDImage.wav Various Artists  Lamb               Café Del Mar  Vol. Ocho 00:04:20
+********** 21:40:55 -- Durée: 1 min(s) -- UPDATE: 153 (10/44) **********************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+  153 Cafe Del Mar - Vol 09 (Nueve)          13      1         1          1 2002 01:11:27 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 09 ...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists             TAG_Album          TAG_length TAG_Genres
+--------- ---------   ---------------- -----------             ---------          ---------- ----------
+01        CDImage.wav Various Artists  Jo Manji                Café Del Mar Vol.9 00:05:45             
+02        CDImage.wav Various Artists  Lovers Lane             Café Del Mar Vol.9 00:05:22             
+03        CDImage.wav Various Artists  Blank & Jones           Café Del Mar Vol.9 00:04:33             
+04        CDImage.wav Various Artists  Kalliope                Café Del Mar Vol.9 00:04:28             
+05        CDImage.wav Various Artists  So Fine                 Café Del Mar Vol.9 00:04:50             
+06        CDImage.wav Various Artists  Miro                    Café Del Mar Vol.9 00:05:34             
+07        CDImage.wav Various Artists  Rue Du Soleil           Café Del Mar Vol.9 00:07:06             
+08        CDImage.wav Various Artists  Soft Wave               Café Del Mar Vol.9 00:05:51             
+09        CDImage.wav Various Artists  CDM                     Café Del Mar Vol.9 00:05:26             
+10        CDImage.wav Various Artists  Quantic                 Café Del Mar Vol.9 00:03:53             
+11        CDImage.wav Various Artists  Trio Mafua              Café Del Mar Vol.9 00:04:09             
+12        CDImage.wav Various Artists  Lazybatusu              Café Del Mar Vol.9 00:06:20             
+13        CDImage.wav Various Artists  Mr. Swen G* Feat. Inusa Café Del Mar Vol.9 00:08:10
+********** 21:40:57 -- Durée: 1 min(s) -- UPDATE: 154 (11/44) **********************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+  154 Cafe Del Mar - Vol 10 (Diez)          14      1         1          1 2003 01:14:12 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 10 (...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists            TAG_Album               TAG_length TAG_Genres
+--------- ---------   ---------------- -----------            ---------               ---------- ----------
+01        CDImage.wav Various          Substructure           Cafe del Mar Volumen 10 00:05:31             
+02        CDImage.wav Various          Remote                 Cafe del Mar Volumen 10 00:05:45             
+03        CDImage.wav Various          Future Loop Foundation Cafe del Mar Volumen 10 00:04:46             
+04        CDImage.wav Various          Lovers Lane            Cafe del Mar Volumen 10 00:05:08             
+05        CDImage.wav Various          DAB                    Cafe del Mar Volumen 10 00:06:35             
+06        CDImage.wav Various          Rue du Soleil          Cafe del Mar Volumen 10 00:05:15             
+07        CDImage.wav Various          Kinema                 Cafe del Mar Volumen 10 00:05:05             
+08        CDImage.wav Various          Rhian Sheehan          Cafe del Mar Volumen 10 00:04:50             
+09        CDImage.wav Various          Terra del Sol          Cafe del Mar Volumen 10 00:05:16             
+10        CDImage.wav Various          OhmG & Bruno           Cafe del Mar Volumen 10 00:05:55             
+11        CDImage.wav Various          Nacho Sotomayor        Cafe del Mar Volumen 10 00:04:49             
+12        CDImage.wav Various          Vargo                  Cafe del Mar Volumen 10 00:05:37             
+13        CDImage.wav Various          Ypey                   Cafe del Mar Volumen 10 00:05:05             
+14        CDImage.wav Various          Blank & Jones          Cafe del Mar Volumen 10 00:04:35
+********** 21:40:59 -- Durée: 1 min(s) -- UPDATE: 155 (12/44) **********************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+  155 Cafe Del Mar - Vol 11 (Once)          14      1         1          1 2004 01:19:04 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 11 (...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists               TAG_Album                 TAG_length TAG_Genres
+--------- ---------   ---------------- -----------               ---------                 ---------- ----------
+01        CDImage.wav Various Artists  Rhian Sheenan             Cafe del Mar Volumen Once 00:06:28             
+02        CDImage.wav Various Artists  M-Seven                   Cafe del Mar Volumen Once 00:05:13             
+03        CDImage.wav Various Artists  Ludvig & Stelar           Cafe del Mar Volumen Once 00:04:39             
+04        CDImage.wav Various Artists  Jens Gad                  Cafe del Mar Volumen Once 00:05:11             
+05        CDImage.wav Various Artists  Ohm-G & Bruno             Cafe del Mar Volumen Once 00:05:08             
+06        CDImage.wav Various Artists  Adani & Wolf feat. Praful Cafe del Mar Volumen Once 00:05:19             
+07        CDImage.wav Various Artists  Sonic Adventure Project   Cafe del Mar Volumen Once 00:04:47             
+08        CDImage.wav Various Artists  Miro                      Cafe del Mar Volumen Once 00:06:12             
+09        CDImage.wav Various Artists  Rue Du Soleil             Cafe del Mar Volumen Once 00:06:24             
+10        CDImage.wav Various Artists  JP Juice                  Cafe del Mar Volumen Once 00:06:11             
+11        CDImage.wav Various Artists  Digby Jones               Cafe del Mar Volumen Once 00:05:56             
+12        CDImage.wav Various Artists  Tactful                   Cafe del Mar Volumen Once 00:08:25             
+13        CDImage.wav Various Artists  Henrik T                  Cafe del Mar Volumen Once 00:04:53             
+14        CDImage.wav Various Artists  DAB                       Cafe del Mar Volumen Once 00:04:18
+********** 21:41:03 -- Durée: 1 min(s) -- UPDATE: 156 (13/44) **********************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+  156 Cafe Del Mar - Vol 12 (Doce)          28      2         2          2 2005 02:23:04 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 12 (...
+
+ODR_Track FIL_Track     TAG_Albumartists TAG_Artists  TAG_Album          TAG_length TAG_Genres
+--------- ---------     ---------------- -----------  ---------          ---------- ----------
+1-01      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:04:39             
+1-02      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:03:54             
+1-03      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:05:21             
+1-04      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:04:36             
+1-05      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:05:49             
+1-06      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:06:10             
+1-07      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:07:29             
+1-08      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:04:45             
+1-09      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:05:29             
+1-10      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:04:39             
+1-11      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:04:10             
+1-12      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:05:22             
+1-13      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:06:39             
+1-14      CDImage.wav   Cafe Del Mar     Cafe Del Mar Volumen Doce  CD 1 00:00:00             
+2-01      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:05:11             
+2-02      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:04:32             
+2-03      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:04:01             
+2-04      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:04:18             
+2-05      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:06:39             
+2-06      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:05:39             
+2-07      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:04:43             
+2-08      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:05:43             
+2-09      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:04:44             
+2-10      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:05:16             
+2-11      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:05:34             
+2-12      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:05:29             
+2-13      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:07:15             
+2-14      CDM-12-2.flac Cafe Del Mar     Cafe Del Mar Volumen Doce CD 2  00:04:58
+********** 21:41:07 -- Durée: 1 min(s) -- UPDATE: 146 (14/44) **********************************************************************************************
+
+ID_CD Name                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                    
+----- ----                         ---------- ------ --------- ---------- ---- ------   ----                                                                    
+  146 Cafe Del Mar - Vol 02 (dos)          13      1         1          1 1995 01:18:57 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\11\Cafe Del Mar - Vol 02 (d...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists  TAG_Album   TAG_length TAG_Genres
+--------- ---------   ---------------- -----------  ---------   ---------- ----------
+01        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:06:08             
+02        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:06:23             
+03        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:07:03             
+04        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:08:05             
+05        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:06:02             
+06        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:05:37             
+07        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:06:30             
+08        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:07:19             
+09        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:04:42             
+10        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:03:36             
+11        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:05:30             
+12        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:06:15             
+13        CDImage.wav Cafe Del Mar     Cafe Del Mar Volumen Dos 00:05:47
+********** 21:41:09 -- Durée: 1 min(s) -- UPDATE: 108 (15/44) **********************************************************************************************
+
+ID_CD Name                                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                           
+----- ----                                  ---------- ------ --------- ---------- ---- ------   ----                                                           
+  108 Wagon Christ - Sorry I Made You Lush          10      1         1          4 2004 00:48:55 \\HOMERSTATION\_LossLess\TECHNO\Colonne 1\08\Wagon Christ - ...
+
+ODR_Track FIL_Track                                       TAG_Albumartists TAG_Artists  TAG_Album             TAG_length TAG_Genres
+--------- ---------                                       ---------------- -----------  ---------             ---------- ----------
+01        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:04:52             
+02        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:05:44             
+03        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:03:38             
+04        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:04:26             
+05        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:05:41             
+06        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:03:37             
+07        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:07:00             
+08        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:03:45             
+09        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:05:47             
+10        01-wagon_christ--sorry_i_made_you_lush-csa.flac wagon christ     wagon christ sorry i made you lush 00:04:25
+********** 21:41:10 -- Durée: 1 min(s) -- UPDATE: 1322 (16/44) *********************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+ 1322 Monaque - Renaissance Russia          16      1        16          6 2010 01:19:55 \\HOMERSTATION\_LossLess\TECHNO\Labels\Renaissance\[non.cat] Monaque...
+
+ODR_Track FIL_Track                                                                             TAG_Albumartists TAG_Artists                           TAG_Album
+--------- ---------                                                                             ---------------- -----------                           ---------
+1-01      01 Kontext - Hometown Swamp.flac                                                      Monaque          Kontext                               Renais...
+1-02      02 Ripperton - Random Violence.flac                                                   Monaque          Ripperton                             Renais...
+1-03      03 Andy Catana - Ironia.flac                                                          Monaque          Andy Catana                           Renais...
+1-04      04 Robag Wruhme - Colby Nekk.flac                                                     Monaque          Robag Wruhme                          Renais...
+1-05      05 Lusine - These Things.flac                                                         Monaque          Lusine                                Renais...
+1-06      06 Steve Foulds - Black Light (Stallos Remix).flac                                    Monaque          Steve Foulds                          Renais...
+1-07      07 The Timewriter - Retime.flac                                                       Monaque          Timewriter, The                       Renais...
+1-08      08 Sahar Z & Audio Junkies - Beyond Detroit.flac                                      Monaque          Sahar Z & Audio Junkies               Renais...
+1-09      09 Nhar - Wisdom.flac                                                                 Monaque          Nhar                                  Renais...
+1-10      10 Asem Shama - Metroman.flac                                                         Monaque          Asem Shama                            Renais...
+1-11      11 Christian Smith - Higienopolis.flac                                                Monaque          Christian Smith                       Renais...
+1-12      12 Monaque - Resolutions.flac                                                         Monaque          Monaque                               Renais...
+1-13      13 Billy Johnson & Gennaro Mastrantonio - Space (Gary Becks Stripped Naked Tool).flac Monaque          Billy Johnston & Gennaro Mastrantonio Renais...
+1-14      14 Westlake - In The Middle Of The Day (B.Craack In The Middle Of The Night Mix).flac Monaque          Westlake                              Renais...
+1-15      15 Spooky - Little Bullet (Revisited Main Mix).flac                                   Monaque          Spooky                                Renais...
+1-16      16 Jim Rivers - 7 Days (Steve Mac Mix).flac                                           Monaque          Jim Rivers                            Renais...
+********** 21:41:15 -- Durée: 1 min(s) -- UPDATE: 236 (17/44) **********************************************************************************************
+
+ID_CD Name                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                            ---------- ------ --------- ---------- ---- ------   ----                                                                 
+  236 Felix Da Housecat - Excursions          18      1         1          3 2002 01:12:57 \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\04\Felix Da Housecat - E...
+
+ODR_Track FIL_Track                                     TAG_Albumartists TAG_Artists              TAG_Album                      TAG_length TAG_Genres
+--------- ---------                                     ---------------- -----------              ---------                      ---------- ----------
+01        Various - Felix Da Housecat - Excursions.flac Various          Ladytron                 Felix Da Housecat - Excursions 00:02:52   Electronic
+02        Various - Felix Da Housecat - Excursions.flac Various          We In Music              Felix Da Housecat - Excursions 00:04:28   Electronic
+03        Various - Felix Da Housecat - Excursions.flac Various          Daniel Diamond           Felix Da Housecat - Excursions 00:02:38   Electronic
+04        Various - Felix Da Housecat - Excursions.flac Various          Tok Tok Vs Soffy O       Felix Da Housecat - Excursions 00:02:59   Electronic
+05        Various - Felix Da Housecat - Excursions.flac Various          Nothern Line             Felix Da Housecat - Excursions 00:03:16   Electronic
+06        Various - Felix Da Housecat - Excursions.flac Various          Dot Allison              Felix Da Housecat - Excursions 00:04:58   Electronic
+07        Various - Felix Da Housecat - Excursions.flac Various          Bolz Bolz                Felix Da Housecat - Excursions 00:03:35   Electronic
+08        Various - Felix Da Housecat - Excursions.flac Various          Felix Da Housecat        Felix Da Housecat - Excursions 00:03:34   Electronic
+09        Various - Felix Da Housecat - Excursions.flac Various          Kiki                     Felix Da Housecat - Excursions 00:03:53   Electronic
+10        Various - Felix Da Housecat - Excursions.flac Various          User 010                 Felix Da Housecat - Excursions 00:03:29   Electronic
+11        Various - Felix Da Housecat - Excursions.flac Various          Tim Taylor Vs Thor 54    Felix Da Housecat - Excursions 00:03:10   Electronic
+12        Various - Felix Da Housecat - Excursions.flac Various          Jeff Mills               Felix Da Housecat - Excursions 00:04:10   Electronic
+13        Various - Felix Da Housecat - Excursions.flac Various          Miss Kitten & The Hacker Felix Da Housecat - Excursions 00:05:44   Electronic
+14        Various - Felix Da Housecat - Excursions.flac Various          Aphrohead                Felix Da Housecat - Excursions 00:03:40   Electronic
+15        Various - Felix Da Housecat - Excursions.flac Various          Felix Da Housecat        Felix Da Housecat - Excursions 00:05:09   Electronic
+16        Various - Felix Da Housecat - Excursions.flac Various          Zoot Woman               Felix Da Housecat - Excursions 00:03:50   Electronic
+17        Various - Felix Da Housecat - Excursions.flac Various          Ladytron                 Felix Da Housecat - Excursions 00:04:43   Electronic
+18        Various - Felix Da Housecat - Excursions.flac Various          Archigram                Felix Da Housecat - Excursions 00:06:49   Electronic
+********** 21:41:18 -- Durée: 1 min(s) -- UPDATE: 836 (18/44) **********************************************************************************************
+
+ID_CD Name              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                            
+----- ----              ---------- ------ --------- ---------- ---- ------   ----                                                            
+  836 Readymade - Bold          13      1         1          7 2001 00:56:00 \\HOMERSTATION\_LossLess\TECHNO\Download\Readymade - Bold (2001)
+
+ODR_Track FIL_Track            TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------            ---------------- ----------- --------- ---------- ----------
+01        Readymade - Bold.wav Readymade        Readymade   Bold      00:05:56             
+02        Readymade - Bold.wav Readymade        Readymade   Bold      00:04:20             
+03        Readymade - Bold.wav Readymade        Readymade   Bold      00:05:58             
+04        Readymade - Bold.wav Readymade        Readymade   Bold      00:01:39             
+05        Readymade - Bold.wav Readymade        Readymade   Bold      00:06:44             
+06        Readymade - Bold.wav Readymade        Readymade   Bold      00:04:09             
+07        Readymade - Bold.wav Readymade        Readymade   Bold      00:00:56             
+08        Readymade - Bold.wav Readymade        Readymade   Bold      00:04:59             
+09        Readymade - Bold.wav Readymade        Readymade   Bold      00:06:33             
+10        Readymade - Bold.wav Readymade        Readymade   Bold      00:01:17             
+11        Readymade - Bold.wav Readymade        Readymade   Bold      00:05:13             
+12        Readymade - Bold.wav Readymade        Readymade   Bold      00:07:03             
+13        Readymade - Bold.wav Readymade        Readymade   Bold      00:01:13
+********** 21:41:20 -- Durée: 1 min(s) -- UPDATE: 835 (19/44) **********************************************************************************************
+
+ID_CD Name                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                
+----- ----                  ---------- ------ --------- ---------- ---- ------   ----                                                                
+  835 Playgroup - Dj Kicks          24      1         1          6 2002 01:11:44 \\HOMERSTATION\_LossLess\TECHNO\Download\Playgroup - Dj Kicks (2002)
+
+ODR_Track FIL_Track                      TAG_Albumartists TAG_Artists                  TAG_Album           TAG_length TAG_Genres
+--------- ---------                      ---------------- -----------                  ---------           ---------- ----------
+01        01-dj_kicks_playgroup-csa.flac various          maurice fulton presents boof dj-kicks: playgroup 00:02:35             
+02        01-dj_kicks_playgroup-csa.flac various          ana rago                     dj-kicks: playgroup 00:03:25             
+03        01-dj_kicks_playgroup-csa.flac various          material                     dj-kicks: playgroup 00:02:36             
+04        01-dj_kicks_playgroup-csa.flac various          harelquin fours              dj-kicks: playgroup 00:05:41             
+05        01-dj_kicks_playgroup-csa.flac various          impedance                    dj-kicks: playgroup 00:03:09             
+06        01-dj_kicks_playgroup-csa.flac various          random factor                dj-kicks: playgroup 00:02:53             
+07        01-dj_kicks_playgroup-csa.flac various          cultural vibe                dj-kicks: playgroup 00:02:54             
+08        01-dj_kicks_playgroup-csa.flac various          metro area                   dj-kicks: playgroup 00:03:10             
+09        01-dj_kicks_playgroup-csa.flac various          tiny trendies                dj-kicks: playgroup 00:05:16             
+10        01-dj_kicks_playgroup-csa.flac various          smith 'n' hack               dj-kicks: playgroup 00:02:53             
+11        01-dj_kicks_playgroup-csa.flac various          zongamin                     dj-kicks: playgroup 00:02:12             
+12        01-dj_kicks_playgroup-csa.flac various          charles schillings           dj-kicks: playgroup 00:02:48             
+13        01-dj_kicks_playgroup-csa.flac various          nigo                         dj-kicks: playgroup 00:02:58             
+14        01-dj_kicks_playgroup-csa.flac various          j-walk                       dj-kicks: playgroup 00:03:12             
+15        01-dj_kicks_playgroup-csa.flac various          kc flightt                   dj-kicks: playgroup 00:02:20             
+16        01-dj_kicks_playgroup-csa.flac various          the human league             dj-kicks: playgroup 00:03:03             
+17        01-dj_kicks_playgroup-csa.flac various          parallax corporation         dj-kicks: playgroup 00:02:38             
+18        01-dj_kicks_playgroup-csa.flac various          playgroup                    dj-kicks: playgroup 00:04:06             
+19        01-dj_kicks_playgroup-csa.flac various          ralphi rosario               dj-kicks: playgroup 00:03:04             
+20        01-dj_kicks_playgroup-csa.flac various          bobby o                      dj-kicks: playgroup 00:00:30             
+21        01-dj_kicks_playgroup-csa.flac various          dexter                       dj-kicks: playgroup 00:02:05             
+22        01-dj_kicks_playgroup-csa.flac various          wanda dee                    dj-kicks: playgroup 00:01:45             
+23        01-dj_kicks_playgroup-csa.flac various          the rapture                  dj-kicks: playgroup 00:02:25             
+24        01-dj_kicks_playgroup-csa.flac various          flying lizards               dj-kicks: playgroup 00:04:06
+********** 21:41:23 -- Durée: 1 min(s) -- UPDATE: 838 (20/44) **********************************************************************************************
+
+ID_CD Name                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                              
+----- ----                               ---------- ------ --------- ---------- ---- ------   ----                                                              
+  838 Richie Hawtin - Decks, FX and 909          38      1         1          6 1999 01:01:29 \\HOMERSTATION\_LossLess\TECHNO\Download\Richie Hawtin - Decks,...
+
+ODR_Track FIL_Track   TAG_Albumartists TAG_Artists   TAG_Album        TAG_length TAG_Genres
+--------- ---------   ---------------- -----------   ---------        ---------- ----------
+01        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:02             
+02        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:04             
+03        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:11             
+04        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:04             
+05        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:25             
+06        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:17             
+07        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:23             
+08        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:10             
+09        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:00:36             
+10        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:37             
+11        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:29             
+12        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:00:47             
+13        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:04:21             
+14        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:50             
+15        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:00:40             
+16        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:00:28             
+17        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:00:13             
+18        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:12             
+19        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:16             
+20        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:00:56             
+21        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:11             
+22        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:00:59             
+23        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:00:10             
+24        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:11             
+25        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:56             
+26        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:16             
+27        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:59             
+28        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:07             
+29        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:38             
+30        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:23             
+31        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:20             
+32        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:00:31             
+33        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:01:21             
+34        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:38             
+35        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:52             
+36        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:59             
+37        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:15             
+38        CDImage.wav Richie Hawtin    Richie Hawtin Decks, EFX & 909 00:02:42
+********** 21:41:30 -- Durée: 1 min(s) -- UPDATE: 840 (21/44) **********************************************************************************************
+
+ID_CD Name                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                       ---------- ------ --------- ---------- ---- ------   ----                                                                     
+  840 Roy Ayers - Mahogany Vibe          14      1         1          3 2004 01:08:58 \\HOMERSTATION\_LossLess\TECHNO\Download\Roy Ayers - Mahogany Vibe (2004)
+
+ODR_Track FIL_Track          TAG_Albumartists TAG_Artists TAG_Album     TAG_length TAG_Genres
+--------- ---------          ---------------- ----------- ---------     ---------- ----------
+01        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:04:13             
+02        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:03:41             
+03        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:04:13             
+04        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:04:48             
+05        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:05:17             
+06        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:04:24             
+07        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:05:49             
+08        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:05:01             
+09        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:03:52             
+10        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:04:22             
+11        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:05:47             
+12        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:04:50             
+13        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:04:20             
+14        Mahogany Vibe.flac Roy Ayers        Roy Ayers   Mahogany Vibe 00:08:21
+********** 21:41:33 -- Durée: 1 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD24] Dominik Eulberg - Diorama (2011) (22/44) *
+********** 21:41:33 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                      
+----- ----                       ---------- ------ --------- ---------- ---- ------   ----                                                                      
+ 4751 Dominik Eulberg - Diorama          11      1        11          2 2011 01:09:42 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD24]...
+
+ODR_Track FIL_Track                                           TAG_Albumartists TAG_Artists     TAG_Album TAG_length TAG_Genres            
+--------- ---------                                           ---------------- -----------     --------- ---------- ----------            
+1-01      01-dominik_eulberg-taeuschungs-blume.flac           Dominik Eulberg  Dominik Eulberg Diorama   00:05:18   Techno/Electro/Minimal
+1-02      02-dominik_eulberg-echomaus.flac                    Dominik Eulberg  Dominik Eulberg Diorama   00:06:57   Techno/Electro/Minimal
+1-03      03-dominik_eulberg-das_neunauge.flac                Dominik Eulberg  Dominik Eulberg Diorama   00:05:22   Techno/Electro/Minimal
+1-04      04-dominik_eulberg-teddy_tausendtod.flac            Dominik Eulberg  Dominik Eulberg Diorama   00:08:00   Techno/Electro/Minimal
+1-05      05-dominik_eulberg-islandmuschel_400.flac           Dominik Eulberg  Dominik Eulberg Diorama   00:07:17   Techno/Electro/Minimal
+1-06      06-dominik_eulberg-die_3_millionen_musketiere.flac  Dominik Eulberg  Dominik Eulberg Diorama   00:06:21   Techno/Electro/Minimal
+1-07      07-dominik_eulberg-h2o.flac                         Dominik Eulberg  Dominik Eulberg Diorama   00:07:14   Techno/Electro/Minimal
+1-08      08-dominik_eulberg-der_tanz_der_gluehwuermchen.flac Dominik Eulberg  Dominik Eulberg Diorama   00:06:20   Techno/Electro/Minimal
+1-09      09-dominik_eulberg-aeronaut.flac                    Dominik Eulberg  Dominik Eulberg Diorama   00:05:33   Techno/Electro/Minimal
+1-10      10-dominik_eulberg-wenn_es_perlen_regnet.flac       Dominik Eulberg  Dominik Eulberg Diorama   00:08:24   Techno/Electro/Minimal
+1-11      11-dominik_eulberg-metamorphose.flac                Dominik Eulberg  Dominik Eulberg Diorama   00:02:54   Techno/Electro/Minimal
+********** 21:41:35 -- Durée: 1 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD20] VA - 100 (2008) (23/44) *
+********** 21:41:35 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name      Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                                   
+----- ----      ---------- ------ --------- ---------- ---- ------   ----                                                                                   
+ 4752 VA - 100          11      1        11          1 2008 01:15:02 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD20] VA - 100 (2008)
+
+ODR_Track FIL_Track                                                                                            TAG_Albumartists TAG_Artists         TAG_Album TA
+                                                                                                                                                              G_
+                                                                                                                                                              le
+                                                                                                                                                              ng
+                                                                                                                                                              th
+--------- ---------                                                                                            ---------------- -----------         --------- --
+1-01      01 - Broker-Dealer - Midnight.flac                                                                   Various          Broker/Dealer       100       00
+1-02      02 - Dominik Eulberg - Es Klebt Noch Morgentau in Deinem Haar.flac                                   Various          Dominik Eulberg     100       00
+1-03      03 - Bukaddor & Fishbeck - Decade.flac                                                               Various          Bukaddor & Fishbeck 100       00
+1-04      04 - Minilogue - Carnival.flac                                                                       Various          Minilogue           100       00
+1-05      05 - Thomas Brinkmann - Aleks in Love.flac                                                           Various          Thomas Brinkmann    100       00
+1-06      06 - Jesse Somfay - The Days of My Youth Ended with Broken Bottles [Dominik Eulberg & Riley Rei.flac Various          Jesse Somfay        100       00
+1-07      07 - Super Flu - Sunset Handjob.flac                                                                 Various          Super Flu           100       00
+1-08      08 - Moonbeam - You Can Hear Them.flac                                                               Various          Moonbeam            100       00
+1-09      09 - Gabriel Ananda - Lila Pause.flac                                                                Various          Gabriel Ananda      100       00
+1-10      10 - Fairmont - Down the Rabbit Hole.flac                                                            Various          Fairmont            100       00
+1-11      11 - Process - City-Zen.flac                                                                         Various          Process             100       00
+********** 21:41:37 -- Durée: 1 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD09] Process - Re'Processed - Interkontinentale Remixe (2CD) (2002) (24/44) *
+********** 21:41:37 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+           | probleme Qty_CD virtuelcd:1|repcd:2
+
+ID_CD Name                                                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                        
+----- ----                                                     ---------- ------ --------- ---------- ---- ------   ----                                        
+ 4753 Process - Re'Processed - Interkontinentale Remixe (2CD)          23      2        23          2 2002 02:23:04 \\HOMERSTATION\_LossLess\TECHNO\Labels\Tr...
+
+ODR_Track FIL_Track                                                 TAG_Albumartists TAG_Artists TAG_Album                               TAG_length TAG_Genres  
+--------- ---------                                                 ---------------- ----------- ---------                               ---------- ----------  
+2-01      01 - Process - Chug (Dubious Methods Remix).flac          Process          Process     Re'Processed - Interkontinentale Remixe 00:06:22   Techno/Mi...
+1-01      01 - Process - Pelican (Fax Recognition Mix).flac         Process          Process     Re'Processed - Interkontinentale Remixe 00:05:27   Techno/Mi...
+2-02      02 - Process - Estero (Re Re Mix).flac                    Process          Process     Re'Processed - Interkontinentale Remixe 00:07:27   Techno/Mi...
+1-02      02 - Process - Pelicanisation.flac                        Process          Process     Re'Processed - Interkontinentale Remixe 00:06:21   Techno/Mi...
+2-03      03 - Process - Magic Ping Pong Mix.flac                   Process          Process     Re'Processed - Interkontinentale Remixe 00:05:43   Techno/Mi...
+1-03      03 - Process - Zpracovat by Tomas Jirku.flac              Process          Process     Re'Processed - Interkontinentale Remixe 00:06:45   Techno/Mi...
+2-04      04 - Process - D1 (Remix).flac                            Process          Process     Re'Processed - Interkontinentale Remixe 00:06:01   Techno/Mi...
+1-04      04 - Process - Modif (Club Mix).flac                      Process          Process     Re'Processed - Interkontinentale Remixe 00:07:49   Techno/Mi...
+1-05      05 - Process - Integ (The Entire Plan Remix).flac         Process          Process     Re'Processed - Interkontinentale Remixe 00:06:16   Techno/Mi...
+2-05      05 - Process - The Pay Visit Mix.flac                     Process          Process     Re'Processed - Interkontinentale Remixe 00:05:09   Techno/Mi...
+2-06      06 - Process - Bye-Bye Gordian Knot.flac                  Process          Process     Re'Processed - Interkontinentale Remixe 00:04:52   Techno/Mi...
+1-06      06 - Process - Infatuation Mix.flac                       Process          Process     Re'Processed - Interkontinentale Remixe 00:06:08   Techno/Mi...
+2-07      07 - Process - Pelican in the Kitchen.flac                Process          Process     Re'Processed - Interkontinentale Remixe 00:08:34   Techno/Mi...
+1-07      07 - Process - Petit Pelican.flac                         Process          Process     Re'Processed - Interkontinentale Remixe 00:05:55   Techno/Mi...
+1-08      08 - Process - Displaced by Fairmont.flac                 Process          Process     Re'Processed - Interkontinentale Remixe 00:05:15   Techno/Mi...
+2-08      08 - Process - Pelican (Smartypants Mix).flac             Process          Process     Re'Processed - Interkontinentale Remixe 00:05:06   Techno/Mi...
+2-09      09 - Process - Estero (Source Remix).flac                 Process          Process     Re'Processed - Interkontinentale Remixe 00:07:19   Techno/Mi...
+1-09      09 - Process - Serial Algorithm of Genetic Mutations.flac Process          Process     Re'Processed - Interkontinentale Remixe 00:06:14   Techno/Mi...
+1-10      10 - Process - Agaric Mix.flac                            Process          Process     Re'Processed - Interkontinentale Remixe 00:05:19   Techno/Mi...
+2-10      10 - Process - Pelican (Want Want Mix).flac               Process          Process     Re'Processed - Interkontinentale Remixe 00:07:02   Techno/Mi...
+2-11      11 - Process - Pelican (Akufen Remix).flac                Process          Process     Re'Processed - Interkontinentale Remixe 00:06:41   Techno/Mi...
+1-11      11 - Process - Sidewalking.flac                           Process          Process     Re'Processed - Interkontinentale Remixe 00:05:24   Techno/Mi...
+1-12      12 - Process - Retrofitted Pelecanus Rmx.flac             Process          Process     Re'Processed - Interkontinentale Remixe 00:05:55   Techno/Mi...
+********** 21:41:44 -- Durée: 1 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD19] Dominik Eulberg - Heimische Gefilde (2007) (25/44) *
+********** 21:41:44 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                            
+----- ----                                 ---------- ------ --------- ---------- ---- ------   ----                                                            
+ 4754 Dominik Eulberg - Heimische Gefilde          21      1        21          1 2007 01:18:14 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[T...
+
+ODR_Track FIL_Track                                                                            TAG_Albumartists TAG_Artists     TAG_Album         TAG_length TAG
+                                                                                                                                                             _Ge
+                                                                                                                                                             nre
+                                                                                                                                                             s  
+--------- ---------                                                                            ---------------- -----------     ---------         ---------- ---
+1-01      01 - Dominik Eulberg - Begrüßung und Buntspecht.flac                                 Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:01:16   Fie
+1-02      02 - Dominik Eulberg - Afraid of Seeing Stars¿ [Heimische Gefilde Edit].flac         Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:06:53   Fie
+1-03      03 - Dominik Eulberg - Uhu.flac                                                      Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:00:43   Fie
+1-04      04 - Dominik Eulberg - Adler [Heimiche Gefilde Remix].flac                           Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:05:50   Fie
+1-05      05 - Dominik Eulberg - Rote Waldameise.flac                                          Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:00:47   Fie
+1-06      06 - Dominik Eulberg - Klangteppichverleger Wolle [Heimische Gefilde Edit].flac      Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:04:49   Fie
+1-07      07 - Dominik Eulberg - Goldammer.flac                                                Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:00:40   Fie
+1-08      08 - Dominik Eulberg - Die Alpenstrandläufer von Spiekeroog.flac                     Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:06:23   Fie
+1-09      09 - Dominik Eulberg - Feldgrille.flac                                               Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:00:33   Fie
+1-10      10 - Dominik Eulberg - Björn Borkenkäfer [Heimische Gefilde Edit].flac               Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:05:23   Fie
+1-11      11 - Dominik Eulberg - Eistaucher.flac                                               Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:01:02   Fie
+1-12      12 - Dominik Eulberg - Der Hecht im Karpfenteich [Heimische Gefilde Edit].flac       Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:04:47   Fie
+1-13      13 - Dominik Eulberg - Gelbbauchunke.flac                                            Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:00:40   Fie
+1-14      14 - Dominik Eulberg - Die Rotbauchunken Vom Tegernsee [Heimische Gefilde Edit].flac Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:05:49   Fie
+1-15      15 - Dominik Eulberg - Nachtigall.flac                                               Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:00:44   Fie
+1-16      16 - Dominik Eulberg - Gashof 'Zum Satten Bass' [Heimische Gefilde Edit].flac        Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:06:52   Fie
+1-17      17 - Dominik Eulberg - Rauhhautfledermaus und Großer Abendsegler.flac                Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:01:02   Fie
+1-18      18 - Dominik Eulberg - Der Buchdrucker [Heimische Gefilde Edit].flac                 Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:07:17   Fie
+1-19      19 - Dominik Eulberg - Waldkauz.flac                                                 Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:00:50   Fie
+1-20      20 - Dominik Eulberg - Harzer Roller [Heimische Gefilde Edit].flac                   Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:06:24   Fie
+1-21      21 - Dominik Eulberg - Stelldichein des Westerwälder Vogelchores.flac                Dominik Eulberg  Dominik Eulberg Heimische Gefilde 00:09:32   Fie
+********** 21:41:48 -- Durée: 2 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD16] Dominik Eulberg - Flora und Fauna (2004) (26/44) *
+********** 21:41:48 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                              
+----- ----                               ---------- ------ --------- ---------- ---- ------   ----                                                              
+ 4755 Dominik Eulberg - Flora und Fauna          10      1        10          1 2004 01:12:41 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Tra...
+
+ODR_Track FIL_Track                                                                                       TAG_Albumartists TAG_Artists     TAG_Album     TAG_len
+                                                                                                                                                         gth    
+--------- ---------                                                                                       ---------------- -----------     ---------     -------
+1-01      01 - Dominik Eulberg - Die Invasion Der Taschenkrebse.flac                                      Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+1-02      02 - Dominik Eulberg - Die Trottellummen Von Helgoland.flac                                     Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+1-03      03 - Dominik Eulberg - Keine Nieten Bei Den Herbstzeitlosen.flac                                Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+1-04      04 - Dominik Eulberg - 'Brenzlich, Brenzlich,' Dachte Der Feuersalamander.flac                  Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+1-05      05 - Dominik Eulberg - Die Seeadler Der Müritz.flac                                             Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+1-06      06 - Dominik Eulberg - Das Röhren Der Rotwildbrunft.flac                                        Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+1-07      07 - Dominik Eulberg - Der Tanz Der Blau-Grünen Mosaikjungfer.flac                              Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+1-08      08 - Dominik Eulberg - Der Judaskuss des Sonnentaus.flac                                        Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+1-09      09 - Dominik Eulberg - Der Zug Der Kraniche; Boten Der Veränderung.flac                         Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+1-10      10 - Dominik Eulberg - Der Purpurrote Sonnenuntergang Am Schilfumsäumten Bergsee (Mit ...).flac Dominik Eulberg  Dominik Eulberg Flora & Fauna 00:0...
+********** 21:41:50 -- Durée: 2 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD18] VA - Elektronische Musik Interkontinental Vol. 5 (2006) (27/44) *
+********** 21:41:51 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                               
+----- ----                                              ---------- ------ --------- ---------- ---- ------   ----                                               
+ 4756 VA - Elektronische Musik Interkontinental Vol. 5          14      1        14          1 2006 01:04:36 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Sch...
+
+ODR_Track FIL_Track                                         TAG_Albumartists TAG_Artists                     TAG_Album                               TAG_length
+--------- ---------                                         ---------------- -----------                     ---------                               ----------
+1-01      01 - Steve Barnes - All the Things.flac           Triple R         Process & Yvette Klein          Elektronische Musik -Interkontinental 5 00:00:39  
+1-02      02 - Lars Wickinger - Ghostrider.flac             Triple R         Lars Wickinger                  Elektronische Musik -Interkontinental 5 00:04:00  
+1-03      03 - Mashkraft - White Lines in the Blue Sky.flac Triple R         Mashkraft                       Elektronische Musik -Interkontinental 5 00:03:08  
+1-04      04 - Jesse Somfay - Fabergé.flac                  Triple R         Jesse Somfay                    Elektronische Musik -Interkontinental 5 00:04:29  
+1-05      05 - Kenny Leaven - Wasabi.flac                   Triple R         Kenny Leaven                    Elektronische Musik -Interkontinental 5 00:03:45  
+1-06      06 - Linus Quick - Tri-State.flac                 Triple R         Linus Quick                     Elektronische Musik -Interkontinental 5 00:04:00  
+1-07      07 - Florian Meindl - Don't Flue the Birds.flac   Triple R         Florian Meindl                  Elektronische Musik -Interkontinental 5 00:05:58  
+1-08      08 - Adam Kroll - Stalker.flac                    Triple R         Adam Kroll                      Elektronische Musik -Interkontinental 5 00:04:30  
+1-09      09 - Zentex - Löytötavara.flac                    Triple R         Zentex                          Elektronische Musik -Interkontinental 5 00:05:15  
+1-10      10 - Ortin Cam - New Found Glory.flac             Triple R         Ortin Cam                       Elektronische Musik -Interkontinental 5 00:05:30  
+1-11      11 - Gabriel Kogler - Romantisch im Westend.flac  Triple R         Gabriel Kogler                  Elektronische Musik -Interkontinental 5 00:05:30  
+1-12      12 - Emanuel Geller - Men on Earth.flac           Triple R         Riley Reinhold & Emanuel Geller Elektronische Musik -Interkontinental 5 00:06:30  
+1-13      13 - Process - Tendency to Synchronize.flac       Triple R         Process                         Elektronische Musik -Interkontinental 5 00:06:01  
+1-14      14 - Nathan Fake - Numb Chance.flac               Triple R         Nathan Fake                     Elektronische Musik -Interkontinental 5 00:05:21
+********** 21:41:53 -- Durée: 2 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD14] VA - Elektronische Musik Interkontinental Vol. 3 (2004) (28/44) *
+********** 21:41:53 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                               
+----- ----                                              ---------- ------ --------- ---------- ---- ------   ----                                               
+ 4757 VA - Elektronische Musik Interkontinental Vol. 3          11      1        11          1 2004 01:05:24 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Sch...
+
+ODR_Track FIL_Track                               TAG_Albumartists TAG_Artists    TAG_Album                               TAG_length TAG_Genres                 
+--------- ---------                               ---------------- -----------    ---------                               ---------- ----------                 
+1-01      01 - Adam Kroll - Klostergarten.flac    Various          Adam Kroll     Elektronische Musik -Interkontinental 3 00:05:06   Experimental/Tech House/...
+1-02      02 - Process - Boll.flac                Various          Process        Elektronische Musik -Interkontinental 3 00:04:24   Experimental/Tech House/...
+1-03      03 - Popnebo - Of Course She Does.flac  Various          Popnebo        Elektronische Musik -Interkontinental 3 00:06:51   Experimental/Tech House/...
+1-04      04 - Michael Fentum - Warm Hands.flac   Various          Michael Fentum Elektronische Musik -Interkontinental 3 00:07:35   Experimental/Tech House/...
+1-05      05 - Oliver Hacke - Lächel.flac         Various          Oliver Hacke   Elektronische Musik -Interkontinental 3 00:08:24   Experimental/Tech House/...
+1-06      06 - Donal Tierney - Text XXX.flac      Various          Donal Tierney  Elektronische Musik -Interkontinental 3 00:04:55   Experimental/Tech House/...
+1-07      07 - Jorge Gebauhr - I Love.flac        Various          Jorge Gebauhr  Elektronische Musik -Interkontinental 3 00:05:08   Experimental/Tech House/...
+1-08      08 - Margo - La Baumette.flac           Various          Margo          Elektronische Musik -Interkontinental 3 00:05:37   Experimental/Tech House/...
+1-09      09 - Boris Heizmann - Winterschlaf.flac Various          Boris Heizmann Elektronische Musik -Interkontinental 3 00:05:30   Experimental/Tech House/...
+1-10      10 - Fotec Foyamat - Love Streams.flac  Various          Fotel Folyamat Elektronische Musik -Interkontinental 3 00:05:09   Experimental/Tech House/...
+1-11      11 - Kosuke Anamizu - Moopy.flac        Various          Kosuke Anamizu Elektronische Musik -Interkontinental 3 00:06:45   Experimental/Tech House/...
+********** 21:41:56 -- Durée: 2 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD07] VA - Elektronische Musik Interkontinental (2001) (29/44) *
+********** 21:41:56 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                      
+----- ----                                       ---------- ------ --------- ---------- ---- ------   ----                                                      
+ 4758 VA - Elektronische Musik Interkontinental          11      1        11          1 2001 01:05:26 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplat...
+
+ODR_Track FIL_Track                                      TAG_Albumartists TAG_Artists   TAG_Album                             TAG_length TAG_Genres             
+--------- ---------                                      ---------------- -----------   ---------                             ---------- ----------             
+1-01      01 - Process - Disp.flac                       Various          Process       Elektronische Musik -Interkontinental 00:05:40   Minimal/Tech House/A...
+1-02      02 - Fairmont - Traum.flac                     Various          Fairmont      Elektronische Musik -Interkontinental 00:04:44   Minimal/Tech House/A...
+1-03      03 - Philippe Cam - Unicef Christmas Card.flac Various          Philippe Cam  Elektronische Musik -Interkontinental 00:06:24   Minimal/Tech House/A...
+1-04      04 - Dinky - Distance.flac                     Various          Miss Dinky    Elektronische Musik -Interkontinental 00:03:40   Minimal/Tech House/A...
+1-05      05 - M.I.A. - De-Frost.flac                    Various          M.I.A.        Elektronische Musik -Interkontinental 00:07:45   Minimal/Tech House/A...
+1-06      06 - Akufen - Train to Barcelona.flac          Various          Akufen        Elektronische Musik -Interkontinental 00:06:22   Minimal/Tech House/A...
+1-07      07 - Oxtongue - Elba Life.flac                 Various          Oxtongue      Elektronische Musik -Interkontinental 00:08:27   Minimal/Tech House/A...
+1-08      08 - Anton Kubikov - End of Space.flac         Various          Anton Kubikov Elektronische Musik -Interkontinental 00:04:18   Minimal/Tech House/A...
+1-09      09 - Broker-Dealer - Stormy.flac               Various          Broker/Dealer Elektronische Musik -Interkontinental 00:07:35   Minimal/Tech House/A...
+1-10      10 - Tomas Jirku - Sen.flac                    Various          Tomas Jirku   Elektronische Musik -Interkontinental 00:05:33   Minimal/Tech House/A...
+1-11      11 - Waki - Woods.flac                         Various          Waki          Elektronische Musik -Interkontinental 00:04:58   Minimal/Tech House/A...
+********** 21:41:58 -- Durée: 2 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum V132] Applescal - Welcome To The Woods EP (2010) (30/44) *
+********** 21:41:58 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                            
+----- ----                                 ---------- ------ --------- ---------- ---- ------   ----                                                            
+ 4759 Applescal - Welcome To The Woods EP           5      1         5          1 2010 00:30:49 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[T...
+
+ODR_Track FIL_Track                                                              TAG_Albumartists TAG_Artists TAG_Album               TAG_length TAG_Genres     
+--------- ---------                                                              ---------------- ----------- ---------               ---------- ----------     
+1-01      01 - Applescal - Welcome To The Woods (Original Mix).flac              Applescal        Applescal   Welcome To The Woods EP 00:06:07   Techno/Dubst...
+1-02      02 - Applescal - Forced Angel (Original Mix).flac                      Applescal        Applescal   Welcome To The Woods EP 00:06:07   Techno/Dubst...
+1-03      03 - Applescal - Your English Song (Dub Mix).flac                      Applescal        Applescal   Welcome To The Woods EP 00:06:36   Techno/Dubst...
+1-04      04 - Applescal - Your English Song (Alec Troniq Quarantine Remix).flac Applescal        Applescal   Welcome To The Woods EP 00:06:50   Techno/Dubst...
+1-05      05 - Applescal - Forced Angel (ThermalBear ReThink Remix).flac         Applescal        Applescal   Welcome To The Woods EP 00:05:09   Techno/Dubst...
+********** 21:42:01 -- Durée: 2 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD21] Applescal - Slave's Commitment (2009) (31/44) *
+********** 21:42:01 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                            ---------- ------ --------- ---------- ---- ------   ----                                                                 
+ 4760 Applescal - Slave's Commitment          12      1        12          1 2009 01:05:23 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum ...
+
+ODR_Track FIL_Track                                                       TAG_Albumartists TAG_Artists   TAG_Album            TAG_length TAG_Genres            
+--------- ---------                                                       ---------------- -----------   ---------            ---------- ----------            
+1-01      01 - Applescal - The History of Love.flac                       Applescal        Applescal     A Slave's Commitment 00:05:17   Techno/Electro/Ambient
+1-02      02 - Applescal - Nottingham Hobbits.flac                        Applescal        Applescal     A Slave's Commitment 00:05:04   Techno/Electro/Ambient
+1-03      03 - Applescal - Ugly But Nasty.flac                            Applescal        Applescal     A Slave's Commitment 00:08:28   Techno/Electro/Ambient
+1-04      04 - Applescal - In the Mirror.flac                             Applescal        Applescal     A Slave's Commitment 00:06:30   Techno/Electro/Ambient
+1-05      05 - Applescal - Music for Her Ears.flac                        Applescal        Applescal     A Slave's Commitment 00:02:02   Techno/Electro/Ambient
+1-06      06 - Applescal - I Can't Stand.flac                             Applescal        Applescal     A Slave's Commitment 00:05:36   Techno/Electro/Ambient
+1-07      07 - Applescal - The Forms of Abstract Life.flac                Applescal        Applescal     A Slave's Commitment 00:06:08   Techno/Electro/Ambient
+1-08      08 - Applescal - Now Heroes Die.flac                            Applescal        Applescal     A Slave's Commitment 00:04:31   Techno/Electro/Ambient
+1-09      09 - Applescal - The Red Dress.flac                             Applescal        Applescal     A Slave's Commitment 00:03:02   Techno/Electro/Ambient
+1-10      10 - Applescal - Funk & FC.flac                                 Applescal        Applescal     A Slave's Commitment 00:08:23   Techno/Electro/Ambient
+1-11      11 - Applescal - Local Daddy's Sjeesh Up [Applescal Remix].flac Applescal        Local Daddy's A Slave's Commitment 00:06:54   Techno/Electro/Ambient
+1-12      12 - Applescal - Reeeer.flac                                    Applescal        Applescal     A Slave's Commitment 00:03:29   Techno/Electro/Ambient
+********** 21:42:03 -- Durée: 2 min(s) -- ADD   : TECHNO Label/Physique \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD12] Detalles - Shapes of Summer (2003) (32/44) *
+********** 21:42:03 -- Durée: 0 sec -- Add album folder=sAlbum_Rep *****************************************************************************************
+
+ID_CD Name                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                    
+----- ----                         ---------- ------ --------- ---------- ---- ------   ----                                                                    
+ 4761 Detalles - Shapes of Summer          11      1        11          1 2003 00:33:19 \\HOMERSTATION\_LossLess\TECHNO\Labels\Traum Schallplatten\[Traum CD1...
+
+ODR_Track FIL_Track                             TAG_Albumartists TAG_Artists TAG_Album        TAG_length TAG_Genres          
+--------- ---------                             ---------------- ----------- ---------        ---------- ----------          
+1-01      01 - Detalles - Slowe Intro.flac      Detalles         Detalles    Shapes Of Summer 00:00:40   Experimental/Ambient
+1-02      02 - Detalles - Palomitas.flac        Detalles         Detalles    Shapes Of Summer 00:04:12   Experimental/Ambient
+1-03      03 - Detalles - Split.flac            Detalles         Detalles    Shapes Of Summer 00:04:04   Experimental/Ambient
+1-04      04 - Detalles - 4 A.M..flac           Detalles         Detalles    Shapes Of Summer 00:01:29   Experimental/Ambient
+1-05      05 - Detalles - Slowe.flac            Detalles         Detalles    Shapes Of Summer 00:02:42   Experimental/Ambient
+1-06      06 - Detalles - Rhodes Relejadas.flac Detalles         Detalles    Shapes Of Summer 00:04:01   Experimental/Ambient
+1-07      07 - Detalles - Solm.flac             Detalles         Detalles    Shapes Of Summer 00:04:12   Experimental/Ambient
+1-08      08 - Detalles - Plus-Mas.flac         Detalles         Detalles    Shapes Of Summer 00:04:08   Experimental/Ambient
+1-09      09 - Detalles - Kalimba.flac          Detalles         Detalles    Shapes Of Summer 00:02:10   Experimental/Ambient
+1-10      10 - Detalles - Hey Bobby.flac        Detalles         Detalles    Shapes Of Summer 00:03:57   Experimental/Ambient
+1-11      11 - Detalles - Melancholy Satie.flac Detalles         Detalles    Shapes Of Summer 00:01:43   Experimental/Ambient
+********** 21:42:06 -- Durée: 2 min(s) -- UPDATE: 4597 (33/44) *********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\VA - 100 (2008)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:06 -- Durée: 2 min(s) -- UPDATE: 3743 (34/44) *********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\Process - Re'Processed; Interkontinentale Remixe (2002)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:06 -- Durée: 2 min(s) -- UPDATE: 2682 (35/44) *********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\REGGAE\Colonne 7\07\VA - 100% Reggae 3 (1994)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:07 -- Durée: 2 min(s) -- UPDATE: 323 (36/44) **********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\VA - Elektronische Musik Interkontinental, Vol. 5 (2006)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:07 -- Durée: 2 min(s) -- UPDATE: 322 (37/44) **********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\VA - Elektronische Musik Interkontinental 3 (2004)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:08 -- Durée: 2 min(s) -- UPDATE: 321 (38/44) **********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\VA - Elektronische Musik Interkontinental (2001)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:08 -- Durée: 2 min(s) -- UPDATE: 309 (39/44) **********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\Dominik Eulberg - Heimische Gefilde (2007)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:09 -- Durée: 2 min(s) -- UPDATE: 308 (40/44) **********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\Dominik Eulberg - Flora und Fauna (2004)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:10 -- Durée: 2 min(s) -- UPDATE: 307 (41/44) **********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\Dominik Eulberg - Diorama (2011)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:11 -- Durée: 2 min(s) -- UPDATE: 306 (42/44) **********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\Detalles - Shapes of Summer (2003)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:11 -- Durée: 2 min(s) -- UPDATE: 305 (43/44) **********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\Applescal - Welcome To The Woods EP (2010)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+********** 21:42:11 -- Durée: 2 min(s) -- UPDATE: 304 (44/44) **********************************************************************************************
+...path modified \\HOMERSTATION\_LossLess\TECHNO\Colonne 2\08\Applescal - Slave's Commitment (2009)
+...path not find: Delete Album
+PS>Erreur de terminaison () : « Erreur système. »
+      | remove \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\LOG\20170829233946_ADD_ALBUMS_LOSSLESS.log
+********** 21:42:12 -- Durée: 2 min(s) -- END **************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170903214212
+**********************

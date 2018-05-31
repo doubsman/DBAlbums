@@ -1,0 +1,177 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170902122707
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt LOSSLESS -TypeOpe "UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE" -AlbumInfos "2879|2888|2892|803|858|823|851|847" -Category "REGGAE|REGGAE|REGGAE|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO" -Family "Label/Physique|Label/Physique|Label/Physique|Download|Download|Download|Download|Download" -Force
+ID de processus : 10964
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 12:27:08 -- Durée: 0 sec -- START ADD_ALBUMS_LOSSLESS *******************************************************************************************
+********** 12:27:09 -- Durée: 1 sec -- UPDATE: 2879 (1/8) **************************************************************************************************
+
+ID_CD Name                                                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                      
+----- ----                                                       ---------- ------ --------- ---------- ---- ------   ----                                      
+ 2879 Bob Marley & The Wailers - Chances Are [WEA 2292-53066-2]           8      1         1          5 1981 00:32:23 \\HOMERSTATION\_LossLess\REGGAE\Labels\...
+
+ODR_Track FIL_Track                     TAG_Albumartists TAG_Artists TAG_Album                      TAG_length TAG_Genres
+--------- ---------                     ---------------- ----------- ---------                      ---------- ----------
+01        Bob Marley - Chances Are.flac Bob Marley       Bob Marley  Chances Are [WEA 2292-53066-2] 00:05:21   Reggae    
+02        Bob Marley - Chances Are.flac Bob Marley       Bob Marley  Chances Are [WEA 2292-53066-2] 00:03:18   Reggae    
+03        Bob Marley - Chances Are.flac Bob Marley       Bob Marley  Chances Are [WEA 2292-53066-2] 00:05:05   Reggae    
+04        Bob Marley - Chances Are.flac Bob Marley       Bob Marley  Chances Are [WEA 2292-53066-2] 00:03:56   Reggae    
+05        Bob Marley - Chances Are.flac Bob Marley       Bob Marley  Chances Are [WEA 2292-53066-2] 00:04:38   Reggae    
+06        Bob Marley - Chances Are.flac Bob Marley       Bob Marley  Chances Are [WEA 2292-53066-2] 00:03:24   Reggae    
+07        Bob Marley - Chances Are.flac Bob Marley       Bob Marley  Chances Are [WEA 2292-53066-2] 00:03:01   Reggae    
+08        Bob Marley - Chances Are.flac Bob Marley       Bob Marley  Chances Are [WEA 2292-53066-2] 00:03:40   Reggae
+********** 12:27:14 -- Durée: 7 sec -- UPDATE: 2888 (2/8) **************************************************************************************************
+
+ID_CD Name                                                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                     
+----- ----                                                        ---------- ------ --------- ---------- ---- ------   ----                                     
+ 2888 Bob Marley & The Wailers - Soul Rebels [Receiver CDRR 106]          12      1         1          4 1970 00:32:50 \\HOMERSTATION\_LossLess\REGGAE\Labels...
+
+ODR_Track FIL_Track                                   TAG_Albumartists         TAG_Artists              TAG_Album                       TAG_length TAG_Genres
+--------- ---------                                   ----------------         -----------              ---------                       ---------- ----------
+01        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:03:23   Reggae    
+02        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:50   Reggae    
+03        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:40   Reggae    
+04        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:18   Reggae    
+05        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:03:38   Reggae    
+06        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:44   Reggae    
+07        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:43   Reggae    
+08        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:33   Reggae    
+09        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:34   Reggae    
+10        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:12   Reggae    
+11        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:46   Reggae    
+12        Bob Marley & The Wailers - Soul Rebels.flac Bob Marley & The Wailers Bob Marley & The Wailers Soul Rebels [Receiver CDRR 106] 00:02:29   Reggae
+********** 12:27:18 -- Durée: 11 sec -- UPDATE: 2892 (3/8) *************************************************************************************************
+
+ID_CD Name                                                                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                           
+----- ----                                                                  ---------- ------ --------- ---------- ---- ------   ----                           
+ 2892 Bob Marley & The Wailers - The Best Of The Wailers [Trojan TJPBX245]          10      1         1          3 1971 00:25:51 \\HOMERSTATION\_LossLess\REG...
+
+ODR_Track FIL_Track                                               TAG_Albumartists         TAG_Artists              TAG_Album                                 TA
+                                                                                                                                                              G_
+                                                                                                                                                              le
+                                                                                                                                                              ng
+                                                                                                                                                              th
+--------- ---------                                               ----------------         -----------              ---------                                 --
+01        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+02        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+03        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+04        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+05        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+06        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+07        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+08        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+09        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+10        Bob Marley & The Wailers - The Best Of The Wailers.flac Bob Marley & The Wailers Bob Marley & The Wailers The Best Of The Wailers [Trojan TJPBX245] 00
+********** 12:27:22 -- Durée: 14 sec -- UPDATE: 803 (4/8) **************************************************************************************************
+
+ID_CD Name                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                               
+----- ----                 ---------- ------ --------- ---------- ---- ------   ----                                                               
+  803 Clark - Body Riddle          11      1         1          1 2006 00:42:09 \\HOMERSTATION\_LossLess\TECHNO\Download\Clark - Body Riddle (2006)
+
+ODR_Track FIL_Track                       TAG_Albumartists TAG_Artists TAG_Album   TAG_length TAG_Genres      
+--------- ---------                       ---------------- ----------- ---------   ---------- ----------      
+01        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:03:54   IDM, Electronica
+02        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:04:13   IDM, Electronica
+03        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:01:36   IDM, Electronica
+04        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:04:23   IDM, Electronica
+05        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:02:54   IDM, Electronica
+06        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:03:22   IDM, Electronica
+07        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:03:44   IDM, Electronica
+08        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:01:05   IDM, Electronica
+09        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:05:40   IDM, Electronica
+10        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:03:50   IDM, Electronica
+11        Clark - (2006) Body Riddle.flac Clark            Clark       Body Riddle 00:07:28   IDM, Electronica
+********** 12:27:24 -- Durée: 17 sec -- UPDATE: 858 (5/8) **************************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                   
+  858 Thom Yorke - The Eraser           9      1         1          3 2006 00:41:00 \\HOMERSTATION\_LossLess\TECHNO\Download\Thom Yorke - The Eraser (2006)
+
+ODR_Track FIL_Track                           TAG_Albumartists TAG_Artists TAG_Album  TAG_length TAG_Genres
+--------- ---------                           ---------------- ----------- ---------  ---------- ----------
+01        Thom Yorke - (2006) The Eraser.flac Thom Yorke       Thom Yorke  The Eraser 00:04:55   Electronic
+02        Thom Yorke - (2006) The Eraser.flac Thom Yorke       Thom Yorke  The Eraser 00:04:03   Electronic
+03        Thom Yorke - (2006) The Eraser.flac Thom Yorke       Thom Yorke  The Eraser 00:04:14   Electronic
+04        Thom Yorke - (2006) The Eraser.flac Thom Yorke       Thom Yorke  The Eraser 00:04:49   Electronic
+05        Thom Yorke - (2006) The Eraser.flac Thom Yorke       Thom Yorke  The Eraser 00:03:36   Electronic
+06        Thom Yorke - (2006) The Eraser.flac Thom Yorke       Thom Yorke  The Eraser 00:05:14   Electronic
+07        Thom Yorke - (2006) The Eraser.flac Thom Yorke       Thom Yorke  The Eraser 00:04:16   Electronic
+08        Thom Yorke - (2006) The Eraser.flac Thom Yorke       Thom Yorke  The Eraser 00:04:38   Electronic
+09        Thom Yorke - (2006) The Eraser.flac Thom Yorke       Thom Yorke  The Eraser 00:05:15   Electronic
+********** 12:27:26 -- Durée: 19 sec -- UPDATE: 823 (6/8) **************************************************************************************************
+
+ID_CD Name             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                           
+----- ----             ---------- ------ --------- ---------- ---- ------   ----                                                           
+  823 Hiromi - Spiral           8      1         1          1 2006 01:05:39 \\HOMERSTATION\_LossLess\TECHNO\Download\Hiromi - Spiral (2006)
+
+ODR_Track FIL_Track                   TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                   ---------------- ----------- --------- ---------- ----------
+01        Hiromi - (2006) Spiral.flac Hiromi           Hiromi      Spiral    00:10:04   Jazz      
+02        Hiromi - (2006) Spiral.flac Hiromi           Hiromi      Spiral    00:10:16   Jazz      
+03        Hiromi - (2006) Spiral.flac Hiromi           Hiromi      Spiral    00:07:46   Jazz      
+04        Hiromi - (2006) Spiral.flac Hiromi           Hiromi      Spiral    00:05:10   Jazz      
+05        Hiromi - (2006) Spiral.flac Hiromi           Hiromi      Spiral    00:05:19   Jazz      
+06        Hiromi - (2006) Spiral.flac Hiromi           Hiromi      Spiral    00:08:21   Jazz      
+07        Hiromi - (2006) Spiral.flac Hiromi           Hiromi      Spiral    00:09:03   Jazz      
+08        Hiromi - (2006) Spiral.flac Hiromi           Hiromi      Spiral    00:09:40   Jazz
+********** 12:27:28 -- Durée: 21 sec -- UPDATE: 851 (7/8) **************************************************************************************************
+
+ID_CD Name                                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                             
+----- ----                                ---------- ------ --------- ---------- ---- ------   ----                                                             
+  851 The Cinematic Orchestra - Ma Fleur          11      1         1          1 2007 00:54:17 \\HOMERSTATION\_LossLess\TECHNO\Download\The Cinematic Orchest...
+
+ODR_Track FIL_Track                               TAG_Albumartists TAG_Artists TAG_Album TAG_length  TAG_Genres             
+--------- ---------                               ---------------- ----------- --------- ----------  ----------             
+01        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        10:44:00    Electro-Jazz, Post-Rock
+02        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        04:41:00    Electro-Jazz, Post-Rock
+03        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        11:54:00    Electro-Jazz, Post-Rock
+04        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        23:29:00    Electro-Jazz, Post-Rock
+05        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        21:16:00    Electro-Jazz, Post-Rock
+06        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        07:41:00    Electro-Jazz, Post-Rock
+07        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        00:06:00    Electro-Jazz, Post-Rock
+08        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        19:45:00    Electro-Jazz, Post-Rock
+09        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        23:37:00    Electro-Jazz, Post-Rock
+10        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        18:34:00    Electro-Jazz, Post-Rock
+11        The.Cinematic.Orchestra.-.Ma.Fleur.flac                                        -20:-52:-43 Electro-Jazz, Post-Rock
+********** 12:27:30 -- Durée: 22 sec -- UPDATE: 847 (8/8) **************************************************************************************************
+
+ID_CD Name                             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                
+----- ----                             ---------- ------ --------- ---------- ---- ------   ----                                                                
+  847 Squarepusher - Hello Everything          12      1         1          2 2006 01:03:48 \\HOMERSTATION\_LossLess\TECHNO\Download\Squarepusher - Hello Eve...
+
+ODR_Track FIL_Track                                   TAG_Albumartists TAG_Artists  TAG_Album        TAG_length TAG_Genres
+--------- ---------                                   ---------------- -----------  ---------        ---------- ----------
+01        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:04:31             
+02        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:02:57             
+03        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:02:54             
+04        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:06:10             
+05        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:06:02             
+06        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:03:54             
+07        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:00:49             
+08        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:07:48             
+09        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:04:33             
+10        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:07:36             
+11        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:05:39             
+12        Squarepusher - Hello Everything (2006).flac Squarepusher     Squarepusher Hello Everything 00:10:55
+      | remove \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\LOG\20170828014929_ADD_ALBUMS_LOSSLESS_TEST.log
+********** 12:27:36 -- Durée: 28 sec -- END ****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170902122736
+**********************

@@ -1,0 +1,754 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170823202212
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt MP3 -TypeOpe "UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|UPDATE|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD|ADD" -AlbumInfos "2427|13239|1451|6450|7694|13810|13814|13841|13843|13845|13846|13848|13849|13850|13851|13852|13853|13854|13855|13856|13857|13858|13859|13860|13864|13865|13866|13867|13868|13869|13870|13872|13873|13874|13875|13876|13877|13878|13882|13883|13884|13888|13891|13892|13894|858|\\HOMERSTATION\_Mp3\Psytrance\_years\2014\VA - Psy Trance Treasures Vol 2 (2014)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Deedrah, Shanti, MODERN8 - Soaring With The Angels EP (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Genetrick - In the Lions Den [DOPDIGI104] (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Oforia - Call To Mind (Original Mix) [MDMA Music] (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Universal Frequencies Vol  5 [Digital Om] (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\Xerox - Piece of Mind [HMHD114] (2017)|\\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Progressive Package Compiled by DJ Arnox (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Records (germany)\[10123854] Katharsis And Boom Duck And Gravitech - El Acido (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Records (germany)\[10122789] Emphacis - Music Travel (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)\[YSE398] VA - Goa Culture Vol 25 (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)\[YSE-DEP-066] VA - Burning Spear (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Digital Nature (israel)\[DNDI183] Cathar - Strong Acid (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Uxmal Records (mexique)\[UXM294] Kedarnath - Between Worlds (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danemark)\[IBOGADIGITAL358] Vini Vici - Ravers Army (Original Mix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danemark)\[IBOGADIGITAL353] Ace Ventura And Rocky Tilbor - Dr Lupo (Rising Dust Remix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Prog On Syndicate (germany)\[10123975] Querox And Monod - Zaga (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Iono Music (germany)\[INM1DIGI268] Ilai, Atomizers - Say It Louder (Original Mix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR434] Ranji - Power of Acid (Pop Art Remix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR435] Zac DePetro And Matte - Chapter I (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR438] Titans - Eternal Vibrations (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR442] Berg And Zanon - Dugly Dagly (Feat  Trio Mandili) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR431] VA - Wild Vision (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Ovnimoon Records (chili-usa)\[OVNIEP252] Floating Planet - Peak Experience (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\DNA Records (israel)\[DND064] Quantum on DNA - Hellfire (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0133] Shake - Redemption (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0129] VA - Summer Festival Collection (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0130] Zyce and Suduaya - Pure Light (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0131] Flegma - Soul Protector (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0132] Talpa and Purple Hayes - Born this Way (2014)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\Power House Records (american)\[PWRCD040] VA - Progress To Goa Vol 2 By Random And Dr Spook (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANODIGI130] Pogo & Djantrix - Rejoicer (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANODIGI131] Dickster & Space Tribe - Turn On The World EP (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANOCD052] VA - Nano Sonic Sound System Vol 5 (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150932] Shreder - Kawabunga (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150833] Aumni - Vagabond (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150864] Exolon - Spiritual Voices (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150857] H-Sunrise - Orange Pulsation (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150918] Ibojima - Mental Extension (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150840] Kundalini - Miditating (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150888] Mind Lab - Mind Sets (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150901] Moon Tripper - Spiritual Space (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150819] Mystic - Curious Effects (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150826] Somatic Cell - Radical Particle (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150710] Dark Soho - ReForm (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150659] Lupin - Dreamblaster (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN007] Hypnocoustics - Ashtamangala (2012)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN011] ManMachine - Animate Reality (2012)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD015] Lupin - Ritmo Galactico (2015)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN026] Champa - Hiya Hiya (2014)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD710] Psyground - The Hill (promo) (2007)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGI088] VA - Similar Minds (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN004] Astral Gnomix - One Touch EP (2011)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060147128659] VA - Transmissions (2012)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD013] Odiolab - Medieval (2015)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150543] Reversed Logic - Crystal Spirit EP (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD016] The Key - The Light Within The Darkness (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD012] VA - Multiverse Chronicles (2015)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150550] Mind Lab - Inner Engineering (2016)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150802] Dark Nebula & Scatterbrain - The Flying Sorcerers (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD005] Atma - Music Revolution (2011)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150949] Somatic Cell & Psilocybian - Voices (Original Mix) (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222630] VA - Trancefusion Chapter 2 (2017)|\\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222623] VA - Trancefusion Chapter 1 (2017)" -Category "ROCK|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TECHNO|TRANCE|TRANCE|TRANCE|TECHNO|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE|TRANCE" -Family "Download|Download|Download|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Download|Download|Download|Download|Download|Download|Download|Download|Download|Download|Download|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique|Label/Physique" -Force
+ID de processus : 10220
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 20:22:13 -- Durée: 0 sec -- START ADD_ALBUMS_MP3 ************************************************************************************************
+********** 20:22:14 -- Durée: 1 sec -- UPDATE: 2427 (1/109) ************************************************************************************************
+
+#year
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : [0680] Belinda Carlisle - A Place On Earth - The Greatest Hits (2CD Limited Edition) -> \\HOMERSTATION\_Mp3\Rock Artists\1000 Top Albums\[0680] Belinda Carlisle - A Place On Earth - The Greatest Hits (2CD Limited Edition)
+           | probleme Qty_CD virtuelcd:1|repcd:2
+
+ID_CD Name                                                                                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path            
+----- ----                                                                                 ---------- ------ --------- ---------- ---- ------   ----            
+ 2427 [0680] Belinda Carlisle - A Place On Earth - The Greatest Hits (2CD Limited Edition)         28      2        28          0    0 02:14:05 \\HOMERSTATIO...
+
+ODR_Track FIL_Track                                              TAG_Albumartists TAG_Artists      TAG_Album                                                    
+--------- ---------                                              ---------------- -----------      ---------                                                    
+2-01      01 - Heaven Is A Place On Earth (Heavenly Version).mp3                  Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-01      01 - Heaven Is A Place On Earth.mp3                                     Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-02      02 - I Get Weak (12' Version).mp3                                       Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-02      02 - I Get Weak.mp3                                                     Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-03      03 - Circle In The Sand (Beach Party Mix).mp3                           Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-03      03 - Circle In The Sand.mp3                                             Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-04      04 - Leave A Light On.mp3                                               Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-04      04 - World Without You (Extended Worldwide Mix).mp3                     Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+2-05      05 - (We Want) The Same Thing (Summer Remix).mp3                        Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-05      05 - La Luna.mp3                                                        Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-06      06 - (We Want) The Same Thing.mp3                                       Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-06      06 - Summer Rain (Justin Strauss Mix).mp3                               Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+2-07      07 - Live Your Life Be Free (Club Mix).mp3                              Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-07      07 - Summer Rain.mp3                                                    Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-08      08 - Live Your Life Be Free.mp3                                         Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-08      08 - Only A Dream.mp3                                                   Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-09      09 - Do You Feel Like I Feel .mp3                                       Belinda Carlisle A Place On Earth - The Greatest Hits                         
+2-09      09 - The Air You Breathe.mp3                                            Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+2-10      10 - Little Black Book (Little Black Mix).mp3                           Belinda Carlisle A Place On Earth - The Greatest Hits (Limited Edition Bonu...
+1-10      10 - Little Black Book.mp3                                              Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-11      11 - Big Scary Animal.mp3                                               Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-12      12 - In Too Deep.mp3                                                    Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-13      13 - California.mp3                                                     Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-14      14 - Always Breaking My Heart.mp3                                       Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-15      15 - Love In The Key Of C.mp3                                           Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-16      16 - Feels Like I've Known You Forever.mp3                              Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-17      17 - A Prayer For Everyone.mp3                                          Belinda Carlisle A Place On Earth - The Greatest Hits                         
+1-18      18 - All God's Children.mp3                                             Belinda Carlisle A Place On Earth - The Greatest Hits
+********** 20:22:23 -- Durée: 11 sec -- UPDATE: 13239 (2/109) **********************************************************************************************
+
+ID_CD Name                                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                  
+----- ----                                           ---------- ------ --------- ---------- ---- ------   ----                                                  
+13239 Kruder & Dorfmeister - The K&D sessions (MPC)          21      2        21          2 1998 02:07:02 \\HOMERSTATION\_Mp3\Techno Artists\Kruder & Dorfmei...
+
+ODR_Track FIL_Track                                         TAG_Albumartists TAG_Artists        TAG_Album        TAG_length TAG_Genres 
+--------- ---------                                         ---------------- -----------        ---------        ---------- ---------- 
+2-01      01 - David Holmes - Gone.mpc                                       Kruder Dorfmeister The K&D Sessions 00:08:30   Drum & Bass
+1-01      01 - Roni Size - Heroes.mpc                                        Kruder Dorfmeister The K&D Sessions 00:06:31   Drum & Bass
+1-02      02 - Alex Reece - Jazz Master.mpc                                  Kruder Dorfmeister The K&D Sessions 00:08:21   Drum & Bass
+2-02      02 - Sofa Surfers - Sofa Rockers.mpc                               Kruder Dorfmeister The K&D Sessions 00:04:31   Drum & Bass
+1-03      03 - Count Basic - Speechless.mpc                                  Kruder Dorfmeister The K&D Sessions 00:06:38   Drum & Bass
+2-03      03 - Mama Oliver - Eastwest Stoned.mpc                             Kruder Dorfmeister The K&D Sessions 00:05:12   Drum & Bass
+2-04      04 - Bomb the Bass - Bug Powder Dust Dub.mpc                       Kruder Dorfmeister The K&D Sessions 00:06:21   Drum & Bass
+1-04      04 - Rocker's HiFi - Going Under.mpc                               Kruder Dorfmeister The K&D Sessions 00:08:38   Drum & Bass
+1-05      05 - Bomb the Bass - Bug Powder Dust.mpc                           Kruder Dorfmeister The K&D Sessions 00:07:21   Drum & Bass
+2-05      05 - Kruder & Dorfmeister - Boogie Woogie.mpc                      Kruder Dorfmeister The K&D Sessions 00:03:21   Drum & Bass
+1-06      06 - Aphrodelics - Rollin' on chrome.mpc                           Kruder Dorfmeister The K&D Sessions 00:05:40   Drum & Bass
+2-06      06 - SIN - Where Shall I Turn.mpc                                  Kruder Dorfmeister The K&D Sessions 00:05:54   Drum & Bass
+2-07      07 - Bone Thugs 'N Harmony - 1st Of Tha Month.mpc                  Kruder Dorfmeister The K&D Sessions 00:05:50   Drum & Bass
+1-07      07 - Depeche Mode - Useless.mpc                                    Kruder Dorfmeister The K&D Sessions 00:06:14   Drum & Bass
+1-08      08 - Count Basic - Gotta Jazz.mpc                                  Kruder Dorfmeister The K&D Sessions 00:05:33   Drum & Bass
+2-08      08 - Kruder & Dorfmeister - Lexicon.mpc                            Kruder Dorfmeister The K&D Sessions 00:01:07   Drum & Bass
+2-09      09 - Knowtoryous - Bomberclaad Joint.mpc                           Kruder Dorfmeister The K&D Sessions 00:03:48   Drum & Bass
+1-09      09 - Rainer Trüby Trio - Donaueschingen.mpc                        Kruder Dorfmeister The K&D Sessions 00:06:56   Drum & Bass
+1-10      10 - Lamb - Trans Fatty Acid.mpc                                   Kruder Dorfmeister The K&D Sessions 00:08:32   Drum & Bass
+2-10      10 - Rocker's HiFi - Going Under Evil.mpc                          Kruder Dorfmeister The K&D Sessions 00:04:31   Drum & Bass
+2-11      11 - Strange Cargo - Million Town.mpc                              Kruder Dorfmeister The K&D Sessions 00:07:33   Drum & Bass
+********** 20:22:32 -- Durée: 19 sec -- UPDATE: 1451 (3/109) ***********************************************************************************************
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : John Digweed - MMII (Mixed & Unmixed) -> \\HOMERSTATION\_Mp3\Techno Artists\John Digweed\John Digweed - MMII (Mixed & Unmixed)
+
+ID_CD Name                                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                           
+----- ----                                  ---------- ------ --------- ---------- ---- ------   ----                                                           
+ 1451 John Digweed - MMII (Mixed & Unmixed)          9      1         9          4 2002 02:26:24 \\HOMERSTATION\_Mp3\Techno Artists\John Digweed\John Digweed...
+
+ODR_Track FIL_Track                                                          TAG_Albumartists TAG_Artists         TAG_Album TAG_length TAG_Genres               
+--------- ---------                                                          ---------------- -----------         --------- ---------- ----------               
+1-01      01 - Bermuda Triangle - Mooger Fooger.mp3                          John Digweed     Bermuda Triangle    MMII      00:10:49   Progressive House Brea...
+1-02      02 - Pollon - Lonely Planet.mp3                                    John Digweed     Pollon              MMII      00:07:04   Progressive House Brea...
+1-03      03 - 108 Grand - Te Quiero (Darren Emerson Remix).mp3              John Digweed     108 Grand           MMII      00:09:45   Progressive House Brea...
+1-04      04 - Flash Brothers - Protect The Sense.mp3                        John Digweed     Flash Brothers      MMII      00:11:06   Progressive House Brea...
+1-05      05 - Spooky - Belong (Vocal Club Mix).mp3                          John Digweed     Spooky              MMII      00:08:44   Progressive House Brea...
+1-06      06 - Mandalay - Deep Love (Charlie May Remix).mp3                  John Digweed     Mandalay            MMII      00:08:19   Progressive House Brea...
+1-07      07 - Shakespear's Sister - Black Sky (Dub Extravaganza Part 2).mp3 John Digweed     Shakespear's Sister MMII      00:10:37   Progressive House Brea...
+1-08      08 - James Holden - I Have Put Out The Light.mp3                   John Digweed     James Holden        MMII      00:08:52   Progressive House Brea...
+1-09      John Digweed - MMII.mp3                                                             John Digweed        MMII      01:11:08   Progressive House Brea...
+********** 20:22:38 -- Durée: 26 sec -- UPDATE: 6450 (4/109) ***********************************************************************************************
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : [F188] Laurent Garnier - excess luggage Rexclub + BBC Mix -> \\HOMERSTATION\_Mp3\Techno Labels\F Communications\[F188] Laurent Garnier - excess luggage Rexclub + BBC Mix
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : [F188] Laurent Garnier - excess luggage Rexclub + BBC Mix -> \\HOMERSTATION\_Mp3\Techno Labels\F Communications\[F188] Laurent Garnier - excess luggage Rexclub + BBC Mix
+
+ID_CD Name                                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                              
+----- ----                                               ---------- ------ --------- ---------- ---- ------   ----                                              
+ 6450 Laurent Garnier - excess luggage Rexclub + BBC Mix         32      2        32          3 2003 02:22:27 \\HOMERSTATION\_Mp3\Techno Labels\F Communicati...
+
+ODR_Track FIL_Track                                            TAG_Albumartists TAG_Artists               TAG_Album      TAG_length TAG_Genres              
+--------- ---------                                            ---------------- -----------               ---------      ---------- ----------              
+2-01      01-Gil Scott-Heron - The Vulture.mpc                 Laurent Garnier  Gil Scott-Heron           Excess Luggage 00:04:35   House/Techno/Trance/Acid
+1-01      01-Scan X - Wasterland.mpc                           Laurent Garnier  Scan X                    Excess Luggage 00:06:05   House/Techno/Trance/Acid
+2-02      02-Don Byron - Alien.mpc                             Laurent Garnier  Don Byron                 Excess Luggage 00:04:23   House/Techno/Trance/Acid
+1-02      02-Laurent Garnier - Crispy Bacon.mpc                Laurent Garnier  Laurent Garnier           Excess Luggage 00:03:51   House/Techno/Trance/Acid
+1-03      03-Jeff Mills - The Bells.mpc                        Laurent Garnier  Jeff Mills                Excess Luggage 00:03:16   House/Techno/Trance/Acid
+2-03      03-Professor Griff - A.i.d.s.mpc                     Laurent Garnier  Professor Griff           Excess Luggage 00:01:11   House/Techno/Trance/Acid
+2-04      04-Funky Fresh Few Feat Wig - 24.7.mpc               Laurent Garnier  Funky Fresh Few           Excess Luggage 00:03:54   House/Techno/Trance/Acid
+1-04      04-Red Planet - Stardancer.mpc                       Laurent Garnier  Martian, The              Excess Luggage 00:05:00   House/Techno/Trance/Acid
+2-05      05-Clouddead - Grey.mpc                              Laurent Garnier  cLOUDDEAD                 Excess Luggage 00:00:59   House/Techno/Trance/Acid
+1-05      05-Marco Carola - Steam Ep , Middle 1.mpc            Laurent Garnier  Locomotive                Excess Luggage 00:02:14   House/Techno/Trance/Acid
+1-06      06-Technasia - Descent.mpc                           Laurent Garnier  Technasia                 Excess Luggage 00:05:54   House/Techno/Trance/Acid
+2-06      06-The Streets - Turn The Page.mpc                   Laurent Garnier  Streets, The              Excess Luggage 00:02:59   House/Techno/Trance/Acid
+1-07      07-Marshall Jefferson - The Cow.mpc                  Laurent Garnier  Marshall Jefferson        Excess Luggage 00:04:27   House/Techno/Trance/Acid
+2-07      07-Octave One - Black Water.mpc                      Laurent Garnier  Octave One                Excess Luggage 00:05:10   House/Techno/Trance/Acid
+2-08      08-Eric Borgo & Oxia - Freaky Games.mpc              Laurent Garnier  Eric Borgo & Oxia         Excess Luggage 00:04:37   House/Techno/Trance/Acid
+1-08      08-Ron Trent - Altered State.mpc                     Laurent Garnier  Ron Trent                 Excess Luggage 00:04:28   House/Techno/Trance/Acid
+2-09      09-Adonis - We're Rocking Down The House.mpc         Laurent Garnier  Adonis                    Excess Luggage 00:02:24   House/Techno/Trance/Acid
+1-09      09-Dj Gilb'r - Pressure (Laurent Garnier Remix).mpc  Laurent Garnier  DJ Gilb'R                 Excess Luggage 00:06:06   House/Techno/Trance/Acid
+2-10      10-Heiko Laux - Hypnomarchin'.mpc                    Laurent Garnier  Heiko Laux                Excess Luggage 00:04:22   House/Techno/Trance/Acid
+1-10      10-Jamies Anderson - Dolphin (Dave Angel Rework).mpc Laurent Garnier  Jamie Anderson            Excess Luggage 00:03:45   House/Techno/Trance/Acid
+1-11      11-T Quest - Upiter.mpc                              Laurent Garnier  T Quest                   Excess Luggage 00:05:08   House/Techno/Trance/Acid
+2-11      11-Ur 3000 - Inspiration.mpc                         Laurent Garnier  Underground Resistance    Excess Luggage 00:05:42   House/Techno/Trance/Acid
+2-12      12-Frank Hunter - The Shinobi.mpc                    Laurent Garnier  Frank Hunter              Excess Luggage 00:03:53   House/Techno/Trance/Acid
+1-12      12-Richard Bartz & Dj Hell - Take A Shot.mpc         Laurent Garnier  DJ Hell vs. Richard Bartz Excess Luggage 00:02:42   House/Techno/Trance/Acid
+2-13      13-Laurent Garnier - Sambou.mpc                      Laurent Garnier  Laurent Garnier           Excess Luggage 00:08:38   House/Techno/Trance/Acid
+1-13      13-Teste - The Wipe (Sam Dynamic).mpc                Laurent Garnier  Teste                     Excess Luggage 00:04:28   House/Techno/Trance/Acid
+2-14      14-Carlton - What's So Funny (Laughapella).mpc       Laurent Garnier  Carlton                   Excess Luggage 00:00:10   House/Techno/Trance/Acid
+1-14      14-Lil Louis And The World - French Kiss.mpc         Laurent Garnier  Lil Louis And The World   Excess Luggage 00:05:54   House/Techno/Trance/Acid
+1-15      15-Donna Summer - Love To Love You.mpc               Laurent Garnier  Donna Summer              Excess Luggage 00:07:40   House/Techno/Trance/Acid
+2-15      15-Laurent Garnier & Sangoma - First Reaction.mpc    Laurent Garnier  Laurent Garnier & Sangoma Excess Luggage 00:06:30   House/Techno/Trance/Acid
+2-16      16-Saul Williams - Tao Of Now.mpc                    Laurent Garnier  Saul Williams             Excess Luggage 00:03:55   House/Techno/Trance/Acid
+2-17      17-Orbital - Belfast.mpc                             Laurent Garnier  Orbital                   Excess Luggage 00:08:06   House/Techno/Trance/Acid
+********** 20:22:55 -- Durée: 1 min(s) -- UPDATE: 7694 (5/109) *********************************************************************************************
+           | probleme Qty_CD virtuelcd:1|repcd:2
+
+ID_CD Name                                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                        
+----- ----                                     ---------- ------ --------- ---------- ---- ------   ----                                                        
+ 7694 Back To Back Vol Two - Mixed By Gummihz          10      2        10          1 2008 02:18:24 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee cd004]...
+
+ODR_Track FIL_Track                                   TAG_Albumartists       TAG_Artists TAG_Album                  TAG_length TAG_Genres
+--------- ---------                                   ----------------       ----------- ---------                  ---------- ----------
+1-01      01 - pan-pot feat. vincenzo - faces.mp3     Pan-Pot Feat. Vincenzo             back to back vol.02 (cd-1) 00:07:02             
+2-10      01 - the mix.mp3                            gummihz                gummihz     back to back vol.02 (cd-2) 01:10:40             
+1-02      02 - gummihz - song for a muse.mp3          Gummihz                            back to back vol.02 (cd-1) 00:07:16             
+1-03      03 - sebo k - too hot.mp3                   Sebo K                             back to back vol.02 (cd-1) 00:05:39             
+1-04      04 - anja schneider - belize.mp3            Anja Schneider                     back to back vol.02 (cd-1) 00:07:49             
+1-05      05 - marc antona - one more sugar.mp3       Marc Antona                        back to back vol.02 (cd-1) 00:06:47             
+1-06      06 - jennifer cardini - august in paris.mp3 Jennifer Cardini                   back to back vol.02 (cd-1) 00:08:39             
+1-07      07 - sleeper thief - cenotes.mp3            Sleeper Thief                      back to back vol.02 (cd-1) 00:08:29             
+1-08      08 - marco resmann - gouache.mp3            Marco Resmann                      back to back vol.02 (cd-1) 00:09:23             
+1-09      09 - gummihz - point of view.mp3            Gummihz                            back to back vol.02 (cd-1) 00:06:41
+********** 20:23:00 -- Durée: 1 min(s) -- UPDATE: 13810 (6/109) ********************************************************************************************
+
+ID_CD Name             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                          
+----- ----             ---------- ------ --------- ---------- ---- ------   ----                                                                          
+13810 nhar - hexoflip           2      1         2          1 2006 00:13:06 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 008] nhar - hexoflip (2006)
+
+ODR_Track FIL_Track                     TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                     ---------------- ----------- --------- ---------- ----------
+01        01 - nhar - hexoflip {2b}.mp3                  nhar        hexoflip  00:06:49   2b        
+02        02 - nhar - silkcut {2b}.mp3                   nhar        hexoflip  00:06:17   2b
+********** 20:23:04 -- Durée: 1 min(s) -- UPDATE: 13814 (7/109) ********************************************************************************************
+
+ID_CD Name                   Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                          
+----- ----                   ---------- ------ --------- ---------- ---- ------   ----                                                                          
+13814 Pan-Pot - Black Lodge           2      1         2          1 2006 00:19:05 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 012] Pan-Pot - Black Lod...
+
+ODR_Track FIL_Track                   TAG_Albumartists TAG_Artists TAG_Album                                     TAG_length TAG_Genres
+--------- ---------                   ---------------- ----------- ---------                                     ---------- ----------
+01        pan-pot - a black dog.mp3                    Pan-Pot     mobilee012 - Pan-Pot - Black Lodge - 17072006 00:09:31   Techno    
+02        pan-pot - b back window.mp3                  Pan-Pot     mobilee012 - Pan-Pot - Black Lodge - 17072006 00:09:34   Techno
+********** 20:23:15 -- Durée: 1 min(s) -- UPDATE: 13841 (8/109) ********************************************************************************************
+
+ID_CD Name                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                           
+----- ----                  ---------- ------ --------- ---------- ---- ------   ----                                                                           
+13841 Miss Jools - La Luna           2      1         2          1 2008 00:13:54 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 046] Miss Jools - La Luna...
+
+ODR_Track FIL_Track                                      TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                                      ---------------- ----------- --------- ---------- ----------
+01        01-miss_jools-la_luna__original_mix.mp3                         Miss Jools  La Luna   00:06:51   Techno    
+02        02-miss_jools-que_me_levante__original_mix.mp3                  Miss Jools  La Luna   00:07:03   Techno
+********** 20:23:19 -- Durée: 1 min(s) -- UPDATE: 13843 (9/109) ********************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+13843 Dan Curtin - Beat Fiend           3      1         3          1 2009 00:22:54 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 047] Dan Curtin - Beat...
+
+ODR_Track FIL_Track                                  TAG_Albumartists TAG_Artists TAG_Album  TAG_length TAG_Genres
+--------- ---------                                  ---------------- ----------- ---------  ---------- ----------
+01        01-dan_curtin-beat_fiend__original_mix.mp3                  Dan Curtin  Beat Fiend 00:07:16   House     
+02        02-dan_curtin-amphibian__original_mix.mp3                   Dan Curtin  Beat Fiend 00:08:18   House     
+03        03-dan_curtin-marsupial__original_mix.mp3                   Dan Curtin  Beat Fiend 00:07:21   House
+********** 20:23:32 -- Durée: 1 min(s) -- UPDATE: 13845 (10/109) *******************************************************************************************
+
+ID_CD Name                                                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                        
+----- ----                                                     ---------- ------ --------- ---------- ---- ------   ----                                        
+13845 Gummihz Vs Anja Schneider - Back To Back Remixes Part 2           2      1         2          3 2009 00:14:19 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee...
+
+ODR_Track FIL_Track                                                 TAG_Albumartists TAG_Artists    TAG_Album                   TAG_length TAG_Genres
+--------- ---------                                                 ---------------- -----------    ---------                   ---------- ----------
+01        01-gummihz-los_los__djulz_remix.mp3                                        GummiHz        Back To Back Remixes Part 2 00:06:51   Techno    
+02        02-anja_schneider-get_away__christian_burkhardt_remix.mp3                  Anja Schneider Back To Back Remixes Part 2 00:07:28   Techno
+********** 20:23:42 -- Durée: 1 min(s) -- UPDATE: 13846 (11/109) *******************************************************************************************
+
+ID_CD Name                                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                      
+----- ----                                       ---------- ------ --------- ---------- ---- ------   ----                                                      
+13846 Anja Schneider And Lee Van Dowski - Deseo           2      1         2          1 2009 00:14:57 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 050]...
+
+ODR_Track FIL_Track                                                                 TAG_Albumartists TAG_Artists                     TAG_Album TAG_length TAG_Ge
+                                                                                                                                                          nres  
+--------- ---------                                                                 ---------------- -----------                     --------- ---------- ------
+01        01-anja_schneider_and_lee_van_dowski-deseo_(original_mix)-bside.mp3                        Anja Schneider & Lee Van Dowski Deseo     00:07:45   Techno
+02        02-anja_schneider_and_lee_van_dowski-la_roulette_(original_mix)-bside.mp3                  Anja Schneider & Lee Van Dowski Deseo     00:07:12   Techno
+********** 20:23:45 -- Durée: 2 min(s) -- UPDATE: 13848 (12/109) *******************************************************************************************
+
+ID_CD Name                    Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                         
+----- ----                    ---------- ------ --------- ---------- ---- ------   ----                                                                         
+13848 Hector - Got Fringe EP           3      1         3          2 2009 00:23:39 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 052] Hector - Got Fring...
+
+ODR_Track FIL_Track                          TAG_Albumartists TAG_Artists TAG_Album   TAG_length TAG_Genres
+--------- ---------                          ---------------- ----------- ---------   ---------- ----------
+01        01-hector-got_fringe.mp3                            Hector      Got Fringe? 00:07:41   House     
+02        02-hector-taking_me_for_a_ride.mp3                  Hector      Got Fringe? 00:09:02   House     
+03        03-hector-canaca.mp3                                Hector      Got Fringe? 00:06:56   House
+********** 20:23:47 -- Durée: 2 min(s) -- UPDATE: 13849 (13/109) *******************************************************************************************
+
+ID_CD Name                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                            ---------- ------ --------- ---------- ---- ------   ----                                                                 
+13849 Marcin Czubala - Mezcalinna EP           2      1         2          2 2009 00:14:03 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 053] Marcin Czu...
+
+ODR_Track FIL_Track                   TAG_Albumartists TAG_Artists    TAG_Album  TAG_length TAG_Genres
+--------- ---------                   ---------------- -----------    ---------  ---------- ----------
+01        01-marcin_czubala-day_1.mp3                  Marcin Czubala Mezcalinna 00:07:19   House     
+02        02-marcin_czubala-day_2.mp3                  Marcin Czubala Mezcalinna 00:06:44   House
+********** 20:23:47 -- Durée: 2 min(s) -- UPDATE: 13850 (14/109) *******************************************************************************************
+
+ID_CD Name                  Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                           
+----- ----                  ---------- ------ --------- ---------- ---- ------   ----                                                                           
+13850 Pan-Pot - Confronted           4      1         4          1 2009 00:36:24 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 054] Pan-Pot - Confronted...
+
+ODR_Track FIL_Track                    TAG_Albumartists TAG_Artists TAG_Album  TAG_length TAG_Genres
+--------- ---------                    ---------------- ----------- ---------  ---------- ----------
+01        01-pan-pot-confronted.mp3                     Pan-Pot     Confronted 00:11:24   Techno    
+02        02-pan-pot-face_to_face.mp3                   Pan-Pot     Confronted 00:08:54   Techno    
+03        03-pan-pot-the_birds.mp3                      Pan-Pot     Confronted 00:08:27   Techno    
+04        04-pan-pot-diamond_heads.mp3                  Pan-Pot     Confronted 00:07:39   Techno
+********** 20:23:52 -- Durée: 2 min(s) -- UPDATE: 13851 (15/109) *******************************************************************************************
+
+ID_CD Name                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                            
+----- ----                 ---------- ------ --------- ---------- ---- ------   ----                                                                            
+13851 And.id - First Talk           3      1         3          1 2009 00:18:48 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 055] And.id - First Talk (...
+
+ODR_Track FIL_Track                TAG_Albumartists TAG_Artists TAG_Album  TAG_length TAG_Genres
+--------- ---------                ---------------- ----------- ---------  ---------- ----------
+01        01-and.id-first_talk.mp3                  And.Id      First Talk 00:06:09   House     
+02        02-and.id-ephoria.mp3                     And.Id      First Talk 00:05:54   House     
+03        03-and.id-lights_on.mp3                   And.Id      First Talk 00:06:45   House
+********** 20:24:05 -- Durée: 2 min(s) -- UPDATE: 13852 (16/109) *******************************************************************************************
+
+ID_CD Name                Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                             
+----- ----                ---------- ------ --------- ---------- ---- ------   ----                                                                             
+13852 Dan Curtin - Other           3      1         3          3 2009 00:21:39 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 056] Dan Curtin - Other (2009)
+
+ODR_Track FIL_Track               TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres        
+--------- ---------               ---------------- ----------- --------- ---------- ----------        
+01        01 Other.mp3                             Dan Curtin  Other     00:07:31   Tech/House Minimal
+02        02 The Sandwalk.mp3                      Dan Curtin  Other     00:07:00   Tech/House Minimal
+03        03 Other (Push Mix).mp3                  Dan Curtin  Other     00:07:08   Tech/House Minimal
+********** 20:24:09 -- Durée: 2 min(s) -- UPDATE: 13853 (17/109) *******************************************************************************************
+
+ID_CD Name                                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                    
+----- ----                                         ---------- ------ --------- ---------- ---- ------   ----                                                    
+13853 Argenis Brito And Miguel Toro - Black Shoes           4      1         4          1 2009 00:29:15 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 05...
+
+ODR_Track FIL_Track                                        TAG_Albumartists TAG_Artists                 TAG_Album   TAG_length TAG_Genres
+--------- ---------                                        ---------------- -----------                 ---------   ---------- ----------
+01        01-argenis_brito_and_miguel_toro-black_shoes.mp3                  Argenis Brito & Miguel Toro Black Shoes 00:07:24   Electronic
+02        02-argenis_brito_and_miguel_toro-speech.mp3                       Argenis Brito & Miguel Toro Black Shoes 00:07:22   Electronic
+03        03-argenis_brito_and_miguel_toro-second_line.mp3                  Argenis Brito & Miguel Toro Black Shoes 00:07:12   Electronic
+04        04-argenis_brito_and_miguel_toro-millas.mp3                       Argenis Brito & Miguel Toro Black Shoes 00:07:18   Electronic
+********** 20:24:18 -- Durée: 2 min(s) -- UPDATE: 13854 (18/109) *******************************************************************************************
+
+ID_CD Name              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                           
+----- ----              ---------- ------ --------- ---------- ---- ------   ----                                                                           
+13854 Sebo K - Spirits           2      1         2          1 2009 00:15:36 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 060] Sebo K - Spirits (2009)
+
+ODR_Track FIL_Track                                               TAG_Albumartists TAG_Artists               TAG_Album TAG_length TAG_Genres
+--------- ---------                                               ---------------- -----------               --------- ---------- ----------
+01        01-sebo_k-spirits_(original_mix).mp3                                     Sebo K                    Spirits   00:07:39   House     
+02        02-sebo_k_featuring_max_moya-spirits_(drum_version).mp3                  Sebo K featuring Max Moya Spirits   00:07:57   House
+********** 20:24:22 -- Durée: 2 min(s) -- UPDATE: 13855 (19/109) *******************************************************************************************
+
+ID_CD Name                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                            ---------- ------ --------- ---------- ---- ------   ----                                                                 
+13855 Pan-Pot - Confronted (Remixes)           5      1         5          1 2009 00:38:28 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 061] Pan-Pot - ...
+
+ODR_Track FIL_Track                                                        TAG_Albumartists TAG_Artists TAG_Album            TAG_length TAG_Genres
+--------- ---------                                                        ---------------- ----------- ---------            ---------- ----------
+01        01-pan-pot-confronted_(adam_beyer_and_jesper_dahlback_remix).mp3                  Pan-Pot     Confronted (Remixes) 00:09:13   Electronic
+02        02-pan-pot-confronted_(martin_landsky_remix).mp3                                  Pan-Pot     Confronted (Remixes) 00:08:11   Electronic
+03        03-pan-pot-face_to_face_(confronted)_(slam_paragraph_mix).mp3                     Pan-Pot     Confronted (Remixes) 00:07:18   Electronic
+04        04-pan-pot-confronted_(dapayk_remix).mp3                                          Pan-Pot     Confronted (Remixes) 00:08:17   Electronic
+05        05-pan-pot-confronted_(dapayks_dubstep_remix).mp3                                 Pan-Pot     Confronted (Remixes) 00:05:29   Electronic
+********** 20:24:31 -- Durée: 2 min(s) -- UPDATE: 13856 (20/109) *******************************************************************************************
+
+ID_CD Name                                    Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                         
+----- ----                                    ---------- ------ --------- ---------- ---- ------   ----                                                         
+13856 Marcin Czubala And Hugo - Zoo Comunale           3      1         3          1 2010 00:24:17 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 062] Ma...
+
+ODR_Track FIL_Track                                                  TAG_Albumartists TAG_Artists             TAG_Album        TAG_length TAG_Genres
+--------- ---------                                                  ---------------- -----------             ---------        ---------- ----------
+01        01-marcin_czubala_and_hugo-zoo_comunale_(original_mix).mp3                  Marcin Czubala and Hugo Zoo Comunale WEB 00:08:00   House     
+02        02-marcin_czubala_and_hugo-no_tu_no_(original_mix).mp3                      Marcin Czubala and Hugo Zoo Comunale WEB 00:08:44   House     
+03        03-marcin_czubala_and_hugo-politia_(original_mix).mp3                       Marcin Czubala and Hugo Zoo Comunale WEB 00:07:34   House
+********** 20:24:34 -- Durée: 2 min(s) -- UPDATE: 13857 (21/109) *******************************************************************************************
+
+ID_CD Name                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                      
+----- ----                       ---------- ------ --------- ---------- ---- ------   ----                                                                      
+13857 Anja Schneider - Ithought           3      1         3          1 2010 00:19:43 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 063] Anja Schneider ...
+
+ODR_Track FIL_Track                      TAG_Albumartists TAG_Artists    TAG_Album TAG_length TAG_Genres
+--------- ---------                      ---------------- -----------    --------- ---------- ----------
+01        01-anja_schneider-ithought.mp3                  Anja Schneider iThought  00:08:00   Electronic
+02        02-anja_schneider-amore.mp3                     Anja Schneider iThought  00:06:23   Electronic
+03        03-anja_schneider-ilook.mp3                     Anja Schneider iThought  00:05:20   Electronic
+********** 20:24:41 -- Durée: 2 min(s) -- UPDATE: 13858 (22/109) *******************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+13858 Dan Curtin Mr. Bean - Do An E           2      1         2          1 2010 00:13:25 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 064] Dan Curtin ...
+
+ODR_Track FIL_Track                               TAG_Albumartists TAG_Artists TAG_Album        TAG_length TAG_Genres
+--------- ---------                               ---------------- ----------- ---------        ---------- ----------
+00        Mr__Bean_Do_An_E_DJ_Madskillz_Remix.mp3                  Dan Curtin  Mr. Bean Do An E 00:06:42   Tech House
+00        Mr__Bean_Do_An_E_Original_Mix.mp3                        Dan Curtin  Mr. Bean Do An E 00:06:43   Tech House
+********** 20:24:43 -- Durée: 3 min(s) -- UPDATE: 13859 (23/109) *******************************************************************************************
+
+ID_CD Name                      Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                       
+----- ----                      ---------- ------ --------- ---------- ---- ------   ----                                                                       
+13859 And.id - I Will Be There           3      1         3          1 2010 00:19:45 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 065] And.id - I Will ...
+
+ODR_Track FIL_Track                     TAG_Albumartists TAG_Artists TAG_Album       TAG_length TAG_Genres
+--------- ---------                     ---------------- ----------- ---------       ---------- ----------
+01        01-and.id-i_will_be_there.mp3                  And.Id      I Will Be There 00:06:21   House     
+02        02-and.id-five.mp3                             And.Id      I Will Be There 00:06:59   House     
+03        03-and.id-erotica_-.mp3                        And.Id      I Will Be There 00:06:26   House
+********** 20:24:46 -- Durée: 3 min(s) -- UPDATE: 13860 (24/109) *******************************************************************************************
+
+ID_CD Name                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                              
+----- ----                               ---------- ------ --------- ---------- ---- ------   ----                                                              
+13860 Rodriguez Jr - Princess Guacamole           3      1         3          1 2010 00:24:16 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 066] Rodrigu...
+
+ODR_Track FIL_Track                              TAG_Albumartists TAG_Artists  TAG_Album          TAG_length TAG_Genres
+--------- ---------                              ---------------- -----------  ---------          ---------- ----------
+01        01-rodriguez_jr-princess_guacamole.mp3                  Rodriguez Jr Princess Guacamole 00:08:07   House     
+02        02-rodriguez_jr-la_guapa.mp3                            Rodriguez Jr Princess Guacamole 00:08:01   House     
+03        03-rodriguez_jr-okra_carnival.mp3                       Rodriguez Jr Princess Guacamole 00:08:08   House
+********** 20:24:54 -- Durée: 3 min(s) -- UPDATE: 13864 (25/109) *******************************************************************************************
+
+ID_CD Name                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                            ---------- ------ --------- ---------- ---- ------   ----                                                                 
+13864 Marcin Czubala - Loose The Man           2      1         2          1 2010 00:15:45 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 070] Marcin Czu...
+
+ODR_Track FIL_Track                           TAG_Albumartists TAG_Artists    TAG_Album     TAG_length TAG_Genres
+--------- ---------                           ---------------- -----------    ---------     ---------- ----------
+01        01-marcin_czubala-loose_the_man.mp3                  Marcin Czubala Loose The Man 00:07:45   House     
+02        02-marcin_czubala-tamarind.mp3                       Marcin Czubala Loose The Man 00:07:59   House
+********** 20:25:01 -- Durée: 3 min(s) -- UPDATE: 13865 (26/109) *******************************************************************************************
+
+ID_CD Name                          Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                   
+----- ----                          ---------- ------ --------- ---------- ---- ------   ----                                                                   
+13865 Pan-Pot - Captain My Captain           3      1         3          1 2010 00:23:13 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 071] Pan-Pot - Ca...
+
+ODR_Track FIL_Track                                     TAG_Albumartists TAG_Artists          TAG_Album          TAG_length TAG_Genres
+--------- ---------                                     ---------------- -----------          ---------          ---------- ----------
+01        01-pan-pot_cari_golden-captain_my_captain.mp3                  Pan-Pot, Cari Golden Captain My Captain 00:08:18   House     
+02        02-pan-pot-black_horse_down.mp3                                Pan-Pot              Captain My Captain 00:07:41   House     
+03        03-pan-pot-bad_photocopy_of_a_big_saw.mp3                      Pan-Pot              Captain My Captain 00:07:14   House
+********** 20:25:07 -- Durée: 3 min(s) -- UPDATE: 13866 (27/109) *******************************************************************************************
+
+ID_CD Name                     Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                        
+----- ----                     ---------- ------ --------- ---------- ---- ------   ----                                                                        
+13866 Anja Schneider - Pushin           3      1         3          1 2010 00:23:51 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 072] Anja Schneider - ...
+
+ODR_Track FIL_Track                      TAG_Albumartists TAG_Artists    TAG_Album TAG_length TAG_Genres
+--------- ---------                      ---------------- -----------    --------- ---------- ----------
+01        01 - Pushin.mp3                Anja Schneider   Anja Schneider Pushin    00:06:46   Tech House
+02        02 - Strong Way.mp3            Anja Schneider   Anja Schneider Pushin    00:07:46   Tech House
+03        03 - I Don’t Feel Anything.mp3 Anja Schneider   Anja Schneider Pushin    00:09:20   Tech House
+********** 20:25:09 -- Durée: 3 min(s) -- UPDATE: 13867 (28/109) *******************************************************************************************
+
+ID_CD Name                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                        ---------- ------ --------- ---------- ---- ------   ----                                                                     
+13867 Miss Kittin - All You Need           3      1         3          1 2011 00:21:54 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 073] Miss Kittin - ...
+
+ODR_Track FIL_Track                                              TAG_Albumartists TAG_Artists TAG_Album        TAG_length TAG_Genres
+--------- ---------                                              ---------------- ----------- ---------        ---------- ----------
+01        01-miss_kittin-all_you_need.mp3                                         Miss Kittin All You Need WEB 00:07:38   Techno    
+02        02-miss_kittin-all_you_need_(lee_van_dowski_remix).mp3                  Miss Kittin All You Need WEB 00:07:46   Techno    
+03        03-miss_kittin-all_you_need_(gesaffelstein_remix).mp3                   Miss Kittin All You Need WEB 00:06:30   Techno
+********** 20:25:12 -- Durée: 3 min(s) -- UPDATE: 13868 (29/109) *******************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+13868 Maya Jane Coles - Beat Faster           3      1         3          1 2011 00:21:07 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 074] Maya Jane C...
+
+ODR_Track FIL_Track                                    TAG_Albumartists TAG_Artists     TAG_Album   TAG_length TAG_Genres
+--------- ---------                                    ---------------- -----------     ---------   ---------- ----------
+01        01-maya_jane_coles-beat_faster.mp3                            Maya Jane Coles Beat Faster 00:07:13   Techno    
+02        02-maya_jane_coles-perfect_imperfections.mp3                  Maya Jane Coles Beat Faster 00:06:34   Techno    
+03        03-maya_jane_coles-play_the_game.mp3                          Maya Jane Coles Beat Faster 00:07:20   Techno
+********** 20:25:17 -- Durée: 3 min(s) -- UPDATE: 13869 (30/109) *******************************************************************************************
+
+ID_CD Name                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                      
+----- ----                       ---------- ------ --------- ---------- ---- ------   ----                                                                      
+13869 And.Id  -Psychedelic Love           3      1         3          1 2011 00:18:48 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 075] And.Id  -Psyche...
+
+ODR_Track FIL_Track                                             TAG_Albumartists TAG_Artists TAG_Album              TAG_length TAG_Genres
+--------- ---------                                             ---------------- ----------- ---------              ---------- ----------
+01        01-and.id-psychedelic_love_(original_mix)-italive.mp3                  And.Id      Psychedelic Love (WEB) 00:06:10   Techno    
+02        02-and.id-hold_and_touch_(original_mix)-italive.mp3                    And.Id      Psychedelic Love (WEB) 00:06:12   Techno    
+03        03-and.id-dirty_thirty_(original_mix)-italive.mp3                      And.Id      Psychedelic Love (WEB) 00:06:26   Techno
+********** 20:25:20 -- Durée: 3 min(s) -- UPDATE: 13870 (31/109) *******************************************************************************************
+
+ID_CD Name                   Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                          
+----- ----                   ---------- ------ --------- ---------- ---- ------   ----                                                                          
+13870 Ray Okpara - Booty EP           4      1         4          1 2011 00:30:49 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 076] Ray Okpara - Booty ...
+
+ODR_Track FIL_Track                           TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                           ---------------- ----------- --------- ---------- ----------
+01        01. Ray Okpara - Booty.mp3                           Ray Okpara  Booty EP  00:08:23   House     
+02        02. Ray Okpara - Crabapple Road.mp3                  Ray Okpara  Booty EP  00:08:11   House     
+03        03. Ray Okpara - Modern Dance.mp3                    Ray Okpara  Booty EP  00:06:42   House     
+04        04. Ray Okpara - Coyoacan.mp3                        Ray Okpara  Booty EP  00:07:34   House
+********** 20:25:35 -- Durée: 3 min(s) -- UPDATE: 13872 (32/109) *******************************************************************************************
+
+ID_CD Name                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                    
+----- ----                         ---------- ------ --------- ---------- ---- ------   ----                                                                    
+13872 Exercise One - Fantasy Camp           2      1         2          1 2011 00:14:23 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 078] Exercise One ...
+
+ODR_Track FIL_Track                           TAG_Albumartists TAG_Artists  TAG_Album    TAG_length TAG_Genres
+--------- ---------                           ---------------- -----------  ---------    ---------- ----------
+01        01. Exercise One - Fantasy Camp.mp3                  Exercise One Fantasy Camp 00:07:57   House     
+02        02. Exercise One - Immersed.mp3                      Exercise One Fantasy Camp 00:06:26   House
+********** 20:25:40 -- Durée: 3 min(s) -- UPDATE: 13873 (33/109) *******************************************************************************************
+
+ID_CD Name                   Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                          
+----- ----                   ---------- ------ --------- ---------- ---- ------   ----                                                                          
+13873 Hector - What The Hec           4      1         4          2 2011 00:29:10 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 079] Hector - What The H...
+
+ODR_Track FIL_Track                                    TAG_Albumartists TAG_Artists TAG_Album     TAG_length TAG_Genres
+--------- ---------                                    ---------------- ----------- ---------     ---------- ----------
+01        01. Hector - Promise (Original Mix).mp3                       Hector      What The Hec? 00:07:51   House     
+02        02. Hector - What The Hec (Original Mix).mp3                  Hector      What The Hec? 00:07:28   House     
+03        03. Hector - The Troof (Original Mix).mp3                     Hector      What The Hec? 00:07:33   House     
+04        04. Hector - Moska (Original Mix).mp3                         Hector      What The Hec? 00:06:18   House
+********** 20:25:46 -- Durée: 4 min(s) -- UPDATE: 13874 (34/109) *******************************************************************************************
+
+ID_CD Name               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                            
+----- ----               ---------- ------ --------- ---------- ---- ------   ----                                                                            
+13874 Sebo K - Mr. Duke           2      1         2          2 2011 00:14:19 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 080] Sebo K - Mr. Duke (2011)
+
+ODR_Track FIL_Track                                   TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                                   ---------------- ----------- --------- ---------- ----------
+01        01-sebo_k-mr._duke.mp3                                       Sebo K      Mr. Duke  00:07:12   House     
+02        02-sebo_k-mr._duke__alternative_version.mp3                  Sebo K      Mr. Duke  00:07:07   House
+********** 20:25:52 -- Durée: 4 min(s) -- UPDATE: 13875 (35/109) *******************************************************************************************
+
+ID_CD Name                               Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                              
+----- ----                               ---------- ------ --------- ---------- ---- ------   ----                                                              
+13875 Martin Landsky - Morning Caffeine           3      1         3          2 2011 00:21:44 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 081] Martin ...
+
+ODR_Track FIL_Track                                         TAG_Albumartists TAG_Artists    TAG_Album        TAG_length TAG_Genres
+--------- ---------                                         ---------------- -----------    ---------        ---------- ----------
+01        01-martin_landsky-morning_caffeine__main_mix.mp3                   Martin Landsky Morning Caffeine 00:08:04   House     
+02        02-martin_landsky-aint_nobodys.mp3                                 Martin Landsky Morning Caffeine 00:07:08   House     
+03        03-martin_landsky-morning_caffeine__organ_dub.mp3                  Martin Landsky Morning Caffeine 00:06:32   House
+********** 20:26:02 -- Durée: 4 min(s) -- UPDATE: 13876 (36/109) *******************************************************************************************
+
+ID_CD Name                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                    
+----- ----                         ---------- ------ --------- ---------- ---- ------   ----                                                                    
+13876 Dan Curtin - A Study In You           3      1         3          2 2011 00:20:09 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 082] Dan Curtin - ...
+
+ODR_Track FIL_Track                                   TAG_Albumartists TAG_Artists TAG_Album      TAG_length TAG_Genres
+--------- ---------                                   ---------------- ----------- ---------      ---------- ----------
+01        01-dan_curtin-a_study_in_you.mp3                             Dan Curtin  A Study In You 00:06:44   House     
+02        02-dan_curtin-breath_deeply__feat._moto.mp3                  Dan Curtin  A Study In You 00:06:54   House     
+03        03-dan_curtin-dont_tell.mp3                                  Dan Curtin  A Study In You 00:06:31   House
+********** 20:26:05 -- Durée: 4 min(s) -- UPDATE: 13877 (37/109) *******************************************************************************************
+
+ID_CD Name                    Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                         
+----- ----                    ---------- ------ --------- ---------- ---- ------   ----                                                                         
+13877 Miss Jools - Walk Away           3      1         3          2 2011 00:20:09 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 083] Miss Jools - Walk ...
+
+ODR_Track FIL_Track                        TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                        ---------------- ----------- --------- ---------- ----------
+01        01-miss_jools-walk_away.mp3                       Miss Jools  Walk Away 00:06:16   House     
+02        02-miss_jools-whats_going_on.mp3                  Miss Jools  Walk Away 00:06:50   House     
+03        03-miss_jools-feel_you.mp3                        Miss Jools  Walk Away 00:07:03   House
+********** 20:26:10 -- Durée: 4 min(s) -- UPDATE: 13878 (38/109) *******************************************************************************************
+
+ID_CD Name                         Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                    
+----- ----                         ---------- ------ --------- ---------- ---- ------   ----                                                                    
+13878 Rodriguez Jr. - Bittersweet           4      1         4          2 2011 00:27:57 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee 084] Rodriguez Jr....
+
+ODR_Track FIL_Track                                           TAG_Albumartists TAG_Artists                   TAG_Album   TAG_length TAG_Genres
+--------- ---------                                           ---------------- -----------                   ---------   ---------- ----------
+01        01-rodriguez_jr.-bittersweet.mp3                                     Rodriguez Jr.                 Bittersweet 00:06:29   House     
+02        02-rodriguez_jr._and_cari_golden-music_dont_lie.mp3                  Rodriguez Jr. And Cari Golden Bittersweet 00:07:36   House     
+03        03-rodriguez_jr.-massilia.mp3                                        Rodriguez Jr.                 Bittersweet 00:06:42   House     
+04        04-rodriguez_jr.-bagpipe_women.mp3                                   Rodriguez Jr.                 Bittersweet 00:07:10   House
+********** 20:26:12 -- Durée: 4 min(s) -- UPDATE: 13882 (39/109) *******************************************************************************************
+
+ID_CD Name                            Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                 
+----- ----                            ---------- ------ --------- ---------- ---- ------   ----                                                                 
+13882 Exercise One - In Cars We Rust          11      1        11          1 2009 01:11:55 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee cd008] Exercise...
+
+ODR_Track FIL_Track                                 TAG_Albumartists TAG_Artists  TAG_Album       TAG_length TAG_Genres
+--------- ---------                                 ---------------- -----------  ---------       ---------- ----------
+01        01-exercise_one-circeo.mp3                                 Exercise One In Cars We Rust 00:04:42   Electronic
+02        02-exercise_one-1994.mp3                                   Exercise One In Cars We Rust 00:09:03   Electronic
+03        03-exercise_one-it_is_happening_again.mp3                  Exercise One In Cars We Rust 00:07:38   Electronic
+04        04-exercise_one-trapdoor.mp3                               Exercise One In Cars We Rust 00:06:48   Electronic
+05        05-exercise_one-drunken_tinman.mp3                         Exercise One In Cars We Rust 00:06:42   Electronic
+06        06-exercise_one-good_kid.mp3                               Exercise One In Cars We Rust 00:04:00   Electronic
+07        07-exercise_one-no_news_today.mp3                          Exercise One In Cars We Rust 00:08:24   Electronic
+08        08-exercise_one-sleeper.mp3                                Exercise One In Cars We Rust 00:05:40   Electronic
+09        09-exercise_one-what_you_say.mp3                           Exercise One In Cars We Rust 00:05:54   Electronic
+10        10-exercise_one-dont_slip.mp3                              Exercise One In Cars We Rust 00:06:11   Electronic
+11        11-exercise_one-just_not.mp3                               Exercise One In Cars We Rust 00:06:55   Electronic
+********** 20:26:17 -- Durée: 4 min(s) -- UPDATE: 13883 (40/109) *******************************************************************************************
+
+ID_CD Name                                              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                               
+----- ----                                              ---------- ------ --------- ---------- ---- ------   ----                                               
+13883 VA - Back To Back Vol.4 compiled by And.Id (2CD)          22      1        22          1 2010 02:24:30 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobil...
+
+ODR_Track FIL_Track                                                                       TAG_Albumartists TAG_Artists                     TAG_Album            
+--------- ---------                                                                       ---------------- -----------                     ---------            
+01        101_and.id_-_she_was_there.mp3                                                                   And.Id                          Back To Back Volum...
+02        102_gummihz_-_sleepless_nights.mp3                                                               GummiHz                         Back To Back Volum...
+03        103_hector_-_got_fringe.mp3                                                                      Hector                          Back To Back Volum...
+04        104_marcin_czubala_-_day_1.mp3                                                                   Marcin Czubala                  Back To Back Volum...
+05        105_anja_schneider_and_lee_van_dowski_-_deseo.mp3                                                Anja Schneider & Lee Van Dowski Back To Back Volum...
+06        106_dan_curtin_-_sandwalk.mp3                                                                    Dan Curtin                      Back To Back Volum...
+07        107_sebo_k_-_spirits.mp3                                                                         Sebo K                          Back To Back Volum...
+08        108_and.id_-_ephoria.mp3                                                                         And.Id                          Back To Back Volum...
+09        109_pan-pot_-_confronted.mp3                                                                     Pan-Pot                         Back To Back Volum...
+10        110_exercise_one_-_no_news_today.mp3                                                             Exercise One                    Back To Back Volum...
+11        201_sebo_k_-_horizons_(and.id_and_b.a.n.d._version).mp3                                          Sebo K                          Back To Back Volum...
+12        202_dan_curtin_-_other_(and.id_and_b.a.n.d._version).mp3                                         Dan Curtin                      Back To Back Volum...
+13        203_gummihz_-_love_call_(and.id_and_b.a.n.d._version).mp3                                        GummiHz                         Back To Back Volum...
+14        204_anja_schneider_and_sebo_k_-_rancho_relaxo_(and.id_and_b.a.n.d._version).mp3                  Anja Schneider & Sebo K         Back To Back Volum...
+15        205_and.id_-_first_talk_(and.id_and_b.a.n.d._version).mp3                                        And.Id                          Back To Back Volum...
+16        206_pan-pot_-_faces_(and.id_and_b.a.n.d._version).mp3                                            Pan-Pot                         Back To Back Volum...
+17        207_sebo_k_-_horizons.mp3                                                                        Sebo K                          Back To Back Volum...
+18        208_dan_curtin_-_other.mp3                                                                       Dan Curtin                      Back To Back Volum...
+19        209_gummihz_-_love_call.mp3                                                                      GummiHz                         Back To Back Volum...
+20        210_anja_schneider_and_sebo_k_-_rancho_relaxo.mp3                                                Anja Schneider & Sebo K         Back To Back Volum...
+21        211_and.id_-_first_talk.mp3                                                                      And.Id                          Back To Back Volum...
+22        212_pan-pot_-_faces.mp3                                                                          Pan-Pot                         Back To Back Volum...
+********** 20:26:23 -- Durée: 4 min(s) -- UPDATE: 13884 (41/109) *******************************************************************************************
+
+ID_CD Name                    Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                         
+----- ----                    ---------- ------ --------- ---------- ---- ------   ----                                                                         
+13884 Dan Curtin - Lifeblood          16      1        16          2 2010 01:17:09 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee cd010] Dan Curtin - Lif...
+
+ODR_Track FIL_Track                             TAG_Albumartists TAG_Artists                  TAG_Album TAG_length TAG_Genres
+--------- ---------                             ---------------- -----------                  --------- ---------- ----------
+1-01      01_Free.mp3                           Dan Curtin       Dan Curtin                   Lifeblood 00:02:36   Downtempo 
+1-02      02_Invisible_Man_In_Drag.mp3          Dan Curtin       Dan Curtin                   Lifeblood 00:06:34   Tech House
+1-03      03_Mirrors_Reflecting_Two_Way_Mix.mp3 Dan Curtin       Dan Curtin                   Lifeblood 00:05:33   Techno    
+1-04      04_I_See_Light.mp3                    Dan Curtin       Dan Curtin                   Lifeblood 00:07:07   Tech House
+1-05      05_Other_Lost_In_You_Mix.mp3          Dan Curtin       Dan Curtin                   Lifeblood 00:06:02   Tech House
+1-06      06_Two_Tickets_To_Paris.mp3           Dan Curtin       Dan Curtin                   Lifeblood 00:06:16   Techno    
+1-07      07_Blood.mp3                          Dan Curtin       Dan Curtin                   Lifeblood 00:01:26   Ambient   
+1-08      08_Blast.mp3                          Dan Curtin       Dan Curtin & Marcellis Wyatt Lifeblood 00:06:21   Tech House
+1-09      09_Schlafwagen.mp3                    Dan Curtin       Dan Curtin & Habida          Lifeblood 00:06:46   Tech House
+1-10      10_Hidden.mp3                         Dan Curtin       Dan Curtin                   Lifeblood 00:01:48   Ambient   
+1-11      11_Perfect_Affair.mp3                 Dan Curtin       Dan Curtin                   Lifeblood 00:03:54   Downtempo 
+1-12      12_Mr._Bean_Do_An_E.mp3               Dan Curtin       Dan Curtin                   Lifeblood 00:06:43   Tech House
+1-13      13_You_Get_What_You_Need.mp3          Dan Curtin       Dan Curtin                   Lifeblood 00:05:45   Tech House
+1-14      14_Overlook.mp3                       Dan Curtin       Dan Curtin                   Lifeblood 00:00:52   Ambient   
+1-15      15_Cant_Say_No.mp3                    Dan Curtin       Dan Curtin & Blacknile       Lifeblood 00:04:17   R&B       
+1-16      16_Breath.mp3                         Dan Curtin       Dan Curtin                   Lifeblood 00:05:09   Tech House
+********** 20:26:35 -- Durée: 4 min(s) -- UPDATE: 13888 (42/109) *******************************************************************************************
+
+ID_CD Name                        Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                     
+----- ----                        ---------- ------ --------- ---------- ---- ------   ----                                                                     
+13888 GummiHz - Sleepless Nights           9      1         9          1 2009 00:56:35 \\HOMERSTATION\_Mp3\Techno Labels\Mobilee\[mobilee lp001] GummiHz - Sl...
+
+ODR_Track FIL_Track                                              TAG_Albumartists TAG_Artists                    TAG_Album        TAG_length TAG_Genres
+--------- ---------                                              ---------------- -----------                    ---------        ---------- ----------
+01        01-gummihz_featuring_emena-love_call.mp3                                GummiHz featuring Emena        Sleepless Nights 00:07:23   Electronic
+02        02-gummihz-sunshine_dub.mp3                                             GummiHz                        Sleepless Nights 00:07:09   Electronic
+03        03-gummihz-bang.mp3                                                     GummiHz                        Sleepless Nights 00:05:13   Electronic
+04        04-gummihz-moments_in_early_night.mp3                                   GummiHz                        Sleepless Nights 00:07:36   Electronic
+05        05-gummihz-biting_cherries.mp3                                          GummiHz                        Sleepless Nights 00:07:39   Electronic
+06        06-gummihz_featuring_emena-i_lose_my.mp3                                GummiHz featuring Emena        Sleepless Nights 00:04:36   Electronic
+07        07-gummihz_featuring_malena_perez-sleepless_nights.mp3                  GummiHz featuring Malena Perez Sleepless Nights 00:06:38   Electronic
+08        08-gummihz-one_groove_and_synth.mp3                                     GummiHz                        Sleepless Nights 00:07:15   Electronic
+09        09-gummihz_featuring_emena-love_call_(acapella).mp3                     GummiHz featuring Emena        Sleepless Nights 00:03:06   Electronic
+********** 20:26:42 -- Durée: 4 min(s) -- UPDATE: 13891 (43/109) *******************************************************************************************
+
+ID_CD Name                                             Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                
+----- ----                                             ---------- ------ --------- ---------- ---- ------   ----                                                
+13891 Heat Seekers - Israeli Trance Allstars [HMCD63]          10      1        10          2 2009 01:19:52 \\HOMERSTATION\_Mp3\Psytrance\_years\2009\Heat Se...
+
+ODR_Track FIL_Track                                               TAG_Albumartists TAG_Artists                        TAG_Album                              TAG
+                                                                                                                                                             _le
+                                                                                                                                                             ngt
+                                                                                                                                                             h  
+--------- ---------                                               ---------------- -----------                        ---------                              ---
+00        01. Astrix - Dharma.mp3                                                  Astrix                             Heat Seekers - Israeli Trance Allstars 00:
+00        02. Sub6 - D.T.N.F.mp3                                                   Sub6 & Domestic                    Heat Seekers - Israeli Trance Allstars 00:
+00        03. Domestic Vs Growling Machines - H. Attack.mp3                        Sub6 & Domestic, Growling Machines Heat Seekers - Israeli Trance Allstars 00:
+00        04. Infected Mushoroom - 9%.mp3                                          Infected Mushroom                  Heat Seekers - Israeli Trance Allstars 00:
+00        05. Void - Comes Alive.mp3                                               Void                               Heat Seekers - Israeli Trance Allstars 00:
+00        06. Skazi - The Light.mp3                                                Skazi                              Heat Seekers - Israeli Trance Allstars 00:
+00        07. Pixel and Wrecked Machines - Sem Parar.mp3                           Pixel                              Heat Seekers - Israeli Trance Allstars 00:
+00        08. Cosma - People On Hold (PsySex Remix).mp3                            Cosma                              Heat Seekers - Israeli Trance Allstars 00:
+00        09. Astral Projection - Humans Will Play For Robots.mp3                  Astral Projection                  Heat Seekers - Israeli Trance Allstars 00:
+00        10. Yahel - Memories.mp3                                                 Yahel                              Heat Seekers - Israeli Trance Allstars 00:
+********** 20:26:48 -- Durée: 5 min(s) -- UPDATE: 13892 (44/109) *******************************************************************************************
+
+ID_CD Name                           Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                                  
+----- ----                           ---------- ------ --------- ---------- ---- ------   ----                                                                  
+13892 X-Noize-Clockwize-WEB-2010-WAV         11      1        11          2 2010 01:20:18 \\HOMERSTATION\_Mp3\Psytrance\_years\2010\X-Noize-Clockwize-WEB-201...
+
+ODR_Track FIL_Track                                                            TAG_Albumartists TAG_Artists                     TAG_Album TAG_length TAG_Genres 
+--------- ---------                                                            ---------------- -----------                     --------- ---------- ---------- 
+01        01-x-noize_feat_techtonic-good_old_days.mp3                                           X-Noize Feat Techtonic          Clockwize 00:08:11   Psychedelic
+02        02-three_point_turn-by_any_means_necessary__x-noize_remix.mp3                         Three Point Turn                Clockwize 00:06:41   Psychedelic
+03        03-x-noize_feat_ptx-ptxnoize.mp3                                                      X-Noize Feat PTX                Clockwize 00:06:47   Psychedelic
+04        04-loud-machines__x-noize_2010_remix.mp3                                              Loud                            Clockwize 00:06:45   Psychedelic
+05        05-quantize-dymethltryptamine__x-noize_remix.mp3                                      Quantize                        Clockwize 00:08:18   Psychedelic
+06        06-x-noize_and_guy_salama_feat_tom_c-losing_control.mp3                               X-Noize & Guy Salama Feat Tom C Clockwize 00:06:32   Psychedelic
+07        07-x-noize_feat_illumination-deep_fried.mp3                                           X-Noize Feat Illumination       Clockwize 00:08:02   Psychedelic
+08        08-x-noize_feat_tom_c-clockwize__live_mix.mp3                                         X-Noize Feat Tom C              Clockwize 00:07:29   Psychedelic
+09        09-x-noize-on_board__hipnotix_remix.mp3                                               X-Noize                         Clockwize 00:07:29   Psychedelic
+10        10-x-noize-rocknroll.mp3                                                              X-Noize                         Clockwize 00:07:29   Psychedelic
+11        11-x-noize-revolver_live_mix__system_nipel_and_white_noise_remix.mp3                  X-Noize                         Clockwize 00:06:35   Psychedelic
+********** 20:27:00 -- Durée: 5 min(s) -- UPDATE: 13894 (45/109) *******************************************************************************************
+
+ID_CD Name                                 Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                                            
+----- ----                                 ---------- ------ --------- ---------- ---- ------   ----                                                            
+13894 Hedflux and Grouch - Collaborations           2      1         2          1 2015 00:14:47 \\HOMERSTATION\_Mp3\Psytrance\_years\2015\Hedflux and Grouch ...
+
+ODR_Track FIL_Track                                                  TAG_Albumartists TAG_Artists      TAG_Album      TAG_length TAG_Genres
+--------- ---------                                                  ---------------- -----------      ---------      ---------- ----------
+02        133_Hedflux_and_Grouch - Mehndi Moller (Hedflux Remix).mp3 Hedflux & Grouch Hedflux & Grouch Collaborations 00:07:38             
+01        135_Hedflux_and_Grouch - Lumination (Original Mix).mp3     Hedflux & Grouch Hedflux & Grouch Collaborations 00:07:09
+********** 20:27:07 -- Durée: 5 min(s) -- UPDATE: 858 (46/109) *********************************************************************************************
+
+           | Correction DATE manquante [REM DATE ????] ANNEE dossier (????) <> ANNEE cue (????) : U60311 Compilation Techno Division Vol 3 Mixed by Carl Cox -> \\HOMERSTATION\_Mp3\Techno\U60311 Compilation Techno Division Vol 3 Mixed by Carl Cox
+
+ID_CD Name                                                       Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                                      
+----- ----                                                       ---------- ------ --------- ---------- ---- ------   ----                                      
+  858 U60311 Compilation Techno Division Vol 3 Mixed by Carl Cox          2      1         2          1    0 02:00:05 \\HOMERSTATION\_Mp3\Techno\U60311 Compi...
+
+ODR_Track FIL_Track                                                 TAG_Albumartists TAG_Artists TAG_Album TAG_length TAG_Genres
+--------- ---------                                                 ---------------- ----------- --------- ---------- ----------
+00        U60311.Compilation.Techno.Division.Vol.3.Carl.Cox.CD1.mp3                                        01:00:41             
+00        U60311.Compilation.Techno.Division.Vol.3.Carl.Cox.CD2.mp3                                        00:59:23
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2014\VA - Psy Trance Treasures Vol 2 (2014) (47/109)
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Deedrah, Shanti, MODERN8 - Soaring With The Angels EP (2017) (48/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Genetrick - In the Lions Den [DOPDIGI104] (2017) (49/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Oforia - Call To Mind (Original Mix) [MDMA Music] (2017) (50/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Universal Frequencies Vol  5 [Digital Om] (2017) (51/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\Xerox - Piece of Mind [HMHD114] (2017) (52/109)
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Download \\HOMERSTATION\_Mp3\Psytrance\_years\2017\VA - Progressive Package Compiled by DJ Arnox (2017) (53/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Records (germany)\[10123854] Katharsis And Boom Duck And Gravitech - El Acido (2017) (54/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Savva Records (germany)\[10122789] Emphacis - Music Travel (2017) (55/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)\[YSE398] VA - Goa Culture Vol 25 (2017) (56/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Yellow Sunshine Explosion (anglais)\[YSE-DEP-066] VA - Burning Spear (2017) (57/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Digital Nature (israel)\[DNDI183] Cathar - Strong Acid (2017) (58/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Uxmal Records (mexique)\[UXM294] Kedarnath - Between Worlds (2017) (59/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danemark)\[IBOGADIGITAL358] Vini Vici - Ravers Army (Original Mix) (2017) (60/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Iboga Records (danemark)\[IBOGADIGITAL353] Ace Ventura And Rocky Tilbor - Dr Lupo (Rising Dust Remix) (2017) (61/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Prog On Syndicate (germany)\[10123975] Querox And Monod - Zaga (2017) (62/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Iono Music (germany)\[INM1DIGI268] Ilai, Atomizers - Say It Louder (Original Mix) (2017) (63/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR434] Ranji - Power of Acid (Pop Art Remix) (2017) (64/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR435] Zac DePetro And Matte - Chapter I (2017) (65/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR438] Titans - Eternal Vibrations (2017) (66/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR442] Berg And Zanon - Dugly Dagly (Feat  Trio Mandili) (2017) (67/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Blue Tunes Recordings (germany)\[BTRDR431] VA - Wild Vision (2017) (68/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Ovnimoon Records (chili-usa)\[OVNIEP252] Floating Planet - Peak Experience (2017) (69/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\DNA Records (israel)\[DND064] Quantum on DNA - Hellfire (2017) (70/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0133] Shake - Redemption (2017) (71/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0129] VA - Summer Festival Collection (2017) (72/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0130] Zyce and Suduaya - Pure Light (2017) (73/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0131] Flegma - Soul Protector (2017) (74/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\TesseracTstudio (serbie)\[TESD0132] Talpa and Purple Hayes - Born this Way (2014) (75/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\Power House Records (american)\[PWRCD040] VA - Progress To Goa Vol 2 By Random And Dr Spook (2017) (76/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANODIGI130] Pogo & Djantrix - Rejoicer (2017) (77/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANODIGI131] Dickster & Space Tribe - Turn On The World EP (2017) (78/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\NANO Records (uk, south africa)\[NANOCD052] VA - Nano Sonic Sound System Vol 5 (2017) (79/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150932] Shreder - Kawabunga (2017) (80/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150833] Aumni - Vagabond (2017) (81/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150864] Exolon - Spiritual Voices (2017) (82/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150857] H-Sunrise - Orange Pulsation (2017) (83/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150918] Ibojima - Mental Extension (2017) (84/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150840] Kundalini - Miditating (2017) (85/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150888] Mind Lab - Mind Sets (2017) (86/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150901] Moon Tripper - Spiritual Space (2017) (87/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150819] Mystic - Curious Effects (2017) (88/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150826] Somatic Cell - Radical Particle (2017) (89/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150710] Dark Soho - ReForm (2016) (90/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150659] Lupin - Dreamblaster (2016) (91/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN007] Hypnocoustics - Ashtamangala (2012) (92/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN011] ManMachine - Animate Reality (2012) (93/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD015] Lupin - Ritmo Galactico (2015) (94/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN026] Champa - Hiya Hiya (2014) (95/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD710] Psyground - The Hill (promo) (2007) (96/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGI088] VA - Similar Minds (2017) (97/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSDIGISUN004] Astral Gnomix - One Touch EP (2011) (98/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060147128659] VA - Transmissions (2012) (99/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD013] Odiolab - Medieval (2015) (100/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150543] Reversed Logic - Crystal Spirit EP (2016) (101/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD016] The Key - The Light Within The Darkness (2016) (102/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD012] VA - Multiverse Chronicles (2015) (103/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150550] Mind Lab - Inner Engineering (2016) (104/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150802] Dark Nebula & Scatterbrain - The Flying Sorcerers (2017) (105/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[BMSSCD005] Atma - Music Revolution (2011) (106/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[0641243150949] Somatic Cell & Psilocybian - Voices (Original Mix) (2017) (107/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222630] VA - Trancefusion Chapter 2 (2017) (108/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- ADD   : TRANCE Label/Physique \\HOMERSTATION\_Mp3\Psytrance\_Labels\BMSS Records\[5060376222623] VA - Trancefusion Chapter 1 (2017) (109/109) *
+********** 20:27:10 -- Durée: 5 min(s) -- END **************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170823202710
+**********************

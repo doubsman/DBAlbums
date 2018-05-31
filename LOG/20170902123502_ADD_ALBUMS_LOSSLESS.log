@@ -1,0 +1,48 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170902123503
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\PS1\UPDATE_ALBUMS.ps1 -Envt LOSSLESS -TypeOpe "UPDATE" -AlbumInfos "2880" -Category "REGGAE" -Family "Label/Physique" -Force
+ID de processus : 14096
+PSVersion: 5.1.14393.1532
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1532
+BuildVersion: 10.0.14393.1532
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   0.4        PSBanner                            {Get-FontFamilies, Write-Banner, psbanner}
+********** 12:35:03 -- Durée: 0 sec -- START ADD_ALBUMS_LOSSLESS *******************************************************************************************
+********** 12:35:04 -- Durée: 1 sec -- UPDATE: 2880 (1/1) **************************************************************************************************
+
+ID_CD Name                                                              Qty_Tracks Qty_CD Qty_audio Qty_covers Year Length   Path                               
+----- ----                                                              ---------- ------ --------- ---------- ---- ------   ----                               
+ 2880 Bob Marley & The Wailers - Chant Down Babylon [Island 546 404-2]          12      1         1          9 1999 00:51:43 \\HOMERSTATION\_LossLess\REGGAE\...
+
+ODR_Track FIL_Track                            TAG_Albumartists TAG_Artists TAG_Album                             TAG_length TAG_Genres
+--------- ---------                            ---------------- ----------- ---------                             ---------- ----------
+01        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:04:51   Reggae    
+02        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:03:30   Reggae    
+03        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:04:19   Reggae    
+04        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:04:13   Reggae    
+05        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:04:19   Reggae    
+06        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:03:53   Reggae    
+07        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:05:47   Reggae    
+08        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:04:08   Reggae    
+09        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:03:54   Reggae    
+10        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:04:05   Reggae    
+11        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:03:50   Reggae    
+12        Bob Marley - Chant Down Babylon.flac Bob Marley       Bob Marley  Chant Down Babylon [Island 546 404-2] 00:04:54   Reggae
+      | remove \\HOMERSTATION\_LossLess\_INVENT\DBAlbumsQT5\LOG\20170828015002_ADD_ALBUMS_LOSSLESS_TEST.log
+********** 12:35:09 -- Durée: 6 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170902123509
+**********************

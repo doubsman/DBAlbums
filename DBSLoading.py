@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont, QMovie
 from PyQt5.QtCore import Qt, pyqtSlot, QSettings, QDateTime
 from PyQt5.QtSql import QSqlQueryModel
 from PyQt5.QtWidgets import QWidget
-from DBDatabase import getrequest, buildTabFromRequest, buildReqTCD
+from DBDatabase import DBFuncBase, getrequest
 from DBFunction import centerWidget
 from Ui_DBLOADING import Ui_LoadingWindow
 
@@ -19,7 +19,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 	configini = QSettings(FILE__INI, QSettings.IniFormat)
 	configini.beginGroup('dbalbums')
 	FONT_MAI = configini.value('font00_ttx')
-	configini.endGroup()	
+	configini.endGroup()
 	
 	def __init__(self, modsql, title, parent):
 		super(DBloadingGui, self).__init__(parent)
@@ -41,16 +41,16 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		self.lab_logo.setMovie(self.movielogo)
 		self.movielogo.start()
 		# tab1
-		req = buildReqTCD("Category", "Family", "DBALBUMS", "ALBUM", "1", True, modsql)
+		req = DBFuncBase().buildReqTCD("Category", "Family", "DBALBUMS", "ALBUM", "1", True, modsql)
 		self.buildTab(req, self.tableWid1)
 		# tab2
-		req = buildReqTCD("Category", "Family", "DBALBUMS", "SIZE (GO)", "ROUND( `Size` /1024,1)", True, modsql)
+		req = DBFuncBase().buildReqTCD("Category", "Family", "DBALBUMS", "SIZE (GO)", "ROUND( `Size` /1024,1)", True, modsql)
 		self.buildTab(req, self.tableWid2)
 		# tab3
-		req = buildReqTCD("Year", "Category", "DBALBUMS", "YEAR", "1", True, modsql)
+		req = DBFuncBase().buildReqTCD("Year", "Category", "DBALBUMS", "YEAR", "1", True, modsql)
 		self.buildTab(req, self.tableWid3)
 		# message
-		basedate = buildTabFromRequest(getrequest('datedatabase', modsql))
+		basedate = DBFuncBase().sqlToArray(getrequest('datedatabase', modsql))
 		if len(basedate) == 0:
 			txt_message = modsql + " Base \nlast modified :\nnever"
 		elif isinstance(basedate[0], QDateTime):
