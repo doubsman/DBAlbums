@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # GetExist History Version
+#  1.26 viewers artworks
 #  1.25 gestion import tkinter + stats loading
 #  1.24 thunbnails + mousewheel + popup
 #  1.23 thunbnails link treeview
@@ -57,7 +58,7 @@ from GetExistCopyDatabaseToSqlite import CopyDatabaseInvent
 
 ###################################################################
 # CONSTANTS
-VERS_PROG = '1.25'
+VERS_PROG = '1.26'
 TITL_PROG = "DB Albums v{v} (2017)".format(v=VERS_PROG)
 PATH_PROG = path.dirname(__file__)
 LOGS_PROG = path.join(PATH_PROG, 'Logs')
@@ -78,10 +79,11 @@ SCOR_ALBUMS = { 0 : 'not listened',
 				4 : 'top',
 				5 : 'best'}
 # SCORE TRACKS
-SCOR_TRACKS = { 0 : 'not listened',
-				1 : 'listened',
-				2 : 'top',
-				3 : 'best'}
+SCOR_TRACKS = { 0 : 'track not listened',
+				1 : 'track listened',
+				2 : 'top track',
+				3 : 'best track'}
+DISP_CJOKER = "*"
 # GUI
 WIDT_MAIN = 1280
 HEIG_MAIN = 1060
@@ -121,9 +123,13 @@ THUN_CO0 = 'black'
 THUN_CO1 = 'white'
 # REQS
 # combo Category
-D_REQUEST = "SELECT '*' AS Category UNION SELECT Category from DBALBUMS group by Category"
+D_REQUEST = "SELECT Category from DBALBUMS group by Category"
 # combo Family
-E_REQUEST = "SELECT '*' AS Family UNION SELECT Family from DBALBUMS group by Family"
+E_REQUEST = "SELECT Family from DBALBUMS group by Family"
+# combo Label
+L_REQUEST = "SELECT DISTINCT Label from DBALBUMS WHERE Label<>'' ORDER BY Label"
+#combo year
+Y_REQUEST = "SELECT DISTINCT `Year` from DBALBUMS ORDER BY `Year` DESC"
 ### ALBUMS
 #  request mysql
 A_REQUEST = "SELECT ID_CD AS ID, Category, Family, Name, Label, ISRC, `Year`, Size, Length, Qty_CD AS `CD`, Qty_Tracks AS Trks, Qty_covers AS Pic, Score As SCR, Typ_Tag AS Tag, CONCAT(Position1,'\\\\',Position2) AS Position, Path, Cover, `MD5`, Date_Insert AS `Add`, Date_Modifs AS `Modified` FROM DBALBUMS ORDER BY Date_Insert DESC"
@@ -309,7 +315,7 @@ def TreeviewSortColumn(tv, col, reverse):
 	# reverse sort next time
 	tv.heading(col, command=lambda	c=col: TreeviewSortColumn(tv, c, not reverse))
 
-def BuildTree(con, frame, req, colWidth, line=15, scroll=False):
+def BuildTree(con, frame, req, colWidth, line, scroll=False, align=W):
 	"""Build Columns treeview."""
 	col_names = GetListColumns(con, req)
 	tree = Treeview(frame, height=line, columns=col_names, show="headings")
@@ -317,7 +323,7 @@ def BuildTree(con, frame, req, colWidth, line=15, scroll=False):
 	counter = 0
 	for col_name in col_names:
 		tree.heading(col_name, text=col_name.title(),command=lambda c=col_name: TreeviewSortColumn(tree, c, False))
-		tree.column(col_name,width=colWidth[counter])
+		tree.column(col_name,width=colWidth[counter], anchor=align)
 		counter += 1
 	tree.tag_configure('0', background=TREE_CO0)
 	tree.tag_configure('1', background=TREE_CO1)
@@ -332,6 +338,37 @@ def BuildTree(con, frame, req, colWidth, line=15, scroll=False):
 		xsb.config(command=tree.xview)
 		tree.configure(yscrollcommand=ysb.set,xscrollcommand=xsb.set)
 	return (tree)
+
+def FillComboRequest(con, req):
+	"""" fill combo tkinter."""
+	TLabs = SelectTOTab(con, req)
+	TMods = []
+	TMods.append(DISP_CJOKER)
+	for row in TLabs:
+		TMods.append(''.join(map(str,row)))
+	return (TMods)
+
+def ResizeImage(monimage, wmax, hmax):
+	# measures
+	width, height = monimage.size
+	if width>wmax or height>hmax:
+		# resize
+		if (width-wmax) > (height-hmax):
+			new_width  = wmax
+			new_height = int(new_width * height / width)
+		else:
+			new_height = hmax
+			new_width  = int(new_height * width / height)
+	else:
+		# zoom
+		if ((wmax/width)<(hmax/height)):
+			new_width  = wmax
+			new_height = int(new_width * height / width)
+		else:
+			new_height = hmax
+			new_width  = int(new_height * width / height)
+	monimage = monimage.resize((new_width, new_height), Image.ANTIALIAS)
+	return(monimage, new_width, new_height)
 
 def DisplayCounters(num = 0, text = '' ):
 	"""format 0 000 + plural."""
@@ -515,7 +552,6 @@ class AutocompleteEntry(Entry):
 		if len(event.keysym) == 1 or event.keysym in tk_umlauts:
 				self.autocomplete()
 
-
 class VerticalScrolledFrame(Frame):
 	"""A pure Tkinter scrollable frame that actually works!
 	* Use the 'interior' attribute to place widgets inside the scrollable frame
@@ -524,7 +560,7 @@ class VerticalScrolledFrame(Frame):
 	"""
 	def __init__(self, parent, canv_w , canv_h , *args, **kwargs):
 		super().__init__(parent, *args, **kwargs)
-
+		
 		self.parent = parent
 		# create a canvas object and a vertical scrollbar 
 		self.yscrlbr = Scrollbar(self)
@@ -607,7 +643,7 @@ class LoadingGui():
 		self.treestat1 = self.BuildTreeStats(req)
 		self.treestat1.bind("<Button-3>", self.ChangeTree1)
 		self.treestat1.pack(side=TOP, anchor=W, fill=BOTH, padx=5, pady=5)
-		req = BuildReqTCD(con, "Category" , "Family", "DBALBUMS", "SIZE (GO)", "ROUND(`Size`/1024,0)", True)
+		req = BuildReqTCD(con, "Category" , "Family", "DBALBUMS", "SIZE (GO)", "ROUND(`Size`/1024,1)", True)
 		self.treestat2 = self.BuildTreeStats(req)
 		self.treestat2.bind("<Button-3>", self.ChangeTree2)
 		# windows
@@ -623,15 +659,13 @@ class LoadingGui():
 	def BuildTreeStats(self, req):
 		Tabs = SelectTOTab(self.con, req)
 		# ajust window height
-		linetebm = 6
-		if len(Tabs)>linetebm:
+		linestabs = 6
+		if len(Tabs)>linestabs:
 			linestabs = len(Tabs)
-		else:
-			linestabs = linetebm
 		self.MyTopLevel.geometry("{w}x{h}".format(w=self.w,h=self.h+(linestabs*18)))
 		CenterWindows(self.MyTopLevel)
 		# build tree
-		tree = BuildTree(self.con, self.cadrestats, req, (50,50,50,50,50), linestabs)
+		tree = BuildTree(self.con, self.cadrestats, req, (50,50,50,50,50), linestabs, False, E)
 		# fill tree
 		counter = 0
 		for row in Tabs:
@@ -677,6 +711,7 @@ class CoverViewGui():
 	def QuitCoverViewGui(self, event):
 		self.master.destroy()
 
+
 class CoversArtWorkViewGui():
 	"""Fenetre view cover."""
 	def __init__(self, master, pathcover, pathalbum, namealbum):
@@ -710,7 +745,9 @@ class CoversArtWorkViewGui():
 			self.listartwork.append(label)
 			label.grid(row=curRow,column=curCol)
 			self.master.update_idletasks()
-			label.bind("<Enter>", lambda event,a=cptIte: self.OnSelectThunbnail(event,a))
+			label.bind("<Button-1>", lambda event,a=cptIte: self.OnSelectThunbnail(event,a))
+			label.bind("<Enter>", lambda event: event.widget.config(relief=SOLID))
+			label.bind("<Leave>", lambda event: event.widget.config(relief=FLAT))
 			# count thunbnails
 			cptIte = cptIte + 1
 			# position
@@ -723,11 +760,11 @@ class CoversArtWorkViewGui():
 		self.framecover = Frame(self.master)
 		self.framecover.pack(side=TOP, anchor=W, fill=BOTH)
 		self.cover = Label(self.framecover, background=THUN_CO0)
-		self.cover.pack(side=TOP, fill=BOTH)
+		self.cover.pack(side=TOP, fill=BOTH, expand=TRUE)
 		self.aMenu = Menu(self.framecover, tearoff=0)
-		self.aMenu.add_command(label="Create cover...", command=self.CreateFileCover)
+		self.aMenu.add_command(label="Create cover file...", command=self.CreateFileCover)
 		# only if no cover file
-		if pathcover[0:len(TEXT_NCO)] != TEXT_NCO:
+		if pathcover[0:len(TEXT_NCO)] == TEXT_NCO:
 			self.master.bind("<Button-3>", self.popupThunbnail)
 		self.OnSelectThunbnail(None, 0)
 		
@@ -737,24 +774,13 @@ class CoversArtWorkViewGui():
 		self.monimage = Image.open(self.filelist)
 		# measures
 		width, height = self.monimage.size
-		new_height = height
-		new_width = width
-		h = HEIG_MAIN-WIDT_PICM+4
-		if width>WIDT_MAIN or height>h:
-			# resize
-			if (width-WIDT_MAIN) > (height-h):
-				new_width  = WIDT_MAIN
-				new_height = int(new_width * height / width)
-			else:
-				new_height = h
-				new_width  = int(new_height * width / height)
-			self.monimage = self.monimage.resize((new_width, new_height), Image.ANTIALIAS)
+		self.monimage, new_width, new_height = ResizeImage(self.monimage, WIDT_MAIN, HEIG_MAIN-WIDT_PICM+4)
 		photo = ImageTk.PhotoImage(self.monimage)
 		self.cover.configure(image = photo)
 		self.cover.image = photo
 		self.master.update_idletasks()
 		# windows
-		self.master.title(TITL_PROG+" [view ArtWorks: "+self.namealbum+"] {c}/{n} - {name}  - {w}x{h}<{wo}x{ho}".format(c=str(numlabel+1), 
+		self.master.title(TITL_PROG+" : [view ArtWorks: "+self.namealbum+'] {c}/{n} "{name}" A[{w}x{h}] O[{wo}x{ho}]'.format(c=str(numlabel+1), 
 																		 n=str(len(self.listartwork)), 
 																		 w=new_width, 
 																		 h=new_height, 
@@ -772,69 +798,6 @@ class CoversArtWorkViewGui():
 		path_cover = path.join(path.dirname(self.filelist), 'cover.' +file_exten )
 		self.master.title("create file {name} ".format(name=path.basename(path_cover)))
 		self.monimage.save(path_cover)
-
-class CoversViewGui():
-	"""Fenetre view covers."""
-	def __init__(self, master, pathcover, pathalbum, namealbum):
-		# Windows
-		self.master = master
-		self.master.attributes('-topmost', True)
-		self.master.resizable(width=False, height=False)
-		BuildIco(self.master)
-		self.master.title("reading files covers...")
-		# build list covers
-		self.namealbum = namealbum
-		self.fileslist = list(GetListFiles(pathalbum, MASKCOVERS))
-		self.numbersCov = len(self.fileslist)
-		self.counterCov = 0
-		self.label = Label(self.master)
-		self.label.bind("<Button-3>", self.nextCov)
-		self.label.bind("<Button-1>", self.QuitCoversViewGui)
-		self.label.pack()
-		# only if no cover file
-		if pathcover[0:len(TEXT_NCO)] == TEXT_NCO:
-			self.master.bind("<Control-Key-c>", self.CreateFileCover)
-		self.nextCov(None)
-	
-	def nextCov(self, event):
-		"""next file covers."""
-		self.currentCov = self.fileslist[self.counterCov]
-		self.monimage = Image.open(self.currentCov)
-		# measures
-		width, height = self.monimage.size
-		new_height = height
-		new_width = width
-		if width>WIDT_MAIN or height>HEIG_MAIN:
-			# resize
-			if (width-WIDT_MAIN) > (height-HEIG_MAIN):
-				new_width  = WIDT_MAIN
-				new_height = int(new_width * height / width)
-			else:
-				new_height = HEIG_MAIN
-				new_width  = int(new_height * width / height)
-			self.monimage = self.monimage.resize((new_width, new_height), Image.ANTIALIAS)
-		# windows
-		self.master.title("{c}/{n} - {name}  - {w}x{h}<{wo}x{ho}".format(c=(self.counterCov+1), n=(self.numbersCov), w=new_width, h=new_height, name=path.basename(self.currentCov), wo=str(width), ho=str(height)))
-		self.master.geometry("{w}x{h}".format(w=new_width,h=new_height))
-		CenterWindows(self.master)
-		# cover
-		self.covers = ImageTk.PhotoImage(self.monimage)
-		self.label.configure(image = self.covers)
-		self.label.image = self.covers
-		# next cover
-		self.counterCov += 1
-		if self.counterCov == self.numbersCov:
-			self.counterCov = 0
-	
-	def CreateFileCover(self, event):
-		file_pictu = getFileNameWithoutExtension(self.currentCov)
-		file_exten = path.splitext(self.currentCov)[1][1:]
-		path_cover = path.join(path.dirname(self.currentCov), 'cover.' +file_exten )
-		self.master.title("{c}/{n} - create file {name} ".format(c=(self.counterCov+1), n=(self.numbersCov), name=path.basename(path_cover)))
-		self.monimage.save(path_cover)
-	
-	def QuitCoversViewGui(self, event):
-		self.master.destroy()
 
 
 class DisplaySubprocessGui():
@@ -969,13 +932,21 @@ class CoverMainGui(Tk):
 		self.searchtracks.set(0)
 		Checkbutton(cadresaisie, text="In Tracks", variable = self.searchtracks).pack(side=LEFT,padx=5,pady=5)
 		# Style
-		self.style_value = StringVar()
-		self.style = Combobox(cadresaisie, textvariable=self.style_value, state='readonly')
-		self.style.pack(side="left", padx=5, pady=5)
+		self.Combostyle_value = StringVar()
+		self.Combostyle = Combobox(cadresaisie, textvariable=self.Combostyle_value, state='readonly')
+		self.Combostyle.pack(side="left", padx=5, pady=5)
 		# Family
-		self.family_value = StringVar()
-		self.family = Combobox(cadresaisie, textvariable=self.family_value, state='readonly')
-		self.family.pack(side="left", padx=5, pady=5)
+		self.Combofamily_value = StringVar()
+		self.Combofamily = Combobox(cadresaisie, textvariable=self.Combofamily_value, state='readonly')
+		self.Combofamily.pack(side="left", padx=5, pady=5)
+		# Label
+		self.Combolabelm_value = StringVar()
+		self.Combolabelm = Combobox(cadresaisie, textvariable=self.Combolabelm_value, state='readonly')
+		self.Combolabelm.pack(side="left", padx=5, pady=5)
+		# year
+		self.Comboyearc_value = StringVar()
+		self.Comboyearc = Combobox(cadresaisie, textvariable=self.Comboyearc_value, state='readonly')
+		self.Comboyearc.pack(side="left", padx=5, pady=5)
 		# buttons
 		btn_search = Button(cadresaisie, text='Search', width=15, command = self.GetSearchAlbums)
 		btn_search.pack(side="left", padx=5, pady=5)
@@ -1062,7 +1033,7 @@ class CoverMainGui(Tk):
 		self.cadrescoretrack = Frame(self)
 		self.cadrescoretrack.pack(fill=BOTH, side=TOP)
 		self.MessageInfo = StringVar()
-		self.MessageInfo_label = Label(self.cadrescoretrack, textvariable=self.MessageInfo, font=self.customFont, bd=1, relief=SUNKEN)
+		self.MessageInfo_label = Label(self.cadrescoretrack, textvariable=self.MessageInfo, anchor=W, font=self.customFont, bd=1, relief=SUNKEN, width=int((WIDT_MAIN/2)/8))
 		self.MessageInfo_label.pack(side=LEFT, padx=5, pady=5)
 		self.postrack_scale = Scale( self.cadrescoretrack,
 										command=self.ModifyScoreTrack, 
@@ -1107,7 +1078,7 @@ class CoverMainGui(Tk):
 				pathcover = curLign['values'][A_POSITIO['Cover']]
 				albumname = curLign['values'][A_POSITIO['Name']]
 				monimage = BuildMiniCover(self.con, pathcover, curalbmd5)
-				label = self.BuildThunbnail(pathcover, albumname.replace('-','\n'), monimage, curItem)
+				label = self.BuildThunbnail(pathcover, albumname.replace(' - ','\n'), monimage, curItem)
 				label.grid(row=curRow,column=curCol)
 				label.bind("<Button-1>", lambda event,a=curItem: self.OnSelectThunbnail(event,a))
 				label.bind("<Button-3>", self.popupthunbnailsalbum)
@@ -1149,8 +1120,9 @@ class CoverMainGui(Tk):
 			# add text infos
 			draw = ImageDraw.Draw(monimage)
 			w, h = draw.textsize(texte)
+			if h<30: h=30
 			draw.rectangle(((4,(WIDT_PICM-h)/2),(WIDT_PICM-4,((WIDT_PICM-h)/2)+h)), fill=THUN_CO0)
-			draw.text((((WIDT_PICM-w)/2)+4*2,((WIDT_PICM-h)/2)+4), texte, font=font, fill=THUN_CO1)
+			draw.text((6,((WIDT_PICM-h)/2)+4), texte, font=font, fill=THUN_CO1)
 		photo = ImageTk.PhotoImage(monimage)
 		label = Label(self.frameThunbnails.interior, image = photo, text= curItem)
 		label.image = photo
@@ -1300,18 +1272,24 @@ class CoverMainGui(Tk):
 			if self.MODE_SQLI:
 				self.title(TITL_PROG + ' : offline mode SQLite local at '+self.condat)
 			else:
-				self.title('{prog} : connected {database} at {heure}'.format(prog = TITL_PROG,
+				self.title('{prog} : online base "{database}" at {heure}'.format(prog = TITL_PROG,
 																			 database = self.Envs,
 																			 heure = self.condat))
 			# montage table mysql en memoire
 			self.Tabs = SelectTOTab(self.con, (Z_REQUEST if self.MODE_SQLI else A_REQUEST))
 			# init combos
-			self.style['values'] = SelectTOTab(self.con, D_REQUEST)
-			self.style.bind("<<ComboboxSelected>>", self.OnPressEnter)
-			self.style.current(0)
-			self.family['values'] = SelectTOTab(self.con, E_REQUEST)
-			self.family.bind("<<ComboboxSelected>>", self.OnPressEnter)
-			self.family.current(0)
+			self.Combostyle['values'] = FillComboRequest(self.con, D_REQUEST)
+			self.Combostyle.bind("<<ComboboxSelected>>", self.OnPressEnter)
+			self.Combostyle.current(0)
+			self.Combofamily['values'] = FillComboRequest(self.con, E_REQUEST)
+			self.Combofamily.bind("<<ComboboxSelected>>", self.OnPressEnter)
+			self.Combofamily.current(0)
+			self.Combolabelm['values'] = FillComboRequest(self.con, L_REQUEST)
+			self.Combolabelm.bind("<<ComboboxSelected>>", self.OnPressEnter)
+			self.Combolabelm.current(0)
+			self.Comboyearc['values'] = FillComboRequest(self.con, Y_REQUEST)
+			self.Comboyearc.bind("<<ComboboxSelected>>", self.OnPressEnter)
+			self.Comboyearc.current(0)
 			# all albums to treeview
 			self.GetSearchAlbums(refresh)
 			# Hide loading
@@ -1342,15 +1320,19 @@ class CoverMainGui(Tk):
 			# on cherche la chaine saisie ou search tracks
 			if txt_search.lower() in row[A_POSITIO['Name']].lower() or txt_search.lower() in row[A_POSITIO['Label']].lower() or self.SearchInTracksSQL(lst_id,row[A_POSITIO['ID_CD']]):
 				# Category ok ?
-				if (self.style_value.get() != '*' and row[A_POSITIO['Category']] == self.style_value.get()) or (self.style_value.get() == '*') :
+				if (self.Combostyle_value.get() != DISP_CJOKER and row[A_POSITIO['Category']] == self.Combostyle_value.get()) or (self.Combostyle_value.get() == DISP_CJOKER):
 					# Family ok ?
-					if (self.family_value.get() != '*' and row[A_POSITIO['Family']] == self.family_value.get()) or (self.family_value.get() == '*') :
-						self.tree.insert("", counter, iid='Row_%s'%counter, values=row, tag = (counter%2))
-						counter += 1
-						cpt_cds += row[A_POSITIO['Qty_CD']]
-						cpt_trk += row[A_POSITIO['Qty_Tracks']]
-						cpt_siz += row[A_POSITIO['Size']]
-						cpt_len += sum(int(x) * 60 ** i for i,x in enumerate(reversed(row[A_POSITIO['Length']].split(":"))))
+					if (self.Combofamily_value.get() != DISP_CJOKER and row[A_POSITIO['Family']] == self.Combofamily_value.get()) or (self.Combofamily_value.get() == DISP_CJOKER):
+						# Label ok ?
+						if (self.Combolabelm_value.get() != DISP_CJOKER and row[A_POSITIO['Label']] == self.Combolabelm_value.get()) or (self.Combolabelm_value.get() == DISP_CJOKER):
+							# year ok ?
+							if (self.Comboyearc_value.get() != DISP_CJOKER and row[A_POSITIO['Year']] == self.Comboyearc_value.get()) or (self.Comboyearc_value.get() == DISP_CJOKER):
+								self.tree.insert("", counter, iid='Row_%s'%counter, values=row, tag = (counter%2))
+								counter += 1
+								cpt_cds += row[A_POSITIO['Qty_CD']]
+								cpt_trk += row[A_POSITIO['Qty_Tracks']]
+								cpt_siz += row[A_POSITIO['Size']]
+								cpt_len += sum(int(x) * 60 ** i for i,x in enumerate(reversed(row[A_POSITIO['Length']].split(":"))))
 		# DISPLAY THUNBNAILS
 		self.DisplayThunbnails()
 		# DISPLAY STATS SEARCH
@@ -1369,7 +1351,7 @@ class CoverMainGui(Tk):
 			else:
 				# seoncd -> Days
 				txt_dur = str(int(((cpt_len/60/60)/24)*10)/10) + ' Days'
-			self.MessageInfo.set("Search Result \"{sch}\" ->  {alb} / {trk} / {cds} / {siz} / {dur} <-".format(sch = (txt_search if len(txt_search)>0 else 'all'),
+			self.MessageInfo.set("Search Result \"{sch}\" :  {alb} / {trk} / {cds} / {siz} / {dur} ".format(sch = (txt_search if len(txt_search)>0 else 'all'),
 																						alb = DisplayCounters(counter, 'Album'),
 																						cds =  DisplayCounters(cpt_cds, 'CD'),
 																						trk = DisplayCounters(cpt_trk, 'Track'),
@@ -1474,6 +1456,8 @@ class CoverMainGui(Tk):
 	def GetInfosTrack(self, curItem):
 		if self.treealb.get_children():
 			curLign = self.treealb.item(curItem)
+			#self.treealb.selection_set(curItem)
+			#self.treealb.focus(curItem)
 			self.ScoreTrack = curLign['values'][T_POSITIO['Score']]
 			self.Id_TRACK = curLign['values'][T_POSITIO['ID_TRACK']]
 			self.CurentTrack = curItem
