@@ -1,203 +1,0 @@
-﻿**********************
-Début de la transcription Windows Powershell
-Heure de début : 20170718143108
-Nom d'utilisateur : ANTEC\Mister doubs
-Utilisateur runAs : ANTEC\Mister doubs
-Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
-Application hôte : powershell.exe -ExecutionPolicy Unrestricted -WindowStyle Hidden -File R:\Projets\ERIC6\DBALBUMSQT5\PS1\BUILD_INVENT_LOSSLESS.ps1 -Envt LOSSLESS_TEST
-ID de processus : 13776
-PSVersion: 5.1.14393.1480
-PSEdition: Desktop
-PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.1480
-BuildVersion: 10.0.14393.1480
-CLRVersion: 4.0.30319.42000
-WSManStackVersion: 3.0
-PSRemotingProtocolVersion: 2.3
-SerializationVersion: 1.1.0.1
-**********************
-Import-Module : Le module «PSBanner» spécifié n'a pas été chargé, car aucun fichier de module valide n'a été trouvé 
-dans un répertoire de module.
-Au caractère R:\Projets\ERIC6\DBALBUMSQT5\PS1\BUILD_INVENT_LOSSLESS.ps1:47 : 1
-+ Import-Module PSBanner -PassThru
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ResourceUnavailable: (PSBanner:String) [Import-Module], FileNotFoundException
-    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
-Import-Module : Le module «PSBanner» spécifié n'a pas été chargé, car aucun fichier de module valide n'a été trouvé
-dans un répertoire de module.
-Au caractère R:\Projets\ERIC6\DBALBUMSQT5\PS1\BUILD_INVENT_LOSSLESS.ps1:47 : 1
-+ Import-Module PSBanner -PassThru
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ResourceUnavailable: (PSBanner:String) [Import-Module], FileNotFoundException
-    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
-
-********** 14:31:09 -- Durée: 1 sec -- ENVT LOSSLESS_TEST DEMARRAGE INVENTAIRE COLLECTION LOSSLESS_TEST version (v1.11) ************************************
-Write-Banner : Le terme «Write-Banner» n'est pas reconnu comme nom d'applet de commande, fonction, fichier de script ou 
-programme exécutable. Vérifiez l'orthographe du nom, ou si un chemin d'accès existe, vérifiez que le chemin d'accès est 
-correct et réessayez.
-Au caractère R:\Projets\ERIC6\DBALBUMSQT5\PS1\BUILD_INVENT_LOSSLESS.ps1:52 : 1
-+ Write-Banner $Envt
-+ ~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (Write-Banner:String) [], CommandNotFoundException
-    + FullyQualifiedErrorId : CommandNotFoundException
-Write-Banner : Le terme «Write-Banner» n'est pas reconnu comme nom d'applet de commande, fonction, fichier de script
-ou programme exécutable. Vérifiez l'orthographe du nom, ou si un chemin d'accès existe, vérifiez que le chemin d'accès
-est correct et réessayez.
-Au caractère R:\Projets\ERIC6\DBALBUMSQT5\PS1\BUILD_INVENT_LOSSLESS.ps1:52 : 1
-+ Write-Banner $Envt
-+ ~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (Write-Banner:String) [], CommandNotFoundException
-    + FullyQualifiedErrorId : CommandNotFoundException
-
-********** 14:31:10 -- Durée: 2 sec -- CONNECT MYSQL *******************************************************************************************************
-********** 14:31:11 -- Durée: 3 sec -- LOAD BASES ALBUMS ***************************************************************************************************
-Category Update : "CLASSIC", "TECHNO", "TRANCE", "ROCK", "REGGAE"
-
-Dbase BASE TRACKS Download Label/Physique Physique Total
------ ----------- -------- -------------- -------- -----
-      TRANCE             0             60       28    88
-      TECHNO            33             55        0    88
-      ROCK              20              0        4    24
-      REGGAE            52             16        0    68
-      CLASSIC           15              0        0    15
-      TOTAL            120            131       32   283
-
-
-********** 14:31:12 -- Durée: 4 sec -- BUILD ALBUMS LIST mode UPDATE ***************************************************************************************
-       Category |  Cpt  |State|  Ids  | Method| Name
-      ----------|-------|-----|-------|-------|---------------------------------------------------------------------------------------------------------------
->
-      CLASSIC   | 00001 | (N) | 00087 | (CUE) | Gonzales -4- Presidential Suite (2002)
->
-      TECHNO    | 00002 | (N) | 00088 | (TAG) | [0641243150888] Mind Lab - Mind Sets (2017)
->
-      TECHNO    | 00003 | (N) | 00089 | (CUE) | Caia - The Magic Dragon (2003)
->
-      TECHNO    | 00004 | (N) | 00090 | (TAG) | Dickster - Elastic Dreams EP (2017)
->
-      TECHNO    | 00005 | (N) | 00091 | (TAG) | Gabriel_Ananda_-_Live_Series_Vol_1 (BASMATI04) (2011)
->
-      TECHNO    | 00006 | (N) | 00092 | (TAG) | Thievery Corporation - Sounds from the Verve Hi (2002)
->
-      TECHNO    | 00007 | (N) | 00093 | (CUE) | [F115] Laurent Garnier - Early Works (1998)
->
-      TECHNO    | 00008 | (N) | 00094 | (CUE) | Fabric 20 - John Digweed (2004)
->
-           | probleme Qty_CD virtuelcd:1|repcd:2
-      TECHNO    | 00009 | (N) | 00095 | (TAG) | [REN26CD] Hernán Cattáneo - Sequential (2006)
->
-      TRANCE    | 00010 | (N) | 00096 | (TAG) | [IBOGADIGITAL090] Emok - Best Of My Sets Vol.02 (2011)
->
-      TRANCE    | 00011 | (N) | 00097 | (TAG) | [BTRDR417] Krunch And Orpheus - El Primo (2017)
->
-      TRANCE    | 00012 | (N) | 00098 | (TAG) | [BTRDR418] Haldolium - Skyfall (Feat  Jan Schmidt) (2017)
->
-           | probleme Qty_CD virtuelcd:2|repcd:1
-      TRANCE    | 00013 | (N) | 00099 | (TAG) | [YSE 053-CD] VA - Goa 2004 Vol.3 (2004)
->
-      TRANCE    | 00014 | (N) | 00100 | (TAG) | VA - Uncharted Vol.1 [Dacru Records] (2015)
->
-      TRANCE    | 00015 | (N) | 00101 | (CUE) | VA_-_Tsunami_Benefit-3CD (2005)
->
-      ROCK      | 00016 | (N) | 00102 | (TAG) | Loud_-_Old_is_Gold-2016
->
-#year
-      ROCK      | 00017 | (N) | 00103 | (TAG) | Air - Moon - Safari (1998)
->
-           | probleme Qty_CD virtuelcd:Ree|repcd:3
-      REGGAE    | 00018 | (N) | 00104 | (CUE) | Lee Scratch Perry - Arkology (1997)
->
-#year
-      REGGAE    | 00019 | (N) | 00105 | (CUE) | Jennifer Lara - Studio One Presents Jennifer Lara (1981)
-
-      ----------|------|-----|------|-------|---------------------------------------------------------------------------------------------------------------
-      Waiting 5s.....
-      Waiting 4s....
-      Waiting 3s...
-      Waiting 2s..
-      Waiting 1s.
-      Waiting 0s
-
-********** 14:33:30 -- Durée: 2 min(s) -- VERIFICATION BASE LOSSLESS_TEST **********************************************************************************
-      | (N) (ID-87) Gonzales -4- Presidential Suite
-      | (N) (ID-88) [0641243150888] Mind Lab - Mind Sets
-      | (N) (ID-89) Caia - The Magic Dragon
-      | (N) (ID-90) Dickster - Elastic Dreams EP
-      | (N) (ID-91) Gabriel Ananda - Live Series Vol 1 (BASMATI04)
-      | (N) (ID-92) Thievery Corporation - Sounds from the Verve Hi
-      | (N) (ID-93) Laurent Garnier - Early Works
-      | (N) (ID-94) Fabric 20 - John Digweed
-      | (N) (ID-95) Hernán Cattáneo - Sequential
-      | (N) (ID-96) [IBOGADIGITAL090] Emok - Best Of My Sets Vol.02
-      | (N) (ID-97) Krunch And Orpheus - El Primo
-      | (N) (ID-98) Haldolium - Skyfall (Feat  Jan Schmidt)
-      | (N) (ID-99) VA - Goa 2004 Vol.3
-      | (N) (ID-100) VA - Uncharted Vol.1 [Dacru Records]
-      | (N) (ID-101) VA - Tsunami Benefit-3CD
-      | (N) (ID-102) Loud - Old is Gold-2016
-      | (N) (ID-103) Air - Moon - Safari
-      | (N) (ID-104) Lee Scratch Perry - Arkology
-      | (N) (ID-105) Jennifer Lara - Studio One Presents Jennifer Lara
-      | MODE 'UPDATE ': MISE A JOUR BASE DBALBUMS
-      | MODE 'UPDATE ': MISE A JOUR DBTRACKS (283 ligne(s) supprimée(s)
-********** 14:33:30 -- Durée: 2 min(s) -- BUILD TDC ********************************************************************************************************
-  DBALBUMS__________________________________________
-
-local NEW ALBUM(S) Download Physique Label/Physique Total
------ ------------ -------- -------- -------------- -----
-      CLASSIC             1        0              0     1
-      TECHNO              5        0              3     8
-      TRANCE              0        1              5     6
-      ROCK                1        1              0     2
-      REGGAE              1        0              1     2
-      TOTAL               8        2              9    19
-
-
-
-local NEW TRACK(S) Download Physique Label/Physique Total
------ ------------ -------- -------- -------------- -----
-      CLASSIC            15        0              0    15
-      TECHNO             33        0             55    88
-      TRANCE              0       28             60    88
-      ROCK               20        4              0    24
-      REGGAE             52        0             16    68
-      TOTAL             120       32            131   283
-
-
-      | UPDATE 0
-
-Dbase ALBUMS MYSQL CLASSIC REGGAE ROCK TECHNO TRANCE Total
------ ------------ ------- ------ ---- ------ ------ -----
-      PRESENT            1      2    2      8      6    19
-      TOTAL              1      2    2      8      6    19
-
-
-
-Dbase TRACKS MYSQL Download Label/Physique Physique Total
------ ------------ -------- -------------- -------- -----
-      TRANCE              0             60       28    88
-      TECHNO             33             55        0    88
-      ROCK               20              0        4    24
-      REGGAE             52             16        0    68
-      CLASSIC            15              0        0    15
-      TOTAL             120            131       32   283
-
-
-       R:\Projets\ERIC6\DBALBUMSQT5\PS1\..\LOG\20170718143108_BUILD_INVENT_LOSSLESS_TEST_Albums.csv
-       R:\Projets\ERIC6\DBALBUMSQT5\PS1\..\LOG\20170718143108_BUILD_INVENT_LOSSLESS_TEST_Tracks.csv
-********** 14:33:34 -- Durée: 2 min(s) -- BUILD COVER TO MySQL *********************************************************************************************
-
-********** 14:33:34 -- Durée: 2 min(s) -- PURJE LOGS *******************************************************************************************************
-********** 14:33:34 -- Durée: 2 min(s) -- ANOMALIE(S) ANALYSE **********************************************************************************************
-
-mysql COD ID_CD MESS
------ --- ----- ----
-      CYD     0 ANNEE différente entre cue (2008) <> ANNEE dossier (1998) : Air - Moon - Safari (1998) -> E:\Work\ZT...
-      CYD     0 ANNEE différente entre cue (2015) <> ANNEE dossier (1981) : Jennifer Lara - Studio One Presents Jenn...
-
-
-********** 14:33:34 -- Durée: 2 min(s) -- DISCONNECT MYSQL *************************************************************************************************
-********** 14:33:34 -- Durée: 2 min(s) -- ...FIN... ********************************************************************************************************
-**********************
-Fin de la transcription Windows PowerShell
-Heure de fin : 20170718143334
-**********************
