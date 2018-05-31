@@ -1,7 +1,9 @@
 Param(
-	[parameter(Mandatory=$false)][string]$Envt = 'LOSSLESS_TEST'
+	[parameter(position=0, Mandatory=$false)][string]$Envt = 'LOSSLESS_TEST',
+	[parameter(position=1, Mandatory=$false)][string]$Mode = 'UPDATE'
 	)
 
+# \\HOMERSTATION\_LossLess\_INVENT\DBAlbums\PS1\BUILD_INVENT_LOSSLESS.ps1 -mode "ADDNEW"
 ##############################################
 # Construction INVENT
 $Process = "BUILD_INVENT_$Envt";
@@ -10,7 +12,8 @@ $version = '1.09';
 $libversion = "INVENTAIRE COLLECTION $Envt";
 $Collections = @("CLASSIC","TECHNO","TRANCE","ROCK","REGGAE");
 $Families =  @{"Physique"="Colonne";"Label/Physique"="Labels";"Download"="Download"};
-$global:INVENTMODE = "UPDATE" #"NEW"; # Mise à jour de la base
+$global:INVENTMODE = $Mode # Mise à jour de la base
+#$global:INVENTMODE = "ADDNEW"; 
 $Start = (Get-Date);
 $date = (Get-Date).ToString("yyyyMMddHHmmss");
 # file
@@ -94,11 +97,9 @@ $reqStr  = "SELECT * FROM $Tbl_Albums;";
 $Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
 If ($Records){
 	$global:DBALBUMS = @() + $Records;
-	$global:cptIDCD = ($global:DBALBUMS.ID_CD | measure-object  -maximum).maximum ;
 	Get-MySQLTDC -MySqlCon $MySqlCon -Group "Category" -Column "Family" -TableName $Tbl_Albums -TDCName "BASE ALBUMS" -LineSum | Out-Host;
 	Get-MySQLTDC -MySqlCon $MySqlCon -Group "Category" -Column "Family" -TableName $Tbl_Albums -TDCName "SIZE   (GO)" -TDCSum 'ROUND(`Size`/1024,1)' -LineSum | Out-Host;
 } Else {
-	$global:cptIDCD = 0;
 	$global:DBALBUMS = @();
 }
 
@@ -112,11 +113,10 @@ If ($Records){
 	}
 }
 
-
 ##############################################
-Super-Title -Label 'BUILD ALBUMS LIST' -Start $Start;
-Write-Host (' '*6+"Category|  Cpt  |State|  Ids  | Method| Name");
-Write-Host (' '*6+"--------|-------|-----|-------|-------|"+'-'*111);
+Super-Title -Label "BUILD ALBUMS LIST mode $global:INVENTMODE" -Start $Start;
+Write-Host (' '*6+" Category |  Cpt  |State|  Ids  | Method| Name");
+Write-Host (' '*6+"----------|-------|-----|-------|-------|"+'-'*111);
 $A_List = $T_List = @();
 ForEach ($Collection in $Collections){
 	$reps = Get-ChildItem -LiteralPath "$racine\$Collection\" | Where-Object { $_.PSIsContainer } | Sort-Object Name | Select-Object Name,Fullname;
@@ -126,10 +126,10 @@ ForEach ($Collection in $Collections){
 		If ($Family){
 			If (($Family -match 'Download') -and !($Collection -match 'TRANCE')) { 
 				$Resultat = (Get-ListeAlb -pathAlbumsList $rep.Fullname -Family $Family);
-				If ($Resultat[0]){				
+				If ($Resultat[0]){
 					$A_List += $Resultat[0];
 					$T_List += $Resultat[1];
-				}				
+				}
 			} Else { 
 				$List_Reps = Get-ChildItem -LiteralPath $rep.Fullname | Where-Object { $_.PSIsContainer } | Sort-Object Name | Select-Object Name,Fullname;
 				ForEach ($List_Rep in $List_Reps){
@@ -137,13 +137,13 @@ ForEach ($Collection in $Collections){
 					If ($Resultat[0]){
 						$A_List += $Resultat[0];
 						$T_List += $Resultat[1];
-					}				
+					}
 				}
 			}
 		}
 	}
 }
-Write-Host ("`r`n"+' '*6+"--------|------|-----|------|-------|"+'-'*111+"`n");
+Write-Host ("`r`n"+' '*6+"----------|------|-----|------|-------|"+'-'*111+"`n");
 # pause de 5 secondes
 Super-Waiting
 
@@ -179,13 +179,13 @@ If (($global:INVENTMODE -eq 'UPDATE') -and ($A_List)){
 	$reqStr  = "DELETE COV FROM $Tbl_Covers AS COV LEFT JOIN $Tbl_Albums AS ALB ON ALB.MD5=COV.MD5 WHERE ISNULL(ALB.MD5);"; 
 	$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr	
 	If ($rows -gt 0){
-		Write-Host (' '*6+"| MODE '$global:INVENTMODE ': MISE A JOUR $Tbl_Covers ($rows ligne(s) supprimée(s)");			
+		Write-Host (' '*6+"| MODE '$global:INVENTMODE ': MISE A JOUR $Tbl_Covers ($rows ligne(s) supprimée(s)");
 	}
 	# On met à jour la base DBTRACKS: ORPHELINS
 	$reqStr= "DELETE TRK FROM $Tbl_Tracks AS TRK LEFT JOIN $Tbl_Albums AS ALB ON ALB.ID_CD=TRK.ID_CD WHERE ISNULL(ALB.ID_CD);";
 	$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr;
 	If ($rows -gt 0){
-		Write-Host (' '*6+"| MODE '$global:INVENTMODE ': MISE A JOUR $Tbl_Tracks ($rows ligne(s) supprimée(s)");			
+		Write-Host (' '*6+"| MODE '$global:INVENTMODE ': MISE A JOUR $Tbl_Tracks ($rows ligne(s) supprimée(s)");
 	}
 }
 
@@ -223,7 +223,7 @@ If ($T_List){
 #
 ##############################################
 Super-Title -Label 'BUILD COVER TO MySQL' -Start $Start;
-$reqStr = "SELECT ALB.ID_CD, ALB.Name, ALB.MD5, ALB.Cover, ALB.Category FROM $Tbl_Albums AS ALB LEFT JOIN $Tbl_Covers AS COV ON ALB.MD5=COV.MD5 WHERE ISNULL(COV.MD5) ORDER BY ALB.ID_CD";
+$reqStr = "SELECT ALB.ID_CD, ALB.Name, ALB.MD5, ALB.Cover, ALB.Category FROM $Tbl_Albums AS ALB LEFT JOIN $Tbl_Covers AS COV ON ALB.MD5=COV.MD5 WHERE ISNULL(COV.MD5) AND Cover<>'No Picture' ORDER BY ALB.ID_CD";
 $Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
 If ($Records){$ListMAJCover = @() + $Records};
 $cpt = ($ListMAJCover | Measure-Object).Count;
@@ -233,31 +233,19 @@ ForEach ($MAJCover in $ListMAJCover){
 	$cpt--
 }
 Write-Host ("`r`n");
-Super-Title -Label 'BUILD MINI COVER TO MySQL' -Start $Start;
-$reqStr = "SELECT ALB.ID_CD, ALB.Name, ALB.MD5, ALB.Cover, ALB.Category FROM $Tbl_Albums AS ALB LEFT JOIN $Tbl_Covers AS COV ON ALB.MD5=COV.MD5 WHERE NOT(ISNULL(COV.MD5)) AND ISNULL(COV.MiniCover64) ORDER BY ALB.ID_CD";
-$Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
-If ($Records){$ListMAJCover = @() + $Records};
-$cpt = ($ListMAJCover | Measure-Object).Count;
-ForEach ($MAJCover in $ListMAJCover){
-	Write-Host (' '*6+"| {4,-16} | {0:0000} | ({1}) | {2:0000} | {5,-62}" -f $cpt, "C" , [int32]$MAJCover.ID_CD, $MAJCover.Name, $MAJCover.Category, $MAJCover.Cover);
-	Covers-ToMySQL -MySqlCon $MySqlCon -PathCover $MAJCover.cover -MD5 $MAJCover.MD5 -Mini;
-	$cpt--
-}
-Write-Host ("`r`n");
 #>
 
 
 ##############################################
 Super-Title -Label 'PURJE LOGS' -Start $Start;
-$nbfiles = (Get-ChildItem -LiteralPath ($path_Out) -file |  Where-Object { !($_.name.StartsWith('DB')) } | Measure-Object).count
+$nbfiles = (Get-ChildItem -LiteralPath ($path_Out) -file | Where-Object { ($_.name -match $Process) } | Measure-Object).count
 If ($nbfiles -gt $Table_Version){
-	Get-ChildItem -LiteralPath ($path_Out) -file |  Where-Object { !($_.name.StartsWith('DB')) } |  Where-Object { ($_.name -match $Process) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Table_Version) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname}
+	Get-ChildItem -LiteralPath ($path_Out) -file | Where-Object { ($_.name -match $Process) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Table_Version) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname}
 }
-
 
 ##############################################
 Super-Title -Label 'ANOMALIE(S) ANALYSE' -Start $Start;
-$reqStr = "SELECT ID_CD,COD, MESS FROM $Tbl_Errors WHERE Date_insert>="+(Get-Date $Start).ToString("yyyyMMddHHmmss");
+$reqStr = "SELECT DISTINCT ID_CD,COD, MESS FROM $Tbl_Errors WHERE Date_insert>="+(Get-Date $Start).ToString("yyyyMMddHHmmss");
 $Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
 $Records | Format-Table -Property @{Expression={mysql}},* -autoSize;
 
@@ -268,7 +256,7 @@ Disconnect-MySQL $MySqlCon
 
 
 ##############################################
-Super-Title -Label ("FIN... Album(s) :"+$global:cptIDCD+"/ Track(s) :"+$global:cptIDTK) -Start $Start;
+Super-Title -Label ("...FIN...") -Start $Start;
 # fin trace
 Stop-Transcript | Out-Null
 #Start $path_Out;

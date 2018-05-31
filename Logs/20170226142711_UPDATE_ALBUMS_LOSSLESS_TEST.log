@@ -1,0 +1,55 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170226142711
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy RemoteSigned -WindowStyle Hidden -File N:\_INVENT\DBAlbums\PS1\UPDATEALBUMS.ps1 -listID_CD 41 -Envt LOSSLESS_TEST
+ID de processus : 11452
+PSVersion: 5.1.14393.693
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.693
+BuildVersion: 10.0.14393.693
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+ L         OOO    SSSSS   SSSSS  L       EEEEEEE  SSSSS   SSSSS  TTTTTTT EEEEEEE  SSSSS  TTTTTTT
+ L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
+ L       O     O S       S       L       E       S       S          T    E       S          T
+ L       O     O S       S       L       E       S       S          T    E       S          T
+ L       O     O  SSSSS   SSSSS  L       EEEEEE   SSSSS   SSSSS     T    EEEEEE   SSSSS     T
+ L       O     O       S       S L       E             S       S    T    E             S    T
+ L       O     O       S       S L       E             S       S    T    E             S    T
+ L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
+ LLLLLLL   OOO    SSSSS   SSSSS  LLLLLLL EEEEEEE  SSSSS   SSSSS     T    EEEEEEE  SSSSS     T
+********** 14:27:11 -- Durée: 1 sec -- START BUILD_INVENT_FUNCTIONS ****************************************************************************************
+********** 14:27:12 -- Durée: 2 sec -- uptade album ID=41 (1/1) ********************************************************************************************
+
+ID_CD Name                             Path                                                                            Qty_CD Qty_audio Year Length  
+----- ----                             ----                                                                            ------ --------- ---- ------  
+   41 Gonzales -4- Presidential Suite  E:\ZTest\TAG_bluid\TEST\CLASSIC\Download\Gonzales -4- Presidential Suite (2002)      1         1 2002 00:44:18
+
+ODR_Track FIL_Track                                 TAG_Artists TAG_Album          TAG_Genres TAG_length
+--------- ---------                                 ----------- ---------          ---------- ----------
+01        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:03:51  
+02        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:03:07  
+03        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:02:02  
+04        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:03:08  
+05        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:03:16  
+06        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:02:26  
+07        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:02:58  
+08        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:02:28  
+09        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:03:35  
+10        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:02:01  
+11        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:03:25  
+12        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:04:14  
+13        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:02:40  
+14        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:03:13  
+15        Gonzales - 2002 - Presidential Suite.flac Gonzales    Presidential Suite Hip-Hop    00:01:54
+********** 14:27:15 -- Durée: 4 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170226142715
+**********************

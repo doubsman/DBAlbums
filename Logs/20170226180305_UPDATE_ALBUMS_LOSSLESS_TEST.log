@@ -1,0 +1,66 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170226180305
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy RemoteSigned -WindowStyle Hidden -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbums\PS1\UPDATEALBUMS.ps1 -listID_CD 49 -Envt LOSSLESS_TEST
+ID de processus : 14388
+PSVersion: 5.1.14393.693
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.693
+BuildVersion: 10.0.14393.693
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+ L         OOO    SSSSS   SSSSS  L       EEEEEEE  SSSSS   SSSSS  TTTTTTT EEEEEEE  SSSSS  TTTTTTT
+ L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
+ L       O     O S       S       L       E       S       S          T    E       S          T
+ L       O     O S       S       L       E       S       S          T    E       S          T
+ L       O     O  SSSSS   SSSSS  L       EEEEEE   SSSSS   SSSSS     T    EEEEEE   SSSSS     T
+ L       O     O       S       S L       E             S       S    T    E             S    T
+ L       O     O       S       S L       E             S       S    T    E             S    T
+ L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
+ LLLLLLL   OOO    SSSSS   SSSSS  LLLLLLL EEEEEEE  SSSSS   SSSSS     T    EEEEEEE  SSSSS     T
+********** 18:03:05 -- Durée: 1 sec -- START BUILD_INVENT_FUNCTIONS ****************************************************************************************
+********** 18:03:06 -- Durée: 2 sec -- uptade album ID=49 (1/1) ********************************************************************************************
+           | probleme Qty_CD virtuelcd:1|repcd:2
+
+ID_CD Name                          Path                                                                               
+----- ----                          ----                                                                               
+   49 Hernán Cattáneo - Sequential  E:\ZTest\TAG_bluid\TEST\TECHNO\Labels\Rennaissance\[REN26CD] Hernán Cattáneo - S...
+
+ODR_Track FIL_Track                                                                                                    
+--------- ---------                                                                                                    
+2-01      (01) [Bushwacka!] Beastman.flac                                                                              
+1-01      (01) [Gui Boratto] Arquipelago.flac                                                                          
+1-02      (02) [Petersky] Fuck them all (Oliviero & MOS for the ladies remix).flac                                     
+2-02      (02) [Trisco] Fashionsta.flac                                                                                
+1-03      (03) [Trafik] Thought line.flac                                                                              
+2-03      (03) [Union Jack] Two Full Moons and a Trout (Luke Chable Remix).flac                                        
+2-04      (04) [Derek Howell] Cram It Up Your Cram Hole - Slam - Human (Acapella).flac                                 
+1-04      (04) [Tommyboy & Mannel] Feel it (Tommyboy & Mannel's renaissance sequential remix).flac                     
+2-05      (05) [16 Bit Lolitas] Destiny.flac                                                                           
+1-05      (05) [Mikael Delta] Baboo.flac                                                                               
+1-06      (06) [Dousk] Florence.flac                                                                                   
+2-06      (06) [Marco Bailey] Fatal Attraction (Instrumental Mix).flac                                                 
+2-07      (07) [Mehta & Riedel] Obsessions (Kered Vs. The Naboombu People Remix).flac                                  
+1-07      (07) [Rocco Mundo & Onno] Je t'aime (love dub for Hernan).flac                                               
+2-08      (08) [Dan Welton] Lisopain (The Pushers Sublingual Dub).flac                                                 
+1-08      (08) [Paolo Mojo] 1983.flac                                                                                  
+2-09      (09) [Brisker & Magitman] Other Dye (Perry O'Neil Remix).flac                                                
+1-09      (09) [Chris Ilopis] Dize moi (Rythm code remix).flac                                                         
+2-10      (10) [Nick Muir] I Feel Real (Hernan Cattaneo Edit).flac                                                     
+1-10      (10) [Randall Jones presents DJs set you free] With my friends.flac                                          
+2-11      (11) [Eddie F] Breather.flac                                                                                 
+1-11      (11) [Way out west] Wonka.flac                                                                               
+1-12      (12) [16 bit lolita's feat. Jennifer Horne] Passing lights.flac                                              
+2-12      (12) [Hernan Cattaneo & John Tonks] Sirocco.flac                                                             
+1-13      (13) [Phonique] For the time being feat. Erlend Oye (Hernan Cattaneo & John Tonks exclusive sequential rem...
+********** 18:03:11 -- Durée: 6 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170226180311
+**********************

@@ -1,5 +1,6 @@
 Param(
-	[parameter(Mandatory=$false)][string]$Envt = 'MP3_TEST'
+	[parameter(position=0, Mandatory=$false)][string]$Envt = 'MP3_TEST',
+	[parameter(position=1, Mandatory=$false)][string]$Mode = 'UPDATE'
 	)
 
 ##############################################
@@ -9,7 +10,7 @@ $Process = "BUILD_INVENT_$Envt";
 $version = '1.09';
 $libversion = "INVENTAIRE COLLECTION $Envt";
 $Collections = @($Envt);
-$global:INVENTMODE = "UPDATE" #"NEW"; # Mise à jour de la base
+$global:INVENTMODE = $Mode #"ONLYNEW"; # Mise à jour de la base
 $Start = (Get-Date);
 # file
 $date	= (Get-Date).ToString("yyyyMMddHHmmss");
@@ -63,7 +64,7 @@ Switch ($Envt){
 								"ACID"="\\HOMERSTATION\_Mp3\Acid";
 								"HOUSE"="\\HOMERSTATION\_Mp3\House";
 								"DOWNTEMPO"="\\HOMERSTATION\_Mp3\DownTempo";
-								"SUOMI"="\\HOMERSTATION\_Mp3\Psy_Suomi";
+								"SUOMI"="\\HOMERSTATION\_Mp3\PsySuomi";
 								"PSY-CHILL"="\\HOMERSTATION\_Mp3\PsyChill";
 								"TECHNO"="\\HOMERSTATION\_Mp3\Techno";
 								"REGGAE"="\\HOMERSTATION\_Mp3\Reggae";
@@ -71,13 +72,14 @@ Switch ($Envt){
 								"ROCK"="\\HOMERSTATION\_Mp3\Rock";
 								"DRUMBASS"="\\HOMERSTATION\_Mp3\Drum Vinyls"}
 			$racinesdoubles1 =@{"TECHNO"="\\HOMERSTATION\_Mp3\Techno Artists";
-								"PSY-DARK"="\\HOMERSTATION\_Mp3\Psy_Dark";
+								"PSY-DARK"="\\HOMERSTATION\_Mp3\PsyDark";
 								"TRANCE"="\\HOMERSTATION\_Mp3\Psytrance\_master";
 								"ROCK"="\\HOMERSTATION\_Mp3\Rock Artists"}
 			$racinesdoubles0 =@{"TRANCE"="\\HOMERSTATION\_Mp3\Psytrance\_years"}
-			$racinessimples2 =@{"REGGAE"="\\HOMERSTATION\_Mp3\Riddim Collection - 169 albums";
-								"ROCK"="\\HOMERSTATION\_Mp3\1000 Top Albums"}
-			$racinesdoubles2 = @{"TRANCE"="\\HOMERSTATION\_Mp3\Psytrance\_Labels"}
+			$racinessimples2 =@{}
+			$racinesdoubles2 = @{"TRANCE"="\\HOMERSTATION\_Mp3\Psytrance\_Labels";
+								"TECHNO"="\\HOMERSTATION\_Mp3\Techno Labels";
+								"REGGAE"="\\HOMERSTATION\_Mp3\Reggae Labels"}
 		}
 		default {
 			$ErrorActionPreference = "Continue";
@@ -86,11 +88,11 @@ Switch ($Envt){
 			$db = "MP3";
 			$password = "MwRbBR2HA8PFQjuu";
 			$port = "3306";
-			$racinessimples1 = @{}
+			$racinessimples1 = @{"ACID"="\\HOMERSTATION\_Mp3\Acid"}
 			$racinesdoubles1 = @{}
 			$racinesdoubles0 = @{}
 			$racinessimples2 = @{}
-			$racinesdoubles2 = @{"TECHNO"="\\HOMERSTATION\_Mp3\Techno Labels"}
+			$racinesdoubles2 = @{}
 		}
 }
 # Techno Labels
@@ -145,8 +147,8 @@ If ($Records){
 ##############################################
 Super-Title -Label 'BUILD ALBUMS LIST' -Start $Start;
 $A_List = $T_List = @();
-Write-Host (' '*6+"Category|  Cpt  |State|  Ids  | Method| Name");
-Write-Host (' '*6+"--------|-------|-----|-------|-------|"+'-'*111);
+Write-Host (' '*6+" Category |  Cpt  |State|  Ids  | Method| Name");
+Write-Host (' '*6+"----------|-------|-----|-------|-------|"+'-'*111);
 
 # DOWNLOAD
 $Family = "Download"
@@ -197,7 +199,7 @@ ForEach ($Racine in $racinesdoubles2.GetEnumerator()){
 		}
 	}
 }
-Write-Host ("`r`n"+' '*6+"--------|------|-----|------|-------|"+'-'*111+"`n");
+Write-Host ("`r`n"+' '*6+"----------|------|-----|------|-------|"+'-'*111+"`n");
 # pause de 5 secondes
 Super-Waiting
 
@@ -257,13 +259,13 @@ If (($global:INVENTMODE -eq 'UPDATE') -and ($A_List)){
 	$reqStr  = "DELETE COV FROM $Tbl_Covers AS COV LEFT JOIN $Tbl_Albums AS ALB ON ALB.MD5=COV.MD5 WHERE ISNULL(ALB.MD5);"; 
 	$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr	
 	If ($rows -gt 0){
-		Write-Host (' '*6+"| MODE '$global:INVENTMODE ': MISE A JOUR $Tbl_Covers ($rows ligne(s) supprimée(s)");			
+		Write-Host (' '*6+"| MODE '$global:INVENTMODE ': MISE A JOUR $Tbl_Covers ($rows ligne(s) supprimée(s)");
 	}
 	# On met à jour la base DBTRACKS: ORPHELINS
 	$reqStr= "DELETE TRK FROM $Tbl_Tracks AS TRK LEFT JOIN $Tbl_Albums AS ALB ON ALB.ID_CD=TRK.ID_CD WHERE ISNULL(ALB.ID_CD);";
 	$rows = Execute-MySQLNonQuery -MySqlCon $MySqlCon -requete $reqStr;
 	If ($rows -gt 0){
-		Write-Host (' '*6+"| MODE '$global:INVENTMODE ': MISE A JOUR $Tbl_Tracks ($rows ligne(s) supprimée(s)");			
+		Write-Host (' '*6+"| MODE '$global:INVENTMODE ': MISE A JOUR $Tbl_Tracks ($rows ligne(s) supprimée(s)");
 	}
 }
 
@@ -278,29 +280,16 @@ If ($T_List){
 	Write-Host (' '*7 + $File_NTracks.Padright(50,"_"));	
 }
 
-<#
+
 ##############################################
 Super-Title -Label 'BUILD COVER TO MySQL' -Start $Start;
-$reqStr = "SELECT ALB.ID_CD, ALB.Name, ALB.MD5, ALB.Cover, ALB.Category FROM $Tbl_Albums AS ALB LEFT JOIN $Tbl_Covers AS COV ON ALB.MD5=COV.MD5 WHERE ISNULL(COV.MD5) ORDER BY ALB.ID_CD";
+$reqStr = "SELECT ALB.ID_CD, ALB.Name, ALB.MD5, ALB.Cover, ALB.Category FROM $Tbl_Albums AS ALB LEFT JOIN $Tbl_Covers AS COV ON ALB.MD5=COV.MD5 WHERE ISNULL(COV.MD5) AND Cover<>'No Picture' ORDER BY ALB.ID_CD";
 $Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
 If ($Records){$ListMAJCover = @() + $Records};
 $cpt = ($ListMAJCover | Measure-Object).Count;
 ForEach ($MAJCover in $ListMAJCover){
 	Write-Host (' '*6+"| {4,-16} | {0:0000} | ({1}) | {2:0000} | {5,-62}" -f $cpt, "C" , [int32]$MAJCover.ID_CD, $MAJCover.Name, $MAJCover.Category, $MAJCover.Cover);
-	Cover-ToMySQL -MySqlCon $MySqlCon -PathCover $MAJCover.cover -MD5 $MAJCover.MD5;
-	$cpt--
-}
-Write-Host ("`r`n");
-#>
-##############################################
-Super-Title -Label 'BUILD MINI COVER TO MySQL' -Start $Start;
-$reqStr = "SELECT ALB.ID_CD, ALB.Name, ALB.MD5, ALB.Cover, ALB.Category FROM $Tbl_Albums AS ALB LEFT JOIN $Tbl_Covers AS COV ON ALB.MD5=COV.MD5 WHERE ISNULL(COV.MiniCover64) ORDER BY ALB.ID_CD";
-$Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
-If ($Records){$ListMAJCover = @() + $Records};
-$cpt = ($ListMAJCover | Measure-Object).Count;
-ForEach ($MAJCover in $ListMAJCover){
-	Write-Host (' '*6+"| {4,-16} | {0:0000} | ({1}) | {2:0000} | {5,-62}" -f $cpt, "C" , [int32]$MAJCover.ID_CD, $MAJCover.Name, $MAJCover.Category, $MAJCover.Cover);
-	Covers-ToMySQL -MySqlCon $MySqlCon -PathCover $MAJCover.cover -MD5 $MAJCover.MD5 -Mini;
+	Covers-ToMySQL -MySqlCon $MySqlCon -PathCover $MAJCover.cover -MD5 $MAJCover.MD5;
 	$cpt--
 }
 Write-Host ("`r`n");
@@ -308,15 +297,15 @@ Write-Host ("`r`n");
 
 ##############################################
 Super-Title -Label 'PURJE LOGS' -Start $Start;
-$nbfiles = (Get-ChildItem -LiteralPath ($path_Out) -file |  Where-Object { !($_.name.StartsWith('DB')) } | Measure-Object).count
+$nbfiles = (Get-ChildItem -LiteralPath ($path_Out) -file | Where-Object { ($_.name -match $Process) } | Measure-Object).count
 If ($nbfiles -gt $Table_Version){
-	Get-ChildItem -LiteralPath ($path_Out) -file |  Where-Object { !($_.name.StartsWith('DB')) } |  Where-Object { ($_.name -match $Process) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Table_Version) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname}
+	Get-ChildItem -LiteralPath ($path_Out) -file | Where-Object { ($_.name -match $Process) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Table_Version) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname}
 }
 
 
 ##############################################
 Super-Title -Label 'ANOMALIE(S) ANALYSE' -Start $Start;
-$reqStr = "SELECT ID_CD,COD, MESS FROM $Tbl_Errors WHERE Date_insert>="+(Get-Date $Start).ToString("yyyyMMddHHmmss");
+$reqStr = "SELECT DISTINCT ID_CD,COD, MESS FROM $Tbl_Errors WHERE Date_insert>="+(Get-Date $Start).ToString("yyyyMMddHHmmss");
 $Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
 $Records | Format-Table -Property @{Expression={mysql}},* -autoSize;
 
@@ -327,7 +316,7 @@ Disconnect-MySQL $MySqlCon
 
 
 ##############################################
-Super-Title -Label ("FIN... Album(s) :"+$global:cptIDCD+"/ Track(s) :"+$global:cptIDTK) -Start $Start;
+Super-Title -Label ("...FIN...") -Start $Start;
 # fin trace
 Stop-Transcript | Out-Null
 #Start $path_Out;
@@ -344,3 +333,4 @@ http://127.0.0.1:8888/default/?cmd=Stop&param1=
 http://127.0.0.1:8888/default/?cmd=PlayOrPause
 http://127.0.0.1:8888/default/?cmd=CreatePlaylist&param1=playlist name&param2=insertion point index
 #>
+

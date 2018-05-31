@@ -2,14 +2,11 @@ Param(
 	[parameter(position=0, Mandatory=$true)]
 	[string]$Envt,
 	[parameter(position=1, Mandatory=$true)]
-	[string]$Album_IDCD,
-	[parameter(position=1, Mandatory=$true)]
-	[string]$Logs
-	)
+	[string]$listID_CD)
 
 ##############################################
 # Construction INVENT
-$Process = "UPDATE_ALBUM_"+$Envt;
+$Process = "UPDATE_ALBUMS_"+$Envt;
 $version = '1.00';
 $Start = (Get-Date);
 # environnement
@@ -44,11 +41,12 @@ Switch ($Envt){
 		}
 }
 # files
-$date	= (Get-Date).ToString("yyyyMMddHHmmss");
+$date = (Get-Date).ToString("yyyyMMddHHmmss");
 $path = split-path $SCRIPT:MyInvocation.MyCommand.Path -parent
-$path_Out = $Logs;
+$path_Out = "$path\..\Logs";
 $File_LogTrac = "$path_Out\$date`_$Process.log";
 $Table_Version = 20;
+$global:cptIDTK = 0;
 # base de données  
 $port = "3306";
 $Tbl_Albums = "DBALBUMS";
@@ -65,48 +63,29 @@ $global:MaskCover = @('.jpg','.jpeg','.png','.bmp','.tif','.bmp');
 $global:CoverAlbum = @('cover.jpg','Cover.jpg','cover.jpeg','cover.png','front.jpg','folder.jpg','folder.jpeg');
 
 
-# Write-Host Waiting
-Function Super-Title{
-	param ([parameter(Mandatory = $True)][Datetime] $Start,
-		   [parameter(Mandatory = $False)][String] $Label='',
-		   [parameter(Mandatory = $False)][Int32]  $Width=154,
-		   [parameter(Mandatory = $False)][String] $Deco1='*',
-		   [parameter(Mandatory = $False)][String] $Deco2='-')
-
-	#$Colors = @("DarkBlue","DarkGreen","DarkCyan","DarkRed","DarkMagenta","DarkYellow","Gray","Blue","Green","Cyan","Magenta","Yellow","White");
-	#$foregroundcolor = Get-Random -Input $Colors;
-	$Minute = [math]::Round(((Get-Date) - $Start).TotalMinutes,0);
-	If ($Minute -eq 0){
-		$Second = [math]::Round(((Get-Date) - $Start).TotalSeconds,0);
-		$Length = [string]$Second + ' sec';
-	} Else {
-		$Length = [string]$Minute + ' min(s)';
-	}
-	$Tittle = $Deco1*$Width + "`n`r" + $Deco2*10 + ' ' + (Get-Date).tostring('HH:mm:ss') + " -- Durée: $Length -- $Label " + $Deco2*($Width-33-$Label.Length-$Length.Length) + "`n`r";
-	Write-Host -foregroundcolor 'Green' $Tittle;
-}
-
-
-Super-Title -Label ('START '+$Process) -Start $Start;
 ##############################################
 Start-Transcript $File_LogTrac | Out-Null
 ##############################################
 . "$path\BUILD_INVENT_FUNCTIONS.ps1"
 . "$path\Write-Banner.ps1"
-
 Write-Banner $Envt
+Super-Title -Label ('START '+$Process) -Start $Start;
 
 ##############################################
 $MySqlCon = Connect-MySQL -MySQLHost $serv -user $user -password $password -Database $db -port $port;
+$nbupdate = ($listID_CD.split(',')).Length;
+$crupdate = 1;
+$LossLess = ($Envt -match "LOSSLESS")
+Foreach ($ID_CD in $listID_CD.split(',')){
+	Super-Title -Label ("uptade album ID=$ID_CD ($crupdate/$nbupdate)") -Start $Start;
+	$crupdate ++
+	Run-UpdateAlbum -ID_CD $ID_CD -LossLess $LossLess
+}
+
 ##############################################
-$reqStr  = "SELECT IFNULL(MAX(ID_TRACK),0) AS CPTIDTK FROM $Tbl_Tracks;";
-$Records = Execute-MySQLQuery -MySqlCon $MySqlCon -requete $reqStr;
-$global:cptIDTK = $Records.CPTIDTK;
-Run-UpdateAlbum($Album_IDCD)
-##############################################
-$nbfiles = (Get-ChildItem -LiteralPath ($path_Out) -file |  Where-Object { !($_.name.StartsWith('DB')) } | Measure-Object).count
+$nbfiles = (Get-ChildItem -LiteralPath ($path_Out) -file |  Where-Object { ($_.name -match $Process) } | Measure-Object).count
 If ($nbfiles -gt $Table_Version){
-	Get-ChildItem -LiteralPath ($path_Out) -file |  Where-Object { !($_.name.StartsWith('DB')) } |  Where-Object { ($_.name -match $Process) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Table_Version) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname}
+	Get-ChildItem -LiteralPath ($path_Out) -file | Where-Object { ($_.name -match $Process) } | Sort-Object LastWriteTime | Select -First ($nbfiles-$Table_Version) | %{Write-Host ('      | remove '+$_.fullname); Remove-Item $_.fullname}
 }
 ##############################################
 Disconnect-MySQL $MySqlCon

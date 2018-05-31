@@ -1,0 +1,43 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170226140056
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy RemoteSigned -File N:\_INVENT\DBAlbums\PS1\UPDATEALBUMS.ps1 -listID_CD 39 -Envt LOSSLESS_TEST
+ID de processus : 7740
+PSVersion: 5.1.14393.693
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.693
+BuildVersion: 10.0.14393.693
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+ L         OOO    SSSSS   SSSSS  L       EEEEEEE  SSSSS   SSSSS  TTTTTTT EEEEEEE  SSSSS  TTTTTTT
+ L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
+ L       O     O S       S       L       E       S       S          T    E       S          T
+ L       O     O S       S       L       E       S       S          T    E       S          T
+ L       O     O  SSSSS   SSSSS  L       EEEEEE   SSSSS   SSSSS     T    EEEEEE   SSSSS     T
+ L       O     O       S       S L       E             S       S    T    E             S    T
+ L       O     O       S       S L       E             S       S    T    E             S    T
+ L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
+ LLLLLLL   OOO    SSSSS   SSSSS  LLLLLLL EEEEEEE  SSSSS   SSSSS     T    EEEEEEE  SSSSS     T
+********** 14:00:56 -- Durée: 1 sec -- START BUILD_INVENT_FUNCTIONS ****************************************************************************************
+********** 14:00:57 -- Durée: 2 sec -- uptade album ID=39 (1/1) ********************************************************************************************
+
+ID_CD Name                                           Path                                                                                         Qty_CD Qty_audio Year Length  
+----- ----                                           ----                                                                                         ------ --------- ---- ------  
+   39 Gabriel Ananda - Live Series Vol 1-(BASMATI04) E:\ZTest\TAG_bluid\TEST\TECHNO\Download\Gabriel_Ananda_-_Live_Series_Vol_1-(BASMATI04)(2011)      1         3 2011 00:25:38
+
+ODR_Track FIL_Track                                   TAG_Artists    TAG_Album          TAG_Genres TAG_length
+--------- ---------                                   -----------    ---------          ---------- ----------
+1-01      01-gabriel_ananda-alpha__live_version.mp3   Gabriel Ananda Live Series Part I Tech House 00:07:45  
+1-03      02-gabriel_ananda-alpha__studio_version.mp3 Gabriel Ananda Live Series Part I Tech House 00:07:33  
+1-02      03-gabriel_ananda-smash__live_version.mp3   Gabriel Ananda Live Series Part I Tech House 00:10:20
+********** 14:01:03 -- Durée: 7 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170226140103
+**********************

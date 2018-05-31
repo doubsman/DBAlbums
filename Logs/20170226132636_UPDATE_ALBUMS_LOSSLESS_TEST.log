@@ -1,0 +1,58 @@
+﻿**********************
+Début de la transcription Windows Powershell
+Heure de début : 20170226132636
+Nom d'utilisateur : ANTEC\Mister doubs
+Utilisateur runAs : ANTEC\Mister doubs
+Ordinateur : ANTEC (Microsoft Windows NT 10.0.14393.0)
+Application hôte : powershell.exe -ExecutionPolicy RemoteSigned -File \\HOMERSTATION\_LossLess\_INVENT\DBAlbums\PS1\UPDATEALBUMS.ps1 -listID_CD 23 -Envt LOSSLESS_TEST
+ID de processus : 10480
+PSVersion: 5.1.14393.693
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.693
+BuildVersion: 10.0.14393.693
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+ L         OOO    SSSSS   SSSSS  L       EEEEEEE  SSSSS   SSSSS  TTTTTTT EEEEEEE  SSSSS  TTTTTTT
+ L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
+ L       O     O S       S       L       E       S       S          T    E       S          T
+ L       O     O S       S       L       E       S       S          T    E       S          T
+ L       O     O  SSSSS   SSSSS  L       EEEEEE   SSSSS   SSSSS     T    EEEEEE   SSSSS     T
+ L       O     O       S       S L       E             S       S    T    E             S    T
+ L       O     O       S       S L       E             S       S    T    E             S    T
+ L        O   O  S     S S     S L       E       S     S S     S    T    E       S     S    T
+ LLLLLLL   OOO    SSSSS   SSSSS  LLLLLLL EEEEEEE  SSSSS   SSSSS     T    EEEEEEE  SSSSS     T
+********** 13:26:37 -- Durée: 1 sec -- START BUILD_INVENT_FUNCTIONS ****************************************************************************************
+********** 13:26:38 -- Durée: 2 sec -- uptade album ID=23 (1/1) ********************************************************************************************
+#year
+
+ID_CD Name                                               Path                                                          
+----- ----                                               ----                                                          
+   23 Jennifer Lara - Studio One Presents Jennifer Lara  E:\ZTest\TAG_bluid\TEST\REGGAE\Labels\01\Jennifer Lara - St...
+
+ODR_Track FIL_Track                                              TAG_Artists   TAG_Album                         TAG_Ge
+                                                                                                                 nres  
+--------- ---------                                              -----------   ---------                         ------
+01        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+02        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+03        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+04        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+05        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+06        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+07        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+08        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+09        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+10        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+11        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+12        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+13        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+14        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+15        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+16        Jennifer Lara - Studio One Presents Jennifer Lara.flac Jennifer Lara Studio One Presents Jennifer Lara Reggae
+********** 13:26:44 -- Durée: 8 sec -- END *****************************************************************************************************************
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20170226132644
+**********************

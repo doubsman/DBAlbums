@@ -14,7 +14,7 @@ from PyQt5.QtGui import QIcon
 
 VERS_PROG = '1.00'
 TITL_PROG = "Player v{v} : ".format(v=VERS_PROG)
-WINS_ICO = "GetExist.ico"
+WINS_ICO = "DBAlbums-icone.ico"
 
 class PlayerAudio(QWidget):
 	def __init__(self, filePath, fileName, x=0, y=0):
@@ -27,7 +27,7 @@ class PlayerAudio(QWidget):
 		self.setFixedSize(400, 40)
 		self.setWindowIcon(QIcon(WINS_ICO))
 		self.setWindowFlags(Qt.WindowStaysOnTopHint)
-		self.setWindowTitle(TITL_PROG+fileName)
+		self.setWindowTitle(TITL_PROG)
 		self.move(x, y)
 		# mm:ss
 		self.lcd = QLCDNumber(self)
@@ -41,16 +41,12 @@ class PlayerAudio(QWidget):
 		self.positionSlider.setRange(0, 0)
 		self.positionSlider.sliderMoved.connect(self.setPosition)
 		self.positionSlider.valueChanged.connect(self.lcddisplay)
-		# histo
-		self.histogram = HistogramWidget()
 		# order display
 		PlayerLayout = QHBoxLayout()
 		PlayerLayout.setContentsMargins(5, 5, 5, 5)
 		PlayerLayout.addWidget(self.playButton)
 		PlayerLayout.addWidget(self.lcd)
 		PlayerLayout.addWidget(self.positionSlider)
-		PlayerLayout.addWidget(self.labelHistogram)
-		PlayerLayout.addWidget(self.histogram, 1)
 		self.setLayout(PlayerLayout)
 		# display
 		self.show()
@@ -59,18 +55,15 @@ class PlayerAudio(QWidget):
 		self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
 		self.mediaPlayer.positionChanged.connect(self.positionChanged)
 		self.mediaPlayer.durationChanged.connect(self.durationChanged)
-		#link histogram
-		self.probe = QAudioProbe()
-		self.probe.videoFrameProbed.connect(self.histogram.processFrame)
-		self.probe.setSource(self.player)
 		
-		self.histogram.audioBufferProbed.connect(self.histogram.processFrame)
 		# autoplay
 		self.insertMedia(path.join(filePath,fileName))
+
 	
 	def insertMedia(self, media):
 		self.mediaPlayer.pause()
 		self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(media)))
+		self.setWindowTitle('playing "'+path.basename(media)+'"')
 		self.mediaPlayer.play()
 	
 	def play(self):
@@ -100,61 +93,6 @@ class PlayerAudio(QWidget):
 		total_p = "%02d:%02d" % (minutes, seconds % 60)
 		self.lcd.display(str(total_p))
 
-class HistogramWidget(QWidget):
-
-	def __init__(self, parent=None):
-		super(HistogramWidget, self).__init__(parent)
-
-		self.m_levels = 128
-		self.m_isBusy = False
-		self.m_histogram = []
-		self.m_processor = FrameProcessor()
-		self.m_processorThread = QThread()
-
-		self.m_processor.moveToThread(self.m_processorThread)
-		self.m_processor.histogramReady.connect(self.setHistogram)
-
-	def __del__(self):
-		self.m_processorThread.quit()
-		self.m_processorThread.wait(10000)
-
-	def setLevels(self, levels):
-		self.m_levels = levels
-
-	def processFrame(self, frame):
-		print("In processFrame()")
-		if self.m_isBusy:
-			return
-
-		self.m_isBusy = True
-		print("Invoking method")
-		QMetaObject.invokeMethod(self.m_processor, 'processFrame',
-				Qt.QueuedConnection, Q_ARG(QVideoFrame, frame),
-				Q_ARG(int, self.m_levels))
-
-	def setHistogram(self, histogram):
-		self.m_isBusy = False
-		self.m_histogram = list(histogram)
-		self.update()
-
-	def paintEvent(self, event):
-		painter = QPainter(self)
-
-		if len(self.m_histogram) == 0:
-			painter.fillRect(0, 0, self.width(), self.height(),
-					QColor.fromRgb(0, 0, 0))
-			return
-
-		barWidth = self.width() / float(len(self.m_histogram))
-
-		for i, value in enumerate(self.m_histogram):
-			h = value * height()
-			# Draw the level.
-			painter.fillRect(barWidth * i, height() - h, barWidth * (i + 1),
-					height(), Qt.red)
-			# Clear the rest of the control.
-			painter.fillRect(barWidth * i, 0, barWidth * (i + 1), height() - h,
-					Qt.black)
 
 class PlayerQThreadProcess(QThread):
 	def __init__(self, filePath, fileName, x=0, y=0):
@@ -176,9 +114,7 @@ def PlayerProcess(filePath, fileName, x=0, y=0):
 	player = PlayerAudio(filePath, fileName, x, y)
 	app.exec_()
 
-
-
-
+	
 if __name__ == "__main__":
 	# Qthread
 	#player  = PlayerQThreadProcess("E:\ZTest","Morten Granau.flac",50,50)
@@ -186,11 +122,12 @@ if __name__ == "__main__":
 	#player.wait()
 	
 	# no thread
-	PlayerProcess("E:\ZTest","Morten Granau.flac")
+	#PlayerProcess("E:\ZTest","Morten Granau.flac")
 	
 	# thread
-	#player = Thread(target = PlayerProcess, args = ("E:\ZTest","Morten Granau.flac",50,50))
-	#player.daemon = True
-	#player.start()
+	tplayer = Thread(target = PlayerProcess, args = ("E:\ZTest","Morten Granau.flac",50,50))
+	tplayer.daemon = True
+	tplayer.start()
+	#tplayer(PlayerProcess.changemedia(PlayerThreadProcess, "E:\ZTest\SCSI-9.flac"))
 	#t1.join()
 
