@@ -1,37 +1,41 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# DBAlbums History Version
-#  1.30 import playlist foobar
-#  1.29 GetExist -> DBAlbums
-#  1.28 fixed bugs + status bar
-#  1.27 combos label/year + fast speed viewer artworks
-#  1.26 viewer artworks
-#  1.25 gestion import tkinter + stats loading
-#  1.24 thunbnails + mousewheel + popup
-#  1.23 thunbnails link treeview
-#  1.22 thunbnails view
-#  1.21 Tagscan + sdtout powershell
-#  1.20 Artworks viewer
-#  1.19 integration Powershell script
-#  1.18 Execute Powershell script BUILD_INVENT.ps1 + BUILD_INVENT_UPDATEALBUM.ps1
-#  1.17 base sqllite (create base + offline mode)
-#  1.16 score album + track
-#  1.15 player music pyQT5
-#  1.14 stats + play music 
-#  1.13 best performance mysql
-#  1.12 fusion gui albmus/tracks windows
-#  1.11 fixed bugs
-#  1.10 refresh buttons + tdc loading
-#  1.09 extract cover mysql/base64 to file
-#  1.08 adaptation python 2.7 (py2exe) et 3.5.2
-#  1.07 combos category/family
-#  1.06 adaptation Ubuntu + base64
-#  1.05 autocompletion
-#  1.04 constantes
-#  1.02 export csv
-#  1.01 gestion covers
-#  1.00 search base INVENT mysql TEST/PRODUCTION
+""" DBAlbums History Version : Doubsman dev.
+1.33 mass update albums + autoincrement id
+1.32 import playlist foobar v2 + dynamic combos 
+1.31 DBAlbums.ini
+1.30 import playlist foobar
+1.29 GetExist -> DBAlbums
+1.28 fixed bugs + status bar
+1.27 combos label/year + fast speed viewer artworks
+1.26 viewer artworks
+1.25 gestion import tkinter + stats loading
+1.24 thunbnails + mousewheel + popup
+1.23 thunbnails link treeview
+1.22 thunbnails view
+1.21 Tagscan + sdtout powershell
+1.20 Artworks viewer
+1.19 integration Powershell script
+1.18 Execution Powershell script BUILD_INVENT.ps1 + BUILD_INVENT_UPDATEALBUM.ps1
+1.17 base sqllite (create base + offline mode)
+1.16 score album + track
+1.15 player music pyQT5
+1.14 stats + play music 
+1.13 best performance mysql
+1.12 fusion gui albmus/tracks windows
+1.11 fixed bugs
+1.10 refresh buttons + tdc loading
+1.09 extract cover mysql/base64 to file
+1.08 adaptation python 2.7 (py2exe) et 3.5.2
+1.07 combos category/family
+1.06 adaptation Ubuntu + base64
+1.05 autocompletion
+1.04 constantes
+1.02 export csv
+1.01 gestion covers
+1.00 search base INVENT mysql TEST/PRODUCTION
+"""
 
 # python 3.5.2
 # python3 -m pip install pymysql
@@ -56,6 +60,7 @@ from base64 import b64decode, decodestring, b64encode
 from time import sleep
 from queue import Queue, Empty
 from hashlib import md5
+from configparser import ConfigParser
 # dev ext
 from fpl_reader import read_playlist
 # functions dev
@@ -65,89 +70,54 @@ from DBAlbumsCopyDatabaseToSqlite import CopyDatabaseInvent
 
 ###################################################################
 # CONSTANTS
-VERS_PROG = '1.30'
-TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
 PATH_PROG = path.dirname(__file__)
 LOGS_PROG = path.join(PATH_PROG, 'Logs')
-FILE__INI = path.join(PATH_PROG, 'DBAlbums.ini')
-# TAG
-TAGS_SCAN = '\\\\HOMERSTATION\_Synchro\_Apps_Portables\\tagscan_6.0.4\Tagscan.exe'
-# FOOBAR
-FOOB_PLAY = 'C:\\Users\\Mister doubs\\AppData\\Roaming\\foobar2000\\playlists-v1.3'
-#FOOB_PLAY = "E:\ZTest\playlists-v1.3" # TEST
-# LOCAL SQLLITE
 BASE_SQLI = path.join(PATH_PROG, 'local', "Invent_{envt}.db")
-# INVENT POWERSHELL
 PWSH_SCRI = path.join(PATH_PROG, 'PS1', "BUILD_INVENT_{mod}.ps1")
-PWSH_SCRU = path.join(PATH_PROG, 'PS1', "UPDATEALBUM.ps1")
-# EXT COVERS
-MASKCOVERS = ('.jpg','.jpeg','.png','.bmp','.tif','.bmp')
-# SCORE ALBUMS
-SCOR_ALBUMS = { 0 : 'album not listened',
-				1 : 'album listened',
-				2 : 'top album',
-				3 : 'best album'}
-# SCORE TRACKS
-SCOR_TRACKS = { 0 : 'track not listened',
-				1 : 'track listened',
-				2 : 'top track',
-				3 : 'best track'}
-DISP_CJOKER = "*"
+PWSH_SCRU = path.join(PATH_PROG, 'PS1', "UPDATEALBUMS.ps1")
+FOOB_UPSC = path.join(PATH_PROG, 'SQL', "DBAlbums_FOOBAR_UPADTESCORE.sql")
+MASKCOVER = ('.jpg','.jpeg','.png','.bmp','.tif','.bmp','.tiff')
+
+# Read File DBAlbums.ini
+FILE__INI = 'DBAlbums.ini'
+readIni = ConfigParser()
+readIni.read(FILE__INI)
 # GUI
-WIDT_MAIN = 1280
-HEIG_MAIN = 1090
-WIDT_PICM = 150
-# mysql
-# PRODS
-SERV_PROD = 'homerstation'
-USER_PROD = 'AdmInvent'
-PASS_PROD = 'JMctOz7a6TWnrJHB86pL'
-BASE_PROD = 'Invent'
-SERV_MP3S = 'homerstation'
-USER_MP3S = 'admInventMP3'
-PASS_MP3S = 'nuDbC6spVZxtkKC8'
-BASE_MP3S = 'InventMP3'
-# TEST
-SERV_TEST = 'doubbigstation'
-USER_TEST = 'admInvent'
-PASS_TEST = 'MwRbBR2HA8PFQjuu'
-BASE_TEST = 'Invent'
-SERV_MP3T = 'doubbigstation'
-USER_MP3T = 'admInvent'
-PASS_MP3T = 'MwRbBR2HA8PFQjuu'
-BASE_MP3T = 'MP3'
-# gui
-NAME_EVT = ['LOSSLESS', 'MP3', 'LOSSLESS_TEST', 'MP3_TEST']
-CURT_EVT = 2 # 0 LOSSLESS
-WINS_ICO = "DBAlbums.ico"
-UNIX_ICO = 'DBAlbums.png'
-PICT_NCO = 'img-cd-blank.gif'
-PICM_NCO = 'img-cd-blank-mini.jpg'
-TEXT_NCO = 'No Picture'
-TREE_CO0 = 'gray85'
-TREE_CO1 = 'gray90'
-TREE_CO2 = 'lightSteelBlue1'
-TREE_CO3 = 'snow'
-THUN_CO0 = 'black'
-THUN_CO1 = 'white'
-# REQS
-# combo Category
-D_REQUEST = "SELECT Category from DBALBUMS group by Category ORDER BY Category DESC"
-# combo Family
-E_REQUEST = "SELECT Family from DBALBUMS group by Family"
-# combo Label
-L_REQUEST = "SELECT DISTINCT Label from DBALBUMS ORDER BY Label"
-#combo year
-Y_REQUEST = "SELECT DISTINCT `Year` from DBALBUMS ORDER BY `Year` DESC"
-### ALBUMS
-#  request mysql
-A_REQUEST = "SELECT ID_CD AS ID, Category, Family, Name, Label, ISRC, `Year`, Size, Length, Qty_CD AS `CD`, Qty_Tracks AS Trks, Qty_covers AS Pic, Score As SCR, Typ_Tag AS Tag, CONCAT(Position1,'\\\\',Position2) AS Position, Path, Cover, `MD5`, Date_Insert AS `Add`, Date_Modifs AS `Modified` FROM DBALBUMS ORDER BY Date_Insert DESC"
-#  request sqllite
-Z_REQUEST = "SELECT ID_CD AS ID, Category, Family, Name, Label, ISRC, `Year`, Size, Length, Qty_CD AS `CD`, Qty_Tracks AS Trks, Qty_covers AS Pic, Score As SCR, Typ_Tag AS Tag, Position1 || '\\' || Position2 AS Position, Path, Cover, `MD5`, Date_Insert AS `Add`, Date_Modifs AS `Modified` FROM DBALBUMS ORDER BY Date_Insert DESC"
-#  request autocompletion: artists + labels
-S_REQUEST = "SELECT Synthax FROM VW_DBCOMPLETION ORDER BY Synthax"
-#  request Update Sore Album
-U_REQUEST = "UPDATE DBALBUMS SET `Score`={score} WHERE `ID_CD`={id}"
+VERS_PROG = readIni.get('dbalbums', 'version')
+TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
+WIDT_MAIN = readIni.getint('dbalbums', 'gui_width')
+HEIG_MAIN = readIni.getint('dbalbums', 'gui_height')
+WIDT_PICM = readIni.getint('dbalbums', 'thunb_size')
+DISP_CJOKER = readIni.get('dbalbums', 'text_joker')
+TEXT_NCO = readIni.get('dbalbums', 'text_nocov')
+WINS_ICO = readIni.get('dbalbums', 'wins_icone')
+UNIX_ICO = readIni.get('dbalbums', 'unix_icone')
+PICT_NCO = readIni.get('dbalbums', 'pict_blank')
+PICM_NCO = readIni.get('dbalbums', 'picm_blank')
+ENVT_DEF = readIni.get('dbalbums', 'default_ev')
+TREE_CO0 = readIni.get('dbalbums', 'color0_lin')
+TREE_CO1 = readIni.get('dbalbums', 'color1_lin')
+TREE_CO2 = readIni.get('dbalbums', 'color2_lin')
+TREE_CO3 = readIni.get('dbalbums', 'color3_lin')
+THUN_CO0 = readIni.get('dbalbums', 'color0_thu')
+THUN_CO1 = readIni.get('dbalbums', 'color1_thu')
+THUN_MAX = readIni.getint('dbalbums', 'thnail_max')
+# PROG
+TAGS_SCAN = r'' + readIni.get('programs', 'tagscan')
+FOOB_PLAY = r'' + readIni.get('programs', 'foobarP')
+# SCORE
+SCOR_ALBUMS = {}
+for envt in readIni['score']:
+	SCOR_ALBUMS.update({int(envt) : readIni.get('score',envt)})
+SCOR_TRACKS = SCOR_ALBUMS
+# LIST ENVT
+NAME_EVT = []
+for envt in readIni['environments']:
+	envtname = readIni.get('environments',envt)
+	if envtname == ENVT_DEF:
+		CURT_EVT = len(NAME_EVT)
+	NAME_EVT.append(readIni.get('environments',envt))
+
 #  columns position
 A_POSITIO = {'ID_CD' 		: 0, 'Category'		: 1, 
 			 'Family'		: 2, 'Name'			: 3,
@@ -159,27 +129,44 @@ A_POSITIO = {'ID_CD' 		: 0, 'Category'		: 1,
 			 'Position'		: 14, 'Path'		: 15,
 			 'Cover'		: 16, 'MD5'			: 17,
 			 'Date_Insert'	: 18, 'Date_Modifs'	: 19}
-#  treeview columns width
-A_C_WIDTH = (40,60,60,270,90,60,40,35,50,25,25,30,30,30,80,200,200,200,67,67)
-### TRACKS
-#  request mysql/sqllite
-T_REQUEST = "SELECT ODR_Track AS `N°`, TAG_Artists AS Artist, TAG_Title AS Tittle, TAG_length AS Length, Score As SCR, TAG_Genres AS `Style`, FIL_Track AS File, REP_Track AS Folder, ID_TRACK AS `ID` FROM DBTRACKS WHERE ID_CD={id} ORDER BY REP_Track, ODR_Track"
-#  request search tracks
-B_REQUEST = "SELECT ID_CD AS ID FROM DBTRACKS AS TRK WHERE TAG_Artists like '%{search}%' OR TAG_Title like '%{search}%' GROUP BY ID_CD"
-#  Update Sore Track
-V_REQUEST = "UPDATE DBTRACKS SET `Score`={score} WHERE `ID_TRACK`={id}"
-#  columns position
 T_POSITIO = {'ODR_Track'	: 0, 'TAG_Artists'	: 1, 
 			 'TAG_Title'	: 2, 'TAG_length'	: 3, 
 			 'Score'		: 4, 'TAG_Genres'	: 5, 
 			 'FIL_Track'	: 6, 'REP_Track'	: 7, 
 			 'ID_TRACK'		: 8}
 #  treeview columns width
+A_C_WIDTH = (40,60,60,270,90,60,40,35,50,25,25,30,30,30,80,200,200,200,67,67)
 T_C_WIDTH = (50,150,200,60,30,70,200,200,50)
-### COVERS
+
+# REQS
+#  autocompletion VW_DBCOMPLETION
+S_REQUEST = "SELECT Synthax FROM VW_DBCOMPLETION ORDER BY Synthax"
+#  list albums mysql DBALBUMS
+A_REQUEST = "SELECT ID_CD AS ID, Category, Family, Name, Label, ISRC, " \
+			"`Year`, Size, Length, Qty_CD AS `CD`, Qty_Tracks AS Trks, Qty_covers AS Pic, " \
+			"Score As SCR, Typ_Tag AS Tag, CONCAT(Position1,'\\\\',Position2) AS Position, " \
+			"Path, Cover, `MD5`, Date_Insert AS `Add`, Date_Modifs AS `Modified` FROM DBALBUMS ORDER BY Date_Insert DESC"
+#  list albums sqllite DBALBUMS
+Z_REQUEST = "SELECT ID_CD AS ID, Category, Family, Name, Label, ISRC, " \
+			"`Year`, Size, Length, Qty_CD AS `CD`, Qty_Tracks AS Trks, Qty_covers AS Pic, " \
+			"Score As SCR, Typ_Tag AS Tag, Position1 || '\\' || Position2 AS Position, " \
+			"Path, Cover, `MD5`, Date_Insert AS `Add`, Date_Modifs AS `Modified` FROM DBALBUMS ORDER BY Date_Insert DESC"
+#  list tracks mysql/sqllite
+T_REQUEST = "SELECT ODR_Track AS `N°`, TAG_Artists AS Artist, TAG_Title AS Tittle, TAG_length AS Length, " \
+			"Score As SCR, TAG_Genres AS `Style`, FIL_Track AS File, REP_Track AS Folder, ID_TRACK AS `ID`  " \
+			"FROM DBTRACKS WHERE ID_CD={id} ORDER BY REP_Track, ODR_Track"
 #  cover blob
 C_REQUEST = "SELECT `MD5`, `Cover64` FROM DBCOVERS WHERE `MD5`='{MD5}'"
 M_REQUEST = "SELECT `MD5`, `MiniCover64` FROM DBCOVERS WHERE `MD5`='{MD5}'"
+#  search tracks
+B_REQUEST = "SELECT ID_CD AS ID FROM DBTRACKS AS TRK WHERE TAG_Artists like '%{search}%' OR TAG_Title like '%{search}%' GROUP BY ID_CD"
+#  request Update Sore Album
+U_REQUEST = "UPDATE DBALBUMS SET `Score`={score} WHERE `ID_CD`={id}"
+#  Update Score Track
+V_REQUEST = "UPDATE DBTRACKS SET `Score`={score} WHERE `ID_TRACK`={id}"
+#  insert playlist foobar
+F_REQUEST = "INSERT INTO DBFOOBAR (Playlist, Path, FIL_Track, Name , MD5, TAG_Album, TAG_Artists, TAG_Title) " \
+			"VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
 
 ###################################################################
@@ -202,45 +189,23 @@ def CenterWindows(win):
 def ConnectInvent(envt):
 	"""Connect base MySQL/Sqlite."""
 	con = None
-	if envt == 'LOSSLESS':
-		server = SERV_PROD
-		userdb = USER_PROD
-		namedb = BASE_PROD
-		passdb = PASS_PROD
-	else: 
-		if envt == 'MP3':
-			server = SERV_MP3S
-			userdb = USER_MP3S
-			namedb = BASE_MP3S
-			passdb = PASS_MP3S
-		else:
-			if envt == 'MP3_TEST':
-				server = SERV_MP3T
-				userdb = USER_MP3T
-				namedb = BASE_MP3T
-				passdb = PASS_MP3T
-			else:
-				if envt == 'LOSSLESS_TEST':
-					server = SERV_TEST
-					userdb = USER_TEST
-					namedb = BASE_TEST
-					passdb = PASS_TEST
-				else:
-					server = SERV_TEST
-					userdb = USER_TEST
-					namedb = BASE_TEST
-					passdb = PASS_TEST
+	# ENVT
+	readIni = ConfigParser()
+	readIni.read(FILE__INI)
+	BASE_SEV = readIni.get(envt, 'serv')
+	BASE_USR = readIni.get(envt, 'user')
+	BASE_PAS = readIni.get(envt, 'pass')
+	BASE_NAM = readIni.get(envt, 'base')
 	try:
 		# MYSQL
 		MODE_SQLI = False
-		con = connectmysql( host=server, 
-							user=userdb, 
-							passwd=passdb, 
-							db=namedb,
+		con = connectmysql( host=BASE_SEV, 
+							user=BASE_USR, 
+							passwd=BASE_PAS, 
+							db=BASE_NAM,
 							charset='utf8',
 							use_unicode=True)
 		#con.autocommit(True)
-		
 	except Exception:
 		pass
 		# SQLite: offline
@@ -306,6 +271,30 @@ def BuildReqTCD(con, group, column, tableName, TDCName="TDC", TDCSum="1", LineSu
 	#ReqTDC += """ ORDER BY TOTAL"""
 	return ReqTDC
 
+def execSqlFile(con, bar, sql_file, nbop):
+	"""Exec script SQL file..."""
+	cur = con.cursor()
+	statement = ""
+	counter = 0
+	bar.open()
+	for line in open(sql_file):
+		if line[0:2] == '--':
+			if line[0:3] == '-- ':
+				bar.settitle("Exec :"+line.replace('--' ,''))
+			continue
+		statement = statement + line
+		if len(line)>2 and line[-2] == ';':
+			counter = counter +1
+			try:
+				cur.execute(statement)
+				con.commit()
+			except (OperationalError, ProgrammingError) as e:
+				print ("\n[WARN] MySQLError during execute statement \n\tArgs: '%s'" % (str(e.args)))
+			bar.update(counter/nbop)
+			statement = ""
+	bar.close()
+	cur.close()
+
 def BuildTree(con, frame, req, colWidth, line, scroll=False, align=W):
 	"""Build Columns treeview."""
 	col_names = GetListColumns(con, req)
@@ -340,7 +329,7 @@ def TreeviewSortColumn(tv, col, reverse):
 	# reverse sort next time
 	tv.heading(col, command=lambda	c=col: TreeviewSortColumn(tv, c, not reverse))
 
-def BuildListFromRequest(con, req, joker=DISP_CJOKER):
+def BuildListFromRequest(con, req, joker=''):
 	"""" fill combo tkinter."""
 	TLabs = BuildTabFromRequest(con, req)
 	TMods = []
@@ -383,7 +372,7 @@ def BuildCover(con, pathcover, md5):
 		# cover base64/mysql
 		req = C_REQUEST.format(MD5=md5)
 		Tableau = BuildTabFromRequest(con, req)
-		if len(Tableau) == 0:
+		if len(Tableau) == 0 or Tableau[0][1]== None:
 			monimage = Image.open(PICM_NCO)
 			print('err '+pathcover) #############
 		else:
@@ -399,7 +388,7 @@ def BuildMiniCover(con, pathcover, md5):
 		# cover base64/mysql
 		req = M_REQUEST.format(MD5=md5)
 		Tableau = BuildTabFromRequest(con, req)
-		if len(Tableau) == 0:
+		if len(Tableau) == 0 or Tableau[0][1]== None:
 			monimage = Image.open(PICM_NCO)
 			print('err '+pathcover) #############
 		else:
@@ -454,27 +443,29 @@ def foobarGetListfilesFromPlaylist(file_path):
 		audiofil = str(lfile.file_name[7:], 'utf-8')
 		albumnam = audiofil.split('\\')[-2]
 		albummd5 = md5(albumnam.encode('utf-8')).hexdigest()
-		# add list Playlist, Path, FIL_Track, Name , MD5
-		listfiles.append((path.basename(playlist), path.dirname(audiofil), path.basename(audiofil) , albumnam, albummd5)) 
+		TAG_Album = ''
+		TAG_Artists = ''
+		TAG_Title = ''
+		try:
+			TAG_Album = lfile.primary_keys[b"album"]
+			TAG_Artists = lfile.primary_keys[b"artist"]
+			TAG_Title = lfile.primary_keys[b"title"]
+		except:
+			pass
+		# add list Playlist, Path, FIL_Track, Name , MD5, TAGartist, TABalbum, TAGtitle
+		listfiles.append((path.basename(playlist), path.dirname(audiofil), path.basename(audiofil) , albumnam, albummd5, TAG_Album, TAG_Artists, TAG_Title)) 
 	return(listfiles)
 
 def foobarMajDBFOOBAR(con, bar, folder):
-	# delete DBFOOBAR
-	sql = "TRUNCATE DBFOOBAR;"
-	with con.cursor() as curs:
-		curs.execute(sql)
-		curs.close()
-	con.commit()
 	# fill DBFOOBAR
 	footracks = foobarBuildTracksList(folder)
 	numtracks = len(footracks)
 	counter = 0
-	bar = ProgressBar()
+	bar.open()
 	bar.settitle('import playlists ('+str(numtracks)+' Tracks) Foobar in progress...')
 	for footrack in footracks:
-		sql = "INSERT INTO DBFOOBAR (Playlist, Path, FIL_Track, Name , MD5) VALUES (%s, %s, %s, %s, %s)"
 		with con.cursor() as curs:
-			curs.execute(sql, footrack)
+			curs.execute(F_REQUEST, footrack)
 			curs.close()
 		con.commit()
 		counter = counter +1
@@ -646,7 +637,7 @@ class ProgressBar():
 	
 	def open(self):
 		self.__root.deiconify()
-		#self.__root.focus_set()
+		self.__root.focus_set()
 	
 	def close(self):
 		self.__root.withdraw()
@@ -755,7 +746,6 @@ class CoverViewGui():
 		self.master.resizable(width=False, height=False)
 		BuildIco(self.master)
 		CenterWindows(self.master)
-		#self.master.overrideredirect(True)
 		
 		width, height = monimage.size
 		self.master.title("{name} - [{w}x{h}] orignal size:[{wo}x{ho}]".format(w=w, h=h, name=namealbum, wo=str(width), ho=str(height)))
@@ -784,7 +774,7 @@ class CoversArtWorkViewGui():
 		
 		# build list covers
 		self.nametittle = nametittle
-		fileslist = list(GetListFiles(pathartworks, MASKCOVERS))
+		fileslist = list(GetListFiles(pathartworks, MASKCOVER))
 		self.numbersCov = len(fileslist)
 		
 		# build labels thunbnails
@@ -933,7 +923,7 @@ class DisplaySubprocessGui():
 				self.button.configure(text="Quit")
 				# err
 				self.textarea.configure(state='normal')
-				self.textarea.insert('end', self.process.stderr.read(), 'err')
+				self.textarea.insert('end', self.process.stderr.read().decode('cp850'), 'err')
 				self.textarea.see('end')
 				self.textarea.configure(state='disabled')
 				return
@@ -1004,28 +994,38 @@ class CoverMainGui(Tk):
 		self.searchtracks = IntVar()
 		self.searchtracks.set(0)
 		Checkbutton(cadresaisie, text="In Tracks", variable = self.searchtracks).pack(side=LEFT,padx=5,pady=5)
-		# Style
+		# buttons
+		btn_search = Button(cadresaisie, text='Search...', width=19, command = self.GetSearchAlbums)
+		btn_search.pack(side="left", padx=5, pady=5)
+		# combo Category
 		self.Combostyle_value = StringVar()
 		self.Combostyle = Combobox(cadresaisie, textvariable=self.Combostyle_value, state='readonly')
+		self.Combostyle.bind("<<ComboboxSelected>>", self.OnPressEnter)
 		self.Combostyle.pack(side="left", padx=5, pady=5)
-		# Family
+		self.Combostyle['values'] = DISP_CJOKER
+		self.Combostyle.current(0)
+		# combo Family
 		self.Combofamily_value = StringVar()
 		self.Combofamily = Combobox(cadresaisie, textvariable=self.Combofamily_value, state='readonly')
+		self.Combofamily.bind("<<ComboboxSelected>>", self.OnPressEnter)
 		self.Combofamily.pack(side="left", padx=5, pady=5)
-		# Label
+		self.Combofamily['values'] = DISP_CJOKER
+		self.Combofamily.current(0)
+		# combo Label
 		self.Combolabelm_value = StringVar()
 		self.Combolabelm = Combobox(cadresaisie, textvariable=self.Combolabelm_value, state='readonly')
+		self.Combolabelm.bind("<<ComboboxSelected>>", self.OnPressEnter)
 		self.Combolabelm.pack(side="left", padx=5, pady=5)
-		# year
+		self.Combolabelm['values'] = DISP_CJOKER
+		self.Combolabelm.current(0)
+		# combo year
 		self.Comboyearc_value = StringVar()
 		self.Comboyearc = Combobox(cadresaisie, textvariable=self.Comboyearc_value, state='readonly')
+		self.Comboyearc.bind("<<ComboboxSelected>>", self.OnPressEnter)
 		self.Comboyearc.pack(side="left", padx=5, pady=5)
-		# buttons
-		btn_search = Button(cadresaisie, text='Search', width=15, command = self.GetSearchAlbums)
-		btn_search.pack(side="left", padx=5, pady=5)
-		#btn_cdal = Button(cadresaisie, text='grid', width=7, command = self.ChandeDisplayAlbumsList)
-		#btn_cdal.pack(side="left", padx=5, pady=5)
-		# combo
+		self.Comboyearc['values'] = DISP_CJOKER
+		self.Comboyearc.current(0)
+		# combo environments
 		self.combo_value = StringVar()
 		self.combo = Combobox(cadresaisie, textvariable=self.combo_value, state='readonly')
 		self.combo['values'] = NAME_EVT
@@ -1036,7 +1036,7 @@ class CoverMainGui(Tk):
 		self.bMenu.add_command(label="Refresh", command=self.RefreshBase)
 		self.bMenu.add_command(label="Update (powershell)...", command=self.BuildInvent)
 		self.bMenu.add_command(label="Create Local base (sqlite)", command=self.CreateLocalBase)
-		self.bMenu.add_command(label="Import Foobar 2000 playlist...", command=self.ImportFoobar)
+		self.bMenu.add_command(label="Import Foobar playlists + Update Score...", command=self.ImportFoobar)
 		self.combo.bind("<<ComboboxSelected>>", self.OnComboEnvtChange)
 		self.combo.bind("<Button-3>", self.popupbase)
 		self.combo.pack(side=RIGHT, padx=15, pady=5)
@@ -1058,9 +1058,9 @@ class CoverMainGui(Tk):
 		self.aMenu = Menu(self.framealbumlist, tearoff=0)
 		self.aMenu.add_command(label="View ArtWorks...", command=self.ViewArtWorks)
 		self.aMenu.add_command(label="Open Folder...", command=self.GetFolder)
-		self.aMenu.add_command(label="Export Select Album(s) to...", command=self.ExportAlbums)
+		self.aMenu.add_command(label="Export Album...", command=self.ExportAlbums)
 		self.aMenu.add_command(label="Update Album...", command=self.UpdateAlbum)
-		self.aMenu.add_command(label="Open TagScan...", command=self.OpenTagScan)
+		self.aMenu.add_command(label="Modify Tags via TagScan...", command=self.OpenTagScan)
 		self.tree.bind("<Button-3>", self.popuptreealbum)
 		self.tree.bind("<<TreeviewSelect>>", self.OnTreeSelectAlbum)
 		self.tree.pack(side=TOP, anchor=W, padx=5, pady=5)
@@ -1141,7 +1141,7 @@ class CoverMainGui(Tk):
 		self.Envs = None
 		self.ConnectEnvt()
 	
-	def DisplayThunbnails(self, new=True, deb=0, fin=200):
+	def DisplayThunbnails(self, new=True, deb=0, fin=THUN_MAX):
 		if new:
 			# delete
 			for labelt in self.labels:
@@ -1189,9 +1189,11 @@ class CoverMainGui(Tk):
 				# add for add more thunbnails
 				monimage = Image.open(UNIX_ICO)
 				monimage = monimage.resize((WIDT_PICM, WIDT_PICM), Image.ANTIALIAS)
-				label = self.BuildThunbnail(UNIX_ICO, "{n} covers display max \n Select for more +{f}...".format(n=str(fin),f=str(fin+fin) if (fin+fin)<(numCov-fin) else str(numCov-fin)), monimage, None)
+				label = self.BuildThunbnail(UNIX_ICO, "{n} covers display max \n Click for more +{f}...".format(n=str(fin),f=str(fin+fin) if (fin+fin)<(numCov-fin) else str(numCov-fin)), monimage, None)
 				label.grid(row=curRow,column=curCol)
-				label.bind("<Enter>", lambda e: self.DisplayThunbnails(False,fin,fin+fin))
+				label.bind("<Button-1>", lambda e: self.DisplayThunbnails(False,fin,fin+fin))
+				label.bind("<Enter>", lambda event: event.widget.config(relief=SOLID))
+				label.bind("<Leave>", lambda event: event.widget.config(relief=FLAT))
 				self.labels.append(label)
 				# add for all thunbnails
 				curCol = curCol + 1
@@ -1201,6 +1203,8 @@ class CoverMainGui(Tk):
 				label = self.BuildThunbnail(UNIX_ICO, "{n} covers display max \n Click for all +{f}...".format(n=str(fin),f=str(numCov-fin)), monimage, None)
 				label.grid(row=curRow,column=curCol)
 				label.bind("<Button-1>", lambda e: self.DisplayThunbnails(False,fin,numCov-fin+1))
+				label.bind("<Enter>", lambda event: event.widget.config(relief=SOLID))
+				label.bind("<Leave>", lambda event: event.widget.config(relief=FLAT))
 				self.labels.append(label)
 				break
 		if not new: self.bargauge.close()
@@ -1238,9 +1242,10 @@ class CoverMainGui(Tk):
 	
 	def OnPressCover(self, event):
 		"""Affiche la pochette de l'album."""
-		self.coverWin = Toplevel(self.master)
-		monimage = BuildCover(self.con, self.pathcover, self.curalbmd5)
-		CoverViewGui(self.coverWin, monimage, self.albumname)
+		if self.pathcover[0:len(TEXT_NCO)] != TEXT_NCO:
+			self.coverWin = Toplevel(self.master)
+			monimage = BuildCover(self.con, self.pathcover, self.curalbmd5)
+			CoverViewGui(self.coverWin, monimage, self.albumname)
 	
 	def OnTreeSelectAlbum(self, event):
 		"""Display album infos."""
@@ -1317,7 +1322,7 @@ class CoverMainGui(Tk):
 			self.aMenu.entryconfig(0, state="disabled")
 		else:
 			self.aMenu.entryconfig(0, state="normal")
-		self.aMenu.entryconfig(3, label="Update (powershell) Album : "+ self.albumname[:15] + "...")
+		self.aMenu.entryconfig(3, label="Update Album (powershell): "+ self.albumname[:15] + "...")
 		self.aMenu.post(event.x_root, event.y_root)
 	
 	def popuptreealbum(self, event):
@@ -1331,14 +1336,25 @@ class CoverMainGui(Tk):
 			self.tree.focus(self.CurentAlbum)
 			# maj infos albums
 			self.GetInfosAlbum(self.CurentAlbum, True)
-		if self.tree.get_children():
 			curLign = self.tree.item(self.CurentAlbum)
 			if curLign['values'][A_POSITIO['Qty_covers']] == 0 or not(path.exists(self.AlbumPath)):
 				self.aMenu.entryconfig(0, state="disabled")
 			else:
 				self.aMenu.entryconfig(0, state="normal")
-			self.aMenu.entryconfig(3, label="Update (powershell) Album : "+ self.albumname[:15] + "...")
+			self.aMenu.entryconfig(1, state="normal")
+			self.aMenu.entryconfig(2, label="Export cover/csv '"+ self.albumname[:15] + "...'")
+			self.aMenu.entryconfig(3, label="Update Album '"+ self.albumname[:15] + "...'")
+			self.aMenu.entryconfig(4, state="normal")
 			self.aMenu.post(event.x_root, event.y_root)
+		else:
+			# select x item
+			if len(ListeSelect) > 1 :
+				self.aMenu.entryconfig(0, state="disabled")
+				self.aMenu.entryconfig(1, state="disabled")
+				self.aMenu.entryconfig(2, label="Export "+ DisplayCounters(len(ListeSelect), 'Album cover/csv') +"...")
+				self.aMenu.entryconfig(3, label="Update "+ DisplayCounters(len(ListeSelect), 'Album Select') +"...")
+				self.aMenu.entryconfig(4, state="disabled")
+				self.aMenu.post(event.x_root, event.y_root)
 	
 	def QuitMain(self):
 		"""Exit."""
@@ -1358,7 +1374,7 @@ class CoverMainGui(Tk):
 			self.loadingWin = Toplevel(self)
 			LoadingGui(self.loadingWin, self.con, self.MODE_SQLI, 0)
 			# auto-completion
-			completion_list = BuildListFromRequest(self.con, S_REQUEST, '')
+			completion_list = BuildListFromRequest(self.con, S_REQUEST)
 			self.ligne_texte.set_completion_list(completion_list)
 			# tittle
 			if self.MODE_SQLI:
@@ -1367,20 +1383,12 @@ class CoverMainGui(Tk):
 				self.title('{prog} : online base "{database}" at {heure}'.format(prog = TITL_PROG,
 																			 database = self.Envs,
 																			 heure = self.condat))
-			# montage table mysql en memoire
+			# mount table albums in memory
 			self.Tabs = BuildTabFromRequest(self.con, (Z_REQUEST if self.MODE_SQLI else A_REQUEST))
-			# init combos
-			self.Combostyle['values'] = BuildListFromRequest(self.con, D_REQUEST)
-			self.Combostyle.bind("<<ComboboxSelected>>", self.OnPressEnter)
+			# reset combos
 			self.Combostyle.current(0)
-			self.Combofamily['values'] = BuildListFromRequest(self.con, E_REQUEST)
-			self.Combofamily.bind("<<ComboboxSelected>>", self.OnPressEnter)
 			self.Combofamily.current(0)
-			self.Combolabelm['values'] = BuildListFromRequest(self.con, L_REQUEST)
-			self.Combolabelm.bind("<<ComboboxSelected>>", self.OnPressEnter)
 			self.Combolabelm.current(0)
-			self.Comboyearc['values'] = BuildListFromRequest(self.con, Y_REQUEST)
-			self.Comboyearc.bind("<<ComboboxSelected>>", self.OnPressEnter)
 			self.Comboyearc.current(0)
 			# all albums to treeview
 			self.GetSearchAlbums(refresh)
@@ -1408,10 +1416,14 @@ class CoverMainGui(Tk):
 				self.tree.delete(i)
 		self.update_idletasks()
 		# insert
+		liststyle = []
+		listfamil = []
+		listlabel = []
+		listeyear = []
 		counter = cpt_trk = cpt_cds = cpt_siz = cpt_len = 0
 		for row in self.Tabs:
-			# on cherche la chaine saisie ou search tracks
-			if txt_search.lower() in row[A_POSITIO['Name']].lower() or txt_search.lower() in row[A_POSITIO['Label']].lower() or self.SearchInTracksSQL(lst_id,row[A_POSITIO['ID_CD']]):
+			# find text entry ?
+			if  txt_search.lower() in row[A_POSITIO['Name']].lower() or txt_search.lower() in row[A_POSITIO['Label']].lower() or self.SearchInTracksSQL(lst_id,row[A_POSITIO['ID_CD']]):
 				# Category ok ?
 				if (self.Combostyle_value.get() != DISP_CJOKER and row[A_POSITIO['Category']] == self.Combostyle_value.get()) or (self.Combostyle_value.get() == DISP_CJOKER):
 					# Family ok ?
@@ -1420,12 +1432,32 @@ class CoverMainGui(Tk):
 						if (self.Combolabelm_value.get() != DISP_CJOKER and row[A_POSITIO['Label']] == self.Combolabelm_value.get()) or (self.Combolabelm_value.get() == DISP_CJOKER):
 							# year ok ?
 							if (self.Comboyearc_value.get() != DISP_CJOKER and row[A_POSITIO['Year']] == self.Comboyearc_value.get()) or (self.Comboyearc_value.get() == DISP_CJOKER):
+								# FILL TREEVIEW
 								self.tree.insert("", counter, iid='Row_%s'%counter, values=row, tag = (counter%2))
+								# FILL LISTS COMBOS
+								if row[A_POSITIO['Category']] not in liststyle:
+									liststyle.append(row[A_POSITIO['Category']])
+								if row[A_POSITIO['Family']] not in listfamil:
+									listfamil.append(row[A_POSITIO['Family']])
+								if row[A_POSITIO['Label']] not in listlabel:
+									listlabel.append(row[A_POSITIO['Label']]) 
+								if row[A_POSITIO['Year']] not in listeyear:
+									listeyear.append(row[A_POSITIO['Year']])
+								# COUNTERS
 								counter += 1
 								cpt_cds += row[A_POSITIO['Qty_CD']]
 								cpt_trk += row[A_POSITIO['Qty_Tracks']]
 								cpt_siz += row[A_POSITIO['Size']]
 								cpt_len += sum(int(x) * 60 ** i for i,x in enumerate(reversed(row[A_POSITIO['Length']].split(":"))))
+		# FILL COMBOS
+		liststyle.sort(reverse=True)
+		self.Combostyle['values'] = [DISP_CJOKER,] + liststyle
+		listfamil.sort()
+		self.Combofamily['values'] = [DISP_CJOKER,] + listfamil
+		listlabel.sort()
+		self.Combolabelm['values'] = [DISP_CJOKER,] + listlabel
+		listeyear.sort(reverse=True)
+		self.Comboyearc['values'] = [DISP_CJOKER,] + listeyear
 		# DISPLAY THUNBNAILS
 		self.DisplayThunbnails()
 		# DISPLAY STATS SEARCH
@@ -1455,7 +1487,12 @@ class CoverMainGui(Tk):
 		if self.tree.get_children():
 			# first line by defaut
 			if not(refresh): self.CurentAlbum = 'Row_0'
-			self.tree.selection_set(self.CurentAlbum)
+			try:
+				self.tree.selection_set(self.CurentAlbum)
+			except:
+				pass
+				self.CurentAlbum = 'Row_0'
+				self.tree.selection_set(self.CurentAlbum)
 			self.tree.focus(self.CurentAlbum)
 		# MAJ ALBUMS INFOS
 		self.GetInfosAlbum(self.CurentAlbum, refresh)
@@ -1507,7 +1544,7 @@ class CoverMainGui(Tk):
 				# first line by defaut
 				if counter > 0: self.CurentTrack = 'Row_0'
 				# MAJ ALBUM NAME
-				txt_album = self.albumname[:100] + "\n{tracks} / {dur} / {cd}".format(tracks = DisplayCounters(counter, 'track'),
+				txt_album = self.albumname[:100] + "\n{tracks} • {dur} • {cd}".format(tracks = DisplayCounters(counter, 'track'),
 																					 dur = str(int(((cpt_len/60))*10)/10) + ' mins',
 																					 cd = DisplayCounters(curLign['values'][A_POSITIO['Qty_CD']], 'CD'))
 				self.stralbumname.set(txt_album)
@@ -1647,14 +1684,25 @@ class CoverMainGui(Tk):
 		self.MessageInfo.set("Create Database SQLite :"+filename+" Sucessfull")
 	
 	def ImportFoobar(self):
-		numtracks = foobarMajDBFOOBAR(self.con,FOOB_PLAY)
+		"""Foobar2000 playlists operations."""
+		# import fpl playlist to mysql DBFOOBAR
+		numtracks = foobarMajDBFOOBAR(self.con, self.bargauge, FOOB_PLAY)
 		self.MessageInfo.set("Import Sucessfull Playlists Foobar 2000: "+str(numtracks)+" Tracks in base")
+		# synchro score sql
+		execSqlFile(self.con, self.bargauge, FOOB_UPSC , 9)
+		self.MessageInfo.set("Synchro Score Sucessfull Playlists Foobar 2000")
 	
 	def UpdateAlbum(self):
 		"""Execute powershell Script update albums infos."""
+		ListeSelect = self.tree.selection()
+		listID_CD = ''
+		for SelItem in ListeSelect:
+			Album = self.tree.item(SelItem)
+			listID_CD += str(Album['values'][A_POSITIO['ID_CD']])+','
+		listID_CD = listID_CD[0:-1]
 		self.GUIUpdateAlbum = Toplevel(self.master)
-		eCommand = BuildCommandPowershell(PWSH_SCRU, '-Album_IDCD', str(self.Id_CD), '-Envt', self.Envs, '-Logs', LOGS_PROG)
-		DisplaySubprocessGui(self.GUIUpdateAlbum, eCommand, 'Execution PowerShell : '+path.basename(PWSH_SCRU)+' -Album_IDCD '+str(self.Id_CD)+' -Envt "'+self.Envs+'"')
+		eCommand = BuildCommandPowershell(PWSH_SCRU, '-listID_CD', listID_CD, '-Envt', self.Envs)
+		DisplaySubprocessGui(self.GUIUpdateAlbum, eCommand, 'Update '+ DisplayCounters(len(ListeSelect), "Album "))
 	
 	def BuildInvent(self):
 		"""Execute powershell Script update all albums infos."""
@@ -1664,7 +1712,7 @@ class CoverMainGui(Tk):
 		else:
 			filescript = PWSH_SCRI.format(mod='MP3')
 		eCommand = BuildCommandPowershell(filescript, '-Envt', self.Envs)
-		DisplaySubprocessGui(self.GUIBuildInvent, eCommand, 'Execution PowerShell : '+path.basename(filescript)+' -Envt "'+self.Envs+'"')
+		DisplaySubprocessGui(self.GUIBuildInvent, eCommand, 'Update Base '+self.Envs)
 		#self.ConnectEnvt(True)
 	
 	def ViewArtWorks(self):
