@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2017, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.60"
+__version__ = "1.61"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -269,10 +269,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 							"Open Folder...", self.getFolder)
 		self.action_EXA = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'exp.png')),
 							"Export Album...", self.exportAlbums)
-		self.action_UAP = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'update.png')),
-							"Update Album...", self.updateAlbums)
 		self.action_TAG = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'tag.png')),
 							"Edit Tags (TagScan)...", self.openTagScan)
+		self.action_UAP = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'update.png')),
+							"Update Album...", self.updateAlbums)
 		self.action_DIS = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'discogs.png')),
 							"Search www.Discogs.com...", self.searchDiscogs)
 
@@ -300,7 +300,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.com_year.currentIndexChanged.connect(self.onFiltersChanged)
 		self.com_genres.currentIndexChanged.connect(self.onFiltersChanged)
 		self.com_country.currentIndexChanged.connect(self.onFiltersChanged)
-		self.com_envt.currentIndexChanged.connect(self.connectEnvt)
+		self.com_envt.currentIndexChanged.connect(self.selectEnvt)
 		self.com_envt.setContextMenuPolicy(Qt.CustomContextMenu)
 		self.com_envt.customContextMenuRequested.connect(self.popUpBaseAlbums)
 		self.thunbnails.signalthunchgt.connect(self.onSelectThunbnail)
@@ -310,7 +310,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.thunbnails.customContextMenuRequested.connect(self.popUpTNAlbums)
 		self.tbl_albums.setContextMenuPolicy(Qt.CustomContextMenu)
 		self.tbl_albums.customContextMenuRequested.connect(self.popUpTreeAlbums)
-		#self.tbl_albums.clicked.connect(self.onSelectListAlbum)
 		self.tbl_albums.currentChanged = self.onSelectListAlbum
 		self.tbl_tracks.clicked.connect(self.onSelectTrackChanged)
 		self.tbl_tracks.doubleClicked.connect(self.playMediasAlbum)
@@ -531,7 +530,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		if purcent == 100:
 			self.gaugeBar.setVisible(False)
 			self.updateStatusBar(self.maintitle)
-
+	
+	def selectEnvt(self, numcombo):
+		"""Select Envt in Combobox."""
+		self.connectEnvt()
+	
 	def connectEnvt(self, refresh=False):
 		"""Connect Envt."""
 		if self.envits != self.com_envt.currentText() or refresh:
@@ -539,32 +542,34 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				self.playerAudio.player.stop()
 			self.envits = self.com_envt.currentText()
 			self.setCursor(Qt.WaitCursor)
-			# init search + grids
-			self.lin_search.textChanged.disconnect()
-			self.lin_search.setText('')
-			self.lin_search.textChanged.connect(self.onTextEdited)
-			# init combos
-			self.com_category.currentIndexChanged.disconnect()
-			self.com_family.currentIndexChanged.disconnect()
-			self.com_label.currentIndexChanged.disconnect()
-			self.com_year.currentIndexChanged.disconnect()
-			self.com_genres.currentIndexChanged.disconnect()
-			self.com_country.currentIndexChanged.disconnect()
-			self.com_category.clear()
-			self.com_family.clear()
-			self.com_label.clear()
-			self.com_year.clear()
-			self.com_country.clear()
-			self.com_genres.clear()
-			self.com_genres.addItems(['Loading...'])
-			self.com_genres.setEnabled(False)
-			self.liststy = None
-			self.com_category.currentIndexChanged.connect(self.onFiltersChanged)
-			self.com_family.currentIndexChanged.connect(self.onFiltersChanged)
-			self.com_label.currentIndexChanged.connect(self.onFiltersChanged)
-			self.com_year.currentIndexChanged.connect(self.onFiltersChanged)
-			self.com_genres.currentIndexChanged.connect(self.onFiltersChanged)
-			self.com_country.currentIndexChanged.connect(self.onFiltersChanged)
+			# other database
+			if not refresh:
+				# init search + grids
+				self.lin_search.textChanged.disconnect()
+				self.lin_search.setText('')
+				self.lin_search.textChanged.connect(self.onTextEdited)
+				# init combos
+				self.com_category.currentIndexChanged.disconnect()
+				self.com_family.currentIndexChanged.disconnect()
+				self.com_label.currentIndexChanged.disconnect()
+				self.com_year.currentIndexChanged.disconnect()
+				self.com_genres.currentIndexChanged.disconnect()
+				self.com_country.currentIndexChanged.disconnect()
+				self.com_category.clear()
+				self.com_family.clear()
+				self.com_label.clear()
+				self.com_year.clear()
+				self.com_country.clear()
+				self.com_genres.clear()
+				self.com_genres.addItems(['Loading...'])
+				self.com_genres.setEnabled(False)
+				self.liststy = None
+				self.com_category.currentIndexChanged.connect(self.onFiltersChanged)
+				self.com_family.currentIndexChanged.connect(self.onFiltersChanged)
+				self.com_label.currentIndexChanged.connect(self.onFiltersChanged)
+				self.com_year.currentIndexChanged.connect(self.onFiltersChanged)
+				self.com_genres.currentIndexChanged.connect(self.onFiltersChanged)
+				self.com_country.currentIndexChanged.connect(self.onFiltersChanged)
 			# connect
 			boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.envits)
 			if not boolconnect:
@@ -626,7 +631,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.lin_search.setCompleter(self.com_autcom)
 					# build list style
 					qDebug('qthread build list style')
-					self.obj = DBPThreadsListStyle(self)
+					self.obj = DBPThreadsListStyle(self, 'listgenres')
 					self.obj.finished.connect(self.fillListGenres)
 					self.obj.start()
 
@@ -635,6 +640,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				# display title
 				self.setCursor(Qt.ArrowCursor)
 				self.displayResultSearch()
+				# apply filters
+				if refresh:
+					self.onFiltersChanged()
 
 	def displayAlbum(self):
 		"""Display info current select album."""
@@ -1062,7 +1070,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		else:
 			self.action_OPF.setEnabled(True)
 		self.action_EXA.setText("Export cover/csv '" + self.albumname[:15] + "...'")
-		self.action_UAP.setText("Update Album (powershell): " + self.albumname[:15] + "...")
+		self.action_UAP.setText("Update Album: " + self.albumname[:15] + "...")
 		self.menua.exec_(position)
 	
 	def playMediasAlbum(self, event):
@@ -1171,9 +1179,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		if listrows is not None:
 			for ind in listrows:
 				# [CATEGORY, FAMILY, 'DELETE/UPDATE/ADD', ID_CD, 'NAME', 'PATHNAME']
+				if path.exists(self.tableMdlAlb.getData(ind, 'PATHNAME')):
+					typeupdate = 'UPDATE'
+				else:
+					typeupdate = 'DELETE'
 				list_actions.append([self.tableMdlAlb.getData(ind, 'CATEGORY'), 
 									self.tableMdlAlb.getData(ind, 'FAMILY'), 
-									'UPDATE',
+									typeupdate,
 									self.tableMdlAlb.getData(ind, 'ID_CD'),
 									self.tableMdlAlb.getData(ind, 'NAME'),
 									self.tableMdlAlb.getData(ind, 'PATHNAME')])
@@ -1186,6 +1198,19 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 									self.curthe)
 			self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 			self.prepareInvent.realiseActions(list_actions)
+	
+	def correctionsAlbums(self):
+		request="SELECT CATEGORY, FAMILY, 'UPDATE', ID_CD, NAME, PATHNAME FROM ALBUMS WHERE PIC > 0 AND ALBUMS.COVER='<No Picture>' AND ID_CD> 12142;"
+		list_actions = DBFuncBase().sqlToArray(request)
+		self.prepareInvent = InventGui(self.tableMdlAlb.arraydata, 
+									self.tableMdlAlb.myindex,
+									self.lstcat,
+									'UPDATE',
+									self.modsql, 
+									self.envits, 
+									self.curthe)
+		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
+		self.prepareInvent.realiseActions(list_actions)
 	
 	def createLocalBase(self):
 		"""Create base Sqlite."""

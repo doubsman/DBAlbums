@@ -41,7 +41,11 @@ class myThreadTimer(QThread):
 		super(myThreadTimer, self).__init__(parent)
 		self.timerThread = timerThread(self)
 		self.timerThread.timeElapsed.connect(self.timeElapsed.emit)
-
+	
+	def stop(self):
+		self.timerThread.terminate()
+		self.terminate()
+		
 	def run(self):
 		self.timerThread.start(time())
 		iterations = 10000
@@ -129,7 +133,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	
 		self.btn_action.clicked.connect(self.realiseActions)
 		self.btn_action.setEnabled(False)
-		self.btn_quit.clicked.connect(lambda e: self.destroy())
+		self.btn_quit.clicked.connect(self.closeImpoort)
 		self.lcdTime.setSegmentStyle(QLCDNumber.Flat)
 		
 		self.seconds = 0
@@ -164,7 +168,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.lab_result.setText('Completed Analyse in '+self.total_p)
 		qDebug('End BuildInvent')
 		
-		self.btn_quit.setText('Quit')
+		self.btn_quit.setText('Close')
 		if len(self.prepareInvent.list_action) > 0 and not self.checkBoxStart.isChecked():
 				self.btn_action.setEnabled(True)
 		self.realiseActions()
@@ -193,7 +197,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 			self.aldelete = self.prepareInvent.aldelete
 		else:
 			# no analyse
-			self.btn_quit.setText('Quit')
+			self.btn_quit.setText('Close')
 			self.list_actions = list_actions
 			self.lab_result.setText('No Analyse')
 			self.lab_advance.setText('')
@@ -236,11 +240,6 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		mesresu += '\nUPDATE  : ' + format(self.alupdate, '05d')
 		mesresu += '\nDELETE  : ' + format(self.aldelete, '05d')
 		self.lab_releaseadvance.setText(mesresu)
-		mesresu =  'PRESENT : ' + format(self.apresent, '05d')
-		mesresu += '\nADD     : ' + format(self.albumnew, '05d')
-		mesresu += '\nUPDATE  : ' + format(self.alupdate, '05d')
-		mesresu += '\nDELETE  : ' + format(self.aldelete, '05d')
-		self.lab_advance.setText(mesresu)
 		QApplication.processEvents()
 		
 	@pyqtSlot()	
@@ -329,6 +328,11 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		gridstyle = gridstyle.format(col3 = self.curthe.listcolors[2], 
 									col4 = self.curthe.listcolors[3])
 		self.tbl_update.setStyleSheet(gridstyle)
+
+	def closeImpoort(self):
+		"""Close Windows."""
+		self.myThreadtime.stop()
+		self.destroy()
 
 	def onScrollPressed(self):
 		pass

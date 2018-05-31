@@ -1,4 +1,5 @@
 """ DBAlbums History Version : Doubsman dev.
+1.61 corrections bugs, stabilisation final version
 1.60 search discogs
 1.59 copy score for update album, bugs
 1.58 rewrite create base sqllite & import foobar playlist v3, database mssql

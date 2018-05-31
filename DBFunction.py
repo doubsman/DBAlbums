@@ -3,7 +3,7 @@
 
 from sys import platform, stdout
 from os import path, walk, listdir
-from PyQt5.QtCore import (QProcess, QObject, QTime, QtInfoMsg,
+from PyQt5.QtCore import (QProcess, QObject, QTime, QtInfoMsg, qDebug, 
 						QtWarningMsg, QtCriticalMsg, QtFatalMsg)
 from PyQt5.QtWidgets import QDesktopWidget
 
@@ -278,9 +278,10 @@ def buildalbumnamehtml(name, label, isrc, country, year, nbcd, nbtracks, nbmin, 
 	if label != "":
 		if label.find('(')>0:
 			label = label[0:label.find('(')].rstrip()
-		label = label.replace(' - ', ' ')
-		imglabel = RESS_LABS +'/'+ label.replace(' ','_') +'.jpg'
+		label = label.replace(' - ', ' ').title()
+		imglabel = path.join(RESS_LABS, label.replace(' ','_') +'.jpg')
 		if not path.isfile(imglabel):
+			qDebug('no image label : ' + imglabel)
 			imglabel = None
 		# isrc
 		if isrc != "":
@@ -297,7 +298,7 @@ def buildalbumnamehtml(name, label, isrc, country, year, nbcd, nbtracks, nbmin, 
 		infosayear = '<a style="' + stylehtml + '" href="dbfunction://y'+year+'">' + year + '</a>'
 	# flags
 	if country != "":
-		flagfile = path.join(RESS_FLAGS, country+'.png')
+		flagfile = path.join(RESS_FLAGS, country.replace(' ', '-') + '.png')
 		if path.isfile(flagfile):
 			imageflag = '<img style="vertical-align:Bottom;" src="' + flagfile + '" height="17">'
 			imageflag = '<a style="' + stylehtml + '" href="dbfunction://c' + country + '">' + imageflag + '</a>'
@@ -324,9 +325,13 @@ def buildalbumnamehtml(name, label, isrc, country, year, nbcd, nbtracks, nbmin, 
 	infotrack = displayCounters(nbtracks, 'Track')
 	infoduree = displayCounters(nbmin, 'min')
 	infoartco = displayCounters(nbcovers, 'art')
+	infopics = ''
+	# artwork
 	if nbcovers>0:
 		infoartco = '<a style="' + stylehtml + '" href="dbfunction://a">' + infoartco + '</a>'
-	infoshtml = '<span>' + infonameal + '</span>' + imageflag + ' ' + infosnbcd + ' ' + inffolder + infotags + infopowe + '<br/>'
+		infopics = '<img style="vertical-align:Bottom;" src="' + path.join(RESS_ICOS, 'art.png') + '" height="17">'
+		infopics = '<a style="' + stylehtml + '" href="dbfunction://a">' + infopics + '</a>'
+	infoshtml = '<span>' + infonameal + '</span>' + imageflag + ' ' + infosnbcd + ' ' + infopics + ' ' + inffolder + ' ' + infotags + ' ' + infopowe + '<br/>'
 	if infoslabel != "":
 		#if infosaisrc != "":
 		#	infoshtml += infoslabel + ' • ' + infosaisrc + ' • '

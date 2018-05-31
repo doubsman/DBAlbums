@@ -262,6 +262,13 @@ class CardAlbum(QObject):
 				cardalbum['NAME'] = self.cleanfolderalbum(cardalbum['NAME'])
 			if cardalbum['NAME'].endswith('-'):
 				cardalbum['NAME'] = cardalbum['NAME'][:-1]
+				
+			# cover from multiple pics
+			if cardalbum['COVER'] == self.TEXT_NCO and cardalbum['PIC'] > 1:
+				listcovers = list(getListFiles(pathalbum, self.mask_artwork))
+				for listcover in listcovers:
+					if 'front' in listcover.lower():
+						cardalbum['COVER'] = listcover
 			
 		return cardalbum, listcardtrack
 
@@ -293,7 +300,7 @@ class CardAlbum(QObject):
 if __name__ == '__main__':
 	#cardalbum, cardtracks = CardAlbum().defineAlbum(r'E:\Work\ZTest\TAG_bluid\ROCK\Download\Air - Moon Safari (1998)', 'ROCK', "DOWNLOAD")
 	#cardalbum, cardtracks = CardAlbum().defineAlbum(r'E:\Work\ZTest\TAG_bluid\TECHNO\Labels\Fcom\[F115] Laurent Garnier - Early Works (1998)', 'TECHNO', "Labels")
-	cardalbum, cardtracks = CardAlbum().defineAlbum(r'E:\Work\ZTest\TAG_bluid\TRANCE\Colonne 1\01\[IBOGADIGITAL090] Emok - Best Of My Sets Vol.02 (2011)', 'TRANCE', "Download")
+	cardalbum, cardtracks = CardAlbum().defineAlbum(r'\\HOMERSTATION\_LossLess\TRANCE\Download\_2015_2019\Nerso - Essence Of Universe EP (2017)', 'TRANCE', "Download")
 	#cardalbum, cardtracks = CardAlbum().defineAlbum(r'\\HOMERSTATION\_Mp3\Rock Artists\1000 Top Albums\[0010] Pink Floyd - Dark Side Of The Moon', 'ROCK', "Download")
 	CardTracks().displayCardTracks(cardtracks)
 	CardAlbum().displayCardAlbum(cardalbum)

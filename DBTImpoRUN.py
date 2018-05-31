@@ -10,7 +10,6 @@ from DBDatabase import DBFuncBase, connectDatabase
 from DBTImpoALB import CardAlbum
 from DBFunction import displayArrayDict
 
-
 class ReleaseInvent(QObject):
 	signalrun = pyqtSignal(int, str)		# percent / message
 	signaltxt = pyqtSignal(str, int)		# message / level display
@@ -134,7 +133,7 @@ if __name__ == '__main__':
 	# debug
 	envt = 'LOSSLESS_TEST'
 	boolconnect, dbbase, modsql, rootDk, listcategory = connectDatabase(envt)
-	
+		
 	# ADD
 	#ReleaseInvent().addAlbums('TRANCE', 'Download', r'E:\Work\ZTest\TAG_bluid\TRANCE\Download\2017\[OVNICD089] Ovnimoon & Rigel - Omnipresent Technology (2014)')
 	
@@ -155,8 +154,8 @@ if __name__ == '__main__':
 	#print(DBFuncBase().sqllToArrayDict('ALBUMS', 'ID_CD', 1))
 	#print(DBFuncBase().sqllToArrayDict('TRACKS', 'ID_CD', 2))	
 
-	oldcardtracks = DBFuncBase().sqlToArrayDict('TRACKS', 'ID_CD', 23)
-	print(oldcardtracks)
+	#oldcardtracks = DBFuncBase().sqlToArrayDict('TRACKS', 'ID_CD', 23)
+	#print(oldcardtracks)
 
 
 #	cardalbum, cardtracks = CardAlbum().defineAlbum(r'\\HOMERSTATION\_LossLess\TECHNO\Labels\Kompakt\[KOMPAKT CD 132] VA - Kompakt Total 16 (2016)', 'TECHNO', "Labels")

@@ -88,7 +88,11 @@ def getrequest(name, MODE_SQLI=None):
 					" FROM TRACKS WHERE ID_CD={id} ORDER BY `TRACKORDER` ";
 	# search in track
 	elif name == 'tracksinsearch':
-		request = "SELECT ID_CD AS ID FROM TRACKS AS TRK WHERE ARTIST like '%{search}%' OR TITLE like '%{search}%' GROUP BY ID_CD"
+		request = 	"SELECT ALBUMS.ID_CD FROM ALBUMS " \
+					"INNER JOIN TRACKS " \
+					"ON ALBUMS.ID_CD=TRACKS.ID_CD " \
+					"WHERE TRACKS.ARTIST like '%{search}%' OR TRACKS.TITLE like '%{search}%' OR ALBUMS.NAME like '%{search}%'  " \
+					"GROUP BY ALBUMS.ID_CD"
 	# cover
 	elif name == 'coverpix':
 		request = "SELECT COVER FROM COVERS WHERE ID_CD={id}"
@@ -396,10 +400,10 @@ class DBCreateSqLite(QObject):
 			for indcol in range(query.record().count()):
 				querylite.bindValue(indcol, query.value(indcol))
 			if not querylite.exec_():
-				qDebug(tablename+"10*' ' "+querylite.lastError().text())
+				qDebug(tablename+10*' '+querylite.lastError().text())
 				listparam = list(querylite.boundValues().values())
 				for i in range(len(listparam)):
-					qDebug(10*' ', i, listparam[i])
+					qDebug(10*' '+ str(i) + ' ' + str(listparam[i]))
 
 
 if __name__ == '__main__':

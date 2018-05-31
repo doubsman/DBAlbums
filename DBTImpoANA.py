@@ -181,7 +181,7 @@ class BuildInvent(QObject):
 					break
 				else:
 					# add doublon
-					self.signaltext.emit('WARNING: Doublons Albums :' + folder)
+					self.signaltext.emit('WARNING: Doublons Albums :' + folder, 3)
 		# no exist
 		return albumfind
 

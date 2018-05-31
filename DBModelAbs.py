@@ -139,7 +139,9 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 	def updateFilters(self, filttext, filtcate=None, filtfami=None, filtyear=None, filtlabl=None, filtgenr=None, filtcoun=None, filtintk=False):
 		"""Update vars filter."""
 		if filtintk and filttext != '':
+			print((getrequest('tracksinsearch')).format(search=filttext))
 			self.listidtxt = DBFuncBase().sqlToArray((getrequest('tracksinsearch')).format(search=filttext))
+			print(self.listidtxt)
 		else:
 			self.listidtxt = []
 		self.filttext = filttext
@@ -199,12 +201,13 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		# text search
 		if self.filtintk and self.filttext != '':
 			index = self.parent.index(sourceRow, self.parent.myindex.index('ID_CD'), sourceParent)
-			if  self.parent.data(index).value() not in self.listidtxt:
+			if self.parent.data(index).value() not in self.listidtxt:
 				return False
 		# find in name and label
 		elif self.filttext != '':
 			index = self.parent.index(sourceRow, self.parent.myindex.index('NAME'), sourceParent)
-			if self.filttext.lower() not in self.parent.data(index).value().lower():
+			indexArtist = self.parent.index(sourceRow, self.parent.myindex.index('POSITIONHDD'), sourceParent)
+			if self.filttext.lower() not in self.parent.data(index).value().lower() and self.filttext.lower() not in self.parent.data(indexArtist).value().lower():
 				return False
 		# cumuls
 		index = self.parent.index(sourceRow, self.parent.myindex.index('SIZE'), sourceParent)
@@ -222,16 +225,18 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		# list id
 		index = self.parent.index(sourceRow, self.parent.myindex.index('ID_CD'), sourceParent)
 		self.listiddi.append(self.parent.data(index).value())
-		# combos list
+		# build combos list
 		index = self.parent.index(sourceRow, self.parent.myindex.index('CATEGORY'), sourceParent)
 		if self.parent.data(index).value() not in self.listcat:
 			self.listcat.append(self.parent.data(index).value())
 		index = self.parent.index(sourceRow, self.parent.myindex.index('FAMILY'), sourceParent)
 		if self.parent.data(index).value() not in self.listfam:
 			self.listfam.append(self.parent.data(index).value())
-		index = self.parent.index(sourceRow, self.parent.myindex.index('LABEL'), sourceParent)
-		if self.parent.data(index) not in self.listlab:
-			self.listlab.append(self.parent.data(index))
+		# label only for family Label/Physique
+		if self.parent.data(index).value() == 'Label/Physique':
+			index = self.parent.index(sourceRow, self.parent.myindex.index('LABEL'), sourceParent)
+			if self.parent.data(index) not in self.listlab:
+				self.listlab.append(self.parent.data(index))
 		index = self.parent.index(sourceRow, self.parent.myindex.index('YEAR'), sourceParent)
 		if self.parent.data(index).value() not in self.listyea:
 			self.listyea.append(self.parent.data(index).value())
@@ -289,9 +294,15 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 		if index.column() == self.myindex.index('SCORE'):
 			return (self.arraydata[index.row()][index.column()]*'★')
 		if index.column() == self.myindex.index('LABEL'):
-			return ((self.arraydata[index.row()][index.column()]).title())
+			if self.arraydata[index.row()][index.column()]:
+				return ((self.arraydata[index.row()][index.column()]).title())
+			else:
+				return ((self.arraydata[index.row()][self.myindex.index('TAGLABEL')]).title())
 		if index.column() == self.myindex.index('ISRC'):
-			return ((self.arraydata[index.row()][index.column()]).upper())
+			if self.arraydata[index.row()][index.column()]:
+				return ((self.arraydata[index.row()][index.column()]).upper())
+			else:
+				return ((self.arraydata[index.row()][self.myindex.index('TAGISRC')]).upper())
 		return QVariant(self.arraydata[index.row()][index.column()])
 	
 	def builListThunbnails(self, new=True, deb=0, fin=100):
@@ -352,7 +363,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 					'Path', 'format', 'ID_TRACK')
 	# treeview columns width
 	C_HEIGHT = 21
-	T_C_WIDTH = (	50, 150, 200, 60, 50,
+	T_C_WIDTH = (	50, 200, 200, 50, 50,
 					90, 250, 60, 70, 70,
 					250, 70, 70)
 					
