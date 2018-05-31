@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """ DBAlbums History Version : Doubsman dev.
+1.37 New player QT5 
+1.36 Enlarge Display thunbnails + bugs closing
+1.35 centralisation functions player/create sqlite3 / create exe via cx_freeze
 1.34 link tree id <-> mysql id / Full Screen
 1.33 mass update albums + autoincrement id + theme
 1.32 import playlist foobar v2 + dynamic combos 
@@ -39,15 +42,14 @@
 """
 
 """ # python 3.6.0 installation modules
-c:\Python36\Scripts\pip3.6.exe install pymysql
-c:\Python36\Scripts\pip3.6.exe install pillow
-extract N:\_INVENT\DBAlbums\python_libs\fpl_reader-master.zip
-c:\Python36\python.exe setup.py install
-c:\Python36\Scripts\pip3.6.exe install pyQT5
-exe
-c:\Python36\Scripts\pip3.6.exe install cx_Freeze
+pip install pymysql
+pip install pillow
+pip install pyQT5
+extract N:\_INVENT\DBAlbums\LIB\fpl_reader-master.zip
+python.exe setup.py install
+pip install cx_Freeze
 """
-from sys import platform, stdout, argv
+from sys import platform, stdout, argv, executable
 from os import system, path, getcwd, name, remove, walk
 from tkinter import (Tk, Toplevel, Label, Button, Checkbutton, Entry, Canvas, Grid, 
 					Frame, Scale, Menu, Text, StringVar, IntVar, FALSE, TRUE, 
@@ -57,35 +59,43 @@ from tkinter.filedialog import asksaveasfile
 from tkinter.ttk import Treeview, Combobox, Scrollbar, Separator, Style
 from tkinter.font import Font
 from threading import Thread
+from subprocess import check_call, call, Popen, PIPE
+from queue import Queue, Empty
 from pymysql import connect as connectmysql
 from sqlite3 import connect as connectsqlite3
-from subprocess import check_call, call, Popen, PIPE
+from logging import DEBUG, basicConfig, info
 from datetime import datetime
+from time import sleep
 from PIL import Image, ImageTk, ImageDraw, ImageFont
 from csv import writer, QUOTE_ALL
 from io import BytesIO
 from base64 import b64decode, decodestring, b64encode
-from time import sleep
-from queue import Queue, Empty
 from hashlib import md5
 from configparser import ConfigParser
-# dev ext
-from fpl_reader import read_playlist
-# functions dev
-from DBAlbumsPlayer import PlayerProcess, PlayerAudio
-from DBAlbumsCopyDatabaseToSqlite import CopyDatabaseInvent
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt, QUrl
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QPushButton, QSlider, 
+						QStyle, QWidget, QLCDNumber)
+from fpl_reader import read_playlist # dev ext https://github.com/rr-/fpl_reader
 
 
 ###################################################################
 # CONSTANTS
-PATH_PROG = path.dirname(__file__)
-LOGS_PROG = path.join(PATH_PROG, 'Logs')
-BASE_SQLI = path.join(PATH_PROG, 'local', "Invent_{envt}.db")
+# path
+if getattr(system, 'frozen', False):
+	# frozen
+	PATH_PROG = path.dirname(executable)
+else:
+	# unfrozen
+	PATH_PROG = path.realpath(path.dirname(argv[0]))
+	#PATH_PROG = path.dirname(__file__)
+LOGS_PROG = path.join(PATH_PROG, 'LOG')
+BASE_SQLI = path.join(PATH_PROG, 'LOC', "Invent_{envt}.db")
 PWSH_SCRI = path.join(PATH_PROG, 'PS1', "BUILD_INVENT_{mod}.ps1")
 PWSH_SCRU = path.join(PATH_PROG, 'PS1', "UPDATEALBUMS.ps1")
 FOOB_UPSC = path.join(PATH_PROG, 'SQL', "DBAlbums_FOOBAR_UPADTESCORE.sql")
 MASKCOVER = ('.jpg','.jpeg','.png','.bmp','.tif','.bmp','.tiff')
-
 # Read File DBAlbums.ini
 FILE__INI = 'DBAlbums.ini'
 readIni = ConfigParser()
@@ -134,9 +144,9 @@ for envt in readIni['environments']:
 A_POSITIO = {'Category'		: 0, 'Family'		: 1,
 			'Name'			: 2, 'Label'		: 3,
 			'ISRC'			: 4, 'Year'			: 5,
-			'Size'			: 6, 'Length'		: 7,
-			'Qty_CD'		: 8, 'Qty_Tracks'	: 9,
-			'Qty_covers'	: 10,'Score'		: 11,
+			'Length'		: 6, 'Qty_CD'		: 7,
+			'Qty_Tracks'	: 8, 'Qty_covers'	: 9,
+			'Score'			: 10, 'Size'		: 11,
 			'Typ_Tag'		: 12,'Position'		: 13,
 			'Date_Insert'	: 14,'Date_Modifs'	: 15,
 			'Path'			: 16,'Cover'		: 17,
@@ -147,23 +157,25 @@ T_POSITIO = {'ODR_Track'	: 0, 'TAG_Artists'	: 1,
 			 'FIL_Track'	: 6, 'REP_Track'	: 7, 
 			 'ID_TRACK'		: 8}
 #  treeview columns width
-A_C_WIDTH = (60,60,270,90,60,40,35,50,25,25,30,30,30,80,67,67,200,200,200)
+A_C_WIDTH = (60,60,250,100,80,40,50,30,30,30,30,30,30,67,67,200,200,200,200)
 T_C_WIDTH = (50,150,200,60,30,70,200,200)
 
 # REQUESTS
 #  autocompletion VW_DBCOMPLETION
 S_REQUEST = "SELECT Synthax FROM VW_DBCOMPLETLISTPUB ORDER BY Synthax"
 #  list albums mysql DBALBUMS
-A_REQUEST = "SELECT Category, Family, Name, Label, ISRC, `Year`, Size, Length, Qty_CD AS `CD`, " \
-			"Qty_Tracks AS Trks, Qty_covers AS Pic, Score As SCR, Typ_Tag AS Tag, " \
+A_REQUEST = "SELECT Category, Family, Name, Label, ISRC, `Year`, Length, Qty_CD AS `CD`, " \
+			"Qty_Tracks AS Trks, Qty_covers AS Pic, Score As SCR, Size, Typ_Tag AS Tag, " \
+			"Date_Insert AS `Add`, Date_Modifs AS `Modified`, " \
 			"CONCAT(Position1,'\\\\',Position2) AS Position, " \
-			"Date_Insert AS `Add`, Date_Modifs AS `Modified`, Path, Cover, `MD5`, ID_CD AS ID " \
+			"Path, Cover, `MD5`, ID_CD AS ID " \
 			"FROM DBALBUMS ORDER BY Date_Insert DESC"
 #  list albums sqllite DBALBUMS
-Z_REQUEST = "SELECT Category, Family, Name, Label, ISRC, `Year`, Size, Length, Qty_CD AS `CD`, " \
-			"Qty_Tracks AS Trks, Qty_covers AS Pic, Score As SCR, Typ_Tag AS Tag, " \
+Z_REQUEST = "SELECT Category, Family, Name, Label, ISRC, `Year`, Length, Qty_CD AS `CD`, " \
+			"Qty_Tracks AS Trks, Qty_covers AS Pic, Score As SCR, Size, Typ_Tag AS Tag, " \
+			"Date_Insert AS `Add`, Date_Modifs AS `Modified`, " \
 			"Position1 || '\\' || Position2 AS Position, " \
-			"Date_Insert AS `Add`, Date_Modifs AS `Modified`, Path, Cover, `MD5`, ID_CD AS ID " \
+			"Path, Cover, `MD5`, ID_CD AS ID " \
 			"FROM DBALBUMS ORDER BY Date_Insert DESC"
 #  list tracks mysql/sqllite
 T_REQUEST = "SELECT ODR_Track AS `N°`, TAG_Artists AS Artist, TAG_Title AS Tittle, TAG_length AS Length, " \
@@ -182,6 +194,89 @@ V_REQUEST = "UPDATE DBTRACKS SET `Score`={score} WHERE `ID_TRACK`={id}"
 F_REQUEST = "INSERT INTO DBFOOBAR (Playlist, Path, FIL_Track, Name , MD5, TAG_Album, TAG_Artists, TAG_Title) " \
 			"VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
+###################################################################
+# PLAYER PQT5
+class PlayerAudio(QWidget):
+	def __init__(self, filePath, fileName, x=0, y=0):
+		super(PlayerAudio, self).__init__()
+		
+		# media
+		self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.LowLatency)
+		
+		# windows
+		self.setFixedSize(400, 40)
+		self.setWindowIcon(QIcon(WINS_ICO))
+		self.setWindowFlags(Qt.WindowStaysOnTopHint)
+		self.setWindowTitle(TITL_PROG)
+		self.move(x, y)
+		# mm:ss
+		self.lcd = QLCDNumber(self)
+		self.lcd.display("00:00")
+		# button
+		self.playButton = QPushButton()
+		self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+		self.playButton.clicked.connect(self.play)
+		# slider position
+		self.positionSlider = QSlider(Qt.Horizontal, self)
+		self.positionSlider.setRange(0, 0)
+		self.positionSlider.sliderMoved.connect(self.setPosition)
+		self.positionSlider.valueChanged.connect(self.lcddisplay)
+		# order display
+		PlayerLayout = QHBoxLayout()
+		PlayerLayout.setContentsMargins(5, 5, 5, 5)
+		PlayerLayout.addWidget(self.playButton)
+		PlayerLayout.addWidget(self.lcd)
+		PlayerLayout.addWidget(self.positionSlider)
+		self.setLayout(PlayerLayout)
+		# display
+		self.show()
+		
+		# link media
+		self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
+		self.mediaPlayer.positionChanged.connect(self.positionChanged)
+		self.mediaPlayer.durationChanged.connect(self.durationChanged)
+		
+		# autoplay
+		self.insertMedia(path.join(filePath,fileName))
+
+	
+	def insertMedia(self, media):
+		self.mediaPlayer.pause()
+		self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(media)))
+		self.setWindowTitle('playing "'+path.basename(media)+'"')
+		self.mediaPlayer.play()
+	
+	def play(self):
+		if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+			self.mediaPlayer.pause()
+		else:
+			self.mediaPlayer.play()
+	
+	def mediaStateChanged(self, state):
+		if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+			self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
+		else:
+			self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+	
+	def positionChanged(self, position):
+		self.positionSlider.setValue(position)
+	
+	def durationChanged(self, duration):
+		self.positionSlider.setRange(0, duration)
+	
+	def setPosition(self, position):
+		self.mediaPlayer.setPosition(position)
+	
+	def lcddisplay(self, position):
+		seconds = position // 1000
+		minutes = seconds // 60
+		total_p = "%02d:%02d" % (minutes, seconds % 60)
+		self.lcd.display(str(total_p))
+
+def PlayerProcess(filePath, fileName, x=0, y=0):
+	app = QApplication(argv)
+	player = PlayerAudio(filePath, fileName, x, y)
+	app.exec_()
 
 ###################################################################
 # FUNCTIONS
@@ -228,6 +323,104 @@ def ConnectInvent(envt):
 		con = connectsqlite3(BASE_SQLI.format(envt=envt))
 	
 	return con, MODE_SQLI
+
+def CopyDatabaseInvent(conMySQL, BaseNameSQLite, BarGauge, logname):
+	basicConfig(filename=logname,
+							filemode='a',
+							format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+							datefmt='%H:%M:%S',
+							level=DEBUG)
+	info ('Create/Update Database '+BaseNameSQLite)
+	BarGauge.open()
+	con = connectsqlite3(BaseNameSQLite)
+	NAME_TABL = "DBALBUMS"
+	BarGauge.update(0.05)
+	BarGauge.settitle('Create Table '+NAME_TABL+' in progress...')
+	info ('Create '+NAME_TABL)
+	Tabs =  BuildTabFromRequest(conMySQL, "SELECT * FROM "+NAME_TABL)
+	with con:
+		cur = con.cursor()    
+		cur.execute("DROP TABLE IF EXISTS {t}".format(t=NAME_TABL))
+		cur.execute("CREATE TABLE DBALBUMS(ID_CD INTEGER PRIMARY KEY AUTOINCREMENT, MD5 TEXT, Family TEXT, Category TEXT, Position1 TEXT, Position2 TEXT, Name TEXT, Label TEXT, ISRC TEXT, Year TEXT, Qty_CD INT,Qty_Cue INT,Qty_CueERR INT, Qty_repMusic INT, Qty_Tracks INT, Qty_audio INT, Typ_Audio TEXT, Qty_repCover, Qty_covers, Cover TEXT, Path TEXT, Size INT, Duration TEXT, Length TEXT, Typ_Tag TEXT, Date_Insert DATETIME, Date_Modifs DATETIME, RHDD_Modifs DATETIME, Score INT, Statut TEXT)")
+		cur.executemany("INSERT INTO DBALBUMS VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", Tabs)
+		cur.execute("CREATE INDEX DBALBUMS_ndx_Date_Insert ON DBALBUMS(Date_Insert)")
+		con.commit() 
+	
+	NAME_TABL = "DBTRACKS"
+	BarGauge.update(0.25)
+	BarGauge.settitle('Create Table '+NAME_TABL+' in progress...')
+	info ('Create '+NAME_TABL)
+	Tabs =  BuildTabFromRequest(conMySQL, "SELECT * FROM "+NAME_TABL)
+	with con:
+		cur = con.cursor()    
+		cur.execute("DROP TABLE IF EXISTS {t}".format(t=NAME_TABL))
+		cur.execute("CREATE TABLE DBTRACKS(ID_CD INT,ID_TRACK INTEGER PRIMARY KEY AUTOINCREMENT, Family TEXT, Category TEXT, Position1 TEXT, Position2 TEXT, REP_Album TEXT, REP_Track TEXT,FIL_Track TEXT,TAG_Exten TEXT,TAG_Album TEXT, TAG_Albumartists TEXT, TAG_Year TEXT,TAG_Disc INT, TAG_Track INT,ODR_Track TEXT, TAG_Artists TEXT,TAG_Title TEXT,TAG_Genres TEXT,TAG_Duration TEXT,TAG_length TEXT,Score INT,Date_Insert DATETIME, Statut TEXT, FOREIGN KEY(ID_CD) REFERENCES DBALBUMS(ID_CD))")
+		cur.executemany("INSERT INTO DBTRACKS VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", Tabs)
+		cur.execute("CREATE INDEX DBTRACKS_ndx_idcd ON DBTRACKS(ID_CD)")
+	con.commit() 
+	
+	NAME_TABL = "DBFOOBAR"
+	BarGauge.update(0.5)
+	BarGauge.settitle('Create Table '+NAME_TABL+' in progress...')
+	info ('Create '+NAME_TABL)
+	Tabs =  BuildTabFromRequest(conMySQL, "SELECT * FROM "+NAME_TABL)
+	with con:
+		cur = con.cursor()
+		cur.execute("DROP TABLE IF EXISTS {t}".format(t=NAME_TABL))
+		cur.execute("CREATE TABLE {t}(ID_FOO INTEGER PRIMARY KEY AUTOINCREMENT, MD5 TEXT, Name TEXT, Path TEXT, FIL_Track TEXT, Playlist TEXT, TAG_Album TEXT, TAG_Artists TEXT, TAG_Title TEXT, Date_insert TIMESTAMP DEFAULT CURRENT_TIMESTAMP)".format(t=NAME_TABL))
+		cur.executemany("INSERT INTO {t} VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)".format(t=NAME_TABL), Tabs)
+		cur.execute("CREATE INDEX DBFOOBAR_ndx_FIL_Track ON DBFOOBAR(FIL_Track)")
+	con.commit() 
+	
+	NAME_TABL = "DBFOOBOR"
+	BarGauge.update(0.6)
+	BarGauge.settitle('Create Table '+NAME_TABL+' in progress...')
+	info ('Create '+NAME_TABL)
+	Tabs =  BuildTabFromRequest(conMySQL, "SELECT * FROM "+NAME_TABL)
+	with con:
+		cur = con.cursor()
+		cur.execute("DROP TABLE IF EXISTS {t}".format(t=NAME_TABL))
+		cur.execute("CREATE TABLE {t}(FIL_Track TEXT, FIL_TrackM TEXT)".format(t=NAME_TABL))
+		cur.executemany("INSERT INTO {t} VALUES(?, ?)".format(t=NAME_TABL), Tabs)
+	con.commit() 
+	
+	NAME_TABL = "DBCOVERS"
+	BarGauge.update(0.75)
+	BarGauge.settitle('Create Table '+NAME_TABL+' in progress...')
+	info ('Create '+NAME_TABL)
+	Tabs =  BuildTabFromRequest(conMySQL, "SELECT * FROM "+NAME_TABL)
+	with con:
+		cur = con.cursor()
+		cur.execute("DROP TABLE IF EXISTS {t}".format(t=NAME_TABL))
+		cur.execute("CREATE TABLE {t}(MD5 TEXT, Cover64 BLOB, MiniCover64 BLOB)".format(t=NAME_TABL))
+		cur.executemany("INSERT INTO {t} VALUES(?, ?, ?)".format(t=NAME_TABL), Tabs)
+		cur.execute("CREATE UNIQUE INDEX DBCOVERS_ndx_md5 ON DBCOVERS(MD5)")
+	con.commit() 
+	
+	NAME_TABL = "VW_DBCOMPLETLISTPUB"
+	BarGauge.update(0.9)
+	BarGauge.settitle('Create Table '+NAME_TABL+' in progress...')
+	info ('Create '+NAME_TABL)
+	Tabs =  BuildTabFromRequest(conMySQL, "SELECT * FROM "+NAME_TABL)
+	with con:
+		cur = con.cursor()
+		cur.execute("DROP TABLE IF EXISTS {t}".format(t=NAME_TABL))
+		cur.execute("CREATE TABLE {t}(Synthax TEXT)".format(t=NAME_TABL))
+		cur.executemany("INSERT INTO {t} VALUES(?)".format(t=NAME_TABL), Tabs)
+	con.commit() 
+	
+	BarGauge.update(1)
+	BarGauge.settitle('Create DataBase Completed: '+BaseNameSQLite)
+	info("test")
+	with con:
+		cur = con.cursor()    
+		cur.execute("SELECT * FROM VW_DBCOMPLETLISTPUB;")
+	con.commit()
+	row = cur.fetchall()
+	info (row[0])
+	
+	con.close()
+	BarGauge.close()
 
 def GetListColumns(con, req, rowid):
 	"""List columns from request MySQL/Sqlite."""
@@ -365,9 +558,26 @@ def DisplayCounters(num = 0, text = '' ):
 	return (strnum + strtxt)
 
 def DisplayStars(star, scorelist):
+	"""scoring."""
 	max = len(scorelist)-1
 	txt_score =  scorelist[star]
 	return (txt_score+'  '+star*'★'+(max-star)*'☆')
+
+def AlbumNameExtract(name, label, isrc, nbcd):
+	"""buil label name & album name."""
+	infoslabel = ""
+	if label!="":
+		infoslabel = label + ' • '
+	if isrc!="":
+		infoslabel += isrc + ' • '
+	if '[' in name:
+		infosalbum = name[name.find('[')+1:name.find(']')]
+		albumnamet = name.replace('['+infosalbum+']','')
+		infoslabel += infosalbum.replace('-',' • ')
+	else:
+		albumnamet = name
+	albumnamet = albumnamet.replace('('+nbcd+'CD)','').replace(nbcd+'CD','')
+	return (albumnamet, infoslabel)
 
 def BuildIco(Gui):
 	"""Icon windows or linux/mac."""
@@ -446,6 +656,7 @@ def foobarBuildTracksList(folder):
 	trackslist = []
 	playfiles = list(GetListFiles(folder,(".fpl",)))
 	for playfile in playfiles:
+		print(playfile)
 		trackslist += foobarGetListfilesFromPlaylist(playfile)
 	return(trackslist)
 
@@ -608,7 +819,7 @@ class VerticalScrolledFrame(Frame):
 		self.canv.yview_moveto(0)
 		
 		# creating a frame to inserto to canvas
-		self.interior = Frame(self.canv)
+		self.interior = Frame(self.canv, width = canv_w, heigh = canv_h)
 		self.canv.create_window(0, 0, window = self.interior, anchor=N+W)
 		self.interior.bind('<Configure>', self._configure_window)  
 		self.interior.bind('<Enter>', self._bound_to_mousewheel)
@@ -641,6 +852,8 @@ class ProgressBar():
 		self.__root.geometry("{w}x{h}".format(w=width+5,h=height+5))
 		self.__root.resizable(False, False)
 		self.__root.attributes('-topmost', True)
+		self.__root.attributes("-toolwindow", 1)
+		self.__root.protocol('WM_DELETE_WINDOW', self.hide)
 		self.__root.title('Wait please...')
 		BuildIco(self.__root)
 		CenterWindows(self.__root)
@@ -648,7 +861,10 @@ class ProgressBar():
 		self.__canvas.grid()
 		self.__width = width
 		self.__height = height
-	
+		
+	def hide(self):
+		self.__root.withdraw()
+		
 	def settitle(self, title):
 		self.__root.title(title)
 	
@@ -679,12 +895,13 @@ class LoadingGui():
 		self.MyTopLevel.title("Loading Datas")
 		self.MyTopLevel.resizable(width=False, height=False)
 		self.MyTopLevel.overrideredirect(True)
+		self.MyTopLevel.bind("<F1>", self.HideLoadingGui)
+		self.MyTopLevel.bind("<Escape>", self.HideLoadingGui)
+		self.MyTopLevel.bind("<Button-1>", self.HideLoadingGui)
 		# logo + message
 		customFont = Font(family="Calibri", size=14)
 		cadretittle = Frame(self.MyTopLevel, width=380, height=100)
 		cadretittle.pack(fill=BOTH)
-		cadretittle.bind("<Button-1>", self.HideLoadingGui)
-		cadretittle.bind("<Button-3>", self.HideLoadingGui)
 		monimage = Image.open(UNIX_ICO)
 		monimage = monimage.resize((100, 100), Image.ANTIALIAS)
 		photo = ImageTk.PhotoImage(monimage)
@@ -972,7 +1189,7 @@ class DisplaySubprocessGui():
 				if line.startswith('*') or ('****' in line):
 					ltag = 'com'
 				else:
-					if (line.lstrip()).startswith('|'):
+					if (line.lstrip()).startswith('|') or ('(U)' in line) or ('(N)' in line):
 						ltag = 'nfo'
 					else:
 						if 'error:' in line:
@@ -1005,23 +1222,27 @@ class DisplaySubprocessGui():
 class CoverMainGui(Tk):
 	"""Fenetre principale."""
 	def __init__(self , master):
+		# WINDOWS
 		Tk.__init__(self , master)
 		self.master = master
 		self.title(TITL_PROG +' : initialisation...')
 		# Icone
 		BuildIco(self)
+		# dimensions
 		self.resizable(width=True, height=True)
 		self.geometry("{w}x{h}".format(w=WIDT_MAIN, h=HEIG_MAIN))
 		self.minsize(width=WIDT_MAIN, height=HEIG_MAIN)
+		self.protocol("WM_DELETE_WINDOW", self.QuitDBAlbums)
 		CenterWindows(self)
 		self.bind("<F5>", self.RefreshBase)
+		self.bind("<F1>", self.showloadingWin)
+		self.bind("<F11>", self.ChangeDisplayNoList)
 		self.withdraw()
-		
 		# Style
 		s=Style()
 		s.theme_use('clam')
 		
-		# Var
+		### INIT VAR
 		self.labels = []
 		self.Envs = None
 		self.tplay = None
@@ -1029,81 +1250,96 @@ class CoverMainGui(Tk):
 		self.curalbmd5 = None
 		self.CurentTrack = None
 		
+		#### INIT CONNECT
+		self.con = None
+		self.con, self.MODE_SQLI = ConnectInvent(NAME_EVT[CURT_EVT])
+		
+		### DISPLAY GUI
+		self.displaygui()
+		
+		#### LOADING ENVT
+		self.ConnectEnvt()
+		
+		#### INIT PROGRESS BAR
+		self.bargauge = ProgressBar()
+		self.bargauge.close()
+	
+	def displaygui(self):
 		#### SAISIE
-		cadresaisie = Frame(self)
-		cadresaisie.pack(fill=BOTH)
+		self.cadresaisie = Frame(self)
+		self.cadresaisie.pack(fill=BOTH)
 		# Label
-		labelDir = Label(cadresaisie, text="Search")
+		labelDir = Label(self.cadresaisie, text="Search")
 		labelDir.pack(side="left", padx=5, pady=5)
 		# ligne de saisie
 		self.var_texte = StringVar(None)
-		self.ligne_texte = AutocompleteEntry(cadresaisie, textvariable=self.var_texte, width=27)
+		self.ligne_texte = AutocompleteEntry(self.cadresaisie, textvariable=self.var_texte, width=27)
 		self.ligne_texte.bind("<Return>", self.OnPressEnter)
 		self.ligne_texte.focus_set()
 		self.ligne_texte.pack(side="left", padx=5, pady=5)
 		# + search tracks
 		self.searchtracks = IntVar()
 		self.searchtracks.set(0)
-		Checkbutton(cadresaisie, text="In Tracks", variable = self.searchtracks).pack(side=LEFT,padx=5,pady=5)
+		Checkbutton(self.cadresaisie, text="In Tracks", variable = self.searchtracks).pack(side=LEFT,padx=5,pady=5)
 		# buttons
-		btn_search = Button(cadresaisie, text='Search...', width=19, command = self.GetSearchAlbums)
+		btn_search = Button(self.cadresaisie, text='Search...', width=19, command = self.GetSearchAlbums)
 		btn_search.pack(side="left", padx=5, pady=5)
 		# combo Category
 		self.Combostyle_value = StringVar()
-		self.Combostyle = Combobox(cadresaisie, textvariable=self.Combostyle_value, state='readonly')
+		self.Combostyle = Combobox(self.cadresaisie, textvariable=self.Combostyle_value, state='readonly')
 		self.Combostyle.bind("<<ComboboxSelected>>", self.OnPressEnter)
 		self.Combostyle.pack(side="left", padx=5, pady=5)
 		self.Combostyle['values'] = DISP_CJOKER
 		self.Combostyle.current(0)
 		# combo Family
 		self.Combofamily_value = StringVar()
-		self.Combofamily = Combobox(cadresaisie, textvariable=self.Combofamily_value, state='readonly')
+		self.Combofamily = Combobox(self.cadresaisie, textvariable=self.Combofamily_value, state='readonly')
 		self.Combofamily.bind("<<ComboboxSelected>>", self.OnPressEnter)
 		self.Combofamily.pack(side="left", padx=5, pady=5)
 		self.Combofamily['values'] = DISP_CJOKER
 		self.Combofamily.current(0)
 		# combo Label
 		self.Combolabelm_value = StringVar()
-		self.Combolabelm = Combobox(cadresaisie, textvariable=self.Combolabelm_value, state='readonly')
+		self.Combolabelm = Combobox(self.cadresaisie, textvariable=self.Combolabelm_value, state='readonly')
 		self.Combolabelm.bind("<<ComboboxSelected>>", self.OnPressEnter)
 		self.Combolabelm.pack(side="left", padx=5, pady=5)
 		self.Combolabelm['values'] = DISP_CJOKER
 		self.Combolabelm.current(0)
 		# combo year
 		self.Comboyearc_value = StringVar()
-		self.Comboyearc = Combobox(cadresaisie, textvariable=self.Comboyearc_value, state='readonly')
+		self.Comboyearc = Combobox(self.cadresaisie, textvariable=self.Comboyearc_value, state='readonly')
 		self.Comboyearc.bind("<<ComboboxSelected>>", self.OnPressEnter)
 		self.Comboyearc.pack(side="left", padx=5, pady=5)
 		self.Comboyearc['values'] = DISP_CJOKER
 		self.Comboyearc.current(0)
 		# combo environments
 		self.combo_value = StringVar()
-		self.combo = Combobox(cadresaisie, textvariable=self.combo_value, state='readonly')
+		self.combo = Combobox(self.cadresaisie, textvariable=self.combo_value, state='readonly')
 		self.combo['values'] = NAME_EVT
 		self.combo.current(CURT_EVT)
 		# popup menu base
-		self.bMenu = Menu(cadresaisie, tearoff=0)
-		self.bMenu.add_command(label="Show Informations...", command=self.showloadingWin)
-		self.bMenu.add_command(label="Refresh Albums List...", command=self.RefreshBase)
+		self.bMenu = Menu(self.cadresaisie, tearoff=0)
+		self.bMenu.add_command(label="Show Informations  [F1]", command=self.showloadingWin)
+		self.bMenu.add_command(label="Reload base Albums [F5]", command=self.RefreshBase)
 		self.bMenu.add_command(label="Update Base (powershell)...", command=self.BuildInvent)
-		self.bMenu.add_command(label="Create Local base sqlite", command=self.CreateLocalBase)
+		self.bMenu.add_command(label="Create sqlite database", command=self.CreateLocalBase)
 		self.bMenu.add_command(label="Import Foobar Playlists, Update Score...", command=self.ImportFoobar)
 		self.bMenu.add_command(label="Edit %s..." % FILE__INI, command=self.EditINI)
+		self.bMenu.add_command(label="Open Logs Folder...", command=self.GetFolderLogs)
 		self.combo.bind("<<ComboboxSelected>>", self.OnComboEnvtChange)
 		self.combo.bind("<Button-3>", self.popupbase)
 		self.combo.pack(side=RIGHT, padx=15, pady=5)
-		
-		#### CONNECT
-		self.con = None
-		self.con, self.MODE_SQLI = ConnectInvent(self.combo_value.get())
+		Separator(self.master ,orient=HORIZONTAL).pack(side=TOP, fill=BOTH)
 		
 		#### LIST ALBUMS
-		Separator(self.master ,orient=HORIZONTAL).pack(side=TOP, fill=BOTH)
-		self.frameThunbnails = VerticalScrolledFrame(self.master , None, None)#WIDT_MAIN ,WIDT_PICM*2+3*2)
-		self.frameThunbnails.pack(side=TOP, anchor=W, fill=BOTH, expand=TRUE, padx=0, pady=0)
+		# thunbnails
+		#self.frameThunbnails = VerticalScrolledFrame(self.master , None, None)#WIDT_MAIN ,WIDT_PICM*2+3*2)
+		self.frameThunbnails = VerticalScrolledFrame(self.master , WIDT_MAIN ,(WIDT_PICM*2)+8)
+		self.frameThunbnails.pack(side=TOP, anchor=W, fill=BOTH, expand=FALSE)
+		self.frameThunbnails.bind("<Configure>",self.resizeframeThunbnails)
+		# list
 		self.framealbumlist = Frame(self)
-		self.framealbumlist.pack(side=TOP, anchor=W, fill=BOTH, expand=TRUE)
-		self.framealbumlist.bind("<Configure>",self.resizeframeThunbnails)
+		self.framealbumlist.pack(side=TOP, anchor=W, fill=BOTH, expand=FALSE)
 		# tree : compatibilité sqllite
 		self.tree = BuildTree(self.con, self.framealbumlist, (Z_REQUEST if self.MODE_SQLI else A_REQUEST), A_C_WIDTH, 10, 'ID', True)
 		# popup menu album
@@ -1113,6 +1349,7 @@ class CoverMainGui(Tk):
 		self.aMenu.add_command(label="Export Album...", command=self.ExportAlbums)
 		self.aMenu.add_command(label="Update Album...", command=self.UpdateAlbum)
 		self.aMenu.add_command(label="Edit Tags (TagScan)...", command=self.OpenTagScan)
+		self.aMenu.add_command(label="No Display list [F11]", command=self.ChangeDisplayNoList)
 		self.tree.bind("<Button-3>", self.popuptreealbum)
 		self.tree.bind("<<TreeviewSelect>>", self.OnTreeSelectAlbum)
 		self.tree.pack(side=TOP, anchor=W, padx=0, pady=0, expand=TRUE, fill=BOTH)
@@ -1120,7 +1357,7 @@ class CoverMainGui(Tk):
 		#### INFOS ALBUM 
 		# COVER
 		self.cadrealbum = Frame(self)
-		self.cadrealbum.pack(fill=BOTH)
+		self.cadrealbum.pack(side=TOP, anchor=W, fill=BOTH, expand=FALSE)
 		self.labcover = Label(self.cadrealbum)
 		self.labcover.pack(side=LEFT, padx=0, pady=0)
 		self.labcover.bind("<Button-1>", self.OnPressCover)
@@ -1160,7 +1397,7 @@ class CoverMainGui(Tk):
 		self.treealb.pack(side=BOTTOM, anchor=W, fill=BOTH, padx=0, pady=0)
 		# SCORE TRACK
 		self.cadrescoretrack = Frame(self)
-		self.cadrescoretrack.pack(fill=BOTH, side=TOP)
+		self.cadrescoretrack.pack(side=TOP, fill=BOTH)
 		self.postrack_scale = Scale( self.cadrescoretrack,
 										command=self.ModifyScoreTrack, 
 										showvalue=0, 
@@ -1174,18 +1411,13 @@ class CoverMainGui(Tk):
 		self.scoretrack_label.pack(side=RIGHT, padx=5, pady=5)
 		self.btn_enrscrtrk = Button(self.cadrescoretrack, text='Update', command = self.OnPressButtonEnrScoreTrack)
 		self.ScoreTrack = 0
+		
 		# Status Bar
 		self.StatusBar = Frame(self)
-		self.StatusBar.pack(fill=BOTH, side=TOP)
+		self.StatusBar.pack(fill=BOTH, anchor=S+W, side=BOTTOM)
 		self.MessageInfo = StringVar()
 		self.MessageInfo_label = Label(self.StatusBar, textvariable=self.MessageInfo, anchor=W, font=self.customFont, bd=1, relief=SUNKEN)
-		self.MessageInfo_label.pack(fill=X, padx=5, pady=5) 
-		# Gauge progress
-		self.bargauge = ProgressBar()
-		self.bargauge.close()
-		
-		#### LOADING ENVT
-		self.ConnectEnvt()
+		self.MessageInfo_label.pack(fill=X, padx=5, pady=5)
 	
 	def resizeframeThunbnails(self, event):
 		if len(self.labels)>0:
@@ -1525,6 +1757,28 @@ class CoverMainGui(Tk):
 									listlabel.append(row[A_POSITIO['Label']]) 
 								if row[A_POSITIO['Year']] not in listeyear:
 									listeyear.append(row[A_POSITIO['Year']])
+								# MODIFICATIONS DISPLAY ALBUM NAME, LABEL, ISRC
+								albumname = row[A_POSITIO['Name']]
+								label = isrc = None
+								if len(albumname.split('['))==2 and albumname[0]!='[':
+									label = albumname.split('[')[1].split(']')[0]
+									albumname = albumname.split('[')[0]
+									if len(label.split(' - '))==2:
+										isrc = label.split(' - ')[1]
+										label = label.split(' - ')[0]
+									else:
+										# LABEL OR ISRC (digit?)
+										if any(char.isdigit() for char in label):
+											isrc = label
+											label = ''
+									# FILL LISTS COMBOS LABEL EXTRA
+									if label not in listlabel:
+										listlabel.append(label)
+								self.tree.set(row[A_POSITIO['ID_CD']], column=A_POSITIO['Name'], value=albumname)
+								if row[A_POSITIO['Label']]=='':
+									self.tree.set(row[A_POSITIO['ID_CD']], column=A_POSITIO['Label'], value=label)
+								if row[A_POSITIO['ISRC']]=='':
+									self.tree.set(row[A_POSITIO['ID_CD']], column=A_POSITIO['ISRC'], value=isrc)
 								# COUNTERS
 								counter += 1
 								cpt_cds += row[A_POSITIO['Qty_CD']]
@@ -1549,12 +1803,7 @@ class CoverMainGui(Tk):
 		# DISPLAY STATS SEARCH
 		if counter > 0:
 			# info size
-			if int((cpt_siz/1024/1024)*10)/10 < 1:
-				# Mo -> Go
-				txt_siz = str(int((cpt_siz/1024)*10)/10) +' Go'
-			else:
-				# Mo -> To
-				txt_siz = str(int((cpt_siz/1024/1024)*10)/10) +' To'
+			txt_siz = str(int(cpt_siz/1024)) +' Go'
 			# info time
 			if int(((cpt_len/60/60)/24)*10)/10 < 1:
 				# seoncd -> Hours
@@ -1630,14 +1879,17 @@ class CoverMainGui(Tk):
 					cpt_len += sum(int(x) * 60 ** i for i,x in enumerate(reversed(track[3].split(":"))))
 				# first line by defaut
 				if counter > 0: self.CurentTrack = self.treealb.get_children()[0]
+				# extract infos label
+				albumnamet, infoslabel = AlbumNameExtract(self.albumname, str(curLign['values'][A_POSITIO['Label']]), 
+																		str(curLign['values'][A_POSITIO['ISRC']]),
+																		str(curLign['values'][A_POSITIO['Qty_CD']]))
 				# MAJ ALBUM NAME
-				txt_album = self.albumname + "\n{year} • {tracks} • {dur} • {cd} • {art}\n{lab} • {num}".format(year=str(curLign['values'][A_POSITIO['Year']]),
+				txt_album = albumnamet + "\n{year} • {tracks} • {dur} • {cd} • {art}\n{lab}".format(year=str(curLign['values'][A_POSITIO['Year']]),
 																		tracks = DisplayCounters(counter, 'track'),
 																		dur = DisplayCounters(int(((cpt_len/60)*10)/10),'min'),
 																		cd = DisplayCounters(curLign['values'][A_POSITIO['Qty_CD']], 'CD'),
 																		art = DisplayCounters(curLign['values'][A_POSITIO['Qty_covers']], 'ArtWork'),
-																		lab = 'Label '+ str(curLign['values'][A_POSITIO['Label']]),
-																		num = str(curLign['values'][A_POSITIO['ISRC']]))
+																		lab = infoslabel)
 				self.stralbumname.set(txt_album)
 				# MAJ COVERS
 				monimage = BuildCover(self.con, self.pathcover, self.curalbmd5)
@@ -1693,10 +1945,14 @@ class CoverMainGui(Tk):
 			self.postrack_scale.set(self.ScoreTrack)
 			self.ScoTracklb.set(DisplayStars(self.ScoreTrack, SCOR_TRACKS))
 			self.postrack_scale.config(state='disabled')
-		
+	
 	def GetFolder(self):
 		"""Ouvre dossier album dans l'explorateur."""
 		openFolder(self.AlbumPath)
+	
+	def GetFolderLogs(self):
+		"""Ouvre dossier logs dans l'explorateur."""
+		openFolder(LOGS_PROG)
 	
 	def OpenTagScan(self):
 		"""Ouvre program edit TAGs."""
@@ -1705,6 +1961,27 @@ class CoverMainGui(Tk):
 	def EditINI(self):
 		"""Edit INI FILE."""
 		RunProgExecWin(EDIT_TEXT, FILE__INI)
+	
+	def ChangeDisplayNoList(self, event=None):
+		"""modifiy thunbnails display."""
+		self.framealbumlist.pack_forget()
+		self.frameThunbnails.pack(expand=TRUE)
+		self.aMenu.entryconfig(5, label="Display list [F11]", command=self.ReinitDisplay)
+		self.bind("<F11>", self.ReinitDisplay)
+	
+	def ReinitDisplay(self, event=None):
+		self.frameThunbnails.pack_forget()
+		self.cadrealbum.pack_forget()
+		self.cadrescoretrack.pack_forget()
+		self.StatusBar.pack_forget()
+		
+		self.frameThunbnails.pack(side=TOP, anchor=W, fill=BOTH, expand=FALSE)
+		self.framealbumlist.pack(side=TOP, anchor=W, fill=BOTH, expand=FALSE)
+		self.cadrealbum.pack(side=TOP, anchor=W, fill=BOTH, expand=FALSE)
+		self.cadrescoretrack.pack(side=TOP, fill=BOTH)
+		self.StatusBar.pack(side=BOTTOM, anchor=S+W, fill=BOTH)
+		self.aMenu.entryconfig(7, label="No Display list [F11]", command=self.ChangeDisplayNoList)
+		self.bind("<F11>", self.ChangeDisplayNoList)
 	
 	def playmedia(self):
 		"""Player Audio thread pyQT5."""
@@ -1758,10 +2035,11 @@ class CoverMainGui(Tk):
 				BuildFileCover(self.con, filecover,Album['values'][A_POSITIO['MD5']], Album['values'][A_POSITIO['Score']])
 			remove(filename.name)
 	
-	def showloadingWin(self):
+	def showloadingWin(self, event=None):
 		"""Display stats base"""
 		self.loadingWin.update()
 		self.loadingWin.deiconify()
+		self.loadingWin.focus_set()
 	
 	def RefreshBase(self, event=None):
 		"""Recharge environnement."""
@@ -1816,15 +2094,14 @@ class CoverMainGui(Tk):
 		else:
 			# view artworks
 			CoversArtWorkViewGui(self.coverWin, self.AlbumPath, self.albumname, self.pathcover)
+	
+	def QuitDBAlbums(self):
+		self.con.close()
+		self.destroy()
 
 
 ###################################################################
 # START
 if __name__ == "__main__":
-	path.dirname(path.realpath(argv[0]))
-	#chdir(os.path.dirname(sys.argv[0]))
-	path.realpath(path.dirname(argv[0]))
 	app = CoverMainGui(None)
 	app.mainloop()
-	
-	
