@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Project SYSTEM "Project-5.1.dtd">
+<!-- eric project file for project DBAlbums QT5 -->
+<!-- Saved: 2018-06-01, 15:51:38 -->
+<!-- Copyright (C) 2018 ,  -->
+<Project version="5.1">
+  <Language>en_US</Language>
+  <Hash>398860a7099ed2e66a0052c51e54ce591a74535b</Hash>
+  <ProgLanguage mixed="0">Python3</ProgLanguage>
+  <ProjectType>PyQt5</ProjectType>
+  <Version>1.61</Version>
+  <Author></Author>
+  <Email></Email>
+  <Eol index="0"/>
+  <Sources>
+    <Source>DBAlbsMini.py</Source>
+    <Source>DBAlbumsQT5.pyw</Source>
+    <Source>DBArtworks.py</Source>
+    <Source>DBAuPlayer.py</Source>
+    <Source>DBDatabase.py</Source>
+    <Source>DBDragDrop.py</Source>
+    <Source>DBFoobarpl.py</Source>
+    <Source>DBFunction.py</Source>
+    <Source>DBModelAbs.py</Source>
+    <Source>DBPThreads.py</Source>
+    <Source>DBSLoading.py</Source>
+    <Source>DBTImpoALB.py</Source>
+    <Source>DBTImpoANA.py</Source>
+    <Source>DBTImpoCUE.py</Source>
+    <Source>DBTImpoLab.py</Source>
+    <Source>DBTImpoRUN.py</Source>
+    <Source>DBTImpoTAG.py</Source>
+    <Source>DBTImpoTRK.py</Source>
+    <Source>DBTImports.py</Source>
+    <Source>DBThunbnai.py</Source>
+    <Source>Ui_DBALBUMS.py</Source>
+    <Source>Ui_DBLOADING.py</Source>
+    <Source>Ui_DBUPDATE.py</Source>
+    <Source>__init__.py</Source>
+  </Sources>
+  <Forms>
+    <Form>DBALBUMS.ui</Form>
+    <Form>DBLOADING.ui</Form>
+    <Form>DBUPDATE.ui</Form>
+  </Forms>
+  <Others>
+    <Other>.gitignore</Other>
+    <Other>DBAlbums.e4p</Other>
+    <Other>DBHistory.txt</Other>
+    <Other>DBInstall.txt</Other>
+  </Others>
+  <MainScript>DBAlbumsQT5.pyw</MainScript>
+  <Vcs>
+    <VcsType>Git</VcsType>
+    <VcsOptions>
+      <dict>
+        <key>
+          <string>add</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>checkout</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>commit</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>diff</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>export</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>global</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>history</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>log</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>remove</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>status</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>tag</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>update</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+      </dict>
+    </VcsOptions>
+  </Vcs>
+  <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.e4p" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES"/>
+    <FiletypeAssociation pattern="*.md" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.proto" type="PROTOCOLS"/>
+    <FiletypeAssociation pattern="*.py" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.py3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.qm" type="TRANSLATIONS"/>
+    <FiletypeAssociation pattern="*.qrc" type="RESOURCES"/>
+    <FiletypeAssociation pattern="*.rst" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.ts" type="TRANSLATIONS"/>
+    <FiletypeAssociation pattern="*.txt" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.ui" type="FORMS"/>
+    <FiletypeAssociation pattern="GNUmakefile" type="OTHERS"/>
+    <FiletypeAssociation pattern="Makefile" type="OTHERS"/>
+    <FiletypeAssociation pattern="README" type="OTHERS"/>
+    <FiletypeAssociation pattern="README.*" type="OTHERS"/>
+    <FiletypeAssociation pattern="makefile" type="OTHERS"/>
+  </FiletypeAssociations>
+</Project>
