@@ -6,7 +6,7 @@ from os import path
 from sys import argv
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QObject, QSettings, pyqtSignal, qDebug
-from DBDatabase import DBFuncBase, connectDatabase
+from DBDatabase import DBFuncBase, connectDatabase, getrequest
 from DBTImpoALB import CardAlbum
 from DBFunction import displayArrayDict
 
@@ -26,10 +26,11 @@ class ReleaseInvent(QObject):
 	TEXT_NCO = configini.value('text_nocov')
 	configini.endGroup()
 					
-	def __init__(self, list_actions):
+	def __init__(self, list_actions, modsql):
 		"""Init invent, build list albums exists in database."""
 		super(ReleaseInvent, self).__init__()
 		self.list_action = list_actions
+		self.modsql = modsql
 
 	def executeActions(self):
 		"""Action for update database.
@@ -107,7 +108,9 @@ class ReleaseInvent(QObject):
 		cardalbum, cardtracks = analysealbum.defineAlbum(folder, category, family)
 		DBFuncBase().arrayCardsToSql('INSERT', cardalbum, 'ALBUMS', 'ID_CD')
 		# last id for cardtracks
-		request = "SELECT LAST_INSERT_ID() as lastid;"
+		#request = "SELECT LAST_INSERT_ID() as lastid;"
+		request = getrequest('lastid', self.modsql)
+		print(request)
 		idcd = DBFuncBase().sqlToArray(request)[0]
 		for cardtrack in cardtracks:
 			cardtrack['ID_CD'] = idcd

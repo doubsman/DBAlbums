@@ -21,6 +21,7 @@ def connectDatabase(envt):
 	BASE_RAC = r'' + configini.value('raci')
 	RACI_DOU = configini.value('cate')
 	RACI_SIM = configini.value('cats')
+	configini.endGroup()
 	boolcon = False
 	if MODE_SQLI == 'sqlite':
 		db = QSqlDatabase.addDatabase("QSQLITE")
@@ -28,6 +29,7 @@ def connectDatabase(envt):
 		if not db.isValid():
 			qDebug(envt+' problem no valid database')
 	else:
+		configini.beginGroup(envt)
 		BASE_SEV = configini.value('serv')
 		BASE_USR = configini.value('user')
 		BASE_PAS = configini.value('pass')
@@ -93,6 +95,14 @@ def getrequest(name, MODE_SQLI=None):
 					"ON ALBUMS.ID_CD=TRACKS.ID_CD " \
 					"WHERE TRACKS.ARTIST like '%{search}%' OR TRACKS.TITLE like '%{search}%' OR ALBUMS.NAME like '%{search}%'  " \
 					"GROUP BY ALBUMS.ID_CD"
+	# last ID
+	if name == 'lastid':
+		if MODE_SQLI == 'mssql':
+			request = "SELECT IDENT_CURRENT(‘tablename’)"
+		if MODE_SQLI == 'mysql':
+			request = "SELECT LAST_INSERT_ID() as lastid;"
+		if MODE_SQLI == 'sqlite':
+			request = "SELECT last_insert_rowid();"
 	# cover
 	elif name == 'coverpix':
 		request = "SELECT COVER FROM COVERS WHERE ID_CD={id}"
@@ -171,7 +181,7 @@ class DBFuncBase(QObject):
 		for column in range(numberscolumns):
 			# first column : primary key
 			if listcolumns[column] == columnnamekey and operation == 'INSERT':
-				queryoperation.bindValue(column, 'NULL')
+				queryoperation.bindValue(column, None)
 			else:
 				queryoperation.bindValue(column, arraydata[listcolumns[column]])
 		if operation == 'UPDATE':
@@ -406,12 +416,49 @@ class DBCreateSqLite(QObject):
 					qDebug(10*' '+ str(i) + ' ' + str(listparam[i]))
 
 
+class DBCcopyTable(QObject):
+	
+	def __init__(self, parent=None):
+		"""Init."""
+		super(DBCcopyTable, self).__init__(parent)
+		self.parent = parent
+	
+	def execSqlFile(self, sql_file, dbcnx=None):
+		"""Exec script SQL file..."""
+		counter = 0
+		request = ''
+		for line in open(sql_file, 'r'):
+			request += line
+			if line.endswith(';\n'):
+				counter = counter + 1
+				request = request.rstrip('\n')
+				qDebug(request)
+				query = QSqlQuery(request, dbcnx)
+				if not query.exec_():
+					errorText = query.lastError().text()
+					qDebug(query.lastQuery())
+					qDebug(errorText)
+				query.clear
+				request = ''
+
+	def copyCovers(self, dbdes):
+		dbsrc = QSqlDatabase.addDatabase("QMYSQL")
+		dbsrc.setHostName('homerstation')
+		dbsrc.setDatabaseName('InventMP3')
+		dbsrc.setUserName('admInventMP3')
+		dbsrc.setPassword('nuDbC6spVZxtkKC8')
+		dbsrc.setPort(3306)
+		if dbsrc.isValid():
+			dbsrc.open()
+		self.copytable(dbsrc, dbdes, 'COVERS')
+
 if __name__ == '__main__':
 #//2005 db.setDatabaseName(DRIVER={SQL Server};SERVER=localhost\SQLExpress;DATABASE=secundaria;UID=sa;PWD=contraseña;WSID=.;Trusted_connection=yes)
 #//2008 db.setDatabaseName("DRIVER={SQL Server Native Client 10.0};SERVER=localhost\SQLExpress;DATABASE=myDbName;UID=user;PWD=userPwd;WSID=.;Trusted_connection=yes")
 #//2012 db.setDatabaseName("DRIVER={SQL Server Native Client 11.0};SERVER=localhost\SQLExpress;DATABASE=myDbName;UID=user;PWD=userPwd;WSID=.;Trusted_connection=yes")
-	boolconnect, dbbase, modsql, rootDk, lstcat = connectDatabase('LOSSLESS_SQLSERVER')
+	boolconnect, dbbase, modsql, rootDk, lstcat = connectDatabase('MP3')
 	print(boolconnect, dbbase, modsql, rootDk, lstcat)
-	
+	copytable = DBCcopyTable()
+	copytable.execSqlFile("E:\Download\InventMP3_old.sql", dbbase)
 	#createsqllite = DBCreateSqLite(r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\TEXT.DB')
 	#createsqllite.createObjSqlLite(dbbase, r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\Create_sqllite_database.sql')

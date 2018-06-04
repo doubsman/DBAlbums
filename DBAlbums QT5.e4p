@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2018-06-01, 15:51:38 -->
+<!-- Saved: 2018-06-02, 00:56:16 -->
 <!-- Copyright (C) 2018 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -14,6 +14,7 @@
   <Eol index="0"/>
   <Sources>
     <Source>DBAlbsMini.py</Source>
+    <Source>DBAlbums.ini</Source>
     <Source>DBAlbumsQT5.pyw</Source>
     <Source>DBArtworks.py</Source>
     <Source>DBAuPlayer.py</Source>
@@ -21,6 +22,8 @@
     <Source>DBDragDrop.py</Source>
     <Source>DBFoobarpl.py</Source>
     <Source>DBFunction.py</Source>
+    <Source>DBHistory.txt</Source>
+    <Source>DBInstall.txt</Source>
     <Source>DBModelAbs.py</Source>
     <Source>DBPThreads.py</Source>
     <Source>DBSLoading.py</Source>
@@ -46,6 +49,7 @@
   <Others>
     <Other>.gitignore</Other>
     <Other>DBAlbums.e4p</Other>
+    <Other>DBAlbums.ini</Other>
     <Other>DBHistory.txt</Other>
     <Other>DBInstall.txt</Other>
   </Others>

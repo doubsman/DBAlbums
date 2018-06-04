@@ -147,7 +147,15 @@ class BuildInvent(QObject):
 					creationdate = ctime(max(stat(root).st_ctime for root in list(getListFiles(folder))))
 					creationdate = datetime.strptime(creationdate, "%a %b %d %H:%M:%S %Y")
 					recentdate = max(modifydate, creationdate)
-					if sizefolder < testalbum[self.list_columns.index('SIZE')] or recentdate > testalbum[self.list_columns.index('MODIFIED')].toPyDateTime() or  testalbum[self.list_columns.index('PATHNAME')] != folder:
+					if isinstance(testalbum[self.list_columns.index('MODIFIED')], str):
+						if 'T' in testalbum[self.list_columns.index('MODIFIED')]:
+							date_format = "%Y-%m-%dT%H:%M:%S.%f"
+						else:
+							date_format = "%Y-%m-%d %H:%M:%S"
+						datebase = datetime.strptime(testalbum[self.list_columns.index('MODIFIED')], date_format)
+					else:
+						datebase = testalbum[self.list_columns.index('MODIFIED')].toPyDateTime()
+					if sizefolder < testalbum[self.list_columns.index('SIZE')] or recentdate > datebase or  testalbum[self.list_columns.index('PATHNAME')] != folder:
 						# UPDATE
 						self.alupdate += 1
 						self.list_finaly.append([category, self.numbers, 'UPDATE', testalbum[self.list_columns.index('ID_CD')], path.basename(folder)])

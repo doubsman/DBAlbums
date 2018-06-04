@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2017, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.61"
+__version__ = "1.62"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -1135,7 +1135,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 									self.lstcat,
 									typeupdate,
 									self.modsql, 
-									self.envits, 
+									self.envits,
 									self.curthe)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 		self.prepareInvent.startAnalyse()

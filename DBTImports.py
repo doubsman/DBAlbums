@@ -148,6 +148,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		for i in range(len(self.tableMdlUpd.U_C_WIDTH)):
 			self.tbl_update.setColumnWidth(i, self.tableMdlUpd.U_C_WIDTH[i])
 		self.tbl_update.verticalHeader().setDefaultSectionSize(self.tableMdlUpd.C_HEIGHT)
+		self.tbl_update.horizontalHeader().setStretchLastSection(True)
 		
 		self.applyTheme()
 		self.show()
@@ -211,7 +212,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 					self.alupdate += 1
 				elif action[2] == 'ADD':
 					self.albumnew += 1
-		run = ReleaseInvent(self.list_actions)
+		run = ReleaseInvent(self.list_actions, self.modsql)
 		run.signalrun.connect(self.updateRun)
 		run.signalend.connect(self.updateEnd)
 		run.signaltxt.connect(self.updateInfos)
