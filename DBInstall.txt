@@ -98,5 +98,15 @@ COMPILATION..........................................
 install visual studio 2017 C++
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
 pyqtdeploy
-load 
-R:\Projets\DBALBUMSQT5\pyqtdeploy.pdy
+	load R:\Projets\DbAlbum.Git\pyqtdeploy.pdy
+build
+	pyqtdeploy-build R:\Projets\DbAlbum.Git\pyqtdeploy.pdy
+
+
+	
+cl
+"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.14.26428\bin\Hostx64\x64"
+set path=%path%;%qtdir%\bin;"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.14.26428\bin\Hostx64\x64"
+
+qmake QT
+H:\_QT\5.9.1\msvc2015_64\bin\qmake.exe

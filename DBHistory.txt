@@ -1,4 +1,5 @@
 """ DBAlbums History Version : Doubsman dev.
+1.62 write sqlite database, upgrade pyQT5 mariaDB
 1.61 corrections bugs, stabilisation final version
 1.60 search discogs
 1.59 copy score for update album, bugs

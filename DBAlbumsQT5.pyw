@@ -10,6 +10,22 @@ __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
 
+""" modules pythons Requirements
+CueParser==1.0.0
+fpl-reader==1.0
+mutagen==1.40.0
+olefile==0.45.1
+Pillow==5.1.0
+PyMySQL==0.8.1
+pypyodbc==1.3.4
+PyQt5==5.10.1
+pyqt5-tools==5.9.0.1.2
+pyqtdeploy==2.1
+QScintilla==2.10.4
+sip==4.19.8
+six==1.11.0
+"""
+
 from sys import platform, argv, exit
 from os import path, getcwd
 from csv import writer, QUOTE_ALL

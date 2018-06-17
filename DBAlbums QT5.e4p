@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2018-06-02, 00:56:16 -->
-<!-- Copyright (C) 2018 ,  -->
+<!-- Saved: 2018-06-04, 18:07:33 -->
+<!-- Copyright (C) 2018 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
   <Hash>398860a7099ed2e66a0052c51e54ce591a74535b</Hash>
   <ProgLanguage mixed="0">Python3</ProgLanguage>
   <ProjectType>PyQt5</ProjectType>
-  <Version>1.61</Version>
-  <Author></Author>
+  <Description>gestion musicale</Description>
+  <Version>1.62</Version>
+  <Author>doubsman</Author>
   <Email></Email>
   <Eol index="0"/>
   <Sources>
