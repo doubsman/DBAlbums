@@ -30,7 +30,7 @@ from sys import platform, argv, exit
 from os import path, getcwd
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
-from PyQt5.QtCore import (Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSettings, 
+from PyQt5.QtCore import (Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, 
 						QSize, QRect, qInstallMessageHandler, qDebug, QUrl) 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, 
 						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel)
@@ -51,6 +51,7 @@ from DBThunbnai import DBThunbnails
 from DBDragDrop import QLabeldnd
 from DBPThreads import DBPThreadsListStyle
 from DBTImports import InventGui
+from DBReadJson import JsonParams
 	
 
 class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
@@ -66,53 +67,37 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	RESS_ICOS = path.join(PATH_PROG, 'IMG' , 'ICO')
 	RESS_FLAG = path.join(PATH_PROG, 'IMG' , 'FLAG')
 	RESS_LOGO = path.join(PATH_PROG, 'IMG')
-	# Read File DBAlbums.ini
-	qDebug('read ini file')
-	FILE__INI = 'DBAlbums.ini'
-	configini = QSettings(FILE__INI, QSettings.IniFormat)
-	configini.beginGroup('dbalbums')
-	VERS_PROG = configini.value('prog_build')
-	TITL_PROG = "♫ DBAlbums v{v} (2017)".format(v=VERS_PROG)
-	WIDT_MAIN = int(configini.value('wgui_width'))
-	HEIG_MAIN = int(configini.value('wgui_heigh'))
-	WIDT_PICM = int(configini.value('thun_csize'))
-	HEIG_LHUN = int(configini.value('thnail_nbl'))
-	WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
-	PICM_NCO = path.join(PATH_PROG, 'IMG', configini.value('pict_blank'))
-	THEM_COL = configini.value('name_theme')
-	TEXT_NCO = configini.value('text_nocov')
-	ENVT_DEF = configini.value('envt_deflt')
-	THUN_DIS = int(configini.value('thnail_dis'))
-	THUN_NOD = int(configini.value('thnail_nod'))
-	COVE_SIZ = int(configini.value('covers_siz'))
-	FONT_MAI = configini.value('font00_ttx')
-	configini.endGroup()
-	# PROGS LINKS
-	configini.beginGroup('programs')
-	TAGS_SCAN = configini.value('tagscan')
-	FOOB_PLAY = configini.value('foobarP')
-	SEAR_DISC = configini.value('discogs')
+	# Read Json params
+	FILE__INI = 'DBAlbums.json'
+	Json_params = JsonParams(FILE__INI)
+	
+	group_dbalbums = Json_params.getMember('dbalbums')
+	VERS_PROG = group_dbalbums['prog_build']
+	TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
+	WIDT_MAIN = group_dbalbums['wgui_width']
+	HEIG_MAIN = group_dbalbums['wgui_heigh']
+	WIDT_PICM = group_dbalbums['thun_csize']
+	HEIG_LHUN = group_dbalbums['thnail_nbl']
+	WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
+	PICM_NCO = path.join(PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
+	THEM_COL = group_dbalbums['name_theme']
+	TEXT_NCO = group_dbalbums['text_nocov']
+	ENVT_DEF = group_dbalbums['envt_deflt']
+	THUN_DIS = group_dbalbums['thnail_dis']
+	THUN_NOD = group_dbalbums['thnail_nod']
+	COVE_SIZ = group_dbalbums['covers_siz']
+	FONT_MAI = group_dbalbums['font00_ttx']
+	
+	group_programs = Json_params.getMember('programs')
+	TAGS_SCAN = group_programs['tagscan']
+	FOOB_PLAY = group_programs['foobarP']
+	SEAR_DISC = group_programs['discogs']
 	if platform == "darwin" or platform == 'linux':
-		EDIT_TEXT = r'' + configini.value('txt_lin')
+		EDIT_TEXT = r'' + group_programs['txt_lin']
 	else:
-		EDIT_TEXT = r'' + configini.value('txt_win')
-	configini.endGroup()
-	# LIST SCORE
-	configini.beginGroup('score')
-	SCOR_ALBUMS = {}
-	for envt in configini.allKeys():
-		SCOR_ALBUMS.update({int(envt): configini.value(envt)})
-	SCOR_TRACKS = SCOR_ALBUMS
-	configini.endGroup()
-	# LIST ENVT
-	configini.beginGroup('environments')
-	NAME_EVT = []
-	for envt in configini.allKeys():
-		envtname = configini.value(envt)
-		if envtname == ENVT_DEF:
-			CURT_EVT = len(NAME_EVT)
-		NAME_EVT.append(envtname)
-	configini.endGroup()
+		EDIT_TEXT = r'' + group_programs['txt_win']
+	SCOR_TRACKS = SCOR_ALBUMS = Json_params.buildDictScore()
+	NAME_EVT, CURT_EVT = Json_params.buildListEnvt(ENVT_DEF)
 	C_HEIGHT = 21
 	COEF_ZOOM = 100
 	

@@ -4,9 +4,11 @@
 from sys import argv, executable
 from os import system, path
 from PyQt5.QtGui import QPixmap, QPainter, QFont
-from PyQt5.QtCore import Qt, pyqtSlot, QSize, pyqtSignal, QRect, QSettings, qDebug
+from PyQt5.QtCore import Qt, pyqtSlot, QSize, pyqtSignal, QRect, qDebug
 from PyQt5.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QScrollArea, QLayout, QLabel
 from DBDatabase import DBFuncBase, getrequest
+from DBReadJson import JsonParams
+
 
 # path
 if getattr(system, 'frozen', False):
@@ -19,14 +21,13 @@ else:
 VERS_PROG = '1.00'
 TITL_PROG = "Artwork viewer v{v} : ".format(v=VERS_PROG)
 
-FILE__INI = 'DBAlbums.ini'
-configini = QSettings(FILE__INI, QSettings.IniFormat)
-configini.beginGroup('dbalbums')
-TEXT_NCO = configini.value('text_nocov')
-PICM_NCO = path.join(PATH_PROG, 'IMG', configini.value('pict_blank'))
-THUN_DBA = path.join(PATH_PROG, 'IMG', configini.value('picm_endof'))
-FONT_MAI = configini.value('font00_ttx')
-configini.endGroup()
+FILE__INI = 'DBAlbums.json'
+Json_params = JsonParams(FILE__INI)
+group_dbalbums = Json_params.getMember('dbalbums')
+TEXT_NCO = group_dbalbums['text_nocov']
+PICM_NCO = path.join(PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
+THUN_DBA = path.join(PATH_PROG, 'IMG', group_dbalbums['picm_endof'])
+FONT_MAI = group_dbalbums['font00_ttx']
 
 
 # ##################################################################

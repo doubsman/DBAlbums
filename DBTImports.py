@@ -6,7 +6,7 @@ from codecs import open
 from time import time, sleep
 from PyQt5.QtGui import QFont, QIcon, QColor, QTextCursor
 from PyQt5.QtCore import (Qt, qDebug, pyqtSignal,
-						pyqtSlot, QSettings, QThread, QDateTime)
+						pyqtSlot, QThread, QDateTime)
 from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit, QScrollBar
 from PyQt5.QtSql import QSqlQuery
 from DBFunction import centerWidget, openFolder
@@ -14,6 +14,7 @@ from DBDatabase import DBFuncBase
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import BuildInvent
 from DBTImpoRUN import ReleaseInvent
+from DBReadJson import JsonParams
 from Ui_DBUPDATE import Ui_UpdateWindows
 
 
@@ -65,22 +66,23 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	PATH_PROG = path.dirname(path.abspath(__file__))
 	LOGS_PROG = path.join(PATH_PROG, 'LOG')
 	# Read File DBAlbums.ini
-	qDebug('read ini file')
-	FILE__INI = 'DBAlbums.ini'
-	configini = QSettings(FILE__INI, QSettings.IniFormat)
-	configini.beginGroup('dbalbums')
-	VERS_PROG = configini.value('prog_build')
-	TITL_PROG = "♫ DBAlbums v{v} (2017)".format(v=VERS_PROG)
-	TITL_PROG = TITL_PROG + " : Update Database"
-	WIDT_MAIN = int(configini.value('wgui_width'))
-	HEIG_MAIN = int(configini.value('wgui_heigh'))
-	WIDT_PICM = int(configini.value('thun_csize'))
-	TEXT_NCO = configini.value('text_nocov')
-	FONT_CON = configini.value('font01_ttx')
-	WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
-	THEM_COL = configini.value('name_theme')
-	configini.endGroup()
+	qDebug('read json params file')
+	FILE__INI = 'DBAlbums.json'
+	Json_params = JsonParams(FILE__INI)
 	
+	group_dbalbums = Json_params.getMember('dbalbums')
+	VERS_PROG = group_dbalbums['prog_build']
+	TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
+	TITL_PROG = TITL_PROG + " : Update Database"
+	WIDT_MAIN = group_dbalbums['wgui_width']
+	HEIG_MAIN = group_dbalbums['wgui_heigh']
+	WIDT_PICM = group_dbalbums['thun_csize']
+	WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
+	THEM_COL = group_dbalbums['name_theme']
+	TEXT_NCO = group_dbalbums['text_nocov']
+	FONT_CON = group_dbalbums['font01_ttx']
+	
+
 	def __init__(self, list_albums, list_columns, list_category, typeupdate, modsql, envt, themecolor, parent=None):
 		"""Init Gui, start invent"""
 		super(InventGui, self).__init__(parent)

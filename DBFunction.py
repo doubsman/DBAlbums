@@ -82,30 +82,6 @@ def displayArrayDict(arraydatadict, colList=None, carcolumn = ' ', carline = '-'
 	displaytabulate += '\n'
 	return displaytabulate
 
-def buildlistcategory(configini, category, racine,  mode):
-	"""Build list category from read ini file."""
-	list_category = []
-	configini.beginGroup(category)
-	for cate in configini.allKeys():
-		listracate = configini.value(cate)
-		family = None
-		if isinstance(listracate, list):
-			for racate in listracate:
-				if racate.find('|') > 0:
-					family = racate.split('|')[1]
-					racate = racate.split('|')[0]
-				racate = path.join(racine, racate)
-				list_category.append([cate, mode, racate, family])
-		else:
-			racate = listracate
-			if racate.find('|') > 0:
-				family = racate.split('|')[1]
-				racate = racate.split('|')[0]
-			racate = path.join(racine, racate)
-			list_category.append([cate, mode, racate, family])
-	configini.endGroup()
-	return list_category
-
 
 def displayCounters(num=0, text=''):
 	"""format 0 000 + plural."""

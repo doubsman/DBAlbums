@@ -3,11 +3,12 @@
 
 from os import path, chdir
 from PyQt5.QtGui import QFont, QMovie
-from PyQt5.QtCore import Qt, pyqtSlot, QSettings, QDateTime
+from PyQt5.QtCore import Qt, pyqtSlot, QDateTime
 from PyQt5.QtSql import QSqlQueryModel
 from PyQt5.QtWidgets import QWidget
 from DBDatabase import DBFuncBase, getrequest
 from DBFunction import centerWidget
+from DBReadJson import JsonParams
 from Ui_DBLOADING import Ui_LoadingWindow
 
 
@@ -15,12 +16,12 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 	PATH_PROG = path.dirname(path.abspath(__file__))
 	RESS_LOGO = path.join(PATH_PROG, 'IMG')
 	chdir(PATH_PROG)
-	FILE__INI = 'DBAlbums.ini'
-	configini = QSettings(FILE__INI, QSettings.IniFormat)
-	configini.beginGroup('dbalbums')
-	FONT_MAI = configini.value('font00_ttx')
-	LOGO = configini.value('progr_logo')
-	configini.endGroup()
+	
+	FILE__INI = 'DBAlbums.json'
+	Json_params = JsonParams(FILE__INI)
+	group_dbalbums = Json_params.getMember('dbalbums')
+	LOGO = group_dbalbums['progr_logo']
+	FONT_MAI = group_dbalbums['font00_ttx']
 	
 	def __init__(self, modsql, title, parent):
 		super(DBloadingGui, self).__init__(parent)

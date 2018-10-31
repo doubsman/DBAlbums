@@ -5,10 +5,11 @@
 from os import path
 from sys import argv
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QObject, QSettings, pyqtSignal, qDebug
+from PyQt5.QtCore import QObject, pyqtSignal
 from DBDatabase import DBFuncBase, connectDatabase, getrequest
 from DBTImpoALB import CardAlbum
 from DBFunction import displayArrayDict
+from DBReadJson import JsonParams
 
 class ReleaseInvent(QObject):
 	signalrun = pyqtSignal(int, str)		# percent / message
@@ -17,14 +18,11 @@ class ReleaseInvent(QObject):
 	signalmacroend = pyqtSignal()
 		
 	PATH_PROG = path.dirname(path.abspath(__file__))
-	# Read File DBAlbums.ini
-	qDebug('read ini file')
-	FILE__INI = 'DBAlbums.ini'
-	configini = QSettings(FILE__INI, QSettings.IniFormat)
-	configini.beginGroup('dbalbums')
-	WIDT_PICM = int(configini.value('thun_csize'))
-	TEXT_NCO = configini.value('text_nocov')
-	configini.endGroup()
+	FILE__INI = 'DBAlbums.json'
+	Json_params = JsonParams(FILE__INI)
+	group_dbalbums = Json_params.getMember('dbalbums')
+	WIDT_PICM = group_dbalbums['thun_csize']
+	TEXT_NCO = group_dbalbums['text_nocov']
 					
 	def __init__(self, list_actions, modsql):
 		"""Init invent, build list albums exists in database."""

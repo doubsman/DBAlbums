@@ -2,19 +2,20 @@
 # -*- coding: utf-8 -*-
 
 from os import path
-from PyQt5.QtCore import Qt, QVariant, QSettings, QModelIndex, pyqtSignal, QSortFilterProxyModel, QAbstractTableModel
+from PyQt5.QtCore import Qt, QVariant, QModelIndex, pyqtSignal, QSortFilterProxyModel, QAbstractTableModel
 from PyQt5.QtSql import QSqlQuery
 from PyQt5.QtGui import QColor
 from DBDatabase import DBFuncBase, getrequest
 from DBFunction import convertUNC
+from DBReadJson import JsonParams
 
-FILE__INI = 'DBAlbums.ini'
-configini = QSettings(FILE__INI, QSettings.IniFormat)
-configini.beginGroup('dbalbums')
-TEXT_NCO = configini.value('text_nocov')
-THUN_NOD = int(configini.value('thnail_nod'))
-FONT_MAI = configini.value('font00_ttx')
-configini.endGroup()
+
+FILE__INI = 'DBAlbums.json'
+Json_params = JsonParams(FILE__INI)
+group_dbalbums = Json_params.getMember('dbalbums')
+TEXT_NCO = group_dbalbums['text_nocov']
+THUN_NOD = group_dbalbums['thnail_nod']
+FONT_MAI = group_dbalbums['font00_ttx']
 
 
 # MODEL ABSTRACT generique

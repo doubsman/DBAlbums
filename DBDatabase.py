@@ -3,10 +3,10 @@
 
 from os import  path, chdir, remove
 from copy import deepcopy
-from PyQt5.QtCore import Qt, QSettings, qDebug, QObject, QByteArray, QIODevice, QBuffer, pyqtSignal
+from PyQt5.QtCore import Qt, qDebug, QObject, QByteArray, QIODevice, QBuffer, pyqtSignal
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QPixmap
-from DBFunction import buildlistcategory
+from DBReadJson import JsonParams
 
 PATH_PROG = path.dirname(path.abspath(__file__))
 chdir(PATH_PROG)
@@ -14,14 +14,12 @@ BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
 
 def connectDatabase(envt):
 	"""Connect base MySQL/Sqlite."""
-	FILE__INI = 'DBAlbums.ini'
-	configini = QSettings(FILE__INI, QSettings.IniFormat)
-	configini.beginGroup(envt)
-	MODE_SQLI = configini.value('typb')
-	BASE_RAC = r'' + configini.value('raci')
-	RACI_DOU = configini.value('cate')
-	RACI_SIM = configini.value('cats')
-	configini.endGroup()
+	FILE__INI = 'DBAlbums.json'
+	Json_params = JsonParams(FILE__INI)
+	group_envt = Json_params.getMember(envt)
+	MODE_SQLI = group_envt['typb']
+	BASE_RAC = r'' + group_envt['raci']
+	RACI_DOU = group_envt['cate']
 	boolcon = False
 	if MODE_SQLI == 'sqlite':
 		db = QSqlDatabase.addDatabase("QSQLITE")
@@ -29,13 +27,11 @@ def connectDatabase(envt):
 		if not db.isValid():
 			qDebug(envt+' problem no valid database')
 	else:
-		configini.beginGroup(envt)
-		BASE_SEV = configini.value('serv')
-		BASE_USR = configini.value('user')
-		BASE_PAS = configini.value('pass')
-		BASE_NAM = configini.value('base')
-		BASE_PRT = int(configini.value('port'))
-		configini.endGroup()
+		BASE_SEV = group_envt['serv']
+		BASE_USR = group_envt['user']
+		BASE_PAS = group_envt['pass']
+		BASE_NAM = group_envt['base']
+		BASE_PRT = group_envt['port']
 		if MODE_SQLI == 'mysql':
 			db = QSqlDatabase.addDatabase("QMYSQL")
 			db.setHostName(BASE_SEV)
@@ -51,9 +47,7 @@ def connectDatabase(envt):
 			db.setDatabaseName(driver);
 	list_category = []
 	if RACI_DOU is not None:
-		list_category += buildlistcategory(configini, RACI_DOU, BASE_RAC, 'D')
-	if RACI_SIM is not None:
-		list_category += buildlistcategory(configini, RACI_SIM, BASE_RAC, 'S')
+		list_category += Json_params.buildCategories(envt)
 	if db.isValid():
 		boolcon = db.open()
 	else:

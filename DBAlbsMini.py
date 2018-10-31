@@ -3,13 +3,14 @@
 from sys import argv
 from os import path, chdir
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QSettings, Qt
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QTableView, QPushButton,
 							QMenu, QLineEdit, QStyle, QAbstractItemView, QCompleter)
 from DBDatabase import DBFuncBase, connectDatabase, getrequest
 from DBFunction import displayCounters, centerWidget, openFolder, ThemeColors
 from DBModelAbs import ModelTableAlbumsABS	# model tables
 from DBArtworks import CoverViewGui			# viewer image b64
+from DBReadJson import JsonParams
 
 
 class DBAlbumsQT5Mini(QMainWindow):
@@ -19,15 +20,14 @@ class DBAlbumsQT5Mini(QMainWindow):
 	chdir(PATH_PROG)
 	VERS_PROG = '1.01'
 	TITL_PROG = "♫ DBAlbums mini v{v} (2017)".format(v=VERS_PROG)
-	FILE__INI = 'DBAlbums.ini'
-	configini = QSettings(FILE__INI, QSettings.IniFormat)
-	configini.beginGroup('dbalbums')
-	WINS_ICO = path.join(PATH_PROG, 'IMG', configini.value('wins_icone'))
-	PICM_NCO = path.join(PATH_PROG, 'IMG', configini.value('pict_blank'))
-	THEM_COL = configini.value('name_theme')
-	ENVT_DEF = configini.value('envt_deflt')
-	configini.endGroup()
-	
+	FILE__INI = 'DBAlbums.json'
+	Json_params = JsonParams(FILE__INI)
+	group_dbalbums = Json_params.getMember('dbalbums')
+	WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
+	PICM_NCO = path.join(PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
+	THEM_COL = group_dbalbums['name_theme']
+	ENVT_DEF = group_dbalbums['envt_deflt']
+		
 	def __init__(self, parent=None):
 		super(DBAlbumsQT5Mini, self).__init__(parent)
 		self.setWindowIcon(QIcon(self.WINS_ICO))

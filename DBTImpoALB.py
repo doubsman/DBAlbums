@@ -5,11 +5,13 @@
 from os import path
 from re import match
 from copy import deepcopy
-from PyQt5.QtCore import QSettings, QObject, QDateTime, pyqtSignal
+from PyQt5.QtCore import QObject, QDateTime, pyqtSignal
 from DBFunction import getListFiles, getListFolders, getFolderSize, getListFilesNoSubFolders
 from DBTImpoCUE import CueParser
 from DBTImpoTRK import CardTracks
 from DBTImpoTAG import DBMediasTags
+from DBReadJson import JsonParams
+
 
 class CardAlbum(QObject):
 	signaltxt = pyqtSignal(str, int)		# message / level display
@@ -50,11 +52,11 @@ class CardAlbum(QObject):
 						}
 	PATH_PROG = path.dirname(path.abspath(__file__))
 	# Read File DBAlbums.ini
-	FILE__INI = 'DBAlbums.ini'
-	configini = QSettings(FILE__INI, QSettings.IniFormat)
-	configini.beginGroup('dbalbums')
-	TEXT_NCO = configini.value('text_nocov')
-	configini.endGroup()
+	FILE__INI = 'DBAlbums.json'
+	Json_params = JsonParams(FILE__INI)
+	group_dbalbums = Json_params.getMember('dbalbums')
+	TEXT_NCO = group_dbalbums['text_nocov']
+	
 	
 	def __init__(self, parent=None):
 		"""Init."""
