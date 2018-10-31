@@ -1,0 +1,18 @@
+
+- UPDATE (1/1) : E:\Work\ZTest\TAG_bluid\TECHNO\Download\Dickster - Elastic Dreams EP (2017)
+
+ID_CD   CATEGORY   FAMILY     TAGMETHOD   POSITIONHDD       NAME                         
+-----   --------   --------   ---------   ---------------   -----------------------------
+6       TECHNO     Download   TAG         TECHNO\Download   Dickster - Elastic Dreams EP
+
+AUDIOTRACKS   TRACKS   LENGTHDISPLAY   CUE   PIC   SIZE   CD   YEAR   ISRC   LABEL   TAGISRC   TAGLABEL       COUNTRY
+-----------   ------   -------------   ---   ---   ----   --   ----   ----   -----   -------   ------------   -------
+1             1        08:03                 1     19     1    2017                            NANO RECORDS
+
+TRACKORDER   LENGTHDISPLAY   ARTIST     TITLE            TYPEMEDIA   DATE   GENRE         DISC   FILENAME                        
+----------   -------------   --------   --------------   ---------   ----   -----------   ----   --------------------------------
+01           08:03           Dickster   Elastic Dreams   audio/mp3   2017   Psychedelic          01 Dickster - Elastic Dreams.mp3
+
+- Completed Operations in 00:00:00
+
+- Create log file : R:\Projets\DBAlbums.Github\LOG\181006153252_UPDATE_DATABASE_LOSSLESS_TEST.log

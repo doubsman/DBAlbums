@@ -57,7 +57,7 @@ def connectDatabase(envt):
 	if db.isValid():
 		boolcon = db.open()
 	else:
-		qDebug(envt+' problem for open database')
+		qDebug(envt+' problem for open database : '+db.lastError().text())
 	return boolcon, db, MODE_SQLI, BASE_RAC, list_category
 
 
@@ -354,6 +354,7 @@ class DBFuncBase(QObject):
 	def deleteTable(self, tableName, columnnamekey, idvalue):
 		"""Delete enr table."""
 		request = ('DELETE FROM ' + tableName + ' WHERE ' + columnnamekey + ' =' + str(idvalue))
+		print(request)
 		query = QSqlQuery()	
 		return query.exec_(request)
 

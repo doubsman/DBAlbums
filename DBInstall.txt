@@ -1,5 +1,12 @@
 INSTALLATION PYTHON LIBS...........................................
 -------------------------------------------------------------------
+for Python 3.7.1
+	python -m pip install --upgrade pip
+	pip3 install PyQt5
+	pip3 install mutagen
+	pip3 install CueParser
+	extract + path cmd /HOMERSTATION/_LossLess/_INVENT/DBAlbums/LIB/fpl_reader-master.zip
+	python setup.py install
 for Python 3.6.0 installation modules for Windows
 	pip install pymysql (mysql)
 	pip install pypyodbc (sql server)

@@ -27,11 +27,15 @@ class timerThread(QThread):
 	def start(self, timeStart):
 		self.timeStart = timeStart
 		return super(timerThread, self).start()
-
+	
+	def stop(self):
+		self.terminate()
+		
 	def run(self):
 		while self.parent().isRunning():
 			self.timeElapsed.emit(time() - self.timeStart)
 			sleep(1)
+		self.terminate()
 
 
 class myThreadTimer(QThread):
@@ -43,7 +47,7 @@ class myThreadTimer(QThread):
 		self.timerThread.timeElapsed.connect(self.timeElapsed.emit)
 	
 	def stop(self):
-		self.timerThread.terminate()
+		self.timerThread.stop()
 		self.terminate()
 		
 	def run(self):
@@ -133,7 +137,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	
 		self.btn_action.clicked.connect(self.realiseActions)
 		self.btn_action.setEnabled(False)
-		self.btn_quit.clicked.connect(self.closeImpoort)
+		self.btn_quit.clicked.connect(self.closeImport)
 		self.lcdTime.setSegmentStyle(QLCDNumber.Flat)
 		
 		self.seconds = 0
@@ -330,8 +334,9 @@ class InventGui(QWidget, Ui_UpdateWindows):
 									col4 = self.curthe.listcolors[3])
 		self.tbl_update.setStyleSheet(gridstyle)
 
-	def closeImpoort(self):
+	def closeImport(self):
 		"""Close Windows."""
+		self.myThreadtime.quit()
 		self.myThreadtime.stop()
 		self.destroy()
 

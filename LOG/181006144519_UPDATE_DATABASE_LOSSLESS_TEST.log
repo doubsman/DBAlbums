@@ -1,0 +1,33 @@
+
+- UPDATE (1/1) : E:\Work\ZTest\TAG_bluid\TECHNO\Labels\Fcom\[F115] Laurent Garnier - Early Works (1998)
+
+ID_CD   CATEGORY   FAMILY           TAGMETHOD   POSITIONHDD   NAME                          
+-----   --------   --------------   ---------   -----------   ------------------------------
+11      TECHNO     Label/Physique   CUE         Labels\Fcom   Laurent Garnier - Early Works
+
+AUDIOTRACKS   TRACKS   LENGTHDISPLAY   CUE   PIC   SIZE   CD   YEAR   ISRC   LABEL   TAGISRC   TAGLABEL   COUNTRY
+-----------   ------   -------------   ---   ---   ----   --   ----   ----   -----   -------   --------   -------
+2             16       129:14          2     2     178    2    1998   F115   FCOM
+
+TRACKORDER   LENGTHDISPLAY   ARTIST           TITLE     TYPEMEDIA   DATE   GENRE     DISC   FILENAME                           
+----------   -------------   --------------   -------   ---------   ----   -------   ----   -----------------------------------
+0101         07:27           Unknown Artist   Track01   audio/mp3   1998   Unknown   1      Laurent_Garnier_Early_Works_Cd1.mp3
+0102         07:40           Unknown Artist   Track02   audio/mp3   1998   Unknown   1      Laurent_Garnier_Early_Works_Cd1.mp3
+0103         06:51           Unknown Artist   Track03   audio/mp3   1998   Unknown   1      Laurent_Garnier_Early_Works_Cd1.mp3
+0104         08:43           Unknown Artist   Track04   audio/mp3   1998   Unknown   1      Laurent_Garnier_Early_Works_Cd1.mp3
+0105         06:52           Unknown Artist   Track05   audio/mp3   1998   Unknown   1      Laurent_Garnier_Early_Works_Cd1.mp3
+0106         13:35           Unknown Artist   Track06   audio/mp3   1998   Unknown   1      Laurent_Garnier_Early_Works_Cd1.mp3
+0107         06:13           Unknown Artist   Track07   audio/mp3   1998   Unknown   1      Laurent_Garnier_Early_Works_Cd1.mp3
+0108         07:42           Unknown Artist   Track08   audio/mp3   1998   Unknown   1      Laurent_Garnier_Early_Works_Cd1.mp3
+0201         07:36           Unknown Artist   Track01   audio/mp3   1998   Unknown   2      Laurent_Garnier_Early_Works_Cd2.mp3
+0202         07:22           Unknown Artist   Track02   audio/mp3   1998   Unknown   2      Laurent_Garnier_Early_Works_Cd2.mp3
+0203         08:44           Unknown Artist   Track03   audio/mp3   1998   Unknown   2      Laurent_Garnier_Early_Works_Cd2.mp3
+0204         05:36           Unknown Artist   Track04   audio/mp3   1998   Unknown   2      Laurent_Garnier_Early_Works_Cd2.mp3
+0205         11:02           Unknown Artist   Track05   audio/mp3   1998   Unknown   2      Laurent_Garnier_Early_Works_Cd2.mp3
+0206         08:10           Unknown Artist   Track06   audio/mp3   1998   Unknown   2      Laurent_Garnier_Early_Works_Cd2.mp3
+0207         06:34           Unknown Artist   Track07   audio/mp3   1998   Unknown   2      Laurent_Garnier_Early_Works_Cd2.mp3
+0208         09:07           Unknown Artist   Track08   audio/mp3   1998   Unknown   2      Laurent_Garnier_Early_Works_Cd2.mp3
+
+- Completed Operations in 00:00:00
+
+- Create log file : R:\Projets\DBAlbums.Github\LOG\181006144519_UPDATE_DATABASE_LOSSLESS_TEST.log
