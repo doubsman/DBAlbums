@@ -1,0 +1,36 @@
+ANALYSE FOLDERS: CLASSIC.D.E:\Work\ZTest\TAG_bluid\CLASSIC
+ANALYSE FOLDERS: TECHNO.D.E:\Work\ZTest\TAG_bluid\TECHNO
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\TECHNO\Colonne 1\01
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\TECHNO\Labels\Fcom
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\TECHNO\Labels\Rennaissance
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\TECHNO\Labels\Trapez
+ANALYSE FOLDERS: TRANCE.D.E:\Work\ZTest\TAG_bluid\TRANCE
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\TRANCE\Artists\Krunch And Orpheus
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\TRANCE\Colonne 1\01
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\TRANCE\Download\2017
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\TRANCE\Labels\Blue Tunes Records
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\TRANCE\Labels\Ovnimoon
+ANALYSE FOLDERS: ROCK.D.E:\Work\ZTest\TAG_bluid\ROCK
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\ROCK\Colonne1\01
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\ROCK\Labels\caca
+ANALYSE FOLDERS: REGGAE.D.E:\Work\ZTest\TAG_bluid\REGGAE
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\REGGAE\Colonne1\01
+ANALYSE SUBFOLDERS: E:\Work\ZTest\TAG_bluid\REGGAE\Labels\01
+
+- ADD (1/1) : E:\Work\ZTest\TAG_bluid\TRANCE\Labels\Ovnimoon\[DOC 025] IAO - Redemption (2018)
+
+ID_CD   CATEGORY   FAMILY           TAGMETHOD   POSITIONHDD       NAME             
+-----   --------   --------------   ---------   ---------------   -----------------
+        TRANCE     Label/Physique   TAG         Labels\Ovnimoon   IAO - Redemption
+
+AUDIOTRACKS   TRACKS   LENGTHDISPLAY   CUE   PIC   SIZE   CD   YEAR   ISRC      LABEL      TAGISRC   TAGLABEL   COUNTRY
+-----------   ------   -------------   ---   ---   ----   --   ----   -------   --------   -------   --------   -------
+1             1        07:58                 2     44     1    2018   DOC 025   OVNIMOON   DOC 025   D.O.C.
+
+TRACKORDER   LENGTHDISPLAY   ARTIST   TITLE        TYPEMEDIA    DATE         GENRE     DISC   FILENAME            
+----------   -------------   ------   ----------   ----------   ----------   -------   ----   --------------------
+01           07:58           IAO      Redemption   audio/flac   2018-01-12   Electro          01 - Redemption.flac
+
+- Completed Operations in 00:00:00
+
+- Create log file : R:\Projets\DBAlbums.Github\LOG\190418112123_UPDATE_DATABASE_LOSSLESS_TEST.log

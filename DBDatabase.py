@@ -3,6 +3,7 @@
 
 from os import  path, chdir, remove
 from copy import deepcopy
+from time import sleep
 from PyQt5.QtCore import Qt, qDebug, QObject, QByteArray, QIODevice, QBuffer, pyqtSignal
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QPixmap
@@ -210,6 +211,10 @@ class DBFuncBase(QObject):
 		arraydata = []
 		query = QSqlQuery(request)
 		query.exec_(request)
+		if not query.exec_():
+			errorText = query.lastError().text()
+			qDebug(query.lastQuery())
+			qDebug(errorText)
 		indexes = query.record().count()
 		while query.next():
 			if indexes == 1:
@@ -348,7 +353,7 @@ class DBFuncBase(QObject):
 	def deleteTable(self, tableName, columnnamekey, idvalue):
 		"""Delete enr table."""
 		request = ('DELETE FROM ' + tableName + ' WHERE ' + columnnamekey + ' =' + str(idvalue))
-		print(request)
+		qDebug(request)
 		query = QSqlQuery()	
 		return query.exec_(request)
 
@@ -408,7 +413,9 @@ class DBCreateSqLite(QObject):
 				qDebug(tablename+10*' '+querylite.lastError().text())
 				listparam = list(querylite.boundValues().values())
 				for i in range(len(listparam)):
-					qDebug(10*' '+ str(i) + ' ' + str(listparam[i]))
+					qDebug(10*' '+ str(i) + ' ' + str(listparam[i].decode('ascii', 'ignore')))
+			# Waiting problem Disk I/O error
+			sleep(0.1)
 
 
 class DBCcopyTable(QObject):

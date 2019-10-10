@@ -8,19 +8,17 @@ from DBDatabase import DBFuncBase, connectDatabase, getrequest
 class DBPThreadsListStyle(QThread):
 	finished = pyqtSignal(list)
 	
-	def __init__(self, parent, namerequest):
+	def __init__(self, parent, listgenres):
 		super(DBPThreadsListStyle, self).__init__(parent)
-		self.namerequest = namerequest
+		self.listgenres = listgenres
 	
 	def __del__(self):
 		self.wait()
 	
 	def run(self):
-		# your logic here
-		request = getrequest(self.namerequest)
-		listgenres = DBFuncBase().sqlToArray(request)
+		# build list styles albums
 		liststyles = []
-		for row in listgenres:
+		for row in self.listgenres:
 			id_cd = row[0]
 			genres = row[1].replace(';', '/')
 			genres = genres.replace(',', '/')
@@ -42,8 +40,12 @@ class DBPThreadsListStyle(QThread):
 class FormTest(QWidget):
 	def __init__(self):
 		super().__init__()
-		boolconnect, self.dbbase, self.modsql, self.rootDk = connectDatabase('LOSSLESS_TEST')
-		self.obj = DBPThreadsListStyle(self, 'listgenres')
+		self.lstcat = None
+		boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase('LOSSLESS_TEST')
+		request = getrequest('listgenres')
+		listgenres = DBFuncBase().sqlToArray(request)
+		#print(listgenres)
+		self.obj = DBPThreadsListStyle(self, listgenres)
 		self.obj.finished.connect(self.listprint)
 		self.obj.start()
 	

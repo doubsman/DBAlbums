@@ -2,29 +2,14 @@
 # coding: utf-8
 
 __author__ = "doubsman"
-__copyright__ = "Copyright 2017, DBAlbums Project"
+__copyright__ = "Copyright 2019, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.62"
+__version__ = "1.64"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
 
-""" modules pythons Requirements
-CueParser==1.0.0
-fpl-reader==1.0
-mutagen==1.40.0
-olefile==0.45.1
-Pillow==5.1.0
-PyMySQL==0.8.1
-pypyodbc==1.3.4
-PyQt5==5.10.1
-pyqt5-tools==5.9.0.1.2
-pyqtdeploy==2.1
-QScintilla==2.10.4
-sip==4.19.8
-six==1.11.0
-"""
 
 from sys import platform, argv, exit
 from os import path, getcwd
@@ -73,7 +58,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	
 	group_dbalbums = Json_params.getMember('dbalbums')
 	VERS_PROG = group_dbalbums['prog_build']
-	TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
+	TITL_PROG = "DBAlbums v{v} (2019)".format(v=VERS_PROG)
 	WIDT_MAIN = group_dbalbums['wgui_width']
 	HEIG_MAIN = group_dbalbums['wgui_heigh']
 	WIDT_PICM = group_dbalbums['thun_csize']
@@ -327,10 +312,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 		# DISABLED OPTIONS for OS linux: no powershell, foobar, tagscan
 		if platform == "darwin" or platform == 'linux':
-			self.action_UBP.setEnabled(False)	# Update base powershell
-			self.action_UBN.setEnabled(False)	# Add news base powershell
+			#self.action_UBP.setEnabled(False)	# Update base powershell
+			#self.action_UBN.setEnabled(False)	# Add news base powershell
 			self.action_IFP.setEnabled(False)   # Import playlists foobar 2000
-			self.action_UAP.setEnabled(False)	# Update album powershell)
+			#self.action_UAP.setEnabled(False)	# Update album powershell)
 			self.action_TAG.setEnabled(False)	# TagScan
 		
 		# init connect
@@ -632,7 +617,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.lin_search.setCompleter(self.com_autcom)
 					# build list style
 					qDebug('qthread build list style')
-					self.obj = DBPThreadsListStyle(self, 'listgenres')
+					request = getrequest('listgenres')
+					listgenres = DBFuncBase().sqlToArray(request)
+					self.obj = DBPThreadsListStyle(self, listgenres)
 					self.obj.finished.connect(self.fillListGenres)
 					self.obj.start()
 

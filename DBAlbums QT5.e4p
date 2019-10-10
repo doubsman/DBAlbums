@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2018-06-04, 18:07:33 -->
+<!-- Saved: 2018-10-31, 23:39:21 -->
 <!-- Copyright (C) 2018 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -27,6 +27,7 @@
     <Source>DBInstall.txt</Source>
     <Source>DBModelAbs.py</Source>
     <Source>DBPThreads.py</Source>
+    <Source>DBReadJson.py</Source>
     <Source>DBSLoading.py</Source>
     <Source>DBTImpoALB.py</Source>
     <Source>DBTImpoANA.py</Source>

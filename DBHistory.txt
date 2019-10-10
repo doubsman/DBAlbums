@@ -1,4 +1,16 @@
+DBALbums 2.0
+------------
+
+double-clic list albums -> play album
+probleme suppression (commit?)
+probleme display time
+probleme orphelin threat time
+log update not end creation
+list views with filters backup
+listen score update auto 1
+
 """ DBAlbums History Version : Doubsman dev.
+1.63 ini to json file 
 1.62 write sqlite database, upgrade pyQT5 mariaDB
 1.61 corrections bugs, stabilisation final version
 1.60 search discogs

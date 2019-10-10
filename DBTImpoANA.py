@@ -104,6 +104,7 @@ class BuildInvent(QObject):
 			listsubfolders = list(getListFolders(folder))
 			for subfolder in listsubfolders:
 				subfolder = path.join(folder, subfolder)
+				self.signaltext.emit('ANALYSE SUBFOLDERS: ' + subfolder, 1)
 				listsubsubfolders = list(getListFolders(subfolder))
 				for subsubfolder in listsubsubfolders:
 					subsubfolder = path.join(subfolder, subsubfolder)
