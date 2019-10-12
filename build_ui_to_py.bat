@@ -1,0 +1,1 @@
+python -m PyQt5.uic.pyuic -x R:\Projets\DBAlbums.Github\DBPARAMS.ui -o R:\Projets\DBAlbums.Github\Ui_DBPARAMS.py

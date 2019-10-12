@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2018-10-31, 23:39:21 -->
-<!-- Copyright (C) 2018 doubsman,  -->
+<!-- Saved: 2019-10-12, 12:27:43 -->
+<!-- Copyright (C) 2019 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
   <Hash>398860a7099ed2e66a0052c51e54ce591a74535b</Hash>
@@ -37,6 +37,7 @@
     <Source>DBTImpoTAG.py</Source>
     <Source>DBTImpoTRK.py</Source>
     <Source>DBTImports.py</Source>
+    <Source>DBTParams.py</Source>
     <Source>DBThunbnai.py</Source>
     <Source>Ui_DBALBUMS.py</Source>
     <Source>Ui_DBLOADING.py</Source>

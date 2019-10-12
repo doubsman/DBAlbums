@@ -312,10 +312,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 		# DISABLED OPTIONS for OS linux: no powershell, foobar, tagscan
 		if platform == "darwin" or platform == 'linux':
-			#self.action_UBP.setEnabled(False)	# Update base powershell
-			#self.action_UBN.setEnabled(False)	# Add news base powershell
+			#self.action_UBP.setEnabled(False)	# Update base 
+			#self.action_UBN.setEnabled(False)	# Add news base 
 			self.action_IFP.setEnabled(False)   # Import playlists foobar 2000
-			#self.action_UAP.setEnabled(False)	# Update album powershell)
+			#self.action_UAP.setEnabled(False)	# Update album
 			self.action_TAG.setEnabled(False)	# TagScan
 		
 		# init connect
@@ -547,7 +547,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				self.com_year.clear()
 				self.com_country.clear()
 				self.com_genres.clear()
-				self.com_genres.addItems(['Loading...'])
+				self.com_genres.addItems(['Loading...........'])
 				self.com_genres.setEnabled(False)
 				self.liststy = None
 				self.com_category.currentIndexChanged.connect(self.onFiltersChanged)
@@ -617,9 +617,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.lin_search.setCompleter(self.com_autcom)
 					# build list style
 					qDebug('qthread build list style')
-					request = getrequest('listgenres')
-					listgenres = DBFuncBase().sqlToArray(request)
-					self.obj = DBPThreadsListStyle(self, listgenres)
+					#request = getrequest('listgenres')
+					#listgenres = DBFuncBase().sqlToArray(request)
+					#self.obj = DBPThreadsListStyle(self, listgenres)
+					self.obj = DBPThreadsListStyle(self, self.envits)
 					self.obj.finished.connect(self.fillListGenres)
 					self.obj.start()
 
@@ -924,6 +925,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.com_genres.clear()
 		self.com_genres.setEnabled(True)
 		self.com_genres.addItems(listgenres)
+		self.com_genres.SizeAdjustPolicy(2)
 		self.com_genres.setCurrentIndex(0)
 		self.com_genres.currentIndexChanged.connect(self.onFiltersChanged)
 		
