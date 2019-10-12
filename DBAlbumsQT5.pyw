@@ -36,6 +36,7 @@ from DBThunbnai import DBThunbnails
 from DBDragDrop import QLabeldnd
 from DBPThreads import DBPThreadsListStyle
 from DBTImports import InventGui
+from DBParams import ParamsGui
 from DBReadJson import JsonParams
 	
 
@@ -245,6 +246,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 							"Import Foobar Playlists, Update Score...", self.importFoobar)
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_FileDialogDetailedView),
 							"Edit {fin}...".format(fin=self.FILE__INI), lambda e=self.EDIT_TEXT, f=self.FILE__INI: runCommand(e, f))
+		self.menub.addAction(self.style().standardIcon(QStyle.SP_FileDialogContentsView),
+							"Params Environments Json...", lambda: self.openParams())
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
 							"Open Logs Folder...", lambda flog=self.LOGS_PROG: openFolder(flog))
 		# popup albums
@@ -1117,6 +1120,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		command = self.albumname.strip().replace(' ', '+')
 		command = self.SEAR_DISC.replace('NAME', command)
 		QDesktopServices.openUrl(QUrl(command))
+	
+	def openParams(self):
+		"""Open Gui PARAMS"""
+		self.dbparams = ParamsGui(self.envits, self.curthe)
 	
 	def buildInventPython(self, typeupdate):
 		"""Browse folder base for update."""
