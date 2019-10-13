@@ -300,6 +300,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.tbl_albums.setContextMenuPolicy(Qt.CustomContextMenu)
 		self.tbl_albums.customContextMenuRequested.connect(self.popUpTreeAlbums)
 		self.tbl_albums.currentChanged = self.onSelectListAlbum
+		self.tbl_albums.doubleClicked.connect(self.playMediasAlbum)
 		self.tbl_tracks.clicked.connect(self.onSelectTrackChanged)
 		self.tbl_tracks.doubleClicked.connect(self.playMediasAlbum)
 		self.tbl_tracks.currentChanged = self.onSelectTrackChanged

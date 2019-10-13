@@ -53,7 +53,7 @@ class myThreadTimer(QThread):
 		
 	def run(self):
 		self.timerThread.start(time())
-		iterations = 10000
+		iterations = 3600
 		while iterations:
 			#print("Running {0}".format(self.__class__.__name__))
 			iterations -= 1
@@ -72,7 +72,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	
 	group_dbalbums = Json_params.getMember('dbalbums')
 	VERS_PROG = group_dbalbums['prog_build']
-	TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
+	TITL_PROG = "DBAlbums v{v} (2019)".format(v=VERS_PROG)
 	TITL_PROG = TITL_PROG + " : Update Database"
 	WIDT_MAIN = group_dbalbums['wgui_width']
 	HEIG_MAIN = group_dbalbums['wgui_heigh']
@@ -112,7 +112,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.list_actions = []
 		
 		font = QFont()
-		font.setFamily("Courrier New")
+		font.setFamily("Courier New")
 		font.setFixedPitch(True)
 		font.setPointSize(10)
 		fontconsol = QFont()
@@ -202,6 +202,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 			self.albumnew = self.prepareInvent.albumnew
 			self.alupdate = self.prepareInvent.alupdate
 			self.aldelete = self.prepareInvent.aldelete
+			self.myThreadtime.stop()
 		else:
 			# no analyse
 			self.btn_quit.setText('Close')
@@ -256,13 +257,11 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.lab_release.setText('Completed Operations in '+self.total_p)
 		if len(self.list_actions) > 0:
 			# create log file
-			self.textEditrelease.append('\n- Completed Operations in '+self.total_p)
-			self.textEditrelease.append('\n- Create log file : ' + self.logname)
-			text_file = open(self.logname, "w", 'utf-8')
-			text_file.write(self.textEditrelease.toPlainText())
-			text_file.close()
+			self.updateInfos('\n- Completed Operations in '+self.total_p)
+			self.updateInfos('\n- Create log file : ' + self.logname)
 			self.textEditrelease.moveCursor(QTextCursor.Start) ;
 			self.textEditrelease.ensureCursorVisible()
+			self.myThreadtime.stop()
 			# refresh
 			self.signalend.emit()
 			QMessageBox.information(self,'Update Database', 'Completed Operations in '+self.total_p)
@@ -290,6 +289,10 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		if self.focusWidget() != self.vScrollBar:
 			self.textEditrelease.ensureCursorVisible()
 		self.textEditrelease.horizontalScrollBar().setValue(0)
+		text_file = open(self.logname, "a", 'utf-8')
+		text_file.write(line+"\n")
+		text_file.close()
+
 	
 	def golbalInsertCovers(self):
 		request = "SELECT ALBUMS.ID_CD, ALBUMS.Cover FROM ALBUMS " \

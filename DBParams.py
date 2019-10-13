@@ -60,7 +60,8 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 				'2' : '<score> label notation display',
 				'3' : '<score> label notation display'
 				}
-				
+	HELP_TXT = "Category\nMode D = double tree / S = simple tree folder"
+		
 	def __init__(self, envt, themecolor, parent=None):
 		"""Init Gui, start invent"""
 		super(ParamsGui, self).__init__(parent)
@@ -90,6 +91,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.updateTable(self.tableWidget_general, self.group_scorealb , None, True)
 		
 		# complete column help
+		self.plainTextEdit.append(self.HELP_TXT)
 		row = 0
 		while row < self.tableWidget_general.rowCount():
 			nameitem = QTableWidgetItem(self.HELP_LST.get(self.tableWidget_general.item(row,0).text()))
@@ -115,7 +117,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			self.envits = self.comboBox_Envt.currentText()
 			# Environment
 			self.group_envt = self.Json_params.getMember(self.envits)
-			self.updateTable(self.tableWidget_envt, self.group_envt, ['Parameters', 'Values'], False, True)
+			self.updateTable(self.tableWidget_envt, self.group_envt, ['Parameters', 'Values'])
 			# Category
 			currentcate = self.tableWidget_envt.item(1,1).text()
 			self.label_cate.setText("Category : " + currentcate + " ")
@@ -126,7 +128,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			for itemd in self.list_category:
 				for item in itemd:
 					listcat.append(item)
-			self.updateTable(self.tableWidget_category, listcat, ['Category', 'Mode', 'Folder Name', 'Family'])
+			self.updateTable(self.tableWidget_category, listcat, ['Category', 'Mode', 'Folder Name', 'Family'])#, False, True)
 			self.tableWidget_category.cellChanged.connect(self.changeCategory)
 		
 	def updateTable(self, table, listitems, listcolumns, add=False, ajustlastcolumn=False):

@@ -1,11 +1,11 @@
 DBALbums 2.0
 ------------
 
-double-clic list albums -> play album
-probleme suppression (commit?)
-probleme display time
-probleme orphelin threat time
-log update not end creation
+double-clic list albums -> play album			OK 1.66
+problem suppression (commit?)
+problem display time
+problem orphelin threat time					?? 1.66
+log update not end creation						OK 1.66
 list views with filters backup
 listen score update auto 1
 
