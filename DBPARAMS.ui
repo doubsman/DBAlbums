@@ -48,8 +48,14 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="styleSheet">
+            <string notr="true">alternate-background-color: #D9D9D9;								background-color: #E5E5E5;</string>
+           </property>
            <property name="sizeAdjustPolicy">
             <enum>QAbstractScrollArea::AdjustToContents</enum>
+           </property>
+           <property name="alternatingRowColors">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -92,6 +98,26 @@
              </property>
             </spacer>
            </item>
+           <item>
+            <widget class="QLabel" name="label_cate">
+             <property name="text">
+              <string>Category</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
          <item>
@@ -107,11 +133,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="styleSheet">
+              <string notr="true">alternate-background-color: #D9D9D9;								background-color: #E5E5E5;</string>
+             </property>
              <property name="sizeAdjustPolicy">
               <enum>QAbstractScrollArea::AdjustToContents</enum>
              </property>
              <property name="alternatingRowColors">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -123,26 +152,16 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="sizeAdjustPolicy">
-              <enum>QAbstractScrollArea::AdjustToContents</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTableWidget" name="tableWidget_listcategory">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+             <property name="styleSheet">
+              <string notr="true">alternate-background-color: #D9D9D9;								background-color: #E5E5E5;</string>
              </property>
              <property name="sizeAdjustPolicy">
               <enum>QAbstractScrollArea::AdjustToContents</enum>
              </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
             </widget>
-           </item>
-           <item>
-            <widget class="QTableWidget" name="tableWidget_infos"/>
            </item>
           </layout>
          </item>
