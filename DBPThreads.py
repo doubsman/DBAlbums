@@ -97,7 +97,6 @@ class DBPThreadsListStyle(QThread):
 		query.clear
 		return arraydata
 
-
 # test Qthread
 #from sys import argv,  exit
 #from PyQt5.QtWidgets import QApplication, QWidget

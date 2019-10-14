@@ -259,6 +259,29 @@ class DBPlayer(QWidget):
 		self.infoBox.setText(fullText)
 		self.infoBox.show()
 
+class TestAudio(QWidget):
+	def __init__(self):
+		super().__init__()
+		self.player = QMediaPlayer(self)
+		self.sound = QMediaContent(QUrl.fromLocalFile("E:\\Work\ZTest\\01 - Redemption.flac"))
+		self.player.setMedia(self.sound)
+		self.player.setVolume(100)
+		self.player.play()
+		self.show()
+
+#import vlc
+#player = vlc.MediaPlayer("E:\\Work\ZTest\\01 - Redemption.flac")
+#player.play()
+#player.pause()
+#player.stop()
+
+#vlc_instance = vlc.Instance()
+#player = vlc_instance.media_player_new()
+#media = vlc_instance.media_new("E:\\Work\ZTest\\01 - Redemption.flac")
+#player.set_media(media)
+#player.play()
+#duration = player.get_length() / 1000
+
 
 class MainExemple(QMainWindow):
 	def __init__(self, parent=None):
@@ -270,7 +293,7 @@ class MainExemple(QMainWindow):
 
 		PlayerAudio.signaltxt.connect(self.txtplayeraudio)
 
-		PlayerAudio.addMediaslist(("E:\WORK\ZTest\Morten Granau.flac",), 0)
+		PlayerAudio.addMediaslist(("E:\\Work\ZTest\\02. Tristan - Reincarnation (GMS Remix).mp3",), 0, "test")
 		PlayerAudio.player.play()
 
 	def txtplayeraudio(self, message):

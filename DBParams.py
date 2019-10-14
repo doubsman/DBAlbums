@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from os import path
+from sys import platform
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import qDebug
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, QMessageBox
-from DBFunction import centerWidget
+from DBFunction import centerWidget, runCommand
 from DBReadJson import JsonParams
 from Ui_DBPARAMS import Ui_ParamsJson
 
@@ -21,6 +22,10 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 	Json_params = JsonParams(FILE__INI)
 	
 	group_programs = Json_params.getMember('programs')
+	if platform == "darwin" or platform == 'linux':
+		EDIT_TEXT = r'' + group_programs['txt_lin']
+	else:
+		EDIT_TEXT = r'' + group_programs['txt_win']
 	group_dbalbums = Json_params.getMember('dbalbums')
 	group_scorealb = Json_params.buildDictScore()
 	VERS_PROG = group_dbalbums['prog_build']
@@ -60,7 +65,11 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 				'2' : '<score> label notation display',
 				'3' : '<score> label notation display'
 				}
-	HELP_TXT = "Category\nMode D = double tree / S = simple tree folder"
+	HELP_TXT = "Category\n"
+	HELP_TXT +="- Name : name (rock, classic...)\n"
+	HELP_TXT +="- Mode : D (double tree folder) or S = (simple tree folder)\n"
+	HELP_TXT +="- Folder : music location folder\n"
+	HELP_TXT +="- Family : name (physique, web, vynils)\n"
 		
 	def __init__(self, envt, themecolor, parent=None):
 		"""Init Gui, start invent"""
@@ -82,6 +91,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		# events
 		self.comboBox_Envt.currentIndexChanged.connect(self.updateEnvt)
 		self.tableWidget_category.cellChanged.connect(self.changeCategory)
+		self.btn_open.clicked.connect(self.openJson)
 		self.btn_quit.clicked.connect(self.closeParams)
 		#self.tableWidget_category.itemSelectionChanged.connect(self.updateListcategory)
 		
@@ -91,7 +101,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.updateTable(self.tableWidget_general, self.group_scorealb , None, True)
 		
 		# complete column help
-		self.plainTextEdit.append(self.HELP_TXT)
+		self.textEdit.append(self.HELP_TXT)
 		row = 0
 		while row < self.tableWidget_general.rowCount():
 			nameitem = QTableWidgetItem(self.HELP_LST.get(self.tableWidget_general.item(row,0).text()))
@@ -102,7 +112,13 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.updateEnvt(True)
 		self.applyTheme()
 		self.show()
-	
+		
+	def openJson(self):
+		"""Open json file with text editor."""
+		e=self.EDIT_TEXT
+		f=self.FILE__INI
+		runCommand(e, f)
+		
 	def changeCategory(self, row, col):
 		"""Modify Category"""
 		curItem = self.tableWidget_category.currentItem()
@@ -181,7 +197,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		"""Apply color Theme to main Gui."""
 		# main
 		mainstyle = 'QWidget{{background-color: {col1};}}' \
-					'QLCDNumber{{border: none;color: black; background-color: {col1};}}' \
 					'QComboBox{{background-color: {col2};}}' \
 					'QScrollBar:vertical{{width: 14px;}}' \
 					'QScrollBar:horizontal{{height: 14px;}}' \
@@ -199,4 +214,5 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.tableWidget_category.setStyleSheet(gridstyle)
 
 	def closeParams(self):
+		"""Close Windows."""
 		self.destroy()

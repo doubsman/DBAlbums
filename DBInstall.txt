@@ -1,6 +1,7 @@
 INSTALLATION PYTHON LIBS...........................................
 -------------------------------------------------------------------
 for Python 3.7.1
+	codec FLAC direcShow http://downloads.xiph.org/releases/oggdsf/opencodecs_0.85.17777.exe
 	python -m pip install --upgrade pip
 	pip3 install PyQt5
 	pip3 install pyqt5-tools

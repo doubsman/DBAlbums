@@ -28,10 +28,7 @@ class timerThread(QThread):
 	def start(self, timeStart):
 		self.timeStart = timeStart
 		return super(timerThread, self).start()
-	
-	def stop(self):
-		self.terminate()
-		
+
 	def run(self):
 		while self.parent().isRunning():
 			self.timeElapsed.emit(time() - self.timeStart)
@@ -48,7 +45,7 @@ class myThreadTimer(QThread):
 		self.timerThread.timeElapsed.connect(self.timeElapsed.emit)
 	
 	def stop(self):
-		self.timerThread.stop()
+		self.timerThread.terminate()
 		self.terminate()
 		
 	def run(self):

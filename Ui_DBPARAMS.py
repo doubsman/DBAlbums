@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'R:\Projets\DBAlbums.Github\DBPARAMS.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_ParamsJson(object):
     def setupUi(self, ParamsJson):
@@ -99,9 +101,14 @@ class Ui_ParamsJson(object):
         self.tableWidget_category.setColumnCount(0)
         self.tableWidget_category.setRowCount(0)
         self.verticalLayout_2.addWidget(self.tableWidget_category)
-        self.plainTextEdit = QtWidgets.QTextEdit(ParamsJson)
-        self.plainTextEdit.setObjectName("plainTextEdit")
-        self.verticalLayout_2.addWidget(self.plainTextEdit)
+        self.textEdit = QtWidgets.QTextEdit(ParamsJson)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
+        self.textEdit.setSizePolicy(sizePolicy)
+        self.textEdit.setObjectName("textEdit")
+        self.verticalLayout_2.addWidget(self.textEdit)
         self.horizontalLayoutrelease.addLayout(self.verticalLayout_2)
         self.verticalLayout_7.addLayout(self.horizontalLayoutrelease)
         self.horizontalLayout.addLayout(self.verticalLayout_7)
@@ -114,6 +121,9 @@ class Ui_ParamsJson(object):
         self.btn_save.setEnabled(False)
         self.btn_save.setObjectName("btn_save")
         self.horizontalLayoutcommands.addWidget(self.btn_save)
+        self.btn_open = QtWidgets.QPushButton(ParamsJson)
+        self.btn_open.setObjectName("btn_open")
+        self.horizontalLayoutcommands.addWidget(self.btn_open)
         self.btn_quit = QtWidgets.QPushButton(ParamsJson)
         self.btn_quit.setObjectName("btn_quit")
         self.horizontalLayoutcommands.addWidget(self.btn_quit)
@@ -130,6 +140,7 @@ class Ui_ParamsJson(object):
         self.lab_envt.setText(_translate("ParamsJson", "Environment"))
         self.label_cate.setText(_translate("ParamsJson", "Category"))
         self.btn_save.setText(_translate("ParamsJson", "Save Json"))
+        self.btn_open.setText(_translate("ParamsJson", "Open"))
         self.btn_quit.setText(_translate("ParamsJson", "Quit"))
 
 
@@ -141,4 +152,3 @@ if __name__ == "__main__":
     ui.setupUi(ParamsJson)
     ParamsJson.show()
     sys.exit(app.exec_())
-

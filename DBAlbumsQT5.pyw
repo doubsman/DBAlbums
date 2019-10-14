@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2019, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.64"
+__version__ = "1.65"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -245,8 +245,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.action_IFP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'foo.png')),
 							"Import Foobar Playlists, Update Score...", self.importFoobar)
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_FileDialogDetailedView),
-							"Edit {fin}...".format(fin=self.FILE__INI), lambda e=self.EDIT_TEXT, f=self.FILE__INI: runCommand(e, f))
-		self.menub.addAction(self.style().standardIcon(QStyle.SP_FileDialogContentsView),
 							"Params Environments Json...", lambda: self.openParams())
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
 							"Open Logs Folder...", lambda flog=self.LOGS_PROG: openFolder(flog))
