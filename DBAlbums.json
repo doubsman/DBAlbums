@@ -97,14 +97,14 @@
         "raci"      : "\\\\HOMERSTATION\\_LossLess",
         "cate"      : "LOSSLESS_CATEGORY",
         "typb"      : "mssql",
-        "serv"      : "ANTEC",
+        "serv"      : "FRACTAL-DB",
         "user"      : "dbalbums",
         "pass"      : "dbalbums2017",
         "base"      : "DBALBUMS",
-        "port"      : 1433
+        "port"      : 1433	
     },
     "LOSSLESS_TEST": {
-        "raci"      : "E:\\Work\\ZTest\\TAG_bluid",
+        "raci"      : "D:\\WorkDev\\DBAlbumsTEST",
         "cate"      : "LOSSLESS_CATEGORY",
         "typb"      : "mysql",
         "serv"      : "doubbigstation",
@@ -114,7 +114,7 @@
         "port"      : 3307
     },
     "LOSSLESS_TEST_SQLITE": {
-        "raci"      : "E:\\Work\\ZTest\\TAG_bluid",
+        "raci"      : "D:\\WorkDev\\DBAlbumsTEST",
         "cate"      : "LOSSLESS_CATEGORY",
         "typb"      : "sqlite",
         "serv"      : null,

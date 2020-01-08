@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2019-10-12, 22:09:42 -->
-<!-- Copyright (C) 2019 doubsman,  -->
+<!-- Saved: 2020-01-07, 21:52:23 -->
+<!-- Copyright (C) 2020 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
   <Hash>398860a7099ed2e66a0052c51e54ce591a74535b</Hash>
@@ -48,6 +48,7 @@
   <Forms>
     <Form>DBALBUMS.ui</Form>
     <Form>DBLOADING.ui</Form>
+    <Form>DBPARAMS.ui</Form>
     <Form>DBUPDATE.ui</Form>
   </Forms>
   <Others>

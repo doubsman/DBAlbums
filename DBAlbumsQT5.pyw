@@ -15,7 +15,7 @@ from sys import platform, argv, exit
 from os import path, getcwd
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
-from PyQt5.QtCore import (Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, 
+from PyQt5.QtCore import (Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QCoreApplication, 
 						QSize, QRect, qInstallMessageHandler, qDebug, QUrl) 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, 
 						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel)
@@ -90,6 +90,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	def __init__(self, parent=None):
 		"""Init gui."""
 		qDebug('init main gui')
+		print(QCoreApplication.libraryPaths())
 		super(DBAlbumsMainGui, self).__init__(parent)
 		self.setupUi(self)
 		

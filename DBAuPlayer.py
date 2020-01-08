@@ -8,12 +8,38 @@ from sys import argv
 from os import path
 from PyQt5.QtCore import Qt, QUrl, pyqtSignal
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist#, QMediaMetaData
-from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QPushButton, QSlider,
+from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QPushButton, QSlider, QStyleOptionSlider,
 							QLabel, QMainWindow, QStyle, QWidget, QMessageBox)
 
 VERS_PROG = '1.00'
 TITL_PROG = "Player v{v} : ".format(v=VERS_PROG)
 WINS_ICO = "DBAlbums-icone.ico"
+
+
+class Slider(QSlider):
+	def mousePressEvent(self, event):
+		super(Slider, self).mousePressEvent(event)
+		if event.button() == Qt.LeftButton:
+			val = self.pixelPosToRangeValue(event.pos())
+			self.setValue(val)
+
+	def pixelPosToRangeValue(self, pos):
+		opt = QStyleOptionSlider()
+		self.initStyleOption(opt)
+		gr = self.style().subControlRect(QStyle.CC_Slider, opt, QStyle.SC_SliderGroove, self)
+		sr = self.style().subControlRect(QStyle.CC_Slider, opt, QStyle.SC_SliderHandle, self)
+		if self.orientation() == Qt.Horizontal:
+			sliderLength = sr.width()
+			sliderMin = gr.x()
+			sliderMax = gr.right() - sliderLength + 1
+		else:
+			sliderLength = sr.height()
+			sliderMin = gr.y()
+			sliderMax = gr.bottom() - sliderLength + 1;
+		pr = pos - sr.center() + sr.topLeft()
+		p = pr.x() if self.orientation() == Qt.Horizontal else pr.y()
+		return QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,
+													sliderMax - sliderMin, opt.upsideDown)
 
 
 # ##################################################################
@@ -68,7 +94,8 @@ class DBPlayer(QWidget):
 		infoBtn.setStyleSheet('border: 0px;')
 
 		# seek slider
-		self.seekSlider = QSlider(Qt.Horizontal, self)
+		#self.seekSlider = QSlider(Qt.Horizontal, self)
+		self.seekSlider = Slider(Qt.Horizontal, self)
 		self.seekSlider.setMinimum(0)
 		self.seekSlider.setMaximum(100)
 		self.seekSlider.setTracking(False)
@@ -92,6 +119,7 @@ class DBPlayer(QWidget):
 
 		# link buttons to media
 		self.seekSlider.sliderMoved.connect(self.seekPosition)
+		self.seekSlider.valueChanged.connect(self.changePosition)
 		self.playBtn.clicked.connect(self.playHandler)
 		stopBtn.clicked.connect(self.stopHandler)
 		volumeDescBtn.clicked.connect(self.decreaseVolume)
@@ -152,7 +180,13 @@ class DBPlayer(QWidget):
 		self.seekSlider.setValue(position)
 		# update the text label
 		self.seekSliderLabel1.setText('%d:%02d' % (int(position/60000), int((position/1000) % 60)))
-
+		
+	def changePosition(self, position):
+		# update position slider
+		self.player.blockSignals(True)
+		self.player.setPosition(position)
+		self.player.blockSignals(False)
+	
 	def seekPosition(self, position):
 		sender = self.sender()
 		if isinstance(sender, QSlider):

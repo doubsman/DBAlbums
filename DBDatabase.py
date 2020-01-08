@@ -214,7 +214,7 @@ class DBFuncBase(QObject):
 		if not query.exec_():
 			errorText = query.lastError().text()
 			qDebug(query.lastQuery())
-			qDebug(errorText)
+			qDebug(ascii(errorText))
 		indexes = query.record().count()
 		while query.next():
 			if indexes == 1:
