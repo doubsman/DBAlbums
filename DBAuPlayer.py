@@ -16,9 +16,9 @@ TITL_PROG = "Player v{v} : ".format(v=VERS_PROG)
 WINS_ICO = "DBAlbums-icone.ico"
 
 
-class Slider(QSlider):
+class MySlider(QSlider):
 	def mousePressEvent(self, event):
-		super(Slider, self).mousePressEvent(event)
+		super(MySlider, self).mousePressEvent(event)
 		if event.button() == Qt.LeftButton:
 			val = self.pixelPosToRangeValue(event.pos())
 			self.setValue(val)
@@ -94,8 +94,7 @@ class DBPlayer(QWidget):
 		infoBtn.setStyleSheet('border: 0px;')
 
 		# seek slider
-		#self.seekSlider = QSlider(Qt.Horizontal, self)
-		self.seekSlider = Slider(Qt.Horizontal, self)
+		self.seekSlider = MySlider(Qt.Horizontal)
 		self.seekSlider.setMinimum(0)
 		self.seekSlider.setMaximum(100)
 		self.seekSlider.setTracking(False)
@@ -119,7 +118,6 @@ class DBPlayer(QWidget):
 
 		# link buttons to media
 		self.seekSlider.sliderMoved.connect(self.seekPosition)
-		self.seekSlider.valueChanged.connect(self.changePosition)
 		self.playBtn.clicked.connect(self.playHandler)
 		stopBtn.clicked.connect(self.stopHandler)
 		volumeDescBtn.clicked.connect(self.decreaseVolume)
@@ -180,18 +178,10 @@ class DBPlayer(QWidget):
 		self.seekSlider.setValue(position)
 		# update the text label
 		self.seekSliderLabel1.setText('%d:%02d' % (int(position/60000), int((position/1000) % 60)))
-		
-	def changePosition(self, position):
-		# update position slider
-		self.player.blockSignals(True)
-		self.player.setPosition(position)
-		self.player.blockSignals(False)
 	
 	def seekPosition(self, position):
-		sender = self.sender()
-		if isinstance(sender, QSlider):
-			if self.player.isSeekable():
-				self.player.setPosition(position)
+		if self.player.isSeekable():
+			self.player.setPosition(position)
 
 	def qmp_volumeChanged(self):
 		if self.player.volume()is not None:

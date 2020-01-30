@@ -8,7 +8,7 @@
         "wins_icone": "icone.ico",
         "pict_blank": "cd-blank.png",
         "picm_endof": "cd-blank-mini3d.jpg",
-        "envt_deflt": "LOSSLESS_TEST",
+        "envt_deflt": "LOSSLESS_TEST_SQLITE",
         "covers_siz": 400,
         "thun_csize": 150,
         "thnail_dis": 100,
@@ -23,7 +23,7 @@
         "txt_lin"   : "mousepad",
         "foobarP"   : "C:\\Users\\Mister doubs\\AppData\\Roaming\\foobar2000\\playlists-v1.3",
         "discogs"   : "http://www.discogs.com/search?q=%NAME",
-        "tagscan"   : "\\\\HOMERSTATION\\_Synchro\\_Apps_Portables\\tagscan_6.0.4\\Tagscan.exe"
+        "tagscan"   : "\\\\HOMERSTATION\\_Synchro\\_Apps_Portables\\tagscan\\Tagscan.exe"
     },
     "score": {
         "0"         : "not listened",

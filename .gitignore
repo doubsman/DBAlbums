@@ -12,6 +12,8 @@ _ropeproject/
 *.orig
 *.bak
 *.rej
+*.log
+*.db
 *~
 cur/
 tmp/

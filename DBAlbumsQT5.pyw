@@ -12,12 +12,12 @@ __status__ = "Production"
 
 
 from sys import platform, argv, exit
-from os import path, getcwd
+from os import path, getcwd, rename
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
 from PyQt5.QtCore import (Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QCoreApplication, 
 						QSize, QRect, qInstallMessageHandler, qDebug, QUrl) 
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, 
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QInputDialog, QLineEdit, 
 						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel)
 from PyQt5.QtMultimedia import QMediaPlayer
 # Gui QtDesigner : compiler .ui sans Eric6: pyuic5 file.ui -o Ui_main_file.py
@@ -261,6 +261,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 							"Edit Tags (TagScan)...", self.openTagScan)
 		self.action_UAP = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'update.png')),
 							"Update Album...", self.updateAlbums)
+		self.action_RAP = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'update.png')),
+							"Rename Album...", self.renameAlbums)
 		self.action_DIS = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'discogs.png')),
 							"Search www.Discogs.com...", self.searchDiscogs)
 
@@ -313,13 +315,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.playerAudio.signaltxt.connect(self.updateStatusBar)
 		self.playerAudio.signalnum.connect(self.selectPlayingTack)
 
-		# DISABLED OPTIONS for OS linux: no powershell, foobar, tagscan
+		# DISABLED OPTIONS for OS linux: no foobar, tagscan
 		if platform == "darwin" or platform == 'linux':
+			self.action_IFP.setEnabled(False)   # Import playlists foobar 2000			
+			self.action_TAG.setEnabled(False)	# TagScan
 			#self.action_UBP.setEnabled(False)	# Update base 
 			#self.action_UBN.setEnabled(False)	# Add news base 
-			self.action_IFP.setEnabled(False)   # Import playlists foobar 2000
 			#self.action_UAP.setEnabled(False)	# Update album
-			self.action_TAG.setEnabled(False)	# TagScan
 		
 		# init connect
 		self.connectEnvt()
@@ -1042,8 +1044,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				if len(listrows) > 1:
 					self.action_VIA.setEnabled(False)
 					self.action_OPF.setEnabled(False)
-					self.action_EXA.setText("Export " + displayCounters(len(listrows), 'Album')+"cover/csv...")
-					self.action_UAP.setText("Update " + displayCounters(len(listrows), 'Album') + "...")
+					self.action_EXA.setText("Export cover/csv " + displayCounters(len(listrows), 'Album(s)')+"...")
+					self.action_UAP.setText("Update " + displayCounters(len(listrows), 'Album(s)') + "...")
+					self.action_RAP.setText("Rename " + displayCounters(len(listrows), 'Album(s)') + "...")
 					self.action_TAG.setEnabled(False)
 					self.menua.exec_(self.tbl_albums.viewport().mapToGlobal(position))
 
@@ -1062,8 +1065,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.action_OPF.setEnabled(False)
 		else:
 			self.action_OPF.setEnabled(True)
-		self.action_EXA.setText("Export cover/csv '" + self.albumname[:15] + "...'")
-		self.action_UAP.setText("Update Album: " + self.albumname[:15] + "...")
+		self.action_EXA.setText("Export cover/csv '" + self.albumname[:15] + "' ...")
+		self.action_UAP.setText("Update Album '" + self.albumname[:15] + "' ...")
+		self.action_RAP.setText("Rename Album '" + self.albumname[:15] + "' ...")
 		self.menua.exec_(position)
 	
 	def playMediasAlbum(self, event):
@@ -1113,6 +1117,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def openTagScan(self):
 		"""Open program TAGs. edit."""
+		# reinit player for access file
+		self.playerAudio.addMediaslist(None, 0, None)
 		runCommand(self.TAGS_SCAN, self.AlbumPath)
 	
 	def searchDiscogs(self):
@@ -1168,7 +1174,40 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 								self.curthe)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 		self.prepareInvent.realiseActions(list_actions)
-
+	
+	def renameAlbums(self):
+		"""Execute macro update."""
+		list_actions = []
+		self.playerAudio.player.stop()
+		listrows = self.getRowsfromListAlbums()
+		if listrows is not None:
+			for ind in listrows:
+				# new name album
+				namealbum = path.basename(self.tableMdlAlb.getData(ind, 'PATHNAME'))
+				newname, okPressed = QInputDialog.getText(self, "Rename Album...","New Name", QLineEdit.Normal, '[' +self.tableMdlAlb.getData(ind, 'TAGISRC')+ '] ' + namealbum)
+				if okPressed and newname != '' and newname != namealbum:
+					# reinit player for access file
+					self.playerAudio.addMediaslist(None, 0, namealbum)
+					# rename folder
+					newpathalbum = path.join(path.dirname(path.abspath(self.tableMdlAlb.getData(ind, 'PATHNAME'))), newname)
+					rename(self.tableMdlAlb.getData(ind, 'PATHNAME'), newpathalbum)
+					list_actions.append([self.tableMdlAlb.getData(ind, 'CATEGORY'), 
+										self.tableMdlAlb.getData(ind, 'FAMILY'), 
+										'UPDATE',
+										self.tableMdlAlb.getData(ind, 'ID_CD'),
+										self.tableMdlAlb.getData(ind, 'NAME'),
+										newpathalbum])
+			if list_actions:
+				self.prepareInvent = InventGui(self.tableMdlAlb.arraydata, 
+										self.tableMdlAlb.myindex,
+										self.lstcat,
+										'UPDATE',
+										self.modsql, 
+										self.envits, 
+										self.curthe)
+				self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
+				self.prepareInvent.realiseActions(list_actions)
+	
 	def updateAlbums(self):
 		"""Execute macro update."""
 		list_actions = []

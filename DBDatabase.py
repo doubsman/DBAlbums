@@ -334,15 +334,15 @@ class DBFuncBase(QObject):
 		for col_name in col_names:
 			ReqTDC += "    SUM(CASE WHEN `{column}` = '{col_name}' THEN {TDCSum} ELSE 0 END) AS `{col_name}` ,\n".format(column=column, TDCSum=TDCSum, col_name=col_name)
 			lstcols += " `{col_name}` ,".format(col_name=col_name)
-		ReqTDC += "    SUM({TDCSum}) AS `TOTAL` FROM {tableName} GROUP BY `{group}` \n".format(tableName=tableName, TDCSum=TDCSum, group=group)
+		ReqTDC += "    SUM({TDCSum}) AS `TOTAL` FROM {tableName} GROUP BY `{group}`\n".format(tableName=tableName, TDCSum=TDCSum, group=group)
 		# sum global
 		if LineSum:
-			ReqTDC += " UNION \nSELECT 'TOTAL', \n"
+			ReqTDC += " UNION \nSELECT '➔TOTAL', \n"
 			for col_name in col_names:
 				ReqTDC += "    SUM(CASE WHEN `{column}` = '{col_name}' THEN {TDCSum} ELSE 0 END),\n".format(column=column, TDCSum=TDCSum, col_name=col_name)
 			ReqTDC += "    SUM({TDCSum}) FROM {tableName}\n".format(tableName=tableName, TDCSum=TDCSum)
 		# order by total is last line
-		ReqTDC += ") tdc ORDER BY `TOTAL`;"
+		ReqTDC += ") tdc ORDER BY 1;"
 		# select column
 		ReqTDC = "SELECT `"+TDCName+"` ,"+lstcols+" `TOTAL` FROM \n" + ReqTDC
 		# replace ` for [] sqlserver
