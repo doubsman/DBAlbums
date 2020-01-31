@@ -7,8 +7,8 @@ from DBDatabase import getrequest
 from DBReadJson import JsonParams
 
 PATH_PROG = path.dirname(path.abspath(__file__))
-chdir(PATH_PROG)
 BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
+#chdir(PATH_PROG)
 
 class DBPThreadsListStyle(QThread):
 	finished = pyqtSignal(list)
@@ -47,7 +47,7 @@ class DBPThreadsListStyle(QThread):
 
 	def connectDatabase(self, envt, connexionName):
 		"""Connect base MySQL/Sqlite."""
-		FILE__INI = 'DBAlbums.json'
+		FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
 		Json_params = JsonParams(FILE__INI)
 		group_envt = Json_params.getMember(envt)
 		MODE_SQLI = group_envt['typb']

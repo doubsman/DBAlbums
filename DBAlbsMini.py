@@ -17,10 +17,9 @@ class DBAlbumsQT5Mini(QMainWindow):
 	"""Init mini Gui constants."""
 	PATH_PROG = path.dirname(path.abspath(__file__))
 	RESS_ICOS = path.join(PATH_PROG, 'IMG' , 'ICO')
-	chdir(PATH_PROG)
 	VERS_PROG = '1.01'
-	TITL_PROG = "♫ DBAlbums mini v{v} (2017)".format(v=VERS_PROG)
-	FILE__INI = 'DBAlbums.json'
+	TITL_PROG = "♫ DBAlbums mini v{v} (2020)".format(v=VERS_PROG)
+	FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
 	Json_params = JsonParams(FILE__INI)
 	group_dbalbums = Json_params.getMember('dbalbums')
 	WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])

@@ -9,8 +9,8 @@ from DBDatabase import DBFuncBase, getrequest
 from DBFunction import convertUNC
 from DBReadJson import JsonParams
 
-
-FILE__INI = 'DBAlbums.json'
+PATH_PROG = path.dirname(path.abspath(__file__))
+FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
 Json_params = JsonParams(FILE__INI)
 group_dbalbums = Json_params.getMember('dbalbums')
 TEXT_NCO = group_dbalbums['text_nocov']

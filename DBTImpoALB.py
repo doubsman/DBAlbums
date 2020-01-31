@@ -51,8 +51,7 @@ class CardAlbum(QObject):
 						'MODIFIED': None		# Calcul
 						}
 	PATH_PROG = path.dirname(path.abspath(__file__))
-	# Read File DBAlbums.ini
-	FILE__INI = 'DBAlbums.json'
+	FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
 	Json_params = JsonParams(FILE__INI)
 	group_dbalbums = Json_params.getMember('dbalbums')
 	TEXT_NCO = group_dbalbums['text_nocov']

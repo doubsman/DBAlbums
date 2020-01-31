@@ -54,7 +54,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	RESS_FLAG = path.join(PATH_PROG, 'IMG' , 'FLAG')
 	RESS_LOGO = path.join(PATH_PROG, 'IMG')
 	# Read Json params
-	FILE__INI = 'DBAlbums.json'
+	FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
 	Json_params = JsonParams(FILE__INI)
 	
 	group_dbalbums = Json_params.getMember('dbalbums')
@@ -71,6 +71,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	ENVT_DEF = group_dbalbums['envt_deflt']
 	THUN_DIS = group_dbalbums['thnail_dis']
 	THUN_NOD = group_dbalbums['thnail_nod']
+	THUN_DBA = path.join(PATH_PROG, 'IMG', group_dbalbums['picm_endof'])
 	COVE_SIZ = group_dbalbums['covers_siz']
 	FONT_MAI = group_dbalbums['font00_ttx']
 	FONT_CON = group_dbalbums['font01_ttx']

@@ -18,7 +18,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 	C_HEIGHT = 25
 	# Read File DBAlbums.json
 	qDebug('read json params file')
-	FILE__INI = 'DBAlbums.json'
+	FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
 	Json_params = JsonParams(FILE__INI)
 	
 	group_programs = Json_params.getMember('programs')
@@ -70,7 +70,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 	HELP_TXT +="- Mode : D (double tree folder) or S = (simple tree folder)\n"
 	HELP_TXT +="- Folder : music location folder\n"
 	HELP_TXT +="- Family : name (physique, web, vynils)\n"
-		
+	
 	def __init__(self, envt, themecolor, parent=None):
 		"""Init Gui, start invent"""
 		super(ParamsGui, self).__init__(parent)
