@@ -1,36 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# ############################################################################
-# # Audio pyQT5 Player by SFI
-# ############################################################################
 from sys import argv
 from os import path
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, pyqtSlot, QSize
+from PyQt5.QtCore import Qt, pyqtSlot, QSize, QObject
 from PyQt5.QtWidgets import (QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, 
 						QLabel, QApplication)
 from DBFunction import openFolder, getListFiles, centerWidget
 from DBThunbnai import DBThunbnails
 from DBReadJson import JsonParams
 
-PATH_PROG = path.dirname(path.abspath(__file__))
-FILE__INI = 'DBAlbums.json'
-Json_params = JsonParams(FILE__INI)
-group_dbalbums = Json_params.getMember('dbalbums')
-VERS_PROG = group_dbalbums['prog_build']
-TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
-TITL_PROG = TITL_PROG + " : Artwork viewer"
-WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
-THEM_COL = group_dbalbums['name_theme']
-TEXT_NCO = group_dbalbums['text_nocov']
-MASKCOVER = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')
 
-# ##################################################################
 class CoverViewGui(QWidget):
-	
+	"""Cover class."""
 	def __init__(self, cover, namealbum, w, h, parent=None):
-		super(CoverViewGui, self).__init__(parent)
+		super(CoverViewGui, self).__init__()
+		self.parent = parent
 		self.resize(w, h)
 		self.setMaximumSize(w, h)
 		self.setMinimumSize(cover.width(), cover.height())
@@ -38,7 +24,7 @@ class CoverViewGui(QWidget):
 		self.setWindowFlags(Qt.WindowTitleHint)
 		self.setWindowFlags(Qt.WindowSystemMenuHint)
 		self.setWindowFlags(Qt.WindowCloseButtonHint)
-		self.setWindowIcon(QIcon(WINS_ICO))
+		self.setWindowIcon(QIcon(self.parent.WINS_ICO))
 		centerWidget(self)
 		self.namealbum = namealbum
 		self.cover = cover
@@ -70,11 +56,14 @@ class CoverViewGui(QWidget):
 
 # ##################################################################
 class ArtworksGui(QWidget):
+	"""AcdSee lite."""
 	def __init__(self, pathartworks, nametittle, createcover, w, h, sizeTN, parent=None):
-		super(ArtworksGui, self).__init__(parent)
+		#super(ArtworksGui, self).__init__(parent)
+		super(ArtworksGui, self).__init__()
+		self.parent = parent
 		self.resize(w, h)
-		self.setWindowIcon(QIcon(WINS_ICO))
-		self.setWindowTitle(TITL_PROG+" [view ArtWorks] : reading files covers...")
+		self.setWindowIcon(QIcon(self.parent.WINS_ICO))
+		self.setWindowTitle(self.parent.TITL_PROG+" [view ArtWorks] : reading files covers...")
 		self.setStyleSheet('QWidget{background-color: darkgray} '
 							'QLabel{background-color: black;border: 1px solid black;}')
 		
@@ -102,7 +91,7 @@ class ArtworksGui(QWidget):
 		self.action_COV = self.menua.addAction("Create cover file...", self.createFileCover)
 		
 		# create cover option only if no cover file
-		if createcover[0:len(TEXT_NCO)] != TEXT_NCO:
+		if createcover[0:len(self.parent.TEXT_NCO)] != self.parent.TEXT_NCO:
 			self.action_COV.setEnabled(False)
 
 		layout = QVBoxLayout(self)
@@ -122,7 +111,7 @@ class ArtworksGui(QWidget):
 
 		# build list covers
 		self.nametittle = nametittle
-		self.fileslist = list(getListFiles(pathartworks, MASKCOVER))
+		self.fileslist = list(getListFiles(pathartworks, self.parent.MASKCOVER))
 		self.filelist = self.fileslist[0]
 
 		# build thunbnails
@@ -165,7 +154,7 @@ class ArtworksGui(QWidget):
 		width, height, new_width, new_height = self.resizeImage(self.labelcover.size().width(), self.size().height()-self.thunbnails.size().height(), self.mycover)
 		dicover = self.mycover.scaled(new_width, new_height, Qt.IgnoreAspectRatio, Qt.FastTransformation)
 		self.labelcover.setPixmap(dicover)
-		self.setWindowTitle(TITL_PROG+" : [view ArtWorks: "+self.nametittle+'] {c}/{n} "{name}" A[{w}x{h}] O[{wo}x{ho}]'.format(c=str(self.numpic+1),
+		self.setWindowTitle(self.parent.TITL_PROG+" : [view ArtWorks: "+self.nametittle+'] {c}/{n} "{name}" A[{w}x{h}] O[{wo}x{ho}]'.format(c=str(self.numpic+1),
 																	 n=str(len(self.fileslist)),
 																	 w=new_width,
 																	 h=new_height,
@@ -193,13 +182,32 @@ class ArtworksGui(QWidget):
 		self.mycover.save(path_cover)
 
 
+# TEST
+class TESTArtWork(QObject):
+	PATH_PROG = path.dirname(path.abspath(__file__))
+	FILE__INI = 'DBAlbums.json'
+	Json_params = JsonParams(FILE__INI)
+	group_dbalbums = Json_params.getMember('dbalbums')
+	VERS_PROG = group_dbalbums['prog_build']
+	TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
+	TITL_PROG = TITL_PROG + " : Artwork viewer"
+	WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
+	TEXT_NCO = group_dbalbums['text_nocov']
+	MASKCOVER = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')
+
+	def __init__(self, filtername = '', PathDownload = '',  parent=None):
+		super(TESTArtWork, self).__init__(None)
+		self.parent = parent
+		ArtworksGui(r"D:\WorkDev\DBAlbumsTEST\ROCK\Download\Red Hot Chili Peppers - Californication (1999)", 
+							'test', 
+							'chocolat', 
+							1250, 
+							1060, 
+							150, 
+							self)
+
 if __name__ == '__main__':
 	app = QApplication(argv)
-	ART = ArtworksGui(r"E:\Work\ZTest\TAG_bluid\TECHNO\Download\Caia - The Magic Dragon (2003)", 
-						'test', 
-						'chocolat', 
-						1250, 
-						1060, 
-						150)
+	run = TESTArtWork()
 	rc = app.exec_()
 	exit(rc)

@@ -14,7 +14,6 @@ from DBDatabase import DBFuncBase
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import BuildInvent
 from DBTImpoRUN import ReleaseInvent
-from DBReadJson import JsonParams
 from Ui_DBUPDATE import Ui_UpdateWindows
 
 
@@ -60,36 +59,16 @@ class myThreadTimer(QThread):
 class InventGui(QWidget, Ui_UpdateWindows):
 	signalend = pyqtSignal()
 	
-	PATH_PROG = path.dirname(path.abspath(__file__))
-	LOGS_PROG = path.join(PATH_PROG, 'LOG')
-	# Read File DBAlbums.ini
-	qDebug('read json params file')
-	FILE__INI = 'DBAlbums.json'
-	Json_params = JsonParams(FILE__INI)
-	
-	group_dbalbums = Json_params.getMember('dbalbums')
-	VERS_PROG = group_dbalbums['prog_build']
-	TITL_PROG = "DBAlbums v{v} (2019)".format(v=VERS_PROG)
-	TITL_PROG = TITL_PROG + " : Update Database"
-	WIDT_MAIN = group_dbalbums['wgui_width']
-	HEIG_MAIN = group_dbalbums['wgui_heigh']
-	WIDT_PICM = group_dbalbums['thun_csize']
-	WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
-	THEM_COL = group_dbalbums['name_theme']
-	TEXT_NCO = group_dbalbums['text_nocov']
-	FONT_CON = group_dbalbums['font01_ttx']
-	
-
 	def __init__(self, list_albums, list_columns, list_category, typeupdate, modsql, envt, themecolor, parent=None):
 		"""Init Gui, start invent"""
-		super(InventGui, self).__init__(parent)
+		super(InventGui, self).__init__()
 		self.setupUi(self)
-		self.resize(self.WIDT_MAIN, self.HEIG_MAIN-300)
-		self.setWindowIcon(QIcon(self.WINS_ICO))
-		self.setWindowTitle(self.TITL_PROG + " Environment : " + envt + " mode : " + typeupdate)
+		self.parent = parent
+		self.resize(self.parent.WIDT_MAIN, self.parent.HEIG_MAIN-300)
+		self.setWindowIcon(QIcon(self.parent.WINS_ICO))
+		self.setWindowTitle(self.parent.TITL_PROG + ' : Update Database (Environment : ' + envt + ' mode : ' + typeupdate + ')')
 		centerWidget(self)
 		
-		self.parent = parent
 		self.list_albums = list_albums
 		self.list_category = list_category
 		self.list_columns = list_columns
@@ -98,7 +77,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.typeupdate = typeupdate
 		self.curthe = themecolor
 		self.logname = QDateTime.currentDateTime().toString('yyMMddhhmmss') + "_UPDATE_DATABASE_" + self.envits + ".log"
-		self.logname = path.join(self.LOGS_PROG, self.logname)
+		self.logname = path.join(self.parent.LOGS_PROG, self.logname)
 		self.total_p = None
 		self.albumnew = 0
 		self.alupdate = 0
@@ -113,7 +92,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		font.setFixedPitch(True)
 		font.setPointSize(10)
 		fontconsol = QFont()
-		fontconsol.setFamily(self.FONT_CON)
+		fontconsol.setFamily(self.parent.FONT_CON)
 		fontconsol.setFixedPitch(True)
 		fontconsol.setPointSize(8)
 		self.levelcolors = [Qt.white, Qt.green, Qt.magenta, Qt.red]
@@ -216,7 +195,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 					self.alupdate += 1
 				elif action[2] == 'ADD':
 					self.albumnew += 1
-		run = ReleaseInvent(self.list_actions, self.modsql)
+		run = ReleaseInvent(self.list_actions, self.modsql, self.parent)
 		run.signalrun.connect(self.updateRun)
 		run.signalend.connect(self.updateEnd)
 		run.signaltxt.connect(self.updateInfos)
@@ -256,7 +235,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 			# create log file
 			self.updateInfos('\n- Completed Operations in '+self.total_p)
 			self.updateInfos('\n- Create log file : ' + self.logname)
-			self.textEditrelease.moveCursor(QTextCursor.Start) ;
+			self.textEditrelease.moveCursor(QTextCursor.Start)
 			self.textEditrelease.ensureCursorVisible()
 			self.myThreadtime.stop()
 			# refresh
@@ -295,11 +274,11 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		request = "SELECT ALBUMS.ID_CD, ALBUMS.Cover FROM ALBUMS " \
 					"LEFT JOIN COVERS ON ALBUMS.ID_CD = COVERS.ID_CD " \
 					"WHERE COVERS.ID_CD IS NULL AND ALBUMS.Cover<>'{textnopic}'"
-		request = request.format(textnopic = self.TEXT_NCO)
+		request = request.format(textnopic = self.parent.TEXT_NCO)
 		query = QSqlQuery(request)
 		query.exec_()
 		while query.next():
-			DBFuncBase().imageToSql(query.value(1), query.value(0), self.WIDT_PICM)
+			DBFuncBase().imageToSql(query.value(1), query.value(0), self.parent.WIDT_PICM)
 
 	def getFolder(self):
 		"""Open album folder."""

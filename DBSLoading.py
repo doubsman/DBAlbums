@@ -8,20 +8,11 @@ from PyQt5.QtSql import QSqlQueryModel
 from PyQt5.QtWidgets import QWidget
 from DBDatabase import DBFuncBase, getrequest
 from DBFunction import centerWidget
-from DBReadJson import JsonParams
 from Ui_DBLOADING import Ui_LoadingWindow
 
 
 class DBloadingGui(QWidget, Ui_LoadingWindow):
-	PATH_PROG = path.dirname(path.abspath(__file__))
-	RESS_LOGO = path.join(PATH_PROG, 'IMG')
-	chdir(PATH_PROG)
-	
-	FILE__INI = 'DBAlbums.json'
-	Json_params = JsonParams(FILE__INI)
-	group_dbalbums = Json_params.getMember('dbalbums')
-	LOGO = group_dbalbums['progr_logo']
-	FONT_MAI = group_dbalbums['font00_ttx']
+	"""Loading."""
 	
 	def __init__(self, modsql, title, parent):
 		super(DBloadingGui, self).__init__(parent)
@@ -32,14 +23,14 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		centerWidget(self)
 		# font
 		font = QFont()
-		font.setFamily(self.FONT_MAI)
+		font.setFamily(self.parent.FONT_MAI)
 		font.setFixedPitch(True)
 		font.setPointSize(14)
 		self.lab_text.setFont(font)
 		self.tabWidget.currentChanged.connect(self.chgtLogo)
 		# logo gif
 		self.numlogo = 1
-		self.movielogo = QMovie(path.join(self.RESS_LOGO,"logo1.gif"))
+		self.movielogo = QMovie(path.join(self.parent.RESS_LOGO,"logo1.gif"))
 		self.lab_logo.setMovie(self.movielogo)
 		self.movielogo.start()
 		# tab1
@@ -83,7 +74,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		self.movielogo.stop()
 		self.numlogo += 1
 		self.numlogo = self.numlogo % 3
-		logo = path.join(self.RESS_LOGO, "logo" +str(self.numlogo) + ".gif")
+		logo = path.join(self.parent.RESS_LOGO, "logo" +str(self.numlogo) + ".gif")
 		self.movielogo = QMovie(logo)
 		self.lab_logo.setMovie(self.movielogo)
 		self.movielogo.start()

@@ -9,14 +9,10 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QPixmap
 from DBReadJson import JsonParams
 
-PATH_PROG = path.dirname(path.abspath(__file__))
-chdir(PATH_PROG)
-BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
 
-def connectDatabase(envt):
+def connectDatabase(envt, fileini, basesqli):
 	"""Connect base MySQL/Sqlite."""
-	FILE__INI = 'DBAlbums.json'
-	Json_params = JsonParams(FILE__INI)
+	Json_params = JsonParams(fileini)
 	group_envt = Json_params.getMember(envt)
 	MODE_SQLI = group_envt['typb']
 	BASE_RAC = r'' + group_envt['raci']
@@ -24,7 +20,7 @@ def connectDatabase(envt):
 	boolcon = False
 	if MODE_SQLI == 'sqlite':
 		db = QSqlDatabase.addDatabase("QSQLITE")
-		db.setDatabaseName(BASE_SQLI.format(envt=envt))
+		db.setDatabaseName(basesqli.format(envt=envt))
 		if not db.isValid():
 			qDebug(envt+' problem no valid database')
 	else:

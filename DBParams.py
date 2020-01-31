@@ -29,7 +29,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 	group_dbalbums = Json_params.getMember('dbalbums')
 	group_scorealb = Json_params.buildDictScore()
 	VERS_PROG = group_dbalbums['prog_build']
-	TITL_PROG = "DBAlbums v{v} (2019)".format(v=VERS_PROG)
+	TITL_PROG = "DBAlbums v{v} (2020)".format(v=VERS_PROG)
 	TITL_PROG = TITL_PROG + " : Environments Parameters "
 	WIDT_MAIN = group_dbalbums['wgui_width']
 	HEIG_MAIN = group_dbalbums['wgui_heigh']

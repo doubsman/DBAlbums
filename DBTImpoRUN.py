@@ -9,7 +9,6 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from DBDatabase import DBFuncBase, connectDatabase, getrequest
 from DBTImpoALB import CardAlbum
 from DBFunction import displayArrayDict
-from DBReadJson import JsonParams
 
 class ReleaseInvent(QObject):
 	signalrun = pyqtSignal(int, str)		# percent / message
@@ -17,16 +16,10 @@ class ReleaseInvent(QObject):
 	signalend = pyqtSignal()
 	signalmacroend = pyqtSignal()
 		
-	PATH_PROG = path.dirname(path.abspath(__file__))
-	FILE__INI = 'DBAlbums.json'
-	Json_params = JsonParams(FILE__INI)
-	group_dbalbums = Json_params.getMember('dbalbums')
-	WIDT_PICM = group_dbalbums['thun_csize']
-	TEXT_NCO = group_dbalbums['text_nocov']
-					
-	def __init__(self, list_actions, modsql):
+	def __init__(self, list_actions, modsql, parent):
 		"""Init invent, build list albums exists in database."""
 		super(ReleaseInvent, self).__init__()
+		self.parent = parent
 		self.list_action = list_actions
 		self.modsql = modsql
 
@@ -93,8 +86,8 @@ class ReleaseInvent(QObject):
 		# write album update
 		DBFuncBase().arrayCardsToSql('UPDATE', cardalbum, 'ALBUMS', 'ID_CD')
 		DBFuncBase().arrayCardsToSql('INSERT', cardtracks, 'TRACKS', 'ID_TRACK')
-		if cardalbum['COVER'] != self.TEXT_NCO:
-			DBFuncBase().imageToSql(cardalbum['COVER'], idcd, self.WIDT_PICM)
+		if cardalbum['COVER'] != self.parent.TEXT_NCO:
+			DBFuncBase().imageToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
 		# display consol
 		self.emitDisplayCardAlbum(cardalbum, cardtracks)
 		self.signalmacroend.emit()
@@ -113,8 +106,8 @@ class ReleaseInvent(QObject):
 		for cardtrack in cardtracks:
 			cardtrack['ID_CD'] = idcd
 		DBFuncBase().arrayCardsToSql('INSERT', cardtracks, 'TRACKS', 'ID_TRACK')
-		if cardalbum['COVER'] != self.TEXT_NCO:
-			DBFuncBase().imageToSql(cardalbum['COVER'], idcd, self.WIDT_PICM)
+		if cardalbum['COVER'] != self.parent.TEXT_NCO:
+			DBFuncBase().imageToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
 		# display consol
 		self.emitDisplayCardAlbum(cardalbum, cardtracks)
 		self.signalmacroend.emit()

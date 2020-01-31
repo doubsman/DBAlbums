@@ -2,10 +2,10 @@
 # coding: utf-8
 
 __author__ = "doubsman"
-__copyright__ = "Copyright 2019, DBAlbums Project"
+__copyright__ = "Copyright 2020, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.65"
+__version__ = "1.66"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -38,7 +38,7 @@ from DBPThreads import DBPThreadsListStyle
 from DBTImports import InventGui
 from DBParams import ParamsGui
 from DBReadJson import JsonParams
-	
+
 
 class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	"""DBAlbums main constants."""
@@ -59,7 +59,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	
 	group_dbalbums = Json_params.getMember('dbalbums')
 	VERS_PROG = group_dbalbums['prog_build']
-	TITL_PROG = "DBAlbums v{v} (2019)".format(v=VERS_PROG)
+	TITL_PROG = "DBAlbums v{v} (2020)".format(v=VERS_PROG)
 	WIDT_MAIN = group_dbalbums['wgui_width']
 	HEIG_MAIN = group_dbalbums['wgui_heigh']
 	WIDT_PICM = group_dbalbums['thun_csize']
@@ -73,6 +73,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	THUN_NOD = group_dbalbums['thnail_nod']
 	COVE_SIZ = group_dbalbums['covers_siz']
 	FONT_MAI = group_dbalbums['font00_ttx']
+	FONT_CON = group_dbalbums['font01_ttx']
+	LOGO_PNG = group_dbalbums['progr_logo']
 	
 	group_programs = Json_params.getMember('programs')
 	TAGS_SCAN = group_programs['tagscan']
@@ -86,6 +88,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	NAME_EVT, CURT_EVT = Json_params.buildListEnvt(ENVT_DEF)
 	C_HEIGHT = 21
 	COEF_ZOOM = 100
+	MASKCOVER = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')
 	
 	def __init__(self, parent=None):
 		"""Init gui."""
@@ -516,7 +519,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.gaugeBar.setVisible(True)
 		if message is not None:
 			self.updateStatusBar(message, t)
-		self.gaugeBar.setValue(purcent)
+		self.gaugeBar.setValue(int(purcent))
 		QApplication.processEvents()
 		if purcent == 100:
 			self.gaugeBar.setVisible(False)
@@ -562,7 +565,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				self.com_genres.currentIndexChanged.connect(self.onFiltersChanged)
 				self.com_country.currentIndexChanged.connect(self.onFiltersChanged)
 			# connect
-			boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.envits)
+			boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.envits, self.FILE__INI, self.BASE_SQLI)
 			if not boolconnect:
 				# no connect
 				self.updateStatusBar("Connect Failed, please select other environment...")
@@ -999,11 +1002,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		"""Display large cover MD5."""
 		if self.pathcover is not None:
 			if self.pathcover[0:len(self.TEXT_NCO)] != self.TEXT_NCO:
-				CoverViewGui(self.coveral, self.albumname, self.h_main, self.h_main)
+				CoverViewGui(self.coveral, self.albumname, self.h_main, self.h_main, self)
 
 	def viewArtworks(self):
 		"""views artworks covers storage."""
-		ArtworksGui(self.AlbumPath, self.albumname, self.pathcover, self.w_main, self.h_main, self.sizeTN)
+		ArtworksGui(self.AlbumPath, self.albumname, self.pathcover, self.w_main, self.h_main, self.sizeTN, self)
 
 	def onPressButtonEnrScoreAlbum(self):
 		"""Update Score Album."""
@@ -1139,7 +1142,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 									typeupdate,
 									self.modsql, 
 									self.envits,
-									self.curthe)
+									self.curthe,
+									self)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 		self.prepareInvent.startAnalyse()
 		
@@ -1171,7 +1175,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 								'UPDATE',
 								self.modsql, 
 								self.envits, 
-								self.curthe)
+								self.curthe,
+								self)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 		self.prepareInvent.realiseActions(list_actions)
 	
@@ -1204,7 +1209,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 										'UPDATE',
 										self.modsql, 
 										self.envits, 
-										self.curthe)
+										self.curthe,
+										self)
 				self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 				self.prepareInvent.realiseActions(list_actions)
 	
@@ -1231,7 +1237,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 									'UPDATE',
 									self.modsql, 
 									self.envits, 
-									self.curthe)
+									self.curthe,
+									self)
 			self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 			self.prepareInvent.realiseActions(list_actions)
 	

@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sys import argv, executable
-from os import system, path
 from PyQt5.QtGui import QPixmap, QPainter, QFont
 from PyQt5.QtCore import Qt, pyqtSlot, QSize, pyqtSignal, QRect, qDebug
 from PyQt5.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QScrollArea, QLayout, QLabel
@@ -10,27 +8,6 @@ from DBDatabase import DBFuncBase, getrequest
 from DBReadJson import JsonParams
 
 
-# path
-if getattr(system, 'frozen', False):
-	# frozen
-	PATH_PROG = path.dirname(executable)
-else:
-	# unfrozen
-	PATH_PROG = path.realpath(path.dirname(argv[0]))
-	
-VERS_PROG = '1.00'
-TITL_PROG = "Artwork viewer v{v} : ".format(v=VERS_PROG)
-
-FILE__INI = 'DBAlbums.json'
-Json_params = JsonParams(FILE__INI)
-group_dbalbums = Json_params.getMember('dbalbums')
-TEXT_NCO = group_dbalbums['text_nocov']
-PICM_NCO = path.join(PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
-THUN_DBA = path.join(PATH_PROG, 'IMG', group_dbalbums['picm_endof'])
-FONT_MAI = group_dbalbums['font00_ttx']
-
-
-# ##################################################################
 class TNLabel(QLabel):
 	"""Build label from thunbnail."""
 	def __init__(self, parent, labelpixmap, labelid, labelsize, labelname, labeltext='', booltxt=False):
@@ -39,7 +16,7 @@ class TNLabel(QLabel):
 		# build picture
 		if labelid is None and labelpixmap is None:
 			# no cover : blank
-			labelpixmap = QPixmap(PICM_NCO)
+			labelpixmap = QPixmap(self.parent.PICM_NCO)
 			booltxt = True
 		elif labelid is not None:
 			# extract picture
@@ -75,7 +52,7 @@ class TNLabel(QLabel):
 		painter.drawPixmap(QRect(0, 0, labelpixmap.width(), labelpixmap.width()), labelpixmap)
 		painter.fillRect(QRect(5, labelsize/3, labelsize-5, labelsize/3), Qt.black)
 		painter.setPen(Qt.white)
-		painter.setFont(QFont(FONT_MAI, 8))
+		painter.setFont(QFont(self.parent.FONT_MAI, 8))
 		painter.drawText(QRect(0, 0, labelsize, labelsize), Qt.AlignCenter, labeltext)
 		painter.end()
 		return labelpixmap
@@ -91,11 +68,11 @@ class TNLabel(QLabel):
 				labelpixmap.loadFromData(cover[0])
 				booltxt = False
 			else:
-				labelpixmap = QPixmap(PICM_NCO)
+				labelpixmap = QPixmap(self.parent.PICM_NCO)
 		except:
 			pass
 			qDebug('err thunbnail read : '+str(idcd))
-			labelpixmap = QPixmap(PICM_NCO)
+			labelpixmap = QPixmap(self.parent.PICM_NCO)
 		return labelpixmap, booltxt
 
 
@@ -183,7 +160,7 @@ class DBThunbnails(QWidget):
 			self.scrollArea.scrollContentsBy(self.thunwidth, self.thunwidth)
 		cpt = 0
 		end = min(len(listthunbnails)+deb, fin)
-		for row in range(deb, end):
+		for _ in range(deb, end):
 			thundesc = listthunbnails[cpt]
 			if self.stopbuild:
 				self.isbuilder = False
@@ -191,7 +168,7 @@ class DBThunbnails(QWidget):
 				break
 			# 2 modes : list or pathcover
 			if isinstance(thundesc, list):
-				# build cover b64 from md5
+				# build cover
 				albumid = thundesc[0]
 				albumrow = thundesc[1]
 				albumname = (thundesc[2]).replace(' - ', '\n')
@@ -199,7 +176,7 @@ class DBThunbnails(QWidget):
 			else:
 				# only path cover
 				mythunb = QPixmap(listthunbnails[cpt])
-				label = TNLabel(self, mythunb, None, self.thunbsize, listthunbnails[cpt])
+				label = TNLabel(self.parent, mythunb, None, self.thunbsize, listthunbnails[cpt])
 			label.mousePressEvent = (lambda event, n=cpt+deb: self.onSelectThunbnail(n))
 			self.gridthunbnails.addWidget(label, self.currow, self.curcol)
 			# signal gauge
@@ -213,7 +190,7 @@ class DBThunbnails(QWidget):
 				self.currow += 1
 		if total > fin:
 			# add for add more thunbnails
-			monimage = QPixmap(THUN_DBA)
+			monimage = QPixmap(self.parent.THUN_DBA)
 			mmessage = "{n} covers displaying \n Click for more...".format(n=str(self.getTotalThunbnails()))
 			label = TNLabel(self.parent, monimage, None, self.thunbsize, 999999, mmessage, True)
 			label.mousePressEvent = (lambda event, n=999999: self.onSelectThunbnail(n))
@@ -257,7 +234,7 @@ class DBThunbnails(QWidget):
 				sizetn = self.thunbsize
 			self.thunmaxco = self.getTotalColumns(sizetn)
 			curRow = curCol = oldcurRow = oldcurCol = 0
-			for row in range(numCov):
+			for _ in range(numCov):
 				if self.stopbuild:
 					self.isbuilder = False
 					break
