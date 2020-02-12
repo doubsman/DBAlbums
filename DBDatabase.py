@@ -9,6 +9,81 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QPixmap
 from DBReadJson import JsonParams
 
+class ConnectDatabase(QObject):
+	
+	def __init__(self, parent, envt, fileini, basesqli ='', connexionName = None):
+		"""Init invent, build list albums exists in database."""
+		super(ConnectDatabase, self).__init__(parent)
+		self.envt = envt
+		self.basesqli = basesqli
+		self.parent = parent
+		self.Json_params = JsonParams(fileini)
+		self.group_envt = self.Json_params.getMember(envt)
+		self.MODE_SQLI = self.group_envt['typb']
+		self.BASE_RAC = r'' + self.group_envt['raci']
+		self.RACI_DOU = self.group_envt['cate']
+		self.boolcon = False
+		if self.MODE_SQLI == 'sqlite':
+			if connexionName is None:
+				self.db = QSqlDatabase.addDatabase("QSQLITE")
+			else:
+				self.db = QSqlDatabase.addDatabase("QSQLITE", connexionName)
+			self.db.setDatabaseName(self.basesqli.format(envt = self.envt))
+			if not self.db.isValid():
+				qDebug(self.envt+' problem no valid database')
+		else:
+			BASE_SEV = self.group_envt['serv']
+			BASE_USR = self.group_envt['user']
+			BASE_PAS = self.group_envt['pass']
+			BASE_NAM = self.group_envt['base']
+			BASE_PRT = self.group_envt['port']
+			if self.MODE_SQLI == 'mysql':
+				if connexionName is None:
+					self.db = QSqlDatabase.addDatabase("QMYSQL")
+				else:
+					self.db = QSqlDatabase.addDatabase("QMYSQL", connexionName)
+				self.db.setHostName(BASE_SEV)
+				self.db.setDatabaseName(BASE_NAM)
+				self.db.setUserName(BASE_USR)
+				self.db.setPassword(BASE_PAS)
+				self.db.setPort(BASE_PRT)
+			elif self.MODE_SQLI == 'mssql':
+				if connexionName is None:
+					self.db = QSqlDatabase.addDatabase("QODBC3")
+				else:
+					self.db = QSqlDatabase.addDatabase("QODBC3", connexionName)
+				driver = "DRIVER={SQL Server Native Client 11.0};Server=" + BASE_SEV + ";Database=" + BASE_NAM
+				driver += ";Uid=" + BASE_USR + ";Port=" + str(BASE_PRT) + ";Pwd=" + BASE_PAS + ";Trusted_connection=yes"
+				#print(driver)
+				self.db.setDatabaseName(driver)
+	
+		self.list_category = []
+		if self.RACI_DOU is not None:
+			self.list_category += self.Json_params.buildCategories(self.envt)
+		if self.db.isValid():
+			self.boolcon = self.db.open()
+		else:
+			qDebug(envt+' problem for open database : ' + self.db.lastError().text())
+
+	def sqlToArray(self, request):
+		"""Select to array data."""
+		arraydata = []
+		query = QSqlQuery(request)
+		query.exec_(request)
+		if not query.exec_():
+			errorText = query.lastError().text()
+			qDebug(query.lastQuery())
+			qDebug(ascii(errorText))
+		indexes = query.record().count()
+		while query.next():
+			if indexes == 1:
+				arraydata.append(query.value(0))
+			else:
+				row = [query.value(index) for index in range(indexes)]
+				arraydata.append(row)
+		query.clear
+		return arraydata
+
 
 def connectDatabase(envt, fileini, basesqli):
 	"""Connect base MySQL/Sqlite."""

@@ -166,14 +166,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QTextEdit" name="textEdit">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
+              <widget class="QTextEdit" name="textEdit"/>
              </item>
             </layout>
            </item>
@@ -211,7 +204,7 @@
        <item>
         <widget class="QPushButton" name="btn_open">
          <property name="text">
-          <string>Open</string>
+          <string>Open JSON</string>
          </property>
         </widget>
        </item>

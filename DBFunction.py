@@ -215,14 +215,6 @@ def openFolder(path):
 		runCommand('xdg-open', path)
 
 
-def convertUNC(path):
-	""" convert path UNC to linux."""
-	# open file unc from Linux (mount \HOMERSTATION\_lossLess)
-	if (platform == "darwin" or platform == 'linux') and path.startswith(r'\\'):
-		path = r""+path.replace('\\\\', '/').replace('\\', '/')
-	return(path)
-
-
 def buildalbumnamehtml(name, label, isrc, country, year, nbcd, nbtracks, nbmin, nbcovers, albumPath, RESS_LABS, RESS_ICOS, RESS_FLAGS):
 	"""buil label name & album name."""
 	# name + label

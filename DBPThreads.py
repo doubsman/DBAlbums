@@ -6,17 +6,18 @@ from PyQt5.QtSql import QSqlQuery, QSqlDatabase
 from DBDatabase import getrequest
 from DBReadJson import JsonParams
 
-PATH_PROG = path.dirname(path.abspath(__file__))
-BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
-#chdir(PATH_PROG)
 
 class DBPThreadsListStyle(QThread):
 	finished = pyqtSignal(list)
 	
-	def __init__(self, parent, envt):
-		super(DBPThreadsListStyle, self).__init__(parent)
+	def __init__(self, parent, envt, fileini):
+		super(DBPThreadsListStyle, self).__init__()
+		self.parent = parent
 		self.envt = envt
+		self.fileini = fileini
 		self.dbthread = None
+		self.CnxDat = None
+		self.boolcon = False
 	
 	def __del__(self):
 		self.wait()
@@ -24,8 +25,12 @@ class DBPThreadsListStyle(QThread):
 	def run(self):
 		# build list styles albums
 		boolcon, self.dbthread = self.connectDatabase(self.envt, 'dbthread')
+		#self.CnxDat = ConnectDatabase(None, self.envt, self.fileini, '', 'dbthread')
+		#self.boolcon = self.CnxDat.boolcon
+		#self.dbthread = self.CnxDat.db
 		request = getrequest('listgenres')
 		self.listgenres = self.sqlToArray(request)
+		#self.listgenres = self.CnxDat.sqlToArray(request)
 		self.dbthread.close()
 		liststyles = []
 		for row in self.listgenres:
@@ -47,8 +52,9 @@ class DBPThreadsListStyle(QThread):
 
 	def connectDatabase(self, envt, connexionName):
 		"""Connect base MySQL/Sqlite."""
-		FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
-		Json_params = JsonParams(FILE__INI)
+		PATH_PROG = path.dirname(path.abspath(__file__))
+		BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
+		Json_params = JsonParams(self.fileini)
 		group_envt = Json_params.getMember(envt)
 		MODE_SQLI = group_envt['typb']
 		boolcon = False
@@ -98,21 +104,21 @@ class DBPThreadsListStyle(QThread):
 		return arraydata
 
 # test Qthread
-#from sys import argv,  exit
-#from PyQt5.QtWidgets import QApplication, QWidget
-#
-#class FormTest(QWidget):
-#	def __init__(self):
-#		super(FormTest, self).__init__()
-#		self.obj = DBPThreadsListStyle(self, 'LOSSLESS_TEST')
-#		self.obj.finished.connect(self.listControl)
-#		self.obj.start()
-#	
-#	def listControl(self, listgenres):
-#		print(len(listgenres), listgenres)
-#
-#
-#if __name__ == '__main__':
-#	app = QApplication(argv)
-#	form = FormTest()
-#	exit(app.exec_())
+from sys import argv, exit
+from PyQt5.QtWidgets import QApplication, QWidget
+
+class FormTest(QWidget):
+	def __init__(self):
+		super(FormTest, self).__init__()
+		self.obj = DBPThreadsListStyle(self, 'LOSSLESS_TEST', r'N:\_INVENT\DBAlbumsQT5\DBAlbums.json')
+		self.obj.finished.connect(self.listControl)
+		self.obj.start()
+	
+	def listControl(self, listgenres):
+		print(len(listgenres), listgenres)
+
+
+if __name__ == '__main__':
+	app = QApplication(argv)
+	form = FormTest()
+	exit(app.exec_())

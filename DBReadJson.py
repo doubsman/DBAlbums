@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 from os import path
+from sys import platform
 from json import load
 from PyQt5.QtCore import QObject
 
@@ -56,13 +56,25 @@ class JsonParams(QObject):
 					family = souslistcate["family"]
 					racate = souslistcate["name"]
 					mode = souslistcate["mode"]
-					racate = path.join(racine, racate)
+					racate = self.convertUNC(path.join(racine, racate))
 					list_pathcollection.append([cate, mode, racate, family])
 			else:
 				# one element
 				family = listcate[cate]["family"]
 				racate = listcate[cate]["name"]
 				mode = listcate[cate]["mode"]
-				racate = path.join(racine, racate)
+				racate = self.convertUNC(path.join(racine, racate))
 				list_pathcollection.append([cate, mode, racate, family])
 		return list_pathcollection
+
+	def convertUNC(self, path):
+		""" convert path UNC to linux."""
+		# open file unc from Linux (/HOMERSTATION/_lossLess)
+		# open file unc windows 10 (\\HOMERSTATION\_lossLess)
+		if (platform == "darwin" or platform == 'linux'):
+			if path.startswith(r'\\'):
+				path = r""+path.replace('\\\\', '/').replace('\\', '/')
+		else:
+			if path.startswith(r'/'):
+				path = r""+path.replace('/', '\\\\').replace('/', '\\')
+		return path

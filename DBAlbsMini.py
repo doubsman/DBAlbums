@@ -16,6 +16,7 @@ from DBReadJson import JsonParams
 class DBAlbumsQT5Mini(QMainWindow):
 	"""Init mini Gui constants."""
 	PATH_PROG = path.dirname(path.abspath(__file__))
+	BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
 	RESS_ICOS = path.join(PATH_PROG, 'IMG' , 'ICO')
 	VERS_PROG = '1.01'
 	TITL_PROG = "♫ DBAlbums mini v{v} (2020)".format(v=VERS_PROG)
@@ -50,7 +51,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.btn_style.clicked.connect(lambda: [self.curthe.nextTheme(), self.applyTheme()])
 		self.statusBar().addPermanentWidget(self.btn_style)
 		
-		boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.ENVT_DEF)
+		boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.ENVT_DEF, self.FILE__INI, self.BASE_SQLI)
 		
 		autoList = DBFuncBase().sqlToArray(getrequest('autocompletion', self.modsql))
 		self.com_autcom = QCompleter(autoList, self.textsearch)

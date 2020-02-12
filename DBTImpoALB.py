@@ -3,6 +3,7 @@
 
 
 from os import path
+from sys import platform
 from re import match
 from copy import deepcopy
 from PyQt5.QtCore import QObject, QDateTime, pyqtSignal
@@ -75,9 +76,13 @@ class CardAlbum(QObject):
 			cardalbum['PATHNAME'] = pathalbum
 			cardalbum['PIC'] = len(list(getListFiles(pathalbum, self.mask_artwork)))
 			cardalbum['SIZE'] = int(round(getFolderSize(pathalbum)/1024/1024, 0))
-			cardalbum['POSITION'] = pathalbum.split("\\")[-3]
-			cardalbum['SUBPOSITION'] = pathalbum.split("\\")[-2]
-			cardalbum['POSITIONHDD'] = pathalbum.split("\\")[-3] + '\\' + pathalbum.split("\\")[-2]
+			if platform == "darwin" or platform == 'linux':
+				carseparat = '/'
+			else:
+				carseparat = '\\'
+			cardalbum['POSITION'] = pathalbum.split(carseparat)[-3]
+			cardalbum['SUBPOSITION'] = pathalbum.split(carseparat)[-2]
+			cardalbum['POSITIONHDD'] = pathalbum.split(carseparat)[-3] + carseparat + pathalbum.split(carseparat)[-2]
 			
 			# cover path
 			coversfile = list(getListFilesNoSubFolders(pathalbum, self.mask_acovers, 'Exactly'))

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'R:\Projets\DBAlbums.Github\DBPARAMS.ui'
+# Form implementation generated from reading ui file 'R:\Python\DBAlbums\DBPARAMS.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -102,11 +102,6 @@ class Ui_ParamsJson(object):
         self.tableWidget_category.setRowCount(0)
         self.verticalLayout_2.addWidget(self.tableWidget_category)
         self.textEdit = QtWidgets.QTextEdit(ParamsJson)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
-        self.textEdit.setSizePolicy(sizePolicy)
         self.textEdit.setObjectName("textEdit")
         self.verticalLayout_2.addWidget(self.textEdit)
         self.horizontalLayoutrelease.addLayout(self.verticalLayout_2)
@@ -140,7 +135,7 @@ class Ui_ParamsJson(object):
         self.lab_envt.setText(_translate("ParamsJson", "Environment"))
         self.label_cate.setText(_translate("ParamsJson", "Category"))
         self.btn_save.setText(_translate("ParamsJson", "Save Json"))
-        self.btn_open.setText(_translate("ParamsJson", "Open"))
+        self.btn_open.setText(_translate("ParamsJson", "Open JSON"))
         self.btn_quit.setText(_translate("ParamsJson", "Quit"))
 
 

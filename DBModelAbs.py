@@ -2,20 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from os import path
+from sys import platform
 from PyQt5.QtCore import Qt, QVariant, QModelIndex, pyqtSignal, QSortFilterProxyModel, QAbstractTableModel
 from PyQt5.QtSql import QSqlQuery
 from PyQt5.QtGui import QColor
 from DBDatabase import DBFuncBase, getrequest
-from DBFunction import convertUNC
-from DBReadJson import JsonParams
-
-PATH_PROG = path.dirname(path.abspath(__file__))
-FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
-Json_params = JsonParams(FILE__INI)
-group_dbalbums = Json_params.getMember('dbalbums')
-TEXT_NCO = group_dbalbums['text_nocov']
-THUN_NOD = group_dbalbums['thnail_nod']
-FONT_MAI = group_dbalbums['font00_ttx']
 
 
 # MODEL ABSTRACT generique
@@ -296,16 +287,18 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 			return (self.arraydata[index.row()][index.column()]*'★')
 		if index.column() == self.myindex.index('LABEL'):
 			if self.arraydata[index.row()][index.column()]:
-				return ((self.arraydata[index.row()][index.column()]).title())
+				return (self.arraydata[index.row()][index.column()]).title()
 			else:
-				return ((self.arraydata[index.row()][self.myindex.index('TAGLABEL')]).title())
+				return (self.arraydata[index.row()][self.myindex.index('TAGLABEL')]).title()
 		if index.column() == self.myindex.index('ISRC'):
 			if self.arraydata[index.row()][index.column()]:
-				return ((self.arraydata[index.row()][index.column()]).upper())
+				return (self.arraydata[index.row()][index.column()]).upper()
 			else:
-				return ((self.arraydata[index.row()][self.myindex.index('TAGISRC')]).upper())
+				return (self.arraydata[index.row()][self.myindex.index('TAGISRC')]).upper()
+		if index.column() == self.myindex.index('COVER') or index.column() == self.myindex.index('PATHNAME'):
+				return self.parent.Json_params.convertUNC(self.arraydata[index.row()][index.column()])
 		return QVariant(self.arraydata[index.row()][index.column()])
-	
+
 	def builListThunbnails(self, new=True, deb=0, fin=100):
 		"""Build list Thunbnails"""
 		listthun = []
@@ -320,7 +313,7 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 			albumname = self.getData(index.row(), 'NAME')
 			albumname = albumname.replace(' - ', '\n')
 			# no cover or no display thunbnails covers (thnail_nod = 1)
-			if THUN_NOD == 0 or pathcover == TEXT_NCO:
+			if self.parent.THUN_NOD == 0 or pathcover == self.parent.TEXT_NCO:
 				idcd = None
 			else:
 				idcd = self.getData(index.row(), 'ID_CD')
@@ -398,6 +391,8 @@ class ModelTableTracksABS(ModelDBAbstract):
 		# DisplayRole
 		if index.column() == self.myindex.index('SCORE'):
 			return (self.arraydata[index.row()][index.column()]*'★')
+		if index.column() == self.myindex.index('PATHNAME'):
+				return self.parent.Json_params.convertUNC(self.arraydata[index.row()][index.column()])
 		return QVariant(self.arraydata[index.row()][index.column()])
 
 	def getMedias(self):
@@ -410,7 +405,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 				if not index.isValid():
 					continue
 				file = path.join(self.arraydata[index.row()][self.myindex.index('PATHNAME')], self.arraydata[index.row()][self.myindex.index('FILENAME')])
-				listmedia.append(convertUNC(file))
+				listmedia.append(file)
 			return listmedia
 
 	def updateScore(self, row, score, namereq='updatescoretrack'):

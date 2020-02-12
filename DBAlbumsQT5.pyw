@@ -25,7 +25,7 @@ from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
 from DBFunction import (runCommand, openFolder, centerWidget, buildalbumnamehtml,
 						displayCounters, displayStars, ThemeColors, qtmymessagehandler)
-from DBDatabase import DBFuncBase, connectDatabase, getrequest, DBCreateSqLite
+from DBDatabase import DBFuncBase, ConnectDatabase, getrequest, DBCreateSqLite
 from DBSLoading import DBloadingGui
 from DBAlbsMini import DBAlbumsQT5Mini
 from DBModelAbs import ModelTableAlbumsABS, ModelTableTracksABS
@@ -566,7 +566,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				self.com_genres.currentIndexChanged.connect(self.onFiltersChanged)
 				self.com_country.currentIndexChanged.connect(self.onFiltersChanged)
 			# connect
-			boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.envits, self.FILE__INI, self.BASE_SQLI)
+			self.CnxConnect = ConnectDatabase(self, self.envits, self.FILE__INI, self.BASE_SQLI)
+			boolconnect = self.CnxConnect.boolcon
+			self.dbbase = self.CnxConnect.db
+			self.modsql = self.CnxConnect.MODE_SQLI
+			self.rootDk = self.CnxConnect.BASE_RAC
+			self.lstcat = self.CnxConnect.list_category
+			#boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.envits, self.FILE__INI, self.BASE_SQLI)
 			if not boolconnect:
 				# no connect
 				self.updateStatusBar("Connect Failed, please select other environment...")
@@ -580,12 +586,14 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				else:
 					self.action_CSD.setEnabled(True)
 				# test path database folder for option update
+				self.rootDk = self.Json_params.convertUNC(self.rootDk)
 				if path.exists(self.rootDk):
 					self.action_UBP.setEnabled(True)
 					self.action_UBN.setEnabled(True)
 				else:
 					self.action_UBP.setEnabled(False)
 					self.action_UBN.setEnabled(False)
+					qDebug('no database root path exist :' + self.rootDk)
 				# loading splashscreen
 				self.loadingGui = DBloadingGui(self.modsql, self.TITL_PROG, self)
 				self.loadingGui.show()
@@ -626,10 +634,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.lin_search.setCompleter(self.com_autcom)
 					# build list style
 					qDebug('qthread build list style')
-					#request = getrequest('listgenres')
-					#listgenres = DBFuncBase().sqlToArray(request)
-					#self.obj = DBPThreadsListStyle(self, listgenres)
-					self.obj = DBPThreadsListStyle(self, self.envits)
+					self.obj = DBPThreadsListStyle(self, self.envits, self.FILE__INI)
 					self.obj.finished.connect(self.fillListGenres)
 					self.obj.start()
 
@@ -1133,7 +1138,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	
 	def openParams(self):
 		"""Open Gui PARAMS"""
-		self.dbparams = ParamsGui(self.envits, self.curthe)
+		self.dbparams = ParamsGui(self.envits, self.FILE__INI, self.curthe)
 	
 	def buildInventPython(self, typeupdate):
 		"""Browse folder base for update."""
@@ -1169,7 +1174,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 							'UPDATE',
 							self.curAlb,
 							self.albumname,
-							self.AlbumPath])
+							self.Json_params.convertUNC(self.AlbumPath)])
 		self.prepareInvent = InventGui(self.tableMdlAlb.arraydata, 
 								self.tableMdlAlb.myindex,
 								self.lstcat,
@@ -1190,13 +1195,15 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			for ind in listrows:
 				# new name album
 				namealbum = path.basename(self.tableMdlAlb.getData(ind, 'PATHNAME'))
+				namealbum = self.Json_params.convertUNC(namealbum)
 				newname, okPressed = QInputDialog.getText(self, "Rename Album...","New Name", QLineEdit.Normal, '[' +self.tableMdlAlb.getData(ind, 'TAGISRC')+ '] ' + namealbum)
 				if okPressed and newname != '' and newname != namealbum:
 					# reinit player for access file
 					self.playerAudio.addMediaslist(None, 0, namealbum)
 					# rename folder
 					newpathalbum = path.join(path.dirname(path.abspath(self.tableMdlAlb.getData(ind, 'PATHNAME'))), newname)
-					rename(self.tableMdlAlb.getData(ind, 'PATHNAME'), newpathalbum)
+					rename(namealbum, newpathalbum)
+					# [CATEGORY, FAMILY, 'DELETE/UPDATE/ADD', ID_CD, 'NAME', 'PATHNAME']
 					list_actions.append([self.tableMdlAlb.getData(ind, 'CATEGORY'), 
 										self.tableMdlAlb.getData(ind, 'FAMILY'), 
 										'UPDATE',
@@ -1214,6 +1221,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 										self)
 				self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 				self.prepareInvent.realiseActions(list_actions)
+				self.playerAudio.addMediaslist(self.homMed, self.curtrk, self.albumname)
 	
 	def updateAlbums(self):
 		"""Execute macro update."""
@@ -1221,17 +1229,19 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		listrows = self.getRowsfromListAlbums()
 		if listrows is not None:
 			for ind in listrows:
-				# [CATEGORY, FAMILY, 'DELETE/UPDATE/ADD', ID_CD, 'NAME', 'PATHNAME']
-				if path.exists(self.tableMdlAlb.getData(ind, 'PATHNAME')):
+				pathname = self.tableMdlAlb.getData(ind, 'PATHNAME')
+				pathname = self.Json_params.convertUNC(pathname)
+				if path.exists(pathname):
 					typeupdate = 'UPDATE'
 				else:
 					typeupdate = 'DELETE'
+				# [CATEGORY, FAMILY, 'DELETE/UPDATE/ADD', ID_CD, 'NAME', 'PATHNAME']				
 				list_actions.append([self.tableMdlAlb.getData(ind, 'CATEGORY'), 
 									self.tableMdlAlb.getData(ind, 'FAMILY'), 
 									typeupdate,
 									self.tableMdlAlb.getData(ind, 'ID_CD'),
 									self.tableMdlAlb.getData(ind, 'NAME'),
-									self.tableMdlAlb.getData(ind, 'PATHNAME')])
+									pathname])
 			self.prepareInvent = InventGui(self.tableMdlAlb.arraydata, 
 									self.tableMdlAlb.myindex,
 									self.lstcat,
@@ -1299,7 +1309,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					DBFuncBase().sqlImageToFile(filecover, self.tableMdlAlb.getData(ind, 'ID_CD'))
 				self.statusBar().showMessage('Export covers Albums /n Create covers Sucessfull to :'+path.dirname(filename), 7000)
 				openFolder(path.dirname(filename))
-	
+
 	@pyqtSlot()
 	def closeEvent(self, event):
 		"""Quit."""

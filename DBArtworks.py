@@ -9,7 +9,6 @@ from PyQt5.QtWidgets import (QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayo
 						QLabel, QApplication)
 from DBFunction import openFolder, getListFiles, centerWidget
 from DBThunbnai import DBThunbnails
-from DBReadJson import JsonParams
 
 
 class CoverViewGui(QWidget):
@@ -183,6 +182,8 @@ class ArtworksGui(QWidget):
 
 
 # # TEST
+#from DBReadJson import JsonParams
+
 # class TESTArtWork(QObject):
 	# PATH_PROG = path.dirname(path.abspath(__file__))
 	# FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')

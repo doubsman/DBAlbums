@@ -1,7 +1,39 @@
 INSTALLATION PYTHON LIBS...........................................
 -------------------------------------------------------------------
+Debian 10 + KDE:
+	network
+		sudo apt-get install samba-common gvfs-backends
+	add hostname
+		nano /etc/hostname
+		nano /etc/hosts
+	install pip/mysql/qtmultimedia
+		apt-get install python3-pip
+		apt-get install libqt5sql5-mysql
+		apt-get install python-pyqt5.qtmultimedia
+	install libs
+		pip3 install PyQt5
+		pip3 install mutagen
+		extract /HOMERSTATION/_LossLess/_INVENT/DBAlbums/LIB/fpl_reader-master.zip
+			python3.exe setup.py install
+	create foler for mount _LossLess volume
+		mkdir -p /HOMERSTATION/_LossLess
+		chmod 777 -R /HOMERSTATION/_LossLess
+	install vim
+		apt-get update && apt-get install vim
+	create credential file
+		vim /home/misterdoubs/.smbhomercred
+			username=HomerMusic
+			password=Mus1c4Me
+			domain=WORKGROUP
+		chmod 600 /home/misterdoubs/.smbhomercred
+	mount _LossLess volume permanent
+		vim /etc/fstab
+			//192.168.0.50/_LossLess /HOMERSTATION/_LossLess cifs _netdev,users,noauto,users,credentials=/home/misterdoubs/.smbhomercred
+	execute dbalbum
+			python3 /HOMERSTATION/_LossLess/_INVENT/DBAlbums/DBAlbums
+		
+	
 for Python 3.7.1
-	codec FLAC direcShow http://downloads.xiph.org/releases/oggdsf/opencodecs_0.85.17777.exe
 	python -m pip install --upgrade pip
 	pip3 install PyQt5
 	pip3 install pyqt5-tools
@@ -36,8 +68,8 @@ for Python 3 installation modules for Debian9
 	pip3 install pypyodbc
 	extract /HOMERSTATION/_LossLess/_INVENT/DBAlbums/LIB/fpl_reader-master.zip
 		python3.exe setup.py install
-
-	
+		
+		
 MOUNT VOLUME LINUX DEBIAN..........................................
 -------------------------------------------------------------------
 # Debian9 Mount volume Music HOMERSTATION
@@ -62,7 +94,7 @@ create folder mount
 	chmod 777 -R /HOMERSTATION/_LossLess
 Create credential File:
 	Terminal:	su
-	mousepad  /home/misterdoubs/.smbhomercred
+	mousepad  vim /home/misterdoubs/.smbhomercred
 		username=HomerMusic
 		password=Mus1c4Me
 		domain=WORKGROUP

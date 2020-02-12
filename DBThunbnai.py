@@ -5,7 +5,6 @@ from PyQt5.QtGui import QPixmap, QPainter, QFont
 from PyQt5.QtCore import Qt, pyqtSlot, QSize, pyqtSignal, QRect, qDebug
 from PyQt5.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QScrollArea, QLayout, QLabel
 from DBDatabase import DBFuncBase, getrequest
-from DBReadJson import JsonParams
 
 
 class TNLabel(QLabel):

@@ -13,69 +13,72 @@ from Ui_DBPARAMS import Ui_ParamsJson
 
 class ParamsGui(QWidget, Ui_ParamsJson):
 	"""Display GUI file Json parameters."""
-	PATH_PROG = path.dirname(path.abspath(__file__))
-	LOGS_PROG = path.join(PATH_PROG, 'LOG')
-	C_HEIGHT = 25
-	# Read File DBAlbums.json
-	qDebug('read json params file')
-	FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
-	Json_params = JsonParams(FILE__INI)
-	
-	group_programs = Json_params.getMember('programs')
-	if platform == "darwin" or platform == 'linux':
-		EDIT_TEXT = r'' + group_programs['txt_lin']
-	else:
-		EDIT_TEXT = r'' + group_programs['txt_win']
-	group_dbalbums = Json_params.getMember('dbalbums')
-	group_scorealb = Json_params.buildDictScore()
-	VERS_PROG = group_dbalbums['prog_build']
-	TITL_PROG = "DBAlbums v{v} (2020)".format(v=VERS_PROG)
-	TITL_PROG = TITL_PROG + " : Environments Parameters "
-	WIDT_MAIN = group_dbalbums['wgui_width']
-	HEIG_MAIN = group_dbalbums['wgui_heigh']
-	WIDT_PICM = group_dbalbums['thun_csize']
-	WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
-	THEM_COL = group_dbalbums['name_theme']
-	TEXT_NCO = group_dbalbums['text_nocov']
-	FONT_CON = group_dbalbums['font01_ttx']
-	HELP_LST = {'prog_build' : 'version program ({v})'.format(v=VERS_PROG),
-				'wgui_width' : 'width pixels main windows ({v})'.format(v=WIDT_MAIN),
-				'wgui_heigh' : 'height pixels main windows ({v})'.format(v=HEIG_MAIN),
-				'text_nocov' : 'Define text for no covers ({v})'.format(v=TEXT_NCO),
-				'progr_logo' : 'filename logo program ({v})'.format(v=group_dbalbums['progr_logo']),
-				'wins_icone' : 'filename icone program ({v})'.format(v=group_dbalbums['wins_icone']),
-				'pict_blank' : 'filename cover blank ({v})'.format(v=group_dbalbums['pict_blank']),
-				'picm_endof' : 'last thunbnails display ({v})'.format(v=group_dbalbums['picm_endof']),
-				'envt_deflt' : 'default environment loading at start ({v})'.format(v=group_dbalbums['envt_deflt']),
-				'covers_siz' : 'size pixels of cover display ({v})'.format(v=group_dbalbums['covers_siz']),
-				'thun_csize' : 'size pixels scare thunbnails ({v})'.format(v=group_dbalbums['thun_csize']),
-				'thnail_dis' : 'number of thunbnails displaying ({v})'.format(v=group_dbalbums['thnail_dis']),
-				'thnail_nbl' : 'number of lines thunbnails displaying ({v})'.format(v=group_dbalbums['thnail_nbl']),
-				'thnail_nod' : 'display covers thunbnails 1 or 0 ({v})'.format(v=group_dbalbums['thnail_nod']),
-				'font00_ttx' : 'name font general text ({v})'.format(v=group_dbalbums['font00_ttx']),
-				'font01_ttx' : 'name font consol execution ({v})'.format(v=group_dbalbums['font01_ttx']),
-				'name_theme' : 'style colors (blue, green, brown, grey, pink) ({v})'.format(v=group_dbalbums['name_theme']),
-				'txt_win' : '<program> text editor Windows',
-				'txt_lin' : '<program> text editor Debian',
-				'tagscan' : '<program> program extern for tags',
-				'foobarP' : '<program> folder playlists foobar2000',
-				'discogs' : '<program> url search album from discogs',
-				'0' : '<score> label notation display',
-				'1' : '<score> label notation display',
-				'2' : '<score> label notation display',
-				'3' : '<score> label notation display'
-				}
-	HELP_TXT = "Category\n"
-	HELP_TXT +="- Name : name (rock, classic...)\n"
-	HELP_TXT +="- Mode : D (double tree folder) or S = (simple tree folder)\n"
-	HELP_TXT +="- Folder : music location folder\n"
-	HELP_TXT +="- Family : name (physique, web, vynils)\n"
-	
-	def __init__(self, envt, themecolor, parent=None):
+
+	def __init__(self, envt, fileini, themecolor, parent=None):
 		"""Init Gui, start invent"""
 		super(ParamsGui, self).__init__(parent)
 		self.parent = parent
 		self.setupUi(self)
+
+		# init Json VAR
+		self.PATH_PROG = path.dirname(path.abspath(__file__))
+		self.LOGS_PROG = path.join(self.PATH_PROG, 'LOG')
+		self.C_HEIGHT = 25
+		# Read File DBAlbums.json
+		qDebug('ParamsGui: read json params file')
+		self.FILE__INI = fileini
+		self.Json_params = JsonParams(self.FILE__INI)
+		
+		group_programs = self.Json_params.getMember('programs')
+		if platform == "darwin" or platform == 'linux':
+			self.EDIT_TEXT = r'' + group_programs['txt_lin']
+		else:
+			self.EDIT_TEXT = r'' + group_programs['txt_win']
+		group_dbalbums = self.Json_params.getMember('dbalbums')
+		group_scorealb = self.Json_params.buildDictScore()
+		self.VERS_PROG = group_dbalbums['prog_build']
+		self.TITL_PROG = "DBAlbums v{v} (2020)".format(v=self.VERS_PROG)
+		self.TITL_PROG += " : Environments Parameters "
+		self.WIDT_MAIN = group_dbalbums['wgui_width']
+		self.HEIG_MAIN = group_dbalbums['wgui_heigh']
+		self.WIDT_PICM = group_dbalbums['thun_csize']
+		self.WINS_ICO = path.join(self.PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
+		self.THEM_COL = group_dbalbums['name_theme']
+		self.TEXT_NCO = group_dbalbums['text_nocov']
+		self.FONT_CON = group_dbalbums['font01_ttx']
+		self.HELP_LST = {'prog_build' : 'version program ({v})'.format(v=self.VERS_PROG),
+					'wgui_width' : 'width pixels main windows ({v})'.format(v=self.WIDT_MAIN),
+					'wgui_heigh' : 'height pixels main windows ({v})'.format(v=self.HEIG_MAIN),
+					'text_nocov' : 'Define text for no covers ({v})'.format(v=self.TEXT_NCO),
+					'progr_logo' : 'filename logo program ({v})'.format(v=group_dbalbums['progr_logo']),
+					'wins_icone' : 'filename icone program ({v})'.format(v=group_dbalbums['wins_icone']),
+					'pict_blank' : 'filename cover blank ({v})'.format(v=group_dbalbums['pict_blank']),
+					'picm_endof' : 'last thunbnails display ({v})'.format(v=group_dbalbums['picm_endof']),
+					'envt_deflt' : 'default environment loading at start ({v})'.format(v=group_dbalbums['envt_deflt']),
+					'covers_siz' : 'size pixels of cover display ({v})'.format(v=group_dbalbums['covers_siz']),
+					'thun_csize' : 'size pixels scare thunbnails ({v})'.format(v=group_dbalbums['thun_csize']),
+					'thnail_dis' : 'number of thunbnails displaying ({v})'.format(v=group_dbalbums['thnail_dis']),
+					'thnail_nbl' : 'number of lines thunbnails displaying ({v})'.format(v=group_dbalbums['thnail_nbl']),
+					'thnail_nod' : 'display covers thunbnails 1 or 0 ({v})'.format(v=group_dbalbums['thnail_nod']),
+					'font00_ttx' : 'name font general text ({v})'.format(v=group_dbalbums['font00_ttx']),
+					'font01_ttx' : 'name font consol execution ({v})'.format(v=group_dbalbums['font01_ttx']),
+					'name_theme' : 'style colors (blue, green, brown, grey, pink) ({v})'.format(v=group_dbalbums['name_theme']),
+					'txt_win' : '<program> text editor Windows',
+					'txt_lin' : '<program> text editor Debian',
+					'tagscan' : '<program> program extern for tags',
+					'foobarP' : '<program> folder playlists foobar2000',
+					'discogs' : '<program> url search album from discogs',
+					'0' : '<score> label notation display',
+					'1' : '<score> label notation display',
+					'2' : '<score> label notation display',
+					'3' : '<score> label notation display'
+					}
+		self.HELP_TXT = "Category\n"
+		self.HELP_TXT +="- Name : name (rock, classic...)\n"
+		self.HELP_TXT +="- Mode : D (double tree folder) or S = (simple tree folder)\n"
+		self.HELP_TXT +="- Folder : music location folder\n"
+		self.HELP_TXT +="- Family : name (physique, web, vynils)\n"
+	
 		self.resize(self.WIDT_MAIN, self.HEIG_MAIN - 250)
 		self.setWindowIcon(QIcon(self.WINS_ICO))
 		self.setWindowTitle(self.TITL_PROG + path.join(self.PATH_PROG, self.FILE__INI))
@@ -96,9 +99,9 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		#self.tableWidget_category.itemSelectionChanged.connect(self.updateListcategory)
 		
 		# General init
-		self.updateTable(self.tableWidget_general, self.group_dbalbums , ['Parameters', 'Values', 'Informations'])
-		self.updateTable(self.tableWidget_general, self.group_programs , None, True)
-		self.updateTable(self.tableWidget_general, self.group_scorealb , None, True)
+		self.updateTable(self.tableWidget_general, group_dbalbums , ['Parameters', 'Values', 'Informations'])
+		self.updateTable(self.tableWidget_general, group_programs , None, True)
+		self.updateTable(self.tableWidget_general, group_scorealb , None, True)
 		
 		# complete column help
 		self.textEdit.append(self.HELP_TXT)
@@ -117,6 +120,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		"""Open json file with text editor."""
 		e=self.EDIT_TEXT
 		f=self.FILE__INI
+		print(e,f)
 		runCommand(e, f)
 		
 	def changeCategory(self, row, col):
