@@ -1,20 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from os import  path, chdir
 from PyQt5.QtCore import QThread, pyqtSignal, qDebug
-from PyQt5.QtSql import QSqlQuery, QSqlDatabase
-from DBDatabase import getrequest
-from DBReadJson import JsonParams
+from DBDatabase import getrequest, ConnectDatabase
 
 
 class DBPThreadsListStyle(QThread):
 	finished = pyqtSignal(list)
 	
-	def __init__(self, parent, envt, fileini):
-		super(DBPThreadsListStyle, self).__init__()
+	def __init__(self, parent, envt, fileini, baseqli):
+		super(DBPThreadsListStyle, self).__init__(parent)
 		self.parent = parent
 		self.envt = envt
 		self.fileini = fileini
+		self.baseqli = baseqli
 		self.dbthread = None
 		self.CnxDat = None
 		self.boolcon = False
@@ -24,13 +22,11 @@ class DBPThreadsListStyle(QThread):
 	
 	def run(self):
 		# build list styles albums
-		boolcon, self.dbthread = self.connectDatabase(self.envt, 'dbthread')
-		#self.CnxDat = ConnectDatabase(None, self.envt, self.fileini, '', 'dbthread')
-		#self.boolcon = self.CnxDat.boolcon
-		#self.dbthread = self.CnxDat.db
+		self.CnxDat = ConnectDatabase(None, self.envt, self.fileini, self.baseqli, 'dbthread')
+		self.boolcon = self.CnxDat.boolcon
+		self.dbthread = self.CnxDat.db
 		request = getrequest('listgenres')
-		self.listgenres = self.sqlToArray(request)
-		#self.listgenres = self.CnxDat.sqlToArray(request)
+		self.listgenres = self.CnxDat.sqlToArray(request)
 		self.dbthread.close()
 		liststyles = []
 		for row in self.listgenres:
@@ -50,75 +46,3 @@ class DBPThreadsListStyle(QThread):
 		self.finished.emit(liststyles)
 		self.quit()
 
-	def connectDatabase(self, envt, connexionName):
-		"""Connect base MySQL/Sqlite."""
-		PATH_PROG = path.dirname(path.abspath(__file__))
-		BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
-		Json_params = JsonParams(self.fileini)
-		group_envt = Json_params.getMember(envt)
-		MODE_SQLI = group_envt['typb']
-		boolcon = False
-		if MODE_SQLI == 'sqlite':
-			db = QSqlDatabase.addDatabase("QSQLITE", connexionName)
-			db.setDatabaseName(BASE_SQLI.format(envt=envt))
-			if not db.isValid():
-				qDebug(envt+' problem no valid database')
-		else:
-			BASE_SEV = group_envt['serv']
-			BASE_USR = group_envt['user']
-			BASE_PAS = group_envt['pass']
-			BASE_NAM = group_envt['base']
-			BASE_PRT = group_envt['port']
-			if MODE_SQLI == 'mysql':
-				db = QSqlDatabase.addDatabase("QMYSQL", connexionName)
-				db.setHostName(BASE_SEV)
-				db.setDatabaseName(BASE_NAM)
-				db.setUserName(BASE_USR)
-				db.setPassword(BASE_PAS)
-				db.setPort(BASE_PRT)
-			elif MODE_SQLI == 'mssql':
-				db = QSqlDatabase.addDatabase("QODBC3", connexionName)
-				driver = "DRIVER={SQL Server Native Client 11.0};Server=" + BASE_SEV + ";Database=" + BASE_NAM
-				driver += ";Uid=" + BASE_USR + ";Port=" + str(BASE_PRT) + ";Pwd=" + BASE_PAS + ";Trusted_connection=yes"
-				#print(driver)
-				db.setDatabaseName(driver);
-		if db.isValid():
-			boolcon = db.open()
-		else:
-			qDebug(envt+' problem for open database : '+db.lastError().text())
-		return boolcon, db
-
-	def sqlToArray(self, request):
-		"""Select to array data."""
-		arraydata = []
-		query = QSqlQuery(self.dbthread)
-		query.exec_(request)
-		indexes = query.record().count()
-		while query.next():
-			if indexes == 1:
-				arraydata.append(query.value(0))
-			else:
-				row = [query.value(index) for index in range(indexes)]
-				arraydata.append(row)
-		query.clear
-		return arraydata
-
-# test Qthread
-from sys import argv, exit
-from PyQt5.QtWidgets import QApplication, QWidget
-
-class FormTest(QWidget):
-	def __init__(self):
-		super(FormTest, self).__init__()
-		self.obj = DBPThreadsListStyle(self, 'LOSSLESS_TEST', r'N:\_INVENT\DBAlbumsQT5\DBAlbums.json')
-		self.obj.finished.connect(self.listControl)
-		self.obj.start()
-	
-	def listControl(self, listgenres):
-		print(len(listgenres), listgenres)
-
-
-if __name__ == '__main__':
-	app = QApplication(argv)
-	form = FormTest()
-	exit(app.exec_())

@@ -51,17 +51,16 @@ class CardAlbum(QObject):
 						'ADD': None, 			# Calcul
 						'MODIFIED': None		# Calcul
 						}
-	PATH_PROG = path.dirname(path.abspath(__file__))
-	FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
-	Json_params = JsonParams(FILE__INI)
-	group_dbalbums = Json_params.getMember('dbalbums')
-	TEXT_NCO = group_dbalbums['text_nocov']
-	
-	
+
 	def __init__(self, parent=None):
 		"""Init."""
 		super(CardAlbum, self).__init__(parent)
 		self.parent = parent
+		self.PATH_PROG = path.dirname(path.abspath(__file__))
+		self.FILE__INI = path.join(self.PATH_PROG, 'DBAlbums.json')
+		Json_params = JsonParams(self.FILE__INI)
+		group_dbalbums = Json_params.getMember('dbalbums')
+		self.TEXT_NCO = group_dbalbums['text_nocov']
 
 	def defineAlbum(self, pathalbum, category, family):
 		"""Define Card Album."""

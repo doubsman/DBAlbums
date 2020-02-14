@@ -6,13 +6,11 @@ from sys import argv
 from os import path
 from re import search, DOTALL
 from PyQt5.QtCore import QObject, qDebug, qInstallMessageHandler, QProcess, pyqtSlot
-from PyQt5.QtWidgets import QApplication
 from mutagen.flac import FLAC
 from mutagen.apev2 import APEv2, APEv2File
 from mutagen.mp3 import MP3
 from mutagen.easyid3 import EasyID3
 from DBFunction import qtmymessagehandler
-from DBDatabase import connectDatabase
 
 
 class DBMediasTags(QObject):
@@ -206,25 +204,5 @@ class DBMediaDuration(QObject):
 			self.totalduration = (int(matches['hours']) * 60 + int(matches['minutes'])) * 60 + int(matches['seconds'].split('.')[0])
 
 
-if __name__ == '__main__':
-	app = QApplication(argv)
-	# debug
-	qInstallMessageHandler(qtmymessagehandler)
-	envt = 'LOSSLESS_TEST'
-	boolconnect, dbbase, modsql, rootDk, listcategory = connectDatabase(envt)
-	
-	# FLAC OK
-	#list_infostrack = DBMediasTags().getTagMediaFLAC('E:\\Work\\ZTest\\01- Love Action.flac')
-	#coveral = DBMediasTags().getImageFromTagFLAC('E:\\Work\\ZTest\\01- Love Action.flac', 'E:\\Work\\ZTest\\', 'FLACtest')
-	# MP3 OK
-	#list_infostrack = DBMediasTags().getTagMediaMP3('E:\\Work\\ZTest\\test.mp3')
-	#coveral = DBMediasTags().getImageFromTagMP3('E:\\Work\\ZTest\\test.mp3', 'E:\\Work\\ZTest\\', 'MP3TEST')
-	
-	# APE KO  -- NO LENGTH
-	list_infostrack = DBMediasTags().getTagMediaAPE(r'\\HOMERSTATION\_LossLess\TECHNO\Download\Blech II - Blechsdottir (1996)\Blech II  01 - Autechre - Lost ++ Disjecta - Kracht.ape')
-	print(list_infostrack)
-
-	#list_infostrack = DBMediasTags().getTagMediaAPE(r'N:\TECHNO\Download\Readymade - Bold (2001)\Readymade - Bold.ape')
-	#print(list_infostrack)
 	
 	

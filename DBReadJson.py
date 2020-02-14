@@ -11,7 +11,6 @@ class JsonParams(QObject):
 	def __init__(self, file_json='DBAlbums.json'):
 		"""Init invent, build list albums exists in database."""
 		super(JsonParams, self).__init__()
-		print(file_json)
 		with open(file_json) as data_file:    
 			self.data = load(data_file)
 

@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2020, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.66"
+__version__ = "1.67"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -25,7 +25,7 @@ from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
 from DBFunction import (runCommand, openFolder, centerWidget, buildalbumnamehtml,
 						displayCounters, displayStars, ThemeColors, qtmymessagehandler)
-from DBDatabase import DBFuncBase, ConnectDatabase, getrequest, DBCreateSqLite
+from DBDatabase import DBFuncBase, ConnectDatabase, DBCreateSqLite
 from DBSLoading import DBloadingGui
 from DBAlbsMini import DBAlbumsQT5Mini
 from DBModelAbs import ModelTableAlbumsABS, ModelTableTracksABS
@@ -571,7 +571,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.dbbase = self.CnxConnect.db
 			self.modsql = self.CnxConnect.MODE_SQLI
 			self.rootDk = self.CnxConnect.BASE_RAC
-			self.lstcat = self.CnxConnect.list_category
+			self.lstcat = self.CnxConnect.buildlistcategory()
 			#boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.envits, self.FILE__INI, self.BASE_SQLI)
 			if not boolconnect:
 				# no connect
@@ -606,7 +606,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 																								hour=curdate))
 				# fill model/tree albums list
 				qDebug('Fill list albums start')
-				req = getrequest('albumslist', self.modsql)
+				req = self.CnxConnect.getrequest('albumslist')
 				self.tableMdlAlb = ModelTableAlbumsABS(self, req)
 				self.tableMdlAlb.SortFilterProxy.sort(-1)
 				self.tableMdlAlb.signalthubuild.connect(self.onBuild)
@@ -628,13 +628,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					index = self.tbl_albums.currentIndex()
 					self.tbl_albums.scrollTo(index)
 					# autocompletion list
-					autoList = DBFuncBase().sqlToArray(getrequest('autocompletion', self.modsql))
+					autoList = DBFuncBase().sqlToArray(self.CnxConnect.getrequest('autocompletion'))
 					self.com_autcom = QCompleter(autoList, self.lin_search)
 					self.com_autcom.setCaseSensitivity(Qt.CaseInsensitive)
 					self.lin_search.setCompleter(self.com_autcom)
 					# build list style
 					qDebug('qthread build list style')
-					self.obj = DBPThreadsListStyle(self, self.envits, self.FILE__INI)
+					self.obj = DBPThreadsListStyle(self, self.envits, self.FILE__INI, self.BASE_SQLI)
 					self.obj.finished.connect(self.fillListGenres)
 					self.obj.start()
 
@@ -680,7 +680,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				searchtxt = self.lin_search.text()
 			else:
 				searchtxt = ''
-			req = (getrequest('trackslist', self.modsql)).format(id=self.curAlb)
+			req = (self.CnxConnect.getrequest('trackslist')).format(id=self.curAlb)
 			self.tableMdlTrk = ModelTableTracksABS(self, searchtxt, req)
 			self.tbl_tracks.setModel(self.tableMdlTrk.SortFilterProxy)
 			self.tableMdlTrk.SortFilterProxy.layoutChanged.connect(self.onListTracksChanged)

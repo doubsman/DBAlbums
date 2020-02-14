@@ -4,9 +4,8 @@
 
 from os import path
 from sys import argv
-from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QObject, pyqtSignal
-from DBDatabase import DBFuncBase, connectDatabase, getrequest
+from DBDatabase import DBFuncBase, getrequest
 from DBTImpoALB import CardAlbum
 from DBFunction import displayArrayDict
 
@@ -78,7 +77,6 @@ class ReleaseInvent(QObject):
 		# copy score track
 		for oldcardtrack in oldcardtracks:
 			if oldcardtrack['SCORE'] > 0:
-				print ("score")
 				# copy score
 				for cardtrack in cardtracks:
 					if cardtrack['FILENAME'] == oldcardtrack['FILENAME'] and cardtrack['TRACKORDER'] == oldcardtrack['TRACKORDER']:
@@ -101,7 +99,6 @@ class ReleaseInvent(QObject):
 		# last id for cardtracks
 		#request = "SELECT LAST_INSERT_ID() as lastid;"
 		request = getrequest('lastid', self.modsql)
-		print(request)
 		idcd = DBFuncBase().sqlToArray(request)[0]
 		for cardtrack in cardtracks:
 			cardtrack['ID_CD'] = idcd
@@ -122,40 +119,4 @@ class ReleaseInvent(QObject):
 	def infoAnalysealbum(self, text, level):
 		self.signaltxt.emit(text, level)
 
-if __name__ == '__main__':
-	app = QApplication(argv)
-	# debug
-	envt = 'LOSSLESS_TEST'
-	boolconnect, dbbase, modsql, rootDk, listcategory = connectDatabase(envt)
-		
-	# ADD
-	#ReleaseInvent().addAlbums('TRANCE', 'Download', r'E:\Work\ZTest\TAG_bluid\TRANCE\Download\2017\[OVNICD089] Ovnimoon & Rigel - Omnipresent Technology (2014)')
-	
-	# UPDATE
-	#cardalbum['ID_CD'] = 1
-	#cardalbum['NAME'] = 'le petit lapin'
-	#print(DBFuncBase().arrayCardsToSql('UPDATE', cardalbum, 'ALBUMS', 'ID_CD'))
-	
-	# INSERT
-	#DBFuncBase().arrayCardsToSql('INSERT', cardalbum, 'ALBUMS', 'ID_CD')
-	#for cardtrack in cardtracks:
-	#	cardtrack['ID_CD'] = 2
-	#DBFuncBase().arrayCardsToSql('INSERT', cardtracks, 'TRACKS', 'ID_TRACK')
-	#CardAlbum().displayCardAlbum(cardalbum)
-	#DBFuncBase().imageToSql(pathimage, idcd, minisize)
 
-	# READ
-	#print(DBFuncBase().sqllToArrayDict('ALBUMS', 'ID_CD', 1))
-	#print(DBFuncBase().sqllToArrayDict('TRACKS', 'ID_CD', 2))	
-
-	#oldcardtracks = DBFuncBase().sqlToArrayDict('TRACKS', 'ID_CD', 23)
-	#print(oldcardtracks)
-
-
-#	cardalbum, cardtracks = CardAlbum().defineAlbum(r'\\HOMERSTATION\_LossLess\TECHNO\Labels\Kompakt\[KOMPAKT CD 132] VA - Kompakt Total 16 (2016)', 'TECHNO', "Labels")
-#	print(displayArrayDict([cardalbum], ('ID_CD', 'CATEGORY', 'FAMILY', 'TAGMETHOD', 'POSITIONHDD', 'NAME', 'COVER')))
-#	print(displayArrayDict([cardalbum], ('AUDIOTRACKS', 'TRACKS', 'LENGTHDISPLAY', 'CUE', 'PIC', 'SIZE', 'CD', 'YEAR', 'ISRC', 'LABEL', 'TAGISRC', 'TAGLABEL', 'COUNTRY')))
-#	print(displayArrayDict(cardtracks, ('TRACKORDER', 'LENGTHDISPLAY', 'ARTIST', 'TITLE', 'TYPEMEDIA', 'DATE', 'GENRE', 'DISC', 'FILENAME')))
-
-
-	

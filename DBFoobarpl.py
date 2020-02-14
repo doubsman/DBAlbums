@@ -5,7 +5,7 @@ from os import path
 from PyQt5.QtCore import qDebug, QObject, pyqtSignal
 from PyQt5.QtSql import QSqlQuery
 from DBFunction import getListFiles
-from DBDatabase import connectDatabase, getrequest, DBFuncBase
+from DBDatabase import getrequest, DBFuncBase
 # dev ext https://github.com/rr-/fpl_reader
 from fpl_reader import read_playlist
 
@@ -94,10 +94,5 @@ class playlistFoobar2000(QObject):
 		"""Traced back progress."""
 		self.signalchgt.emit(int, text)
 
-
-if __name__ == '__main__':
-	boolconnect, dbbase, modsql, rootDk, lstcat = connectDatabase('LOSSLESS_TEST')
-	foba = playlistFoobar2000(r'C:\Users\Mister doubs\AppData\Roaming\foobar2000\playlists-v1.3')
-	foba.importPlaylist()
 
 	

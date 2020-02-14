@@ -1,12 +1,12 @@
 #! /usr/bin/python
 # coding: utf-8
 from sys import argv
-from os import path, chdir
+from os import path
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QTableView, QPushButton,
 							QMenu, QLineEdit, QStyle, QAbstractItemView, QCompleter)
-from DBDatabase import DBFuncBase, connectDatabase, getrequest
+from DBDatabase import DBFuncBase, ConnectDatabase
 from DBFunction import displayCounters, centerWidget, openFolder, ThemeColors
 from DBModelAbs import ModelTableAlbumsABS	# model tables
 from DBArtworks import CoverViewGui			# viewer image b64
@@ -15,21 +15,21 @@ from DBReadJson import JsonParams
 
 class DBAlbumsQT5Mini(QMainWindow):
 	"""Init mini Gui constants."""
-	PATH_PROG = path.dirname(path.abspath(__file__))
-	BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
-	RESS_ICOS = path.join(PATH_PROG, 'IMG' , 'ICO')
-	VERS_PROG = '1.01'
-	TITL_PROG = "♫ DBAlbums mini v{v} (2020)".format(v=VERS_PROG)
-	FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
-	Json_params = JsonParams(FILE__INI)
-	group_dbalbums = Json_params.getMember('dbalbums')
-	WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
-	PICM_NCO = path.join(PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
-	THEM_COL = group_dbalbums['name_theme']
-	ENVT_DEF = group_dbalbums['envt_deflt']
 		
 	def __init__(self, parent=None):
 		super(DBAlbumsQT5Mini, self).__init__(parent)
+		self.PATH_PROG = path.dirname(path.abspath(__file__))
+		self.BASE_SQLI = path.join(self.PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
+		self.RESS_ICOS = path.join(self.PATH_PROG, 'IMG' , 'ICO')
+		self.VERS_PROG = '1.01'
+		self.TITL_PROG = "♫ DBAlbums mini v{v} (2020)".format(v=VERS_PROG)
+		self.FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
+		Json_params = JsonParams(self.FILE__INI)
+		group_dbalbums = Json_params.getMember('dbalbums')
+		self.WINS_ICO = path.join(self.PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
+		self.PICM_NCO = path.join(self.PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
+		self.THEM_COL = group_dbalbums['name_theme']
+		self.ENVT_DEF = group_dbalbums['envt_deflt']
 		self.setWindowIcon(QIcon(self.WINS_ICO))
 		self.setWindowTitle(self.TITL_PROG + ' : [' + self.ENVT_DEF + ']')
 		self.h_main = 400
@@ -51,9 +51,14 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.btn_style.clicked.connect(lambda: [self.curthe.nextTheme(), self.applyTheme()])
 		self.statusBar().addPermanentWidget(self.btn_style)
 		
-		boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.ENVT_DEF, self.FILE__INI, self.BASE_SQLI)
-		
-		autoList = DBFuncBase().sqlToArray(getrequest('autocompletion', self.modsql))
+		self.CnxConnect = ConnectDatabase(self, self.envits, self.FILE__INI, self.BASE_SQLI)
+		boolconnect = self.CnxConnect.boolcon
+		self.dbbase = self.CnxConnect.db
+		self.modsql = self.CnxConnect.MODE_SQLI
+		self.rootDk = self.CnxConnect.BASE_RAC
+		self.lstcat = self.CnxConnect.buildlistcategory()
+
+		autoList = DBFuncBase().sqlToArray(self.CnxConnect.getrequest('autocompletion'))
 		self.com_autcom = QCompleter(autoList, self.textsearch)
 		self.com_autcom.setCaseSensitivity(Qt.CaseInsensitive)
 		self.textsearch.setCompleter(self.com_autcom)
@@ -70,7 +75,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.curthe = ThemeColors(self.THEM_COL)
 		self.applyTheme()
 			
-		req = getrequest('albumslist', self.modsql)
+		req = self.CnxConnect.getrequest('albumslist', self.modsql)
 		self.model = ModelTableAlbumsABS(self, req)
 		self.model.SortFilterProxy.layoutChanged.connect(self.listChanged)
 		self.model.SortFilterProxy.sort(-1)

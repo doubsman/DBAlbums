@@ -10,8 +10,7 @@ from PyQt5.QtGui import QPixmap
 from DBReadJson import JsonParams
 
 class ConnectDatabase(QObject):
-	
-	def __init__(self, parent, envt, fileini, basesqli ='', connexionName = None):
+	def __init__(self, parent, envt, fileini, basesqli , connexionName = None):
 		"""Init invent, build list albums exists in database."""
 		super(ConnectDatabase, self).__init__(parent)
 		self.envt = envt
@@ -56,21 +55,23 @@ class ConnectDatabase(QObject):
 				driver += ";Uid=" + BASE_USR + ";Port=" + str(BASE_PRT) + ";Pwd=" + BASE_PAS + ";Trusted_connection=yes"
 				#print(driver)
 				self.db.setDatabaseName(driver)
-	
-		self.list_category = []
-		if self.RACI_DOU is not None:
-			self.list_category += self.Json_params.buildCategories(self.envt)
 		if self.db.isValid():
 			self.boolcon = self.db.open()
 		else:
 			qDebug(envt+' problem for open database : ' + self.db.lastError().text())
 
+	def buildlistcategory(self):
+		"""list database category."""
+		self.list_category = []
+		if self.RACI_DOU is not None:
+			self.list_category += self.Json_params.buildCategories(self.envt)
+		return self.list_category
+
 	def sqlToArray(self, request):
 		"""Select to array data."""
 		arraydata = []
-		query = QSqlQuery(request)
-		query.exec_(request)
-		if not query.exec_():
+		query = QSqlQuery(self.db)
+		if not query.exec_(request):
 			errorText = query.lastError().text()
 			qDebug(query.lastQuery())
 			qDebug(ascii(errorText))
@@ -84,47 +85,76 @@ class ConnectDatabase(QObject):
 		query.clear
 		return arraydata
 
+	def getrequest(self, name):
+		"""Store requests."""
+		# autocompletion VW_DBCOMPLETION
+		if name == 'autocompletion':
+			if self.MODE_SQLI == 'mssql':
+				request = "SELECT TOP 1000 Synthax FROM VW_COMPLETION GROUP BY Synthax ORDER BY COUNT(*) DESC;"
+			else:
+				request = "SELECT Synthax FROM VW_COMPLETION GROUP BY Synthax ORDER BY COUNT(*) DESC LIMIT 1000;"
+		# date modification base
+		elif name == 'datedatabase':
+			request = "SELECT MAX(datebase) FROM (SELECT MAX( `ADD` ) AS datebase FROM ALBUMS UNION SELECT MAX( `ADD` ) FROM ALBUMS ) FUS;"
+		# list albums DBALBUMS
+		elif name == 'albumslist':
+			request = 	"SELECT " \
+						" `CATEGORY` , `FAMILY` , `NAME` , `ARTIST` , `STYLE` , " \
+						" `LABEL` , `TAGLABEL` , `ISRC` , `TAGISRC` , `TRACKS` , " \
+						" `CD` , `YEAR` , `LENGTHDISPLAY` , `SIZE` , `SCORE` , " \
+						" `PIC` , `COUNTRY` , `ADD` , `MODIFIED` , `POSITIONHDD` , " \
+						" `PATHNAME` , `COVER` , `TAGMETHOD` , `ID_CD` " \
+						" FROM ALBUMS ORDER BY `ADD` DESC";
+		# list tracks
+		elif name == 'trackslist':
+			request = 	"SELECT " \
+						" `TRACKORDER` , `ARTIST` , `TITLE` , `LENGTHDISPLAY` , `SCORE` ," \
+						" `GENRE` , `FILENAME` , `INDEX` , `POS_START_SAMPLES` , `POS_END_SAMPLES` ," \
+						" `PATHNAME` , `TYPEMEDIA` , `ID_TRACK` " \
+						" FROM TRACKS WHERE ID_CD={id} ORDER BY `TRACKORDER` ";
+		# search in track
+		elif name == 'tracksinsearch':
+			request = 	"SELECT ALBUMS.ID_CD FROM ALBUMS " \
+						"INNER JOIN TRACKS " \
+						"ON ALBUMS.ID_CD=TRACKS.ID_CD " \
+						"WHERE TRACKS.ARTIST like '%{search}%' OR TRACKS.TITLE like '%{search}%' OR ALBUMS.NAME like '%{search}%'  " \
+						"GROUP BY ALBUMS.ID_CD"
+		# last ID
+		if name == 'lastid':
+			if self.MODE_SQLI == 'mssql':
+				request = "SELECT IDENT_CURRENT(‘tablename’)"
+			if self.MODE_SQLI == 'mysql':
+				request = "SELECT LAST_INSERT_ID() as lastid;"
+			if self.MODE_SQLI == 'sqlite':
+				request = "SELECT last_insert_rowid();"
+		# cover
+		elif name == 'coverpix':
+			request = "SELECT COVER FROM COVERS WHERE ID_CD={id}"
+		elif name == 'thumbnailpix':
+			request = "SELECT THUMBNAIL FROM COVERS WHERE ID_CD={id}"
+		elif name == 'insertcover':
+			if self.MODE_SQLI == 'mssql':
+				request = "INSERT INTO COVERS(ID_CD, NAME, COVER, THUMBNAIL) VALUES (?, ?, ?, ?)"
+			else:
+				request = "REPLACE INTO COVERS(ID_CD, NAME, COVER, THUMBNAIL) VALUES (?, ?, ?, ?)"
+		# update Sore Album
+		elif name == 'updatescorealbum':
+			request = "UPDATE ALBUMS SET SCORE={score} WHERE ID_CD={id}"
+		# update Sore Track
+		elif name == 'updatescoretrack':
+			request = "UPDATE TRACKS SET SCORE={score} WHERE ID_TRACK={id}"
+		# insert playlist foobar
+		elif name == 'playlistfoobar':
+			request = "INSERT INTO FOOBAR (PLAYLIST, PATH, FILENAME, ALBUM, NAME, ARTIST, TITLE, `ADD` ) " \
+						"VALUES (?, ?, ?, ?, ?, ?, ?,  NOW())"
+		# combobox style
+		elif name == 'listgenres':
+			request = "SELECT ID_CD, STYLE FROM ALBUMS;"
+		# compatibilité SQLSERVER	
+		if self.MODE_SQLI == 'mssql':
+			request = request.replace(' `', ' [').replace('` ', '] ').replace("'", '"')
+		return request
 
-def connectDatabase(envt, fileini, basesqli):
-	"""Connect base MySQL/Sqlite."""
-	Json_params = JsonParams(fileini)
-	group_envt = Json_params.getMember(envt)
-	MODE_SQLI = group_envt['typb']
-	BASE_RAC = r'' + group_envt['raci']
-	RACI_DOU = group_envt['cate']
-	boolcon = False
-	if MODE_SQLI == 'sqlite':
-		db = QSqlDatabase.addDatabase("QSQLITE")
-		db.setDatabaseName(basesqli.format(envt=envt))
-		if not db.isValid():
-			qDebug(envt+' problem no valid database')
-	else:
-		BASE_SEV = group_envt['serv']
-		BASE_USR = group_envt['user']
-		BASE_PAS = group_envt['pass']
-		BASE_NAM = group_envt['base']
-		BASE_PRT = group_envt['port']
-		if MODE_SQLI == 'mysql':
-			db = QSqlDatabase.addDatabase("QMYSQL")
-			db.setHostName(BASE_SEV)
-			db.setDatabaseName(BASE_NAM)
-			db.setUserName(BASE_USR)
-			db.setPassword(BASE_PAS)
-			db.setPort(BASE_PRT)
-		elif MODE_SQLI == 'mssql':
-			db = QSqlDatabase.addDatabase("QODBC3")
-			driver = "DRIVER={SQL Server Native Client 11.0};Server=" + BASE_SEV + ";Database=" + BASE_NAM
-			driver += ";Uid=" + BASE_USR + ";Port=" + str(BASE_PRT) + ";Pwd=" + BASE_PAS + ";Trusted_connection=yes"
-			#print(driver)
-			db.setDatabaseName(driver);
-	list_category = []
-	if RACI_DOU is not None:
-		list_category += Json_params.buildCategories(envt)
-	if db.isValid():
-		boolcon = db.open()
-	else:
-		qDebug(envt+' problem for open database : '+db.lastError().text())
-	return boolcon, db, MODE_SQLI, BASE_RAC, list_category
 
 
 def getrequest(name, MODE_SQLI=None):
@@ -162,12 +192,12 @@ def getrequest(name, MODE_SQLI=None):
 					"WHERE TRACKS.ARTIST like '%{search}%' OR TRACKS.TITLE like '%{search}%' OR ALBUMS.NAME like '%{search}%'  " \
 					"GROUP BY ALBUMS.ID_CD"
 	# last ID
-	if name == 'lastid':
+	elif name == 'lastid':
 		if MODE_SQLI == 'mssql':
 			request = "SELECT IDENT_CURRENT(‘tablename’)"
-		if MODE_SQLI == 'mysql':
+		elif MODE_SQLI == 'mysql':
 			request = "SELECT LAST_INSERT_ID() as lastid;"
-		if MODE_SQLI == 'sqlite':
+		elif MODE_SQLI == 'sqlite':
 			request = "SELECT last_insert_rowid();"
 	# cover
 	elif name == 'coverpix':
@@ -175,7 +205,10 @@ def getrequest(name, MODE_SQLI=None):
 	elif name == 'thumbnailpix':
 		request = "SELECT THUMBNAIL FROM COVERS WHERE ID_CD={id}"
 	elif name == 'insertcover':
-		request = "REPLACE INTO COVERS(ID_CD, NAME, COVER, THUMBNAIL) VALUES (?, ?, ?, ?)"
+		if MODE_SQLI == 'mssql':
+			request = "INSERT INTO COVERS(ID_CD, NAME, COVER, THUMBNAIL) VALUES (?, ?, ?, ?)"
+		else:
+			request = "INSERT INTO COVERS(ID_CD, NAME, COVER, THUMBNAIL) VALUES (?, ?, ?, ?)"
 	# update Sore Album
 	elif name == 'updatescorealbum':
 		request = "UPDATE ALBUMS SET SCORE={score} WHERE ID_CD={id}"
@@ -189,7 +222,7 @@ def getrequest(name, MODE_SQLI=None):
 	# combobox style
 	elif name == 'listgenres':
 		request = "SELECT ID_CD, STYLE FROM ALBUMS;"
-		
+	# compatibilité	SQLServer
 	if MODE_SQLI == 'mssql':
 		request = request.replace(' `', ' [').replace('` ', '] ').replace("'", '"')
 	return request
@@ -226,7 +259,7 @@ class DBFuncBase(QObject):
 		else:
 			qDebug(operation)
 			return False
-	
+		print(request) ##########################################
 		# repeat query insert 
 		if isinstance(arraydata, list):
 			# multi card
@@ -281,8 +314,7 @@ class DBFuncBase(QObject):
 		"""Select to array data."""
 		arraydata = []
 		query = QSqlQuery(request)
-		query.exec_(request)
-		if not query.exec_():
+		if not query.exec_(request):
 			errorText = query.lastError().text()
 			qDebug(query.lastQuery())
 			qDebug(ascii(errorText))
@@ -364,7 +396,7 @@ class DBFuncBase(QObject):
 		query.bindValue(2, inByteArray)
 		query.bindValue(3, inByteArraymini)
 		if not query.exec_():
-			qDebug(10*' '+":index "+query.lastError().text())
+			qDebug(10*' '+":index "+ascii(query.lastError().text()))
 			return False
 		return True
 
@@ -401,19 +433,19 @@ class DBFuncBase(QObject):
 		col_names = self.sqlToArray(req)
 		# sum/collections
 		lstcols = ''
-		ReqTDC = "(SELECT `{group}` AS `{TDCName}` ,\n".format(group=group, TDCName=TDCName)
+		ReqTDC = "(SELECT `{group}` AS `{TDCName}` , 0 as `lineOder` , \n".format(group=group, TDCName=TDCName)
 		for col_name in col_names:
 			ReqTDC += "    SUM(CASE WHEN `{column}` = '{col_name}' THEN {TDCSum} ELSE 0 END) AS `{col_name}` ,\n".format(column=column, TDCSum=TDCSum, col_name=col_name)
 			lstcols += " `{col_name}` ,".format(col_name=col_name)
-		ReqTDC += "    SUM({TDCSum}) AS `TOTAL` FROM {tableName} GROUP BY `{group}`\n".format(tableName=tableName, TDCSum=TDCSum, group=group)
+		ReqTDC += "    SUM({TDCSum}) AS `TOTAL` FROM {tableName} GROUP BY `{group}` \n".format(tableName=tableName, TDCSum=TDCSum, group=group)
 		# sum global
 		if LineSum:
-			ReqTDC += " UNION \nSELECT '➔TOTAL', \n"
+			ReqTDC += " UNION \nSELECT 'TOTAL', 1 as `lineOder` , \n"
 			for col_name in col_names:
 				ReqTDC += "    SUM(CASE WHEN `{column}` = '{col_name}' THEN {TDCSum} ELSE 0 END),\n".format(column=column, TDCSum=TDCSum, col_name=col_name)
 			ReqTDC += "    SUM({TDCSum}) FROM {tableName}\n".format(tableName=tableName, TDCSum=TDCSum)
 		# order by total is last line
-		ReqTDC += ") tdc ORDER BY 1;"
+		ReqTDC += ") tdc ORDER BY `lineOder` , 1;"
 		# select column
 		ReqTDC = "SELECT `"+TDCName+"` ,"+lstcols+" `TOTAL` FROM \n" + ReqTDC
 		# replace ` for [] sqlserver
@@ -526,12 +558,13 @@ class DBCcopyTable(QObject):
 		self.copytable(dbsrc, dbdes, 'COVERS')
 
 if __name__ == '__main__':
+	pass
 #//2005 db.setDatabaseName(DRIVER={SQL Server};SERVER=localhost\SQLExpress;DATABASE=secundaria;UID=sa;PWD=contraseña;WSID=.;Trusted_connection=yes)
 #//2008 db.setDatabaseName("DRIVER={SQL Server Native Client 10.0};SERVER=localhost\SQLExpress;DATABASE=myDbName;UID=user;PWD=userPwd;WSID=.;Trusted_connection=yes")
 #//2012 db.setDatabaseName("DRIVER={SQL Server Native Client 11.0};SERVER=localhost\SQLExpress;DATABASE=myDbName;UID=user;PWD=userPwd;WSID=.;Trusted_connection=yes")
-	boolconnect, dbbase, modsql, rootDk, lstcat = connectDatabase('MP3')
-	print(boolconnect, dbbase, modsql, rootDk, lstcat)
-	copytable = DBCcopyTable()
-	copytable.execSqlFile("E:\Download\InventMP3_old.sql", dbbase)
-	#createsqllite = DBCreateSqLite(r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\TEXT.DB')
-	#createsqllite.createObjSqlLite(dbbase, r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\Create_sqllite_database.sql')
+#boolconnect, dbbase, modsql, rootDk, lstcat = connectDatabase('MP3')
+#print(boolconnect, dbbase, modsql, rootDk, lstcat)
+#copytable = DBCcopyTable()
+#copytable.execSqlFile("E:\Download\InventMP3_old.sql", dbbase)
+#createsqllite = DBCreateSqLite(r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\TEXT.DB')
+#createsqllite.createObjSqlLite(dbbase, r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\Create_sqllite_database.sql')
