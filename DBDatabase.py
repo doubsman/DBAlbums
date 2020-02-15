@@ -167,7 +167,7 @@ class ConnectDatabase(QObject):
 	def traductionRequest(self, requestname):
 		"""Corection path windows-linux."""
 		if self.MODE_SQLI == 'mssql':
-			requestname = requestname.replace(' `', ' [').replace('` ', '] ')#.replace("'", '"')
+			requestname = requestname.replace(' `', ' [').replace('` ', '] ')#.replace("`,", '],')
 		return requestname
 
 	def arrayCardsToSql(self, operation, arraydata, tablename, columnnamekey):
@@ -175,22 +175,21 @@ class ConnectDatabase(QObject):
 		if len(listcolumns) == 0:
 			qDebug(tablename)
 			return False
-		
+		# remove primary key
+		listcolumns.remove(columnnamekey)
 		numberscolumns = len(listcolumns)
 		if operation == 'INSERT':
 			# build query insert
-			request = 'INSERT INTO ' + tablename + '('
-			request += ', '.join('`{0}`'.format(w) for w in listcolumns) + ') VALUES '
+			request = 'INSERT INTO ' + tablename + '( '
+			request += ', '.join('`{0}` '.format(w) for w in listcolumns) + ') VALUES '
 			request += '(' + ', '.join( ['?'] * numberscolumns) +')' 
 		elif operation == 'UPDATE':
 			# build query update
-			listcolumns.remove(columnnamekey)
-			numberscolumns = len(listcolumns)
 			request = 'UPDATE ' + tablename + ' SET '
-			request += '= ?, '.join('`{0}`'.format(w) for w in listcolumns) + '= ? '
+			request += '= ?, '.join('`{0}` '.format(w) for w in listcolumns) + '= ? '
 			request += ' WHERE ' + columnnamekey + ' = ? ;'
 		else:
-			qDebug(operation)
+			qDebug('problem unknow operation : ' + operation)
 			return False
 		request = self.traductionRequest(request)
 		# repeat query insert 
@@ -211,11 +210,7 @@ class ConnectDatabase(QObject):
 		queryoperation = QSqlQuery(self.db)
 		queryoperation.prepare(request)
 		for column in range(numberscolumns):
-			# first column : primary key
-			if listcolumns[column] == columnnamekey and operation == 'INSERT':
-				queryoperation.bindValue(column, None)
-			else:
-				queryoperation.bindValue(column, arraydata[listcolumns[column]])
+			queryoperation.bindValue(column, arraydata[listcolumns[column]])
 		if operation == 'UPDATE':
 			# primary key for update
 			queryoperation.bindValue(column + 1, arraydata[columnnamekey])
@@ -228,7 +223,10 @@ class ConnectDatabase(QObject):
 	
 	def getListColumnsTable(self, tablename):
 		"""Get list columns from table."""
-		request = 'SELECT * FROM ' + tablename + ' LIMIT 0'
+		if self.MODE_SQLI == 'mssql':
+			request = 'SELECT TOP 0 * FROM ' + tablename 
+		else:
+			request = 'SELECT * FROM ' + tablename + ' LIMIT 0'
 		query = QSqlQuery(self.db)
 		query.exec_(request)
 		listcolumns = self.getListColumns(query)

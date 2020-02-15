@@ -107,9 +107,9 @@ class ReleaseInvent(QObject):
 	
 	def deleteAlbum(self, idcd):
 		"""Delete Album in database."""
-		self.parent.CnxConnect.deleteTable("ALBUMS", "ID_CD", idcd)
-		self.parent.CnxConnect.deleteTable("TRACKS", "ID_CD", idcd)
-		self.parent.CnxConnect.deleteTable("COVERS", "ID_CD", idcd)
+		self.parent.CnxConnect.deleteLineTable("ALBUMS", "ID_CD", idcd)
+		self.parent.CnxConnect.deleteLineTable("TRACKS", "ID_CD", idcd)
+		self.parent.CnxConnect.deleteLineTable("COVERS", "ID_CD", idcd)
 		self.signalmacroend.emit()
 	
 	def infoAnalysealbum(self, text, level):
