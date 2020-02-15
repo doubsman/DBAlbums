@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from PyQt5.QtCore import QThread, pyqtSignal, qDebug
-from DBDatabase import getrequest, ConnectDatabase
+from PyQt5.QtCore import QThread, pyqtSignal
+from DBDatabase import ConnectDatabase
 
 
 class DBPThreadsListStyle(QThread):
@@ -25,7 +25,7 @@ class DBPThreadsListStyle(QThread):
 		self.CnxDat = ConnectDatabase(None, self.envt, self.fileini, self.baseqli, 'dbthread')
 		self.boolcon = self.CnxDat.boolcon
 		self.dbthread = self.CnxDat.db
-		request = getrequest('listgenres')
+		request = self.CnxDat.getrequest('listgenres')
 		self.listgenres = self.CnxDat.sqlToArray(request)
 		self.dbthread.close()
 		liststyles = []

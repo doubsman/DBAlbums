@@ -2,15 +2,13 @@
 # -*- coding: utf-8 -*-
 
 
-from sys import argv
 from os import path
 from re import search, DOTALL
-from PyQt5.QtCore import QObject, qDebug, qInstallMessageHandler, QProcess, pyqtSlot
+from PyQt5.QtCore import QObject, qDebug, QProcess, pyqtSlot
 from mutagen.flac import FLAC
 from mutagen.apev2 import APEv2, APEv2File
 from mutagen.mp3 import MP3
 from mutagen.easyid3 import EasyID3
-from DBFunction import qtmymessagehandler
 
 
 class DBMediasTags(QObject):

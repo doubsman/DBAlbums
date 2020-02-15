@@ -4,12 +4,11 @@
 # ############################################################################
 # # Audio pyQT5 Player by SFI
 # ############################################################################
-from sys import argv
 from os import path
 from PyQt5.QtCore import Qt, QUrl, pyqtSignal
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist#, QMediaMetaData
-from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QPushButton, QSlider, QStyleOptionSlider,
-							QLabel, QMainWindow, QStyle, QWidget, QMessageBox)
+from PyQt5.QtWidgets import (QHBoxLayout, QPushButton, QSlider, QStyleOptionSlider,
+							QLabel, QStyle, QWidget, QMessageBox)
 
 VERS_PROG = '1.00'
 TITL_PROG = "Player v{v} : ".format(v=VERS_PROG)
@@ -307,25 +306,25 @@ class TestAudio(QWidget):
 #duration = player.get_length() / 1000
 
 
-class MainExemple(QMainWindow):
-	def __init__(self, parent=None):
-		super(MainExemple, self).__init__(parent)
-		# Init GUI
-		PlayerAudio = DBPlayer()
-		self.setCentralWidget(PlayerAudio)
-		self.show()
-
-		PlayerAudio.signaltxt.connect(self.txtplayeraudio)
-
-		PlayerAudio.addMediaslist(("E:\\Work\ZTest\\02. Tristan - Reincarnation (GMS Remix).mp3",), 0, "test")
-		PlayerAudio.player.play()
-
-	def txtplayeraudio(self, message):
-		print(message)
-
-
-if __name__ == '__main__':
-	app = QApplication(argv)
-	player = MainExemple()
-	rc = app.exec_()
-	exit(rc)
+#class MainExemple(QMainWindow):
+#	def __init__(self, parent=None):
+#		super(MainExemple, self).__init__(parent)
+#		# Init GUI
+#		PlayerAudio = DBPlayer()
+#		self.setCentralWidget(PlayerAudio)
+#		self.show()
+#
+#		PlayerAudio.signaltxt.connect(self.txtplayeraudio)
+#
+#		PlayerAudio.addMediaslist(("E:\\Work\ZTest\\02. Tristan - Reincarnation (GMS Remix).mp3",), 0, "test")
+#		PlayerAudio.player.play()
+#
+#	def txtplayeraudio(self, message):
+#		print(message)
+#
+#
+#if __name__ == '__main__':
+#	app = QApplication(argv)
+#	player = MainExemple()
+#	rc = app.exec_()
+#	exit(rc)

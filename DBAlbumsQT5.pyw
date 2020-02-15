@@ -25,7 +25,7 @@ from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
 from DBFunction import (runCommand, openFolder, centerWidget, buildalbumnamehtml,
 						displayCounters, displayStars, ThemeColors, qtmymessagehandler)
-from DBDatabase import DBFuncBase, ConnectDatabase, DBCreateSqLite
+from DBDatabase import ConnectDatabase, DBCreateSqLite
 from DBSLoading import DBloadingGui
 from DBAlbsMini import DBAlbumsQT5Mini
 from DBModelAbs import ModelTableAlbumsABS, ModelTableTracksABS
@@ -595,7 +595,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.action_UBN.setEnabled(False)
 					qDebug('no database root path exist :' + self.rootDk)
 				# loading splashscreen
-				self.loadingGui = DBloadingGui(self.modsql, self.TITL_PROG, self)
+				self.loadingGui = DBloadingGui(self, self.TITL_PROG)
 				self.loadingGui.show()
 				QApplication.processEvents()
 				# last date modifcation base
@@ -628,7 +628,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					index = self.tbl_albums.currentIndex()
 					self.tbl_albums.scrollTo(index)
 					# autocompletion list
-					autoList = DBFuncBase().sqlToArray(self.CnxConnect.getrequest('autocompletion'))
+					autoList = self.CnxConnect.sqlToArray(self.CnxConnect.getrequest('autocompletion'))
 					self.com_autcom = QCompleter(autoList, self.lin_search)
 					self.com_autcom.setCaseSensitivity(Qt.CaseInsensitive)
 					self.lin_search.setCompleter(self.com_autcom)
@@ -732,7 +732,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			else:
 				#self.labelcover.updateLabel(None)
 				self.labelcover.updateLabel(self.AlbumPath)
-				self.coveral = DBFuncBase().sqlToPixmap(self.curAlb, self.PICM_NCO)
+				self.coveral = self.CnxConnect.sqlToPixmap(self.curAlb, self.PICM_NCO)
 			self.coveral = self.coveral.scaled(self.COVE_SIZ, self.COVE_SIZ, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
 			self.labelcover.setPixmap(self.coveral)
 
@@ -1146,7 +1146,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 									self.tableMdlAlb.myindex,
 									self.lstcat,
 									typeupdate,
-									self.modsql, 
 									self.envits,
 									self.curthe,
 									self)
@@ -1179,7 +1178,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 								self.tableMdlAlb.myindex,
 								self.lstcat,
 								'UPDATE',
-								self.modsql, 
 								self.envits, 
 								self.curthe,
 								self)
@@ -1215,7 +1213,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 										self.tableMdlAlb.myindex,
 										self.lstcat,
 										'UPDATE',
-										self.modsql, 
 										self.envits, 
 										self.curthe,
 										self)
@@ -1246,7 +1243,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 									self.tableMdlAlb.myindex,
 									self.lstcat,
 									'UPDATE',
-									self.modsql, 
 									self.envits, 
 									self.curthe,
 									self)
@@ -1255,12 +1251,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	
 	def correctionsAlbums(self):
 		request="SELECT CATEGORY, FAMILY, 'UPDATE', ID_CD, NAME, PATHNAME FROM ALBUMS WHERE PIC > 0 AND ALBUMS.COVER='<No Picture>' AND ID_CD> 12142;"
-		list_actions = DBFuncBase().sqlToArray(request)
+		list_actions = self.CnxConnect.sqlToArray(request)
 		self.prepareInvent = InventGui(self.tableMdlAlb.arraydata, 
 									self.tableMdlAlb.myindex,
 									self.lstcat,
 									'UPDATE',
-									self.modsql, 
 									self.envits, 
 									self.curthe)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
@@ -1306,7 +1301,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					filecover = path.join(path.dirname(filename), self.tableMdlAlb.getData(ind, 'NAME'))
 					extension = ((self.tableMdlAlb.getData(ind, 'COVER'))[-4:]).replace('.', '')
 					filecover = filecover+'.'+extension
-					DBFuncBase().sqlImageToFile(filecover, self.tableMdlAlb.getData(ind, 'ID_CD'))
+					self.CnxConnect.sqlImageToFile(filecover, self.tableMdlAlb.getData(ind, 'ID_CD'))
 				self.statusBar().showMessage('Export covers Albums /n Create covers Sucessfull to :'+path.dirname(filename), 7000)
 				openFolder(path.dirname(filename))
 

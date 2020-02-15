@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from os import path, chdir
+from os import path
 from PyQt5.QtGui import QFont, QMovie
 from PyQt5.QtCore import Qt, pyqtSlot, QDateTime
 from PyQt5.QtSql import QSqlQueryModel
 from PyQt5.QtWidgets import QWidget
-from DBDatabase import DBFuncBase, getrequest
 from DBFunction import centerWidget
 from Ui_DBLOADING import Ui_LoadingWindow
 
@@ -14,7 +13,7 @@ from Ui_DBLOADING import Ui_LoadingWindow
 class DBloadingGui(QWidget, Ui_LoadingWindow):
 	"""Loading."""
 	
-	def __init__(self, modsql, title, parent):
+	def __init__(self, parent, title):
 		super(DBloadingGui, self).__init__(parent)
 		self.setupUi(self)
 		self.parent = parent
@@ -34,22 +33,23 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		self.lab_logo.setMovie(self.movielogo)
 		self.movielogo.start()
 		# tab1
-		req = DBFuncBase().buildReqTCD("CATEGORY", "FAMILY", "ALBUMS", "ALBUM", "1", True, modsql)
+		req = self.parent.CnxConnect.buildRequestTCD("CATEGORY", "FAMILY", "ALBUMS", "ALBUM", "1", True)
 		self.buildTab(req, self.tableWid1)
 		# tab2
-		req = DBFuncBase().buildReqTCD("CATEGORY", "FAMILY", "ALBUMS", "SIZE (GO)", "ROUND( `Size` /1024,1)", True, modsql)
+		req = self.parent.CnxConnect.buildRequestTCD("CATEGORY", "FAMILY", "ALBUMS", "SIZE (GO)", "ROUND( `Size` /1024,1)", True)
 		self.buildTab(req, self.tableWid2)
 		# tab3
-		req = DBFuncBase().buildReqTCD("YEAR", "CATEGORY", "ALBUMS", "YEAR", "1", True, modsql)
+		req = self.parent.CnxConnect.buildRequestTCD("YEAR", "CATEGORY", "ALBUMS", "YEAR", "1", True)
 		self.buildTab(req, self.tableWid3)
 		# message
-		basedate = DBFuncBase().sqlToArray(getrequest('datedatabase', modsql))
+		basedate = self.parent.CnxConnect.sqlToArray(self.parent.CnxConnect.getrequest('datedatabase'))
+		txt_message = self.parent.CnxConnect.MODE_SQLI
 		if len(basedate) == 0:
-			txt_message = modsql + " Base \nlast modified :\nnever"
+			txt_message += " Base \nlast modified :\nnever"
 		elif isinstance(basedate[0], QDateTime):
-			txt_message = modsql + " Base \nlast modified :\n"+basedate[0].toString('dd/MM/yyyy hh:mm:ss')	
+			txt_message += " Base \nlast modified :\n"+basedate[0].toString('dd/MM/yyyy hh:mm:ss')	
 		else:
-			txt_message = modsql + " Base \nlast modified :\n"+basedate[0].replace('T',' ')
+			txt_message += " Base \nlast modified :\n"+basedate[0].replace('T',' ')
 		self.lab_text.setText(title+"\nConnected "+txt_message)
 		# quit
 		self.btn_quit.clicked.connect(lambda: self.hide())

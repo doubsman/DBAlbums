@@ -21,7 +21,7 @@ class BuildInvent(QObject):
 					"Artists"			: "Artists"}
 	mask_amedias = ('.flac','.ape','.wma','.mp3','.wv','.aac','.mpc')
 	
-	def __init__(self, list_albums, list_columns, list_category, typeupdate, modsql, envt):
+	def __init__(self, list_albums, list_columns, list_category, typeupdate, envt):
 		"""Init invent, build list albums exists in database."""
 		super(BuildInvent, self).__init__()
 		self.list_albums = list_albums
@@ -29,7 +29,6 @@ class BuildInvent(QObject):
 		self.list_columns = list_columns
 		self.totalalbums = len(self.list_albums)
 		self.typeupdate = typeupdate
-		self.modsql = modsql
 		self.envt = envt
 		self.list_invent = []
 		self.list_finaly = []

@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from os import path
-from sys import platform
 from PyQt5.QtCore import Qt, QVariant, QModelIndex, pyqtSignal, QSortFilterProxyModel, QAbstractTableModel
 from PyQt5.QtSql import QSqlQuery
 from PyQt5.QtGui import QColor
-from DBDatabase import DBFuncBase, getrequest
 
 
 # MODEL ABSTRACT generique
@@ -30,7 +28,7 @@ class ModelDBAbstract(QAbstractTableModel):
 		query = QSqlQuery()
 		query.setForwardOnly(True)
 		query.exec_(self.request)
-		self.myindex = DBFuncBase().getListColumns(query)
+		self.myindex = self.parent.CnxConnect.getListColumns(query)
 		cpt = 1
 		tot = query.size() 
 		while query.next():
@@ -131,8 +129,8 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 	def updateFilters(self, filttext, filtcate=None, filtfami=None, filtyear=None, filtlabl=None, filtgenr=None, filtcoun=None, filtintk=False):
 		"""Update vars filter."""
 		if filtintk and filttext != '':
-			print((getrequest('tracksinsearch')).format(search=filttext))
-			self.listidtxt = DBFuncBase().sqlToArray((getrequest('tracksinsearch')).format(search=filttext))
+			print((self.parent.CnxConnect.getrequest('tracksinsearch')).format(search=filttext))
+			self.listidtxt = self.parent.CnxConnect.sqlToArray((self.parent.CnxConnect.getrequest('tracksinsearch')).format(search=filttext))
 			print(self.listidtxt)
 		else:
 			self.listidtxt = []
@@ -325,7 +323,7 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 		"""Maj Mysql table Albums."""
 		idkey = self.arraydata[row][self.myindex.index('ID_CD')]
 		# update score mysql
-		req =  getrequest(namereq)
+		req =  self.parent.CnxConnect.getrequest(namereq)
 		req = req.format(score=score, id=idkey)
 		query = QSqlQuery()
 		query.exec_(req)
@@ -412,7 +410,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 		"""Maj Mysql table Albums."""
 		# update score mysql
 		idkey = self.arraydata[row][self.myindex.index('ID_TRACK')]
-		req =  getrequest(namereq)
+		req =  self.parent.CnxConnect.getrequest(namereq)
 		req = req.format(score=score, id=idkey)
 		query = QSqlQuery()
 		query.exec_(req)

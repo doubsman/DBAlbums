@@ -2,10 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from os import path
-from sys import argv
 from PyQt5.QtCore import QObject, pyqtSignal
-from DBDatabase import DBFuncBase, getrequest
 from DBTImpoALB import CardAlbum
 from DBFunction import displayArrayDict
 
@@ -15,12 +12,11 @@ class ReleaseInvent(QObject):
 	signalend = pyqtSignal()
 	signalmacroend = pyqtSignal()
 		
-	def __init__(self, list_actions, modsql, parent):
+	def __init__(self, parent, list_actions):
 		"""Init invent, build list albums exists in database."""
 		super(ReleaseInvent, self).__init__()
 		self.parent = parent
 		self.list_action = list_actions
-		self.modsql = modsql
 
 	def executeActions(self):
 		"""Action for update database.
@@ -57,12 +53,12 @@ class ReleaseInvent(QObject):
 	def updateAlbum(self, category, family, folder, idcd):
 		"""Build album card."""
 		# capture datas old
-		oldcardalbum = DBFuncBase().sqlToArrayDict('ALBUMS', 'ID_CD', idcd)
+		oldcardalbum = self.parent.CnxConnect.sqlToArrayDict('ALBUMS', 'ID_CD', idcd)
 		oldcardalbum = oldcardalbum[0]
-		oldcardtracks = DBFuncBase().sqlToArrayDict('TRACKS', 'ID_CD', idcd)
+		oldcardtracks = self.parent.CnxConnect.sqlToArrayDict('TRACKS', 'ID_CD', idcd)
 		# delete old
-		DBFuncBase().deleteTable("TRACKS", "ID_CD", idcd)
-		DBFuncBase().deleteTable("COVERS", "ID_CD", idcd)
+		self.parent.CnxConnect.deleteLineTable("TRACKS", "ID_CD", idcd)
+		self.parent.CnxConnect.deleteLineTable("COVERS", "ID_CD", idcd)
 		# new
 		analysealbum = CardAlbum()
 		analysealbum.signaltxt.connect(self.infoAnalysealbum)
@@ -82,10 +78,10 @@ class ReleaseInvent(QObject):
 					if cardtrack['FILENAME'] == oldcardtrack['FILENAME'] and cardtrack['TRACKORDER'] == oldcardtrack['TRACKORDER']:
 						cardtrack['SCORE'] = oldcardtrack['SCORE']
 		# write album update
-		DBFuncBase().arrayCardsToSql('UPDATE', cardalbum, 'ALBUMS', 'ID_CD')
-		DBFuncBase().arrayCardsToSql('INSERT', cardtracks, 'TRACKS', 'ID_TRACK')
+		self.parent.CnxConnect.arrayCardsToSql('UPDATE', cardalbum, 'ALBUMS', 'ID_CD')
+		self.parent.CnxConnect.arrayCardsToSql('INSERT', cardtracks, 'TRACKS', 'ID_TRACK')
 		if cardalbum['COVER'] != self.parent.TEXT_NCO:
-			DBFuncBase().imageToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
+			self.parent.CnxConnect.imageToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
 		# display consol
 		self.emitDisplayCardAlbum(cardalbum, cardtracks)
 		self.signalmacroend.emit()
@@ -95,25 +91,25 @@ class ReleaseInvent(QObject):
 		analysealbum = CardAlbum()
 		analysealbum.signaltxt.connect(self.infoAnalysealbum)
 		cardalbum, cardtracks = analysealbum.defineAlbum(folder, category, family)
-		DBFuncBase().arrayCardsToSql('INSERT', cardalbum, 'ALBUMS', 'ID_CD')
+		self.parent.CnxConnect.arrayCardsToSql('INSERT', cardalbum, 'ALBUMS', 'ID_CD')
 		# last id for cardtracks
 		#request = "SELECT LAST_INSERT_ID() as lastid;"
-		request = getrequest('lastid', self.modsql)
-		idcd = DBFuncBase().sqlToArray(request)[0]
+		request = self.parent.CnxConnect.getrequest('lastid')
+		idcd = self.parent.CnxConnect.sqlToArray(request)[0]
 		for cardtrack in cardtracks:
 			cardtrack['ID_CD'] = idcd
-		DBFuncBase().arrayCardsToSql('INSERT', cardtracks, 'TRACKS', 'ID_TRACK')
+		self.parent.CnxConnect.arrayCardsToSql('INSERT', cardtracks, 'TRACKS', 'ID_TRACK')
 		if cardalbum['COVER'] != self.parent.TEXT_NCO:
-			DBFuncBase().imageToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
+			self.parent.CnxConnect.imageToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
 		# display consol
 		self.emitDisplayCardAlbum(cardalbum, cardtracks)
 		self.signalmacroend.emit()
 	
 	def deleteAlbum(self, idcd):
 		"""Delete Album in database."""
-		DBFuncBase().deleteTable("ALBUMS", "ID_CD", idcd)
-		DBFuncBase().deleteTable("TRACKS", "ID_CD", idcd)
-		DBFuncBase().deleteTable("COVERS", "ID_CD", idcd)
+		self.parent.CnxConnect.deleteTable("ALBUMS", "ID_CD", idcd)
+		self.parent.CnxConnect.deleteTable("TRACKS", "ID_CD", idcd)
+		self.parent.CnxConnect.deleteTable("COVERS", "ID_CD", idcd)
 		self.signalmacroend.emit()
 	
 	def infoAnalysealbum(self, text, level):

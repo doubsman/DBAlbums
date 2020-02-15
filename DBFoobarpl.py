@@ -5,7 +5,6 @@ from os import path
 from PyQt5.QtCore import qDebug, QObject, pyqtSignal
 from PyQt5.QtSql import QSqlQuery
 from DBFunction import getListFiles
-from DBDatabase import getrequest, DBFuncBase
 # dev ext https://github.com/rr-/fpl_reader
 from fpl_reader import read_playlist
 
@@ -32,7 +31,7 @@ class playlistFoobar2000(QObject):
 		"""Insert playlist track in database dans update score."""
 		self.numtracks = len(self.trackslist)
 		counter = 0
-		request = getrequest('playlistfoobar')		
+		request = self.parent.CnxConnect.getrequest('playlistfoobar')		
 		self.signalchgt.emit(0, "Crowse playlists fooBar 2000")
 		for footrack in self.trackslist:
 			query = QSqlQuery()
@@ -50,8 +49,7 @@ class playlistFoobar2000(QObject):
 			self.signalchgt.emit((counter/self.numtracks)*100, 'Import playlists FooBar2000 in progess...')
 
 	def updateScore(self, filerequests):
-		update = DBFuncBase(self)
-		update.signalchgt.connect(self.loadingProgress)
+		self.parent.CnxConnect.signalchgt.connect(self.loadingProgress)
 		update.execSqlFile(filerequests)
 
 	def readPlaylist(self, file_path):

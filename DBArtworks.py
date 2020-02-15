@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sys import argv
 from os import path
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, pyqtSlot, QSize, QObject
-from PyQt5.QtWidgets import (QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, 
-						QLabel, QApplication)
+from PyQt5.QtCore import Qt, pyqtSlot, QSize
+from PyQt5.QtWidgets import QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, QLabel
 from DBFunction import openFolder, getListFiles, centerWidget
 from DBThunbnai import DBThunbnails
 

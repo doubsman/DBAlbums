@@ -301,21 +301,3 @@ class CardAlbum(QObject):
 		#	albumtempo = arrayalbum[0].strip() + '-' + arrayalbum[1].strip() + "[" + arrayalbum[2].strip() + "]"
 		return albumtempo
 		
-	
-if __name__ == '__main__':
-	#cardalbum, cardtracks = CardAlbum().defineAlbum(r'E:\Work\ZTest\TAG_bluid\ROCK\Download\Air - Moon Safari (1998)', 'ROCK', "DOWNLOAD")
-	#cardalbum, cardtracks = CardAlbum().defineAlbum(r'E:\Work\ZTest\TAG_bluid\TECHNO\Labels\Fcom\[F115] Laurent Garnier - Early Works (1998)', 'TECHNO', "Labels")
-	cardalbum, cardtracks = CardAlbum().defineAlbum(r'\\HOMERSTATION\_LossLess\TRANCE\Download\_2015_2019\Nerso - Essence Of Universe EP (2017)', 'TRANCE', "Download")
-	#cardalbum, cardtracks = CardAlbum().defineAlbum(r'\\HOMERSTATION\_Mp3\Rock Artists\1000 Top Albums\[0010] Pink Floyd - Dark Side Of The Moon', 'ROCK', "Download")
-	CardTracks().displayCardTracks(cardtracks)
-	CardAlbum().displayCardAlbum(cardalbum)
-	#DBFuncBase().imageToSql(pathimage, idcd, minisize)
-	
-#	cb = QApplication.clipboard()
-#	cb.clear(mode=cb.Clipboard )
-#	cb.setText("Clipboard Text", mode=cb.Clipboard)
-	
-	#print(CardAlbum().cleanfolderalbum('VA_-_Psychosomatic-Compiled_By_Tricossoma-2010-MYCEL'))
-	#print(CardAlbum().cleanfolderalbum('[gl10] Miss Yetti - Hedonism and Digital sex (vinyl)(2003)'))
-	#print(CardAlbum().cleanfolderalbum('Donnacha Costello - Colorseries [MIN 031](2007)'))
-	#print(CardAlbum().cleanfolderalbum('VA_-_Tales_Of_The_Spektral_Wizard_2011'))

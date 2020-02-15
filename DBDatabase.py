@@ -1,15 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from os import  path, chdir, remove
+from os import  path, remove
 from copy import deepcopy
 from time import sleep
+from codecs import open
 from PyQt5.QtCore import Qt, qDebug, QObject, QByteArray, QIODevice, QBuffer, pyqtSignal
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QPixmap
 from DBReadJson import JsonParams
 
+
 class ConnectDatabase(QObject):
+	signalchgt = pyqtSignal(int, str)		# signal browse
+
 	def __init__(self, parent, envt, fileini, basesqli , connexionName = None):
 		"""Init invent, build list albums exists in database."""
 		super(ConnectDatabase, self).__init__(parent)
@@ -53,7 +57,6 @@ class ConnectDatabase(QObject):
 					self.db = QSqlDatabase.addDatabase("QODBC3", connexionName)
 				driver = "DRIVER={SQL Server Native Client 11.0};Server=" + BASE_SEV + ";Database=" + BASE_NAM
 				driver += ";Uid=" + BASE_USR + ";Port=" + str(BASE_PRT) + ";Pwd=" + BASE_PAS + ";Trusted_connection=yes"
-				#print(driver)
 				self.db.setDatabaseName(driver)
 		if self.db.isValid():
 			self.boolcon = self.db.open()
@@ -66,24 +69,6 @@ class ConnectDatabase(QObject):
 		if self.RACI_DOU is not None:
 			self.list_category += self.Json_params.buildCategories(self.envt)
 		return self.list_category
-
-	def sqlToArray(self, request):
-		"""Select to array data."""
-		arraydata = []
-		query = QSqlQuery(self.db)
-		if not query.exec_(request):
-			errorText = query.lastError().text()
-			qDebug(query.lastQuery())
-			qDebug(ascii(errorText))
-		indexes = query.record().count()
-		while query.next():
-			if indexes == 1:
-				arraydata.append(query.value(0))
-			else:
-				row = [query.value(index) for index in range(indexes)]
-				arraydata.append(row)
-		query.clear
-		return arraydata
 
 	def getrequest(self, name):
 		"""Store requests."""
@@ -150,92 +135,40 @@ class ConnectDatabase(QObject):
 		# combobox style
 		elif name == 'listgenres':
 			request = "SELECT ID_CD, STYLE FROM ALBUMS;"
-		# compatibilité SQLSERVER	
+		# compatibilité mutli-base	
+		return self.traductionRequest(request)
+
+	def buildRequestTCD(self, group, column, tableName, TDCName='TDC', TDCSum=1, LineSum=True):
+		"""build request Pivot table compatible sqlite, mysql, SQLserver."""
+		# Collect list columns
+		req = "SELECT `{column}` FROM {tableName} GROUP BY `{column}` ;".format(tableName=tableName, column=column)
+		req = self.traductionRequest(req)
+		col_names = self.sqlToArray(req)
+		# sum/collections
+		lstcols = ''
+		ReqTDC = "(SELECT `{group}` AS `{TDCName}` , 0 as `lineOder` , \n".format(group=group, TDCName=TDCName)
+		for col_name in col_names:
+			ReqTDC += "    SUM(CASE WHEN `{column}` = '{col_name}' THEN {TDCSum} ELSE 0 END) AS `{col_name}` ,\n".format(column=column, TDCSum=TDCSum, col_name=col_name)
+			lstcols += " `{col_name}` ,".format(col_name=col_name)
+		ReqTDC += "    SUM({TDCSum}) AS `TOTAL` FROM {tableName} GROUP BY `{group}` \n".format(tableName=tableName, TDCSum=TDCSum, group=group)
+		# sum global
+		if LineSum:
+			ReqTDC += " UNION \nSELECT 'TOTAL', 1 as `lineOder` , \n"
+			for col_name in col_names:
+				ReqTDC += "    SUM(CASE WHEN `{column}` = '{col_name}' THEN {TDCSum} ELSE 0 END),\n".format(column=column, TDCSum=TDCSum, col_name=col_name)
+			ReqTDC += "    SUM({TDCSum}) FROM {tableName}\n".format(tableName=tableName, TDCSum=TDCSum)
+		# order by total is last line
+		ReqTDC += ") tdc ORDER BY `lineOder` , 1;"
+		# select column
+		ReqTDC = "SELECT `"+TDCName+"` ,"+lstcols+" `TOTAL` FROM \n" + ReqTDC
+		ReqTDC = self.traductionRequest(ReqTDC)
+		return ReqTDC
+
+	def traductionRequest(self, requestname):
+		"""Corection path windows-linux."""
 		if self.MODE_SQLI == 'mssql':
-			request = request.replace(' `', ' [').replace('` ', '] ').replace("'", '"')
-		return request
-
-
-
-def getrequest(name, MODE_SQLI=None):
-	"""Store requests."""
-	# autocompletion VW_DBCOMPLETION
-	if name == 'autocompletion':
-		if MODE_SQLI == 'mssql':
-			request = "SELECT TOP 1000 Synthax FROM VW_COMPLETION GROUP BY Synthax ORDER BY COUNT(*) DESC;"
-		else:
-			request = "SELECT Synthax FROM VW_COMPLETION GROUP BY Synthax ORDER BY COUNT(*) DESC LIMIT 1000;"
-	# date modification base
-	elif name == 'datedatabase':
-		request = "SELECT MAX(datebase) FROM (SELECT MAX( `ADD` ) AS datebase FROM ALBUMS UNION SELECT MAX( `ADD` ) FROM ALBUMS ) FUS;"
-	# list albums DBALBUMS
-	elif name == 'albumslist':
-		request = 	"SELECT " \
-					" `CATEGORY` , `FAMILY` , `NAME` , `ARTIST` , `STYLE` , " \
-					" `LABEL` , `TAGLABEL` , `ISRC` , `TAGISRC` , `TRACKS` , " \
-					" `CD` , `YEAR` , `LENGTHDISPLAY` , `SIZE` , `SCORE` , " \
-					" `PIC` , `COUNTRY` , `ADD` , `MODIFIED` , `POSITIONHDD` , " \
-					" `PATHNAME` , `COVER` , `TAGMETHOD` , `ID_CD` " \
-					" FROM ALBUMS ORDER BY `ADD` DESC";
-	# list tracks
-	elif name == 'trackslist':
-		request = 	"SELECT " \
-					" `TRACKORDER` , `ARTIST` , `TITLE` , `LENGTHDISPLAY` , `SCORE` ," \
-					" `GENRE` , `FILENAME` , `INDEX` , `POS_START_SAMPLES` , `POS_END_SAMPLES` ," \
-					" `PATHNAME` , `TYPEMEDIA` , `ID_TRACK` " \
-					" FROM TRACKS WHERE ID_CD={id} ORDER BY `TRACKORDER` ";
-	# search in track
-	elif name == 'tracksinsearch':
-		request = 	"SELECT ALBUMS.ID_CD FROM ALBUMS " \
-					"INNER JOIN TRACKS " \
-					"ON ALBUMS.ID_CD=TRACKS.ID_CD " \
-					"WHERE TRACKS.ARTIST like '%{search}%' OR TRACKS.TITLE like '%{search}%' OR ALBUMS.NAME like '%{search}%'  " \
-					"GROUP BY ALBUMS.ID_CD"
-	# last ID
-	elif name == 'lastid':
-		if MODE_SQLI == 'mssql':
-			request = "SELECT IDENT_CURRENT(‘tablename’)"
-		elif MODE_SQLI == 'mysql':
-			request = "SELECT LAST_INSERT_ID() as lastid;"
-		elif MODE_SQLI == 'sqlite':
-			request = "SELECT last_insert_rowid();"
-	# cover
-	elif name == 'coverpix':
-		request = "SELECT COVER FROM COVERS WHERE ID_CD={id}"
-	elif name == 'thumbnailpix':
-		request = "SELECT THUMBNAIL FROM COVERS WHERE ID_CD={id}"
-	elif name == 'insertcover':
-		if MODE_SQLI == 'mssql':
-			request = "INSERT INTO COVERS(ID_CD, NAME, COVER, THUMBNAIL) VALUES (?, ?, ?, ?)"
-		else:
-			request = "INSERT INTO COVERS(ID_CD, NAME, COVER, THUMBNAIL) VALUES (?, ?, ?, ?)"
-	# update Sore Album
-	elif name == 'updatescorealbum':
-		request = "UPDATE ALBUMS SET SCORE={score} WHERE ID_CD={id}"
-	# update Sore Track
-	elif name == 'updatescoretrack':
-		request = "UPDATE TRACKS SET SCORE={score} WHERE ID_TRACK={id}"
-	# insert playlist foobar
-	elif name == 'playlistfoobar':
-		request = "INSERT INTO FOOBAR (PLAYLIST, PATH, FILENAME, ALBUM, NAME, ARTIST, TITLE, `ADD` ) " \
-					"VALUES (?, ?, ?, ?, ?, ?, ?,  NOW())"
-	# combobox style
-	elif name == 'listgenres':
-		request = "SELECT ID_CD, STYLE FROM ALBUMS;"
-	# compatibilité	SQLServer
-	if MODE_SQLI == 'mssql':
-		request = request.replace(' `', ' [').replace('` ', '] ').replace("'", '"')
-	return request
-
-
-
-class DBFuncBase(QObject):
-	signalchgt = pyqtSignal(int, str)		# signal browse
-	
-	def __init__(self, parent=None):
-		"""Init."""
-		super(DBFuncBase, self).__init__(parent)
-		self.parent = parent
+			requestname = requestname.replace(' `', ' [').replace('` ', '] ')#.replace("'", '"')
+		return requestname
 
 	def arrayCardsToSql(self, operation, arraydata, tablename, columnnamekey):
 		listcolumns = self.getListColumnsTable(tablename)
@@ -259,10 +192,10 @@ class DBFuncBase(QObject):
 		else:
 			qDebug(operation)
 			return False
-		print(request) ##########################################
+		request = self.traductionRequest(request)
 		# repeat query insert 
 		if isinstance(arraydata, list):
-			# multi card
+			# multi cards
 			for row in arraydata:
 				if not self.arrayCardToSql(operation, row, columnnamekey, request, listcolumns):
 					return False
@@ -275,7 +208,7 @@ class DBFuncBase(QObject):
 	def arrayCardToSql(self, operation, arraydata, columnnamekey, request, listcolumns):
 		# one card
 		numberscolumns = len(listcolumns)
-		queryoperation = QSqlQuery()
+		queryoperation = QSqlQuery(self.db)
 		queryoperation.prepare(request)
 		for column in range(numberscolumns):
 			# first column : primary key
@@ -296,8 +229,8 @@ class DBFuncBase(QObject):
 	def getListColumnsTable(self, tablename):
 		"""Get list columns from table."""
 		request = 'SELECT * FROM ' + tablename + ' LIMIT 0'
-		query = QSqlQuery(request)
-		query.exec_()
+		query = QSqlQuery(self.db)
+		query.exec_(request)
 		listcolumns = self.getListColumns(query)
 		query.clear
 		return listcolumns
@@ -313,7 +246,7 @@ class DBFuncBase(QObject):
 	def sqlToArray(self, request):
 		"""Select to array data."""
 		arraydata = []
-		query = QSqlQuery(request)
+		query = QSqlQuery(self.db)
 		if not query.exec_(request):
 			errorText = query.lastError().text()
 			qDebug(query.lastQuery())
@@ -328,13 +261,20 @@ class DBFuncBase(QObject):
 		query.clear
 		return arraydata
 
+	def deleteLineTable(self, tableName, columnnamekey, idvalue):
+		"""Delete enr table."""
+		request = ('DELETE FROM ' + tableName + ' WHERE ' + columnnamekey + ' =' + str(idvalue))
+		qDebug(request)
+		query = QSqlQuery(self.db)	
+		return query.exec_(request)	
+
 	def sqlToArrayDict(self, tablename, columnnamekey, columnvalue):
 		"""Select to array/ line format dict data."""
 		request = 'SELECT * FROM {tbl} WHERE {col}={colv};'
 		request = request.format(tbl = tablename, col = columnnamekey,  colv = str(columnvalue))
 		arraydata = []
 		cardline = {}
-		query = QSqlQuery(request)
+		query = QSqlQuery(self.db)
 		query.exec_(request)
 		numberscolumns = query.record().count()
 		while query.next():
@@ -346,6 +286,8 @@ class DBFuncBase(QObject):
 
 	def execSqlFile(self, sql_file, dbcnx=None):
 		"""Exec script SQL file..."""
+		if dbcnx is None:
+			dbcnx = self.db
 		counter = 0
 		request = ''
 		for line in open(sql_file, 'r'):
@@ -388,8 +330,8 @@ class DBFuncBase(QObject):
 		# mssql
 		# https://stackoverflow.com/questions/108403/solutions-for-insert-or-update-on-sql-server
 		# UPDATE data or INSERT : https://en.wikipedia.org/wiki/Merge_(SQL)
-		query = QSqlQuery()
-		request = getrequest('insertcover')
+		query = QSqlQuery(self.db)
+		request = self.getrequest('insertcover')
 		query.prepare(request)
 		query.bindValue(0, idcd)
 		query.bindValue(1, pathimage)
@@ -402,7 +344,7 @@ class DBFuncBase(QObject):
 
 	def sqlToPixmap(self, idcd, blankcover, typecover = 'coverpix'):
 		"""Read database image, return Blank Pixmap else."""
-		request = (getrequest(typecover)).format(id=idcd)
+		request = (self.getrequest(typecover)).format(id=idcd)
 		try:
 			cover = self.sqlToArray(request)
 			if len(cover) > 0:
@@ -418,47 +360,11 @@ class DBFuncBase(QObject):
 	
 	def sqlImageToFile(self, idcd, savepathfile, typecover = 'coverpix'):
 		"""Read database image, build file image."""
-		request = (getrequest(typecover)).format(id=idcd)
+		request = (self.getrequest(typecover)).format(id=idcd)
 		cover = self.sqlToArray(request)[0]
 		savefile = open(savepathfile, "wb")
 		savefile.write(cover[0])
 		savefile.close()
-
-	def buildReqTCD(self, group, column, tableName, TDCName='TDC', TDCSum=1, LineSum=True, MODE_SQLI='mysql'):
-		"""build request Pivot table compatible sqlite, mysql, SQLserver."""
-		# Collections
-		req = "SELECT `{column}` FROM {tableName} GROUP BY `{column}` ;".format(tableName=tableName, column=column)
-		if MODE_SQLI == 'mssql':
-			req = req.replace(' `', ' [').replace('` ', '] ')
-		col_names = self.sqlToArray(req)
-		# sum/collections
-		lstcols = ''
-		ReqTDC = "(SELECT `{group}` AS `{TDCName}` , 0 as `lineOder` , \n".format(group=group, TDCName=TDCName)
-		for col_name in col_names:
-			ReqTDC += "    SUM(CASE WHEN `{column}` = '{col_name}' THEN {TDCSum} ELSE 0 END) AS `{col_name}` ,\n".format(column=column, TDCSum=TDCSum, col_name=col_name)
-			lstcols += " `{col_name}` ,".format(col_name=col_name)
-		ReqTDC += "    SUM({TDCSum}) AS `TOTAL` FROM {tableName} GROUP BY `{group}` \n".format(tableName=tableName, TDCSum=TDCSum, group=group)
-		# sum global
-		if LineSum:
-			ReqTDC += " UNION \nSELECT 'TOTAL', 1 as `lineOder` , \n"
-			for col_name in col_names:
-				ReqTDC += "    SUM(CASE WHEN `{column}` = '{col_name}' THEN {TDCSum} ELSE 0 END),\n".format(column=column, TDCSum=TDCSum, col_name=col_name)
-			ReqTDC += "    SUM({TDCSum}) FROM {tableName}\n".format(tableName=tableName, TDCSum=TDCSum)
-		# order by total is last line
-		ReqTDC += ") tdc ORDER BY `lineOder` , 1;"
-		# select column
-		ReqTDC = "SELECT `"+TDCName+"` ,"+lstcols+" `TOTAL` FROM \n" + ReqTDC
-		# replace ` for [] sqlserver
-		if MODE_SQLI == 'mssql':
-			ReqTDC = ReqTDC.replace(' `', ' [').replace('` ', '] ')
-		return ReqTDC
-
-	def deleteTable(self, tableName, columnnamekey, idvalue):
-		"""Delete enr table."""
-		request = ('DELETE FROM ' + tableName + ' WHERE ' + columnnamekey + ' =' + str(idvalue))
-		qDebug(request)
-		query = QSqlQuery()	
-		return query.exec_(request)
 
 
 class DBCreateSqLite(QObject):
@@ -483,7 +389,7 @@ class DBCreateSqLite(QObject):
 			boolcon = dblite.open()
 			if boolcon:	
 				# create objects database
-				DBFuncBase().execSqlFile(filerequestcreate, dblite)
+				self.parent.CnxConnect.execSqlFile(filerequestcreate, dblite)
 				# copy table
 				self.signalchgt.emit((1/5)*100, 'Create ALBUMS...')
 				self.copytable(dbsource, dblite, 'ALBUMS')
@@ -498,7 +404,7 @@ class DBCreateSqLite(QObject):
 			qDebug('no create', self.basename)
 	
 	def copytable(self, dbsrc, dbdes, tablename):
-		listcolumns =  DBFuncBase().getListColumnsTable(tablename)
+		listcolumns =  self.parent.CnxConnect.getListColumnsTable(tablename)
 		numberscolumns = len(listcolumns)
 		# build query insert
 		request = 'INSERT INTO ' + tablename + '('

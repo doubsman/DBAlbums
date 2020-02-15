@@ -4,7 +4,6 @@
 from PyQt5.QtGui import QPixmap, QPainter, QFont
 from PyQt5.QtCore import Qt, pyqtSlot, QSize, pyqtSignal, QRect, qDebug
 from PyQt5.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QScrollArea, QLayout, QLabel
-from DBDatabase import DBFuncBase, getrequest
 
 
 class TNLabel(QLabel):
@@ -59,9 +58,9 @@ class TNLabel(QLabel):
 	def extractCover(self, idcd, namerequest='thumbnailpix'):
 		"""Get base picture cover."""
 		booltxt = True
-		request = (getrequest(namerequest)).format(id=idcd)
+		request = (self.parent.CnxConnect.getrequest(namerequest)).format(id=idcd)
 		try:
-			cover = DBFuncBase().sqlToArray(request)
+			cover = self.parent.CnxConnect.sqlToArray(request)
 			if len(cover) > 0:
 				labelpixmap = QPixmap()
 				labelpixmap.loadFromData(cover[0])

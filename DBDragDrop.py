@@ -1,9 +1,8 @@
 #! /usr/bin/python
 # coding: utf-8
 
-from sys import argv, exit
 from os import path
-from PyQt5.QtWidgets import (QApplication, QWidget, QLabel, QHBoxLayout)
+from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt, QSize, pyqtSignal
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
@@ -100,8 +99,8 @@ class QCustomQWidget(QWidget):
 		self.mimeQLabel.setPixmap(QPixmap(mimeQImage))
 
 
-if __name__ == '__main__':
-	app = QApplication(argv)
-	myQCustomQWidget = QCustomQWidget()
-	myQCustomQWidget.show()
-	exit(app.exec_())
+#if __name__ == '__main__':
+# 	app = QApplication(argv)
+# 	myQCustomQWidget = QCustomQWidget()
+# 	myQCustomQWidget.show()
+# 	exit(app.exec_())

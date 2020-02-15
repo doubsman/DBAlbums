@@ -10,7 +10,6 @@ from PyQt5.QtCore import (Qt, qDebug, pyqtSignal,
 from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit, QScrollBar
 from PyQt5.QtSql import QSqlQuery
 from DBFunction import centerWidget, openFolder
-from DBDatabase import DBFuncBase
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import BuildInvent
 from DBTImpoRUN import ReleaseInvent
@@ -59,7 +58,7 @@ class myThreadTimer(QThread):
 class InventGui(QWidget, Ui_UpdateWindows):
 	signalend = pyqtSignal()
 	
-	def __init__(self, list_albums, list_columns, list_category, typeupdate, modsql, envt, themecolor, parent=None):
+	def __init__(self, list_albums, list_columns, list_category, typeupdate, envt, themecolor, parent=None):
 		"""Init Gui, start invent"""
 		super(InventGui, self).__init__()
 		self.setupUi(self)
@@ -72,7 +71,6 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.list_albums = list_albums
 		self.list_category = list_category
 		self.list_columns = list_columns
-		self.modsql = modsql
 		self.envits = envt
 		self.typeupdate = typeupdate
 		self.curthe = themecolor
@@ -142,7 +140,6 @@ class InventGui(QWidget, Ui_UpdateWindows):
 									self.list_columns,
 									self.list_category,
 									self.typeupdate,
-									self.modsql, 
 									self.envits)
 		self.prepareInvent.signalchgt.connect(self.onBuild)
 		self.prepareInvent.signaltext.connect(self.updateInfos)
@@ -195,7 +192,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 					self.alupdate += 1
 				elif action[2] == 'ADD':
 					self.albumnew += 1
-		run = ReleaseInvent(self.list_actions, self.modsql, self.parent)
+		run = ReleaseInvent(self.parent, self.list_actions)
 		run.signalrun.connect(self.updateRun)
 		run.signalend.connect(self.updateEnd)
 		run.signaltxt.connect(self.updateInfos)
@@ -278,7 +275,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		query = QSqlQuery(request)
 		query.exec_()
 		while query.next():
-			DBFuncBase().imageToSql(query.value(1), query.value(0), self.parent.WIDT_PICM)
+			self.parent.CnxConnect.imageToSql(query.value(1), query.value(0), self.parent.WIDT_PICM)
 
 	def getFolder(self):
 		"""Open album folder."""
