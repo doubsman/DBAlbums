@@ -13,9 +13,7 @@ class DBPThreadsListStyle(QThread):
 		self.envt = envt
 		self.fileini = fileini
 		self.baseqli = baseqli
-		self.dbthread = None
 		self.CnxDat = None
-		self.boolcon = False
 	
 	def __del__(self):
 		self.wait()
@@ -23,8 +21,6 @@ class DBPThreadsListStyle(QThread):
 	def run(self):
 		# build list styles albums
 		self.CnxDat = ConnectDatabase(None, self.envt, self.fileini, self.baseqli, 'dbthread')
-		self.boolcon = self.CnxDat.boolcon
-		self.dbthread = self.CnxDat.db
 		request = self.CnxDat.getrequest('listgenres')
 		self.listgenres = self.CnxDat.sqlToArray(request)
 		liststyles = []
@@ -43,6 +39,6 @@ class DBPThreadsListStyle(QThread):
 				liststyles.append([id_cd, genre])
 		liststyles.sort(reverse=False)
 		self.finished.emit(liststyles)
-		self.CnxDat.removeConnexionDatabase()
+		self.CnxDat.closeDatabase()
 		self.quit()
 

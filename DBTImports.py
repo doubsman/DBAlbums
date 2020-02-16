@@ -272,10 +272,10 @@ class InventGui(QWidget, Ui_UpdateWindows):
 					"LEFT JOIN COVERS ON ALBUMS.ID_CD = COVERS.ID_CD " \
 					"WHERE COVERS.ID_CD IS NULL AND ALBUMS.Cover<>'{textnopic}'"
 		request = request.format(textnopic = self.parent.TEXT_NCO)
-		query = QSqlQuery(request)
-		query.exec_()
+		query = QSqlQuery(self.parent.dbbase)
+		query.exec_(request)
 		while query.next():
-			self.parent.CnxConnect.imageToSql(query.value(1), query.value(0), self.parent.WIDT_PICM)
+			self.parent.CnxConnect.imagesToSql(query.value(1), query.value(0), self.parent.WIDT_PICM)
 
 	def getFolder(self):
 		"""Open album folder."""

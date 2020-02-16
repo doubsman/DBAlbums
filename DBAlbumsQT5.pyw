@@ -571,11 +571,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				self.com_country.currentIndexChanged.connect(self.onFiltersChanged)
 			# deconnect
 			if self.boolCnx:
-				self.CnxConnect.removeConnexionDatabase()
+				self.CnxConnect.closeDatabase()
 			# connect
 			self.CnxConnect = ConnectDatabase(self, self.envits, self.FILE__INI, self.BASE_SQLI, 'dbmain')
 			self.boolCnx = self.CnxConnect.boolcon
-			self.dbbase = self.CnxConnect.db
+			self.dbbase = self.CnxConnect.qtdbdb
 			self.modsql = self.CnxConnect.MODE_SQLI
 			self.rootDk = self.CnxConnect.BASE_RAC
 			self.lstcat = self.CnxConnect.buildlistcategory()
@@ -1072,18 +1072,24 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def updateTextPopupAlbum(self, position):
 		"""Update option menu album enabled."""
-		if self.tableMdlAlb.getData(self.currow, 'PIC') == 0 or not(path.exists(self.AlbumPath)):
-			self.action_VIA.setEnabled(False)
-		else:
-			self.action_VIA.setEnabled(True)
-		# path exist ?
-		if not(path.exists(self.AlbumPath)):
-			self.action_OPF.setEnabled(False)
-		else:
-			self.action_OPF.setEnabled(True)
 		self.action_EXA.setText("Export cover/csv '" + self.albumname[:15] + "' ...")
 		self.action_UAP.setText("Update Album '" + self.albumname[:15] + "' ...")
 		self.action_RAP.setText("Rename Album '" + self.albumname[:15] + "' ...")
+		# numbers jpg >1 for gui artwork enable
+		if self.tableMdlAlb.getData(self.currow, 'PIC') > 1:
+			self.action_VIA.setEnabled(True)
+		else:
+			self.action_VIA.setEnabled(False)
+		# open folder and gui artwork option
+		if path.exists(self.AlbumPath):
+			self.action_OPF.setEnabled(True)
+			self.action_UAP.setEnabled(True)
+			self.action_RAP.setEnabled(True)
+		else:
+			self.action_OPF.setEnabled(False)
+			self.action_VIA.setEnabled(False)
+			self.action_UAP.setEnabled(False)
+			self.action_RAP.setEnabled(False)
 		self.menua.exec_(position)
 	
 	def playMediasAlbum(self, event):

@@ -81,7 +81,7 @@ class ReleaseInvent(QObject):
 		self.parent.CnxConnect.arrayCardsToSql('UPDATE', cardalbum, 'ALBUMS', 'ID_CD')
 		self.parent.CnxConnect.arrayCardsToSql('INSERT', cardtracks, 'TRACKS', 'ID_TRACK')
 		if cardalbum['COVER'] != self.parent.TEXT_NCO:
-			self.parent.CnxConnect.imageToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
+			self.parent.CnxConnect.imagesToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
 		# display consol
 		self.emitDisplayCardAlbum(cardalbum, cardtracks)
 		self.signalmacroend.emit()
@@ -100,7 +100,7 @@ class ReleaseInvent(QObject):
 			cardtrack['ID_CD'] = idcd
 		self.parent.CnxConnect.arrayCardsToSql('INSERT', cardtracks, 'TRACKS', 'ID_TRACK')
 		if cardalbum['COVER'] != self.parent.TEXT_NCO:
-			self.parent.CnxConnect.imageToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
+			self.parent.CnxConnect.imagesToSql(cardalbum['COVER'], idcd, self.parent.WIDT_PICM)
 		# display consol
 		self.emitDisplayCardAlbum(cardalbum, cardtracks)
 		self.signalmacroend.emit()

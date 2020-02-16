@@ -53,7 +53,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		
 		self.CnxConnect = ConnectDatabase(self, self.envits, self.FILE__INI, self.BASE_SQLI)
 		boolconnect = self.CnxConnect.boolcon
-		self.dbbase = self.CnxConnect.db
+		self.dbbase = self.CnxConnect.qtdbdb
 		self.modsql = self.CnxConnect.MODE_SQLI
 		self.rootDk = self.CnxConnect.BASE_RAC
 		self.lstcat = self.CnxConnect.buildlistcategory()
