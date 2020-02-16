@@ -78,6 +78,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	TAGS_SCAN = group_programs['tagscan']
 	FOOB_PLAY = group_programs['foobarP']
 	SEAR_DISC = group_programs['discogs']
+	FONT_SIZE = group_dbalbums['font00_siz']
 	if platform == "darwin" or platform == 'linux':
 		FONT_MAI = group_dbalbums['font00_unx']
 		FONT_CON = group_dbalbums['font01_ttx']
@@ -95,7 +96,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	def __init__(self, parent=None):
 		"""Init gui."""
 		qDebug('init main gui')
-		print(QCoreApplication.libraryPaths())
+		#print(QCoreApplication.libraryPaths())
 		super(DBAlbumsMainGui, self).__init__(parent)
 		self.setupUi(self)
 		
@@ -131,7 +132,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		font = QFont()
 		font.setFamily(self.FONT_MAI)
 		font.setFixedPitch(True)
-		font.setPointSize(12)
+		font.setPointSize(self.FONT_SIZE)
 		self.lab_search.setFont(font)
 		self.lab_scorealb.setFont(font)
 		self.lab_scoretrk.setFont(font)
@@ -143,7 +144,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 		# center, size
 		centerWidget(self)
-		self.thunnbline = self.HEIG_LHUN
 		self.resize(self.w_main, self.h_main)
 		
 		# menu bar
@@ -153,26 +153,26 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		# combos Envt
 		self.com_envt.addItems(self.NAME_EVT)
 		self.com_envt.setCurrentIndex(self.CURT_EVT)
-		
-		# combos Tip
+		# add Tip
 		self.com_envt.setToolTip('Environment')
 		
 		# buttons
 		self.btn_clearsearch.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
 		self.btn_findtrack.setIcon(QIcon(path.join(self.RESS_ICOS, 'target.png')))
 		
-		# thunbnails list
-		self.thunbnails = DBThunbnails(self, self.sizeTN, self.thunnbline)
-		self.thunbnails.setMaximumSize(QSize(16667, (self.sizeTN+4) * self.thunnbline))
-		self.layout2thunbnails.addWidget(self.thunbnails)
-		
 		# minimize ? height main windows
-		sizescreen = QApplication.primaryScreen()
-		if sizescreen.size().height() < (self.h_main):
+		self.thunnbline = self.HEIG_LHUN
+		sizescreen = QApplication.primaryScreen() 
+		if sizescreen.size().height() - 100 < self.h_main:
 			# one line for thunbnails
 			self.thunnbline = 1
 			self.resize(self.w_main, self.h_main-self.sizeTN)
 			self.setMinimumSize(self.w_main, self.h_main-self.sizeTN)
+		
+		# thunbnails list
+		self.thunbnails = DBThunbnails(self, self.sizeTN, self.thunnbline)
+		self.thunbnails.setMaximumSize(QSize(16667, (self.sizeTN+4) * self.thunnbline))
+		self.layout2thunbnails.addWidget(self.thunbnails)
 
 		# scroring
 		self.sli_scorealb.setMaximumSize(16777215, 18)
@@ -397,7 +397,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.thunbnails.setMaximumSize(QSize(16777215,16777215))
 		else:
 			self.tbl_albums.show()
-			self.thunbnails.setMaximumSize(QSize(16777215, (self.sizeTN+4) * self.thunnbline))
+			#self.thunbnails.setMaximumSize(QSize(16777215, (self.sizeTN+4) * self.thunnbline))
 
 	def applyTheme(self):
 		"""Apply color Theme to main Gui."""
@@ -1263,6 +1263,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.prepareInvent.realiseActions(list_actions)
 	
 	def correctionsAlbums(self):
+		"""Force update database for a request selection."""
 		request="SELECT CATEGORY, FAMILY, 'UPDATE', ID_CD, NAME, PATHNAME FROM ALBUMS WHERE PIC > 0 AND ALBUMS.COVER='<No Picture>' AND ID_CD> 12142;"
 		list_actions = self.CnxConnect.sqlToArray(request)
 		self.prepareInvent = InventGui(self.tableMdlAlb.arraydata, 

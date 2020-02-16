@@ -17,6 +17,7 @@
         "font00_ttx": "Calibri",
         "font01_ttx": "Lucida Console",
         "font00_unx": "Carlito",
+        "font00_siz": 12,
         "name_theme": "blue"
     },
     "programs": {

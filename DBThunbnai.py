@@ -120,11 +120,23 @@ class DBThunbnails(QWidget):
 		self.scrollArea.setWidget(self.scrollAreaWidgetthunbnails)
 		self.scrollArea.keyPressEvent = self.keyPressEvent
 		
+		self.scrollBarevent = self.scrollArea.verticalScrollBar()
+		self.scrollBarevent.valueChanged.connect(self.endScroobarVertical)
+
+		self.booladdthub = False
+		self.isbuilder = False
+
 		layout = QVBoxLayout()
 		layout.setContentsMargins(0, 0, 0, 0)
 		layout.addWidget(self.scrollArea)
 		self.setLayout(layout)
 	
+	def endScroobarVertical(self, value):
+		# max scroll + no total display thumbnails + not build thumbail 
+		if value == self.scrollArea.verticalScrollBar().maximum() and self.booladdthub and not(self.isbuilder):
+			# emit signal add thunbnails
+			self.signalthunadds.emit(self.getTotalThunbnails())
+
 	def getTotalWidth(self, sizetn):
 		"""Apply margin to size."""
 		return (sizetn + (2 * self.thunmarge) + self.thunspace)
@@ -148,8 +160,9 @@ class DBThunbnails(QWidget):
 			self.delThunbails()
 			self.currow = 0
 			self.curcol = 0
-		else:
-			self.delThunbailsEndof()
+			self.thunbncur = 0
+		#else:
+			#self.delThunbailsEndof()
 		# init new size
 		if sizetn is not None:
 			self.thunbsize = sizetn
@@ -186,30 +199,17 @@ class DBThunbnails(QWidget):
 			if self.curcol == self.thunmaxco:
 				self.curcol = 0
 				self.currow += 1
+		self.booladdthub = False
 		if total > fin:
-			# add for add more thunbnails
-			monimage = QPixmap(self.parent.THUN_DBA)
-			mmessage = "{n} covers displaying \n Click for more...".format(n=str(self.getTotalThunbnails()))
-			label = TNLabel(self.parent, monimage, None, self.thunbsize, 999999, mmessage, True)
-			label.mousePressEvent = (lambda event, n=999999: self.onSelectThunbnail(n))
-			self.gridthunbnails.addWidget(label, self.currow, self.curcol)
-		if new:
-			self.thunbncur = 0
+			self.booladdthub = True
 		self.signalthubuild.emit(100, 'end Create thunbnails')
 		self.isbuilder = False
-		qDebug("Start End Thunbnails")
+		qDebug('Start End Thunbnails (' + str(self.getTotalThunbnails()) + ')')
 	
 	def delThunbails(self):
 		"""Remove thunbnails."""
 		while self.getTotalThunbnails() > 0:
 			layoutitem = self.gridthunbnails.takeAt(0)
-			self.gridthunbnails.removeWidget(layoutitem.widget())
-			layoutitem.widget().deleteLater()
-
-	def delThunbailsEndof(self):
-		"""Remove thunbnails EndOf."""
-		if self.getTotalThunbnails() > 0:
-			layoutitem = self.gridthunbnails.takeAt(self.getTotalThunbnails()-1)
 			self.gridthunbnails.removeWidget(layoutitem.widget())
 			layoutitem.widget().deleteLater()
 
@@ -288,11 +288,7 @@ class DBThunbnails(QWidget):
 
 	def onSelectThunbnail(self, tunhnum):
 		"""Select thunbnail, send signal."""
-		if tunhnum == 999999:
-			qDebug('onSelectThunbnail EMIT add '+str(self.getTotalThunbnails()))
-			# emit signal add thunbnails
-			self.signalthunadds.emit(self.getTotalThunbnails()-1)
-		elif tunhnum != self.thunbncur and tunhnum != 999999:
+		if tunhnum != self.thunbncur:
 			# emit signal select thunbnails
 			qDebug('onSelectThunbnail EMIT sel '+str(self.thunbncur))
 			self.signalthunchgt.emit(tunhnum)

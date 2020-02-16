@@ -24,7 +24,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		font = QFont()
 		font.setFamily(self.parent.FONT_MAI)
 		font.setFixedPitch(True)
-		font.setPointSize(14)
+		font.setPointSize(self.parent.FONT_SIZE + 2)
 		self.lab_text.setFont(font)
 		self.tabWidget.currentChanged.connect(self.chgtLogo)
 		# logo gif

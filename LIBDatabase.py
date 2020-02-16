@@ -44,7 +44,7 @@ class LibDatabase(QObject):
 		elif self.dbtype == 'mysql':
 			self.qtdbdb = QSqlDatabase.addDatabase("QMYSQL", self.qtname)
 			self.qtdbdb.setHostName(self.dbserv)
-			self.qtdbdb.setDatabaseName(BASE_NAM)
+			self.qtdbdb.setDatabaseName(self.dbbase)
 			self.qtdbdb.setUserName(self.dbuser)
 			self.qtdbdb.setPassword(self.dbpass)
 			self.qtdbdb.setPort(self.dbport)			
@@ -57,7 +57,7 @@ class LibDatabase(QObject):
 		if self.qtdbdb.isValid():
 			self.boolcn = self.qtdbdb.open()
 		else:
-			qDebug(envt+' problem for open database : ' + self.db.lastError().text())
+			qDebug('Problem for open database : ' + self.qtdbdb.lastError().text())
 
 	def closeDatabase(self):
 		self.qtdbdb.close()
