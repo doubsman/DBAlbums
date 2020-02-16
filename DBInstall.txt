@@ -1,6 +1,8 @@
 INSTALLATION PYTHON LIBS...........................................
 -------------------------------------------------------------------
 Debian 10 + KDE:
+	sudo
+		echo "misterdoubs    ALL=(ALL:ALL) ALL" >> /etc/sudoers 
 	network
 		sudo apt-get install samba-common gvfs-backends
 	add hostname
@@ -18,6 +20,7 @@ Debian 10 + KDE:
 	create foler for mount _LossLess volume
 		mkdir -p /HOMERSTATION/_LossLess
 		chmod 777 -R /HOMERSTATION/_LossLess
+		chown user:misterdoubs /HOMERSTATION/_LossLess/
 	install vim
 		apt-get update && apt-get install vim
 	create credential file

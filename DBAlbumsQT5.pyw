@@ -73,17 +73,18 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	THUN_NOD = group_dbalbums['thnail_nod']
 	THUN_DBA = path.join(PATH_PROG, 'IMG', group_dbalbums['picm_endof'])
 	COVE_SIZ = group_dbalbums['covers_siz']
-	FONT_MAI = group_dbalbums['font00_ttx']
-	FONT_CON = group_dbalbums['font01_ttx']
 	LOGO_PNG = group_dbalbums['progr_logo']
-	
 	group_programs = Json_params.getMember('programs')
 	TAGS_SCAN = group_programs['tagscan']
 	FOOB_PLAY = group_programs['foobarP']
 	SEAR_DISC = group_programs['discogs']
 	if platform == "darwin" or platform == 'linux':
+		FONT_MAI = group_dbalbums['font00_unx']
+		FONT_CON = group_dbalbums['font01_ttx']
 		EDIT_TEXT = r'' + group_programs['txt_lin']
 	else:
+		FONT_MAI = group_dbalbums['font00_ttx']
+		FONT_CON = group_dbalbums['font01_ttx']
 		EDIT_TEXT = r'' + group_programs['txt_win']
 	SCOR_TRACKS = SCOR_ALBUMS = Json_params.buildDictScore()
 	NAME_EVT, CURT_EVT = Json_params.buildListEnvt(ENVT_DEF)
@@ -117,6 +118,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.maintitle = None	# title main tempo
 		self.coveral = None		# current cover album
 		self.liststy = None     # list ID_CD | TAG_Genres
+		self.boolCnx = False	# connect database succes
 		# zoom
 		self.cuzoom = self.COEF_ZOOM
 		self.sizeTN = self.WIDT_PICM
@@ -135,6 +137,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.lab_scoretrk.setFont(font)
 		self.lab_album.setFont(font)
 		self.lab_label.setFont(font)
+		self.lab_comenvt.setFont(font)
+		self.chb_searchtracks.setFont(font)
 		self.statusbar.setFont(font)
 
 		# center, size
@@ -565,15 +569,18 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				self.com_year.currentIndexChanged.connect(self.onFiltersChanged)
 				self.com_genres.currentIndexChanged.connect(self.onFiltersChanged)
 				self.com_country.currentIndexChanged.connect(self.onFiltersChanged)
+			# deconnect
+			if self.boolCnx:
+				self.CnxConnect.removeConnexionDatabase()
 			# connect
-			self.CnxConnect = ConnectDatabase(self, self.envits, self.FILE__INI, self.BASE_SQLI)
-			boolconnect = self.CnxConnect.boolcon
+			self.CnxConnect = ConnectDatabase(self, self.envits, self.FILE__INI, self.BASE_SQLI, 'dbmain')
+			self.boolCnx = self.CnxConnect.boolcon
 			self.dbbase = self.CnxConnect.db
 			self.modsql = self.CnxConnect.MODE_SQLI
 			self.rootDk = self.CnxConnect.BASE_RAC
 			self.lstcat = self.CnxConnect.buildlistcategory()
-			#boolconnect, self.dbbase, self.modsql, self.rootDk, self.lstcat = connectDatabase(self.envits, self.FILE__INI, self.BASE_SQLI)
-			if not boolconnect:
+			self.lab_comenvt.setText(self.modsql.title())
+			if not self.boolCnx:
 				# no connect
 				self.updateStatusBar("Connect Failed, please select other environment...")
 				# init scrore

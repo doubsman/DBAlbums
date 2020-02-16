@@ -25,7 +25,7 @@ class ModelDBAbstract(QAbstractTableModel):
 	
 	def refresh(self):
 		"""build Array from request."""
-		query = QSqlQuery()
+		query = QSqlQuery(self.parent.dbbase)
 		query.setForwardOnly(True)
 		query.exec_(self.request)
 		self.myindex = self.parent.CnxConnect.getListColumns(query)
@@ -325,7 +325,7 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 		# update score mysql
 		req =  self.parent.CnxConnect.getrequest(namereq)
 		req = req.format(score=score, id=idkey)
-		query = QSqlQuery()
+		query = QSqlQuery(self.parent.dbbase)
 		query.exec_(req)
 		query.clear
 		# change value to array
@@ -412,7 +412,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 		idkey = self.arraydata[row][self.myindex.index('ID_TRACK')]
 		req =  self.parent.CnxConnect.getrequest(namereq)
 		req = req.format(score=score, id=idkey)
-		query = QSqlQuery()
+		query = QSqlQuery(self.parent.dbbase)
 		query.exec_(req)
 		query.clear
 		# change value to array

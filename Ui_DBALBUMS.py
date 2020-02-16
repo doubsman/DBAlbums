@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'R:\Projets\DBALBUMSQT5\DBALBUMS.ui'
+# Form implementation generated from reading ui file 'R:\Python\DBAlbums\DBALBUMS.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -248,6 +250,10 @@ class Ui_MainWindow(object):
         self.layout1command.addWidget(self.com_country)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.layout1command.addItem(spacerItem2)
+        self.lab_comenvt = QtWidgets.QLabel(self.centralwidget)
+        self.lab_comenvt.setText("")
+        self.lab_comenvt.setObjectName("lab_comenvt")
+        self.layout1command.addWidget(self.lab_comenvt)
         self.com_envt = QtWidgets.QComboBox(self.centralwidget)
         self.com_envt.setMinimumSize(QtCore.QSize(80, 0))
         self.com_envt.setObjectName("com_envt")
@@ -284,4 +290,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-

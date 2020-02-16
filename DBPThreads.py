@@ -27,7 +27,6 @@ class DBPThreadsListStyle(QThread):
 		self.dbthread = self.CnxDat.db
 		request = self.CnxDat.getrequest('listgenres')
 		self.listgenres = self.CnxDat.sqlToArray(request)
-		self.dbthread.close()
 		liststyles = []
 		for row in self.listgenres:
 			id_cd = row[0]
@@ -44,5 +43,6 @@ class DBPThreadsListStyle(QThread):
 				liststyles.append([id_cd, genre])
 		liststyles.sort(reverse=False)
 		self.finished.emit(liststyles)
+		self.CnxDat.removeConnexionDatabase()
 		self.quit()
 

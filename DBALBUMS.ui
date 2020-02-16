@@ -695,6 +695,13 @@
          </spacer>
         </item>
         <item>
+         <widget class="QLabel" name="lab_comenvt">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QComboBox" name="com_envt">
           <property name="minimumSize">
            <size>

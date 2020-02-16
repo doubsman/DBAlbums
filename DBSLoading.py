@@ -61,9 +61,9 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		if event.key() == Qt.Key_Escape or event.key() == Qt.Key_F1:
 			self.hide()
 
-	def buildTab(self,  req, tab):
+	def buildTab(self, req, tab):
 		model = QSqlQueryModel(self)
-		model.setQuery(req)
+		model.setQuery(req, self.parent.dbbase)
 		tab.setModel(model)
 		tab.resizeColumnsToContents()
 		tab.verticalHeader().setVisible(False)
