@@ -28,7 +28,12 @@ class ConnectDatabase(LibDatabase):
 		self.BASE_RAC = r'' + self.group_envt['raci']
 		self.RACI_DOU = self.group_envt['cate']
 		if self.MODE_SQLI == 'sqlite':
-			self.openDatabase(self.MODE_SQLI, '', '', '', '', '', self.basesqli.format(envt = self.envt) , connexionName)
+			basename = self.basesqli.format(envt = self.envt)
+			self.buildbase = path.exists(basename)
+			self.openDatabase(self.MODE_SQLI, '', '', '', '', '', basename , connexionName)
+			if not(self.buildbase):
+				# build database tables/view
+				self.execSqlFile(self.parent.CREA_SQLI)
 		else:
 			BASE_SEV = self.group_envt['serv']
 			BASE_USR = self.group_envt['user']
@@ -112,7 +117,7 @@ class ConnectDatabase(LibDatabase):
 		elif name == 'listgenres':
 			request = "SELECT ID_CD, STYLE FROM ALBUMS;"
 		# compatibilité mutli-base	
-		return self.traductionRequest(request)
+		return self.translateRequest(request)
 
 	def imagesToSql(self, pathimage, idcd, minisize):
 		"""Write image and thunbnail to database."""
@@ -198,13 +203,13 @@ class DBCreateSqLite(QObject):
 				# create objects database
 				self.parent.CnxConnect.execSqlFile(filerequestcreate, dblite)
 				# copy table
-				self.signalchgt.emit((1/5)*100, 'Create ALBUMS...')
+				self.signalchgt.emit((1/5)*100, 'Copy table ALBUMS...')
 				self.copytable(dbsource, dblite, 'ALBUMS')
-				self.signalchgt.emit((2/5)*100, 'Create TRACKS...')
+				self.signalchgt.emit((2/5)*100, 'Copy table TRACKS...')
 				self.copytable(dbsource, dblite, 'TRACKS')
-				self.signalchgt.emit((3/5)*100, 'Create COVERS...')
+				self.signalchgt.emit((3/5)*100, 'Copy table COVERS...')
 				self.copytable(dbsource, dblite, 'COVERS')
-				self.signalchgt.emit((4/5)*100, 'Create FOOBAR...')
+				self.signalchgt.emit((4/5)*100, 'Copy table FOOBAR...')
 				self.copytable(dbsource, dblite, 'FOOBAR')
 				self.signalchgt.emit((5/5)*100, 'Operations completed')
 		else:

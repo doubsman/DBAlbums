@@ -34,13 +34,14 @@
         "3"         : "best\\selection"
     },
     "environments": {
-        "envt1"     : "LOSSLESS",
+        "envt1"     : "LOSSLESS_MYSQL",
         "envt2"     : "LOSSLESS_SQLITE",
         "envt3"     : "LOSSLESS_SQLSERVER",
         "envt4"     : "LOSSLESS_TEST",
         "envt5"     : "LOSSLESS_TEST_SQLITE",
-        "envt6"     : "MP3",
-        "envt7"     : "MP3_TEST"
+        "envt6"     : "MP3_MYSQL",
+        "envt7"     : "MP3_SQLITE",
+        "envt8"     : "MP3_TEST_MYSQL"
     },
     "LOSSLESS_CATEGORY": {
         "CLASSIC"   : { "mode" : "D", "name" : "CLASSIC", "family" : null },
@@ -75,7 +76,7 @@
     "MP3_TEST_CATEGORY": {
         "ACID"      : { "mode" : "S", "name" : "Acid", "family" : "Download" }
     },
-    "LOSSLESS": {
+    "LOSSLESS_MYSQL": {
         "raci"      : "\\\\HOMERSTATION\\_LossLess",
         "cate"      : "LOSSLESS_CATEGORY",
         "typb"      : "mysql",
@@ -103,7 +104,7 @@
         "user"      : "dbalbums",
         "pass"      : "dbalbums2017",
         "base"      : "DBALBUMS",
-        "port"      : 1433	
+        "port"      : 1433
     },
     "LOSSLESS_TEST": {
         "raci"      : "D:\\WorkDev\\DBAlbumsTEST",
@@ -125,7 +126,7 @@
         "base"      : null,
         "port"      : null
     },
-    "MP3": {
+    "MP3_MYSQL": {
         "raci"      : "\\\\HOMERSTATION\\_Mp3",
         "cate"      : "MP3_CATEGORY",
         "typb"      : "mysql",
@@ -135,7 +136,17 @@
         "base"      : "DBALBUMSMP3",
         "port"      : 3307
     },
-    "MP3_TEST": {
+    "MP3_SQLITE": {
+        "raci"      : "\\\\HOMERSTATION\\_Mp3",
+        "cate"      : "MP3_CATEGORY",
+        "typb"      : "sqlite",
+        "serv"      : null,
+        "user"      : null,
+        "pass"      : null,
+        "base"      : null,
+        "port"      : null
+    },
+    "MP3_TEST_MYSQL": {
         "raci"      : "\\\\HOMERSTATION\\_Mp3",
         "cate"      : "MP3_TEST_CATEGORY",
         "typb"      : "mysql",

@@ -63,6 +63,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 					'font00_ttx' : 'name font general text for windows ({v})'.format(v=group_dbalbums['font00_ttx']),
 					'font00_unx' : 'name font general text for linux ({v})'.format(v=group_dbalbums['font00_unx']),
 					'font01_ttx' : 'name font consol execution ({v})'.format(v=group_dbalbums['font01_ttx']),
+					'font00_siz' : 'size font main ({v})'.format(v=group_dbalbums['font00_siz']),
 					'name_theme' : 'style colors (blue, green, brown, grey, pink) ({v})'.format(v=group_dbalbums['name_theme']),
 					'txt_win' : '<program> text editor Windows',
 					'txt_lin' : '<program> text editor Debian',

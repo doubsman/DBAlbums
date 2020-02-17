@@ -67,7 +67,7 @@ class LibDatabase(QObject):
 		"""build request Pivot table compatible sqlite, mysql, SQLserver."""
 		# Collect list columns
 		req = "SELECT `{column}` FROM {tableName} GROUP BY `{column}` ;".format(tableName=tableName, column=column)
-		req = self.traductionRequest(req)
+		req = self.translateRequest(req)
 		col_names = self.sqlToArray(req)
 		# sum/collections
 		lstcols = ''
@@ -86,37 +86,40 @@ class LibDatabase(QObject):
 		ReqTDC += ") tdc ORDER BY `lineOder` , 1;"
 		# select column
 		ReqTDC = "SELECT `"+TDCName+"` ,"+lstcols+" `TOTAL` FROM \n" + ReqTDC
-		ReqTDC = self.traductionRequest(ReqTDC)
+		ReqTDC = self.translateRequest(ReqTDC)
 		return ReqTDC
 
-	def traductionRequest(self, requestname):
+	def buildRequest(self, operation, tablename, columnnamekey=None):
+		# build list columns table
+		listcolumns = self.getListColumnsTable(tablename)
+		if columnnamekey is not None:
+			# remove primary key
+			listcolumns.remove(columnnamekey)
+		if len(listcolumns) == 0:
+			qDebug('problem read columns table :' + tablename)
+			return False
+		else:
+			numberscolumns = len(listcolumns)
+			if operation == 'INSERT':
+				# build query insert
+				request = 'INSERT INTO ' + tablename + '( '
+				request += ', '.join('`{0}` '.format(w) for w in listcolumns) + ') VALUES '
+				request += '(' + ', '.join( ['?'] * numberscolumns) +')' 
+			elif operation == 'UPDATE':
+				# build query update
+				request = 'UPDATE ' + tablename + ' SET '
+				request += '= ?, '.join('`{0}` '.format(w) for w in listcolumns) + '= ? '
+				request += ' WHERE ' + columnnamekey + ' = ? ;'
+		return self.translateRequest(request), listcolumns
+
+	def translateRequest(self, requestname):
 		"""Corection path windows-linux."""
 		if self.dbtype == 'mssql':
 			requestname = requestname.replace(' `', ' [').replace('` ', '] ')#.replace("`,", '],')
 		return requestname
 
 	def arrayCardsToSql(self, operation, arraydata, tablename, columnnamekey):
-		listcolumns = self.getListColumnsTable(tablename)
-		if len(listcolumns) == 0:
-			qDebug('problem read columns table :' + tablename)
-			return False
-		# remove primary key
-		listcolumns.remove(columnnamekey)
-		numberscolumns = len(listcolumns)
-		if operation == 'INSERT':
-			# build query insert
-			request = 'INSERT INTO ' + tablename + '( '
-			request += ', '.join('`{0}` '.format(w) for w in listcolumns) + ') VALUES '
-			request += '(' + ', '.join( ['?'] * numberscolumns) +')' 
-		elif operation == 'UPDATE':
-			# build query update
-			request = 'UPDATE ' + tablename + ' SET '
-			request += '= ?, '.join('`{0}` '.format(w) for w in listcolumns) + '= ? '
-			request += ' WHERE ' + columnnamekey + ' = ? ;'
-		else:
-			qDebug('problem unknow operation : ' + operation)
-			return False
-		request = self.traductionRequest(request)
+		request, listcolumns = self.buildRequest(operation, tablename, columnnamekey)
 		# repeat query insert 
 		if isinstance(arraydata, list):
 			# multi cards
@@ -214,10 +217,9 @@ class LibDatabase(QObject):
 		counter = 0
 		request = ''
 		for line in open(sql_file, 'r'):
-			request += line
+			request += line.rstrip('\n').lstrip('\t')
 			if line.endswith(';\n'):
 				counter = counter + 1
-				request = request.rstrip('\n')
 				qDebug(request)
 				query = QSqlQuery(request, dbcnx)
 				if not query.exec_():
