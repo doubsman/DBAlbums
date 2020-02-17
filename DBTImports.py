@@ -108,8 +108,9 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.textEditrelease.setLineWrapMode(QTextEdit.NoWrap)
 		self.textEditrelease.setReadOnly(True)
 		self.textEditrelease.setFont(fontconsol)
-		self.vScrollBar = QScrollBar(self.textEditrelease.verticalScrollBar())
-		self.vScrollBar.sliderPressed.connect(self.onScrollPressed)
+		#self.vScrollBar = QScrollBar(self.textEditrelease.verticalScrollBar())
+		#self.vScrollBar = QScrollBar(self.textEditrelease)
+		#self.vScrollBar.sliderPressed.connect(self.onScrollPressed)
 	
 		self.btn_action.clicked.connect(self.realiseActions)
 		self.btn_action.setEnabled(False)
@@ -252,14 +253,16 @@ class InventGui(QWidget, Ui_UpdateWindows):
 				level = 0
 		# set color
 		self.textEditrelease.setTextColor(QColor(self.levelcolors[level]))
-		if self.focusWidget() != self.vScrollBar:
+		#if self.focusWidget() != self.vScrollBar:
+		if self.focusWidget() != self.textEditrelease.verticalScrollBar():
 			# display
 			cursor = self.textEditrelease.textCursor()
 			cursor.movePosition(QTextCursor.End)
 		#cursor.insertText(line)
 		self.textEditrelease.append(line.rstrip())
 		self.textEditrelease.setTextCursor(cursor)
-		if self.focusWidget() != self.vScrollBar:
+		#if self.focusWidget() != self.vScrollBar:
+		if self.focusWidget() != self.textEditrelease.verticalScrollBar():
 			self.textEditrelease.ensureCursorVisible()
 		self.textEditrelease.horizontalScrollBar().setValue(0)
 		text_file = open(self.logname, "a", 'utf-8')

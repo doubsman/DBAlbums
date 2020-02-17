@@ -29,9 +29,10 @@ class ConnectDatabase(LibDatabase):
 		self.RACI_DOU = self.group_envt['cate']
 		if self.MODE_SQLI == 'sqlite':
 			basename = self.basesqli.format(envt = self.envt)
+			# file exist ?
 			self.buildbase = path.exists(basename)
 			self.openDatabase(self.MODE_SQLI, '', '', '', '', '', basename , connexionName)
-			if not(self.buildbase):
+			if not(self.buildbase) and self.boolcn:
 				# build database tables/view
 				self.execSqlFile(self.parent.CREA_SQLI)
 		else:
@@ -41,6 +42,17 @@ class ConnectDatabase(LibDatabase):
 			BASE_NAM = self.group_envt['base']
 			BASE_PRT = self.group_envt['port']
 			self.openDatabase(self.MODE_SQLI, BASE_SEV, BASE_USR, BASE_PAS, BASE_NAM, BASE_PRT, self.basesqli , connexionName)
+			if self.boolcn:
+				# table album exist ?
+				request = self.getrequest('tableexist')
+				self.buildbase = (len(self.sqlToArray(request)) > 0)
+				if not(self.buildbase):
+					if self.MODE_SQLI == 'mysql':
+						# build database tables/view
+						self.execSqlFile(self.parent.CREA_MYSQ)
+					elif self.MODE_SQLI == 'mssql':
+						# build database tables/view
+						self.execSqlFile(self.parent.CREA_MSSQ)
 		self.boolcon = self.boolcn
 		self.db = self.qtdbdb
 
@@ -116,6 +128,12 @@ class ConnectDatabase(LibDatabase):
 		# combobox style
 		elif name == 'listgenres':
 			request = "SELECT ID_CD, STYLE FROM ALBUMS;"
+		# table exist
+		elif name == 'tableexist':
+			if self.MODE_SQLI == 'mysql':
+				request = "'SELECT * FROM information_schema.tables WHERE table_schema = 'DBALUMS' AND table_name = 'ALBUMS' LIMIT 1;"
+			if self.MODE_SQLI == 'mssql':
+				request = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'ALBUMS';"
 		# compatibilité mutli-base	
 		return self.translateRequest(request)
 

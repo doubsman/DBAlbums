@@ -69,6 +69,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		tab.verticalHeader().setVisible(False)
 		tab.horizontalHeader().setStretchLastSection(True)
 		tab.verticalHeader().setDefaultSectionSize(self.parent.C_HEIGHT)
+		tab.setFont(QFont(self.parent.FONT_CON, self.parent.FONT_SIZE - 2))
 	
 	def chgtLogo(self):
 		self.movielogo.stop()

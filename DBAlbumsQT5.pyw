@@ -48,6 +48,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
 	CREA_MYSQ = path.join(PATH_PROG, 'SQL', "Create_mysql_database.sql")
 	CREA_SQLI = path.join(PATH_PROG, 'SQL', "Create_sqllite_database.sql")
+	CREA_MSQL = path.join(PATH_PROG, 'SQL', "Create_mssql_database.sql")
 	FOOB_UPSC = path.join(PATH_PROG, 'SQL', "UpdateScore_Playlists_Foobar.sql")
 	RESS_LABS = path.join(PATH_PROG, 'IMG' , 'LAB')
 	RESS_ICOS = path.join(PATH_PROG, 'IMG' , 'ICO')
@@ -497,7 +498,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def displayResultSearch(self):
 		"""Build main message status bar."""
-		txt_sch = (self.lin_search.text() if len(self.lin_search.text()) > 0 else 'all')
+		txt_sch = (r'Search Result "' + self.lin_search.text() + '" :' if len(self.lin_search.text()) > 0 else '')
 		if self.tableMdlAlb.rowCount()==0:
 			message = "Search Result \"{sch}\" : nothing".format(sch=txt_sch)
 		else:
@@ -511,15 +512,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				txt_siz =  str(self.tableMdlAlb.SortFilterProxy.cpt_siz) + ' Mo'
 			else:
 				txt_siz = str(int(self.tableMdlAlb.SortFilterProxy.cpt_siz/1024)) + ' Go'
-
-			message = "Search Result \"{sch}\" :  {alb} | {trk} | {cds} | {siz} | {dur}"
+			message = "{sch} {alb} | {trk} | {cds} | {siz} | {dur}"
 			message = message.format(alb=displayCounters(self.tableMdlAlb.SortFilterProxy.rowCount(), 'Album'),
 									cds=displayCounters(self.tableMdlAlb.SortFilterProxy.cpt_cds, 'CD'),
 									trk=displayCounters(self.tableMdlAlb.SortFilterProxy.cpt_trk, 'Track'),
 									siz=txt_siz,
 									dur=txt_len,
 									sch=txt_sch)
-
 		self.maintitle = message
 		self.updateStatusBar(self.maintitle)
 
