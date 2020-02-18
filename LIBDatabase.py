@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from os import  path, remove
 from copy import deepcopy
 from time import sleep
 from codecs import open
-from PyQt5.QtCore import Qt, qDebug, QObject, QByteArray, QIODevice, QBuffer, pyqtSignal
+from PyQt5.QtCore import qDebug, QObject, QByteArray, QIODevice, QBuffer
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QPixmap
-from DBReadJson import JsonParams
 
 
 class LibDatabase(QObject):

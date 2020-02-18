@@ -7,7 +7,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import qDebug
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, QMessageBox
 from DBFunction import centerWidget, runCommand
-from DBReadJson import JsonParams
+from DBFileJson import JsonParams
 from Ui_DBPARAMS import Ui_ParamsJson
 
 
@@ -54,7 +54,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 					'wins_icone' : 'filename icone program ({v})'.format(v=group_dbalbums['wins_icone']),
 					'pict_blank' : 'filename cover blank ({v})'.format(v=group_dbalbums['pict_blank']),
 					'picm_endof' : 'last thunbnails display ({v})'.format(v=group_dbalbums['picm_endof']),
-					'envt_deflt' : 'default environment loading at start ({v})'.format(v=group_dbalbums['envt_deflt']),
+					'envt_deflt' : 'default environment ({v})'.format(v=group_dbalbums['envt_deflt']),
 					'covers_siz' : 'size pixels of cover display ({v})'.format(v=group_dbalbums['covers_siz']),
 					'thun_csize' : 'size pixels scare thunbnails ({v})'.format(v=group_dbalbums['thun_csize']),
 					'thnail_dis' : 'number of thunbnails displaying ({v})'.format(v=group_dbalbums['thnail_dis']),
@@ -98,21 +98,24 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.tableWidget_category.cellChanged.connect(self.changeCategory)
 		self.btn_open.clicked.connect(self.openJson)
 		self.btn_quit.clicked.connect(self.closeParams)
+		self.btn_save.clicked.connect(self.writeFileJson)
 		#self.tableWidget_category.itemSelectionChanged.connect(self.updateListcategory)
 		
-		# General init
-		self.updateTable(self.tableWidget_general, group_dbalbums , ['Parameters', 'Values', 'Informations'])
-		self.updateTable(self.tableWidget_general, group_programs , None, True)
-		self.updateTable(self.tableWidget_general, group_scorealb , None, True)
+		# tbl General init
+		self.updateTable(self.tableWidget_general, group_dbalbums , ['Group', 'Parameters', 'Values', 'Informations'], False, False, 'dbalbums')
+		self.updateTable(self.tableWidget_general, group_programs , None, True, False, 'programs')
+		self.updateTable(self.tableWidget_general, group_scorealb , None, True, False, 'score')
 		
 		# complete column help
 		self.textEdit.append(self.HELP_TXT)
 		row = 0
 		while row < self.tableWidget_general.rowCount():
-			nameitem = QTableWidgetItem(self.HELP_LST.get(self.tableWidget_general.item(row,0).text()))
-			self.tableWidget_general.setItem(row,2,nameitem)
+			nameitem = QTableWidgetItem(self.HELP_LST.get(self.tableWidget_general.item(row,1).text()))
+			self.tableWidget_general.setItem(row,3,nameitem)
 			row += 1
-	
+
+		self.modifydate = False
+
 		# run
 		self.updateEnvt(True)
 		self.applyTheme()
@@ -120,10 +123,10 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		
 	def openJson(self):
 		"""Open json file with text editor."""
-		e=self.EDIT_TEXT
-		f=self.FILE__INI
-		print(e,f)
-		runCommand(e, f)
+		runCommand(self.EDIT_TEXT, self.FILE__INI)
+	
+	def writeFileJson(self):
+		self.Json_params.saveJson()
 		
 	def changeCategory(self, row, col):
 		"""Modify Category"""
@@ -134,7 +137,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.btn_save.setEnabled(True)
 
 	def updateEnvt(self, refresh):
-		"""change table lists content envt"""
+		"""Change table lists content envt + category"""
 		if self.envits != self.comboBox_Envt.currentText() or refresh:
 			self.envits = self.comboBox_Envt.currentText()
 			# Environment
@@ -145,7 +148,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			self.label_cate.setText("Category : " + currentcate + " ")
 			self.tableWidget_category.cellChanged.disconnect()
 			self.list_category = []
-			self.list_category += self.Json_params.buildCategories(self.envits)
+			self.list_category += self.Json_params.buildListcategory(self.envits)
 			listcat = []
 			for itemd in self.list_category:
 				for item in itemd:
@@ -153,7 +156,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			self.updateTable(self.tableWidget_category, listcat, ['Category', 'Mode', 'Folder Name', 'Family'])#, False, True)
 			self.tableWidget_category.cellChanged.connect(self.changeCategory)
 		
-	def updateTable(self, table, listitems, listcolumns, add=False, ajustlastcolumn=False):
+	def updateTable(self, table, listitems, listcolumns, add = False, ajustlastcolumn = False, groupjson = None):
 		"""generic insert QtableWidget data"""
 		if not add:
 			# init table
@@ -178,8 +181,14 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			for key, value in listitems.items():
 				nameitem = QTableWidgetItem(str(key))
 				codeitem = QTableWidgetItem(str(value))
-				table.setItem(row,0,nameitem)			
-				table.setItem(row,1,codeitem)
+				if groupjson:
+					grpsitem = QTableWidgetItem(str(groupjson))
+					table.setItem(row,0,grpsitem)
+					table.setItem(row,1,nameitem)			
+					table.setItem(row,2,codeitem)
+				else:
+					table.setItem(row,0,nameitem)
+					table.setItem(row,1,codeitem)
 				row += 1
 		else:
 			# array format

@@ -3,16 +3,18 @@
 
 from os import path
 from sys import platform
-from json import load
+from json import load, dumps
 from PyQt5.QtCore import QObject
 
 
 class JsonParams(QObject):
-	def __init__(self, file_json='DBAlbums.json'):
+	def __init__(self, file_json='DBAlbums.json', parent=None):
 		"""Init invent, build list albums exists in database."""
-		super(JsonParams, self).__init__()
-		with open(file_json) as data_file:    
-			self.data = load(data_file)
+		super(JsonParams, self).__init__(parent)
+		self.file_json = file_json
+		data_file = open(self.file_json, 'r')
+		self.data = load(data_file)
+		data_file.close()
 
 	def getMember(self, member):
 		"""Return array infos member of json."""
@@ -36,35 +38,28 @@ class JsonParams(QObject):
 			dict_score.update({int(envt): listescore[envt]})
 		return dict_score
 
-	def buildCategories(self,  envt):
+	def buildListcategory(self, envt):
 		"""Build list category simple and double from json file."""
 		racine =  self.data[envt]["raci"]
 		category = self.data[envt]["cate"]
 		list_pathcollection = []
-		list_pathcollection = self.buildCategory(racine, category)
-		return list_pathcollection
-
-	def buildCategory(self,  racine, category):
-		"""Build list for one category."""
-		list_pathcollection = []
 		listcate = self.data[category]
 		for cate in listcate:
-			if isinstance( listcate[cate], list):
-				# array elements
-				for souslistcate in listcate[cate]:
-					family = souslistcate["family"]
-					racate = souslistcate["name"]
-					mode = souslistcate["mode"]
-					racate = self.convertUNC(path.join(racine, racate))
-					list_pathcollection.append([cate, mode, racate, family])
-			else:
-				# one element
-				family = listcate[cate]["family"]
-				racate = listcate[cate]["name"]
-				mode = listcate[cate]["mode"]
-				racate = self.convertUNC(path.join(racine, racate))
-				list_pathcollection.append([cate, mode, racate, family])
+			# one element
+			mstyle = listcate[cate]["Style"]
+			family = listcate[cate]["family"]
+			racate = listcate[cate]["folder"]
+			mode = listcate[cate]["mode"]
+			racate = path.join(racine, racate)
+			racate = self.convertUNC(racate)
+			list_pathcollection.append([mstyle, mode, racate, family])
 		return list_pathcollection
+
+	def saveJson(self):
+		"""Save Json file conofiguration."""
+		data_file = open(self.file_json+'2', 'w+')
+		data_file.write(dumps(self.data, indent=4))
+		data_file.close()
 
 	def convertUNC(self, path):
 		""" convert path UNC to linux."""
@@ -76,4 +71,4 @@ class JsonParams(QObject):
 		else:
 			if path.startswith(r'/'):
 				path = r""+path.replace('/', '\\\\').replace('/', '\\')
-		return path
+		return path	

@@ -321,5 +321,3 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.myThreadtime.stop()
 		self.destroy()
 
-	def onScrollPressed(self):
-		pass

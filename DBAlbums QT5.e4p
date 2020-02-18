@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2020-01-13, 21:26:50 -->
+<!-- Saved: 2020-02-18, 11:12:19 -->
 <!-- Copyright (C) 2020 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -22,6 +22,7 @@
     <Source>DBAuPlayer.py</Source>
     <Source>DBDatabase.py</Source>
     <Source>DBDragDrop.py</Source>
+    <Source>DBFileJson.py</Source>
     <Source>DBFoobarpl.py</Source>
     <Source>DBFunction.py</Source>
     <Source>DBHistory.txt</Source>
@@ -29,7 +30,6 @@
     <Source>DBModelAbs.py</Source>
     <Source>DBPThreads.py</Source>
     <Source>DBParams.py</Source>
-    <Source>DBReadJson.py</Source>
     <Source>DBSLoading.py</Source>
     <Source>DBTImpoALB.py</Source>
     <Source>DBTImpoANA.py</Source>
@@ -40,6 +40,7 @@
     <Source>DBTImpoTRK.py</Source>
     <Source>DBTImports.py</Source>
     <Source>DBThunbnai.py</Source>
+    <Source>LIBDatabase.py</Source>
     <Source>Ui_DBALBUMS.py</Source>
     <Source>Ui_DBLOADING.py</Source>
     <Source>Ui_DBPARAMS.py</Source>

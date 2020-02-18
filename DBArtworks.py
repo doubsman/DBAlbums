@@ -180,7 +180,7 @@ class ArtworksGui(QWidget):
 
 
 # # TEST
-#from DBReadJson import JsonParams
+#from DBFileJson import JsonParams
 
 # class TESTArtWork(QObject):
 	# PATH_PROG = path.dirname(path.abspath(__file__))

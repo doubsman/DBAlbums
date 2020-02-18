@@ -37,7 +37,7 @@ from DBDragDrop import QLabeldnd
 from DBPThreads import DBPThreadsListStyle
 from DBTImports import InventGui
 from DBParams import ParamsGui
-from DBReadJson import JsonParams
+from DBFileJson import JsonParams
 
 
 class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
@@ -585,7 +585,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.dbbase = self.CnxConnect.qtdbdb
 			self.modsql = self.CnxConnect.MODE_SQLI
 			self.rootDk = self.CnxConnect.BASE_RAC
-			self.lstcat = self.CnxConnect.buildlistcategory()
+			self.lstcat = self.Json_params.buildListcategory(self.envits)
 			self.lab_comenvt.setText(self.modsql.title())
 			if not self.boolCnx:
 				# no connect

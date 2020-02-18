@@ -10,7 +10,7 @@ from DBDatabase import ConnectDatabase
 from DBFunction import displayCounters, centerWidget, openFolder, ThemeColors
 from DBModelAbs import ModelTableAlbumsABS	# model tables
 from DBArtworks import CoverViewGui			# viewer image b64
-from DBReadJson import JsonParams
+from DBFileJson import JsonParams
 
 
 class DBAlbumsQT5Mini(QMainWindow):
@@ -56,7 +56,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.dbbase = self.CnxConnect.qtdbdb
 		self.modsql = self.CnxConnect.MODE_SQLI
 		self.rootDk = self.CnxConnect.BASE_RAC
-		self.lstcat = self.CnxConnect.buildlistcategory()
+		self.lstcat = self.Json_params.buildListcategory(self.envits)
 
 		autoList = self.CnxConnect.sqlToArray(self.CnxConnect.getrequest('autocompletion'))
 		self.com_autcom = QCompleter(autoList, self.textsearch)

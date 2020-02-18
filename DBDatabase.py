@@ -8,7 +8,7 @@ from codecs import open
 from PyQt5.QtCore import Qt, qDebug, QObject, QByteArray, QIODevice, QBuffer, pyqtSignal
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QPixmap
-from DBReadJson import JsonParams
+from DBFileJson import JsonParams
 from LIBDatabase import LibDatabase
 
 
@@ -27,14 +27,12 @@ class ConnectDatabase(LibDatabase):
 		self.MODE_SQLI = self.group_envt['typb']
 		self.BASE_RAC = r'' + self.group_envt['raci']
 		self.RACI_DOU = self.group_envt['cate']
+		# open Database
 		if self.MODE_SQLI == 'sqlite':
 			basename = self.basesqli.format(envt = self.envt)
 			# file exist ?
 			self.buildbase = path.exists(basename)
 			self.openDatabase(self.MODE_SQLI, '', '', '', '', '', basename , connexionName)
-			if not(self.buildbase) and self.boolcn:
-				# build database tables/view
-				self.execSqlFile(self.parent.CREA_SQLI)
 		else:
 			BASE_SEV = self.group_envt['serv']
 			BASE_USR = self.group_envt['user']
@@ -42,7 +40,13 @@ class ConnectDatabase(LibDatabase):
 			BASE_NAM = self.group_envt['base']
 			BASE_PRT = self.group_envt['port']
 			self.openDatabase(self.MODE_SQLI, BASE_SEV, BASE_USR, BASE_PAS, BASE_NAM, BASE_PRT, self.basesqli , connexionName)
-			if self.boolcn:
+		# create Objects if new database
+		if self.boolcn:
+			if self.MODE_SQLI == 'sqlite':
+				if not(self.buildbase):
+					# build database tables/view
+					self.execSqlFile(self.parent.CREA_SQLI)
+			else:
 				# table album exist ?
 				request = self.getrequest('tableexist')
 				self.buildbase = (len(self.sqlToArray(request)) > 0)
@@ -55,13 +59,6 @@ class ConnectDatabase(LibDatabase):
 						self.execSqlFile(self.parent.CREA_MSSQ)
 		self.boolcon = self.boolcn
 		self.db = self.qtdbdb
-
-	def buildlistcategory(self):
-		"""list database category."""
-		self.list_category = []
-		if self.RACI_DOU is not None:
-			self.list_category += self.Json_params.buildCategories(self.envt)
-		return self.list_category
 
 	def getrequest(self, name):
 		"""Store requests."""

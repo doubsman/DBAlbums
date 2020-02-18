@@ -11,7 +11,7 @@ from DBFunction import getListFiles, getListFolders, getFolderSize, getListFiles
 from DBTImpoCUE import CueParser
 from DBTImpoTRK import CardTracks
 from DBTImpoTAG import DBMediasTags
-from DBReadJson import JsonParams
+from DBFileJson import JsonParams
 
 
 class CardAlbum(QObject):

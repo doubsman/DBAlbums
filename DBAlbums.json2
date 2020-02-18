@@ -1,0 +1,294 @@
+{
+    "dbalbums": {
+        "prog_build": 1.67,
+        "wgui_width": 1400,
+        "wgui_heigh": 1060,
+        "text_nocov": "<No Picture>",
+        "progr_logo": "logo.png",
+        "wins_icone": "icone.ico",
+        "pict_blank": "cd-blank.png",
+        "picm_endof": "cd-blank-mini3d.jpg",
+        "envt_deflt": "MP3_SQLITE",
+        "covers_siz": 400,
+        "thun_csize": 150,
+        "thnail_dis": 100,
+        "thnail_nbl": 2,
+        "thnail_nod": 1,
+        "font00_ttx": "Calibri",
+        "font01_ttx": "Lucida Console",
+        "font00_unx": "Carlito",
+        "font00_siz": 12,
+        "name_theme": "blue"
+    },
+    "programs": {
+        "txt_win": "C:\\Program Files (x86)\\Notepad++\\notepad++.exe",
+        "txt_lin": "mousepad",
+        "foobarP": "C:\\Users\\Mister doubs\\AppData\\Roaming\\foobar2000\\playlists-v1.3",
+        "discogs": "http://www.discogs.com/search?q=%NAME",
+        "tagscan": "\\\\HOMERSTATION\\_Synchro\\_Apps_Portables\\tagscan\\Tagscan.exe"
+    },
+    "score": {
+        "0": "not listened",
+        "1": "listened",
+        "2": "top",
+        "3": "best\\selection"
+    },
+    "environments": {
+        "envt1": "LOSSLESS_MYSQL",
+        "envt2": "LOSSLESS_SQLITE",
+        "envt3": "LOSSLESS_SQLSERVER",
+        "envt4": "LOSSLESS_TEST",
+        "envt5": "LOSSLESS_TEST_SQLITE",
+        "envt6": "MP3_MYSQL",
+        "envt7": "MP3_SQLITE",
+        "envt8": "MP3_TEST_MYSQL"
+    },
+    "LOSSLESS_CATEGORY": {
+        "FOLDER001": {
+            "Style": "CLASSIC",
+            "mode": "D",
+            "folder": "CLASSIC",
+            "family": null
+        },
+        "FOLDER002": {
+            "Style": "TECHNO",
+            "mode": "D",
+            "folder": "TECHNO",
+            "family": null
+        },
+        "FOLDER003": {
+            "Style": "TRANCE",
+            "mode": "D",
+            "folder": "TRANCE",
+            "family": null
+        },
+        "FOLDER004": {
+            "Style": "ROCK",
+            "mode": "D",
+            "folder": "ROCK",
+            "family": null
+        },
+        "FOLDER005": {
+            "Style": "REGGAE",
+            "mode": "D",
+            "folder": "REGGAE",
+            "family": null
+        }
+    },
+    "MP3_CATEGORY": {
+        "FOLDER001": {
+            "Style": "TECHNO",
+            "mode": "D",
+            "folder": "Techno Artists",
+            "family": "Download"
+        },
+        "FOLDER002": {
+            "Style": "TECHNO",
+            "mode": "D",
+            "folder": "Techno Labels",
+            "family": "Label"
+        },
+        "FOLDER003": {
+            "Style": "TECHNO",
+            "mode": "S",
+            "folder": "Techno",
+            "family": "Download"
+        },
+        "FOLDER004": {
+            "Style": "PSYTECHNO",
+            "mode": "S",
+            "folder": "Psytechno",
+            "family": "Download"
+        },
+        "FOLDER005": {
+            "Style": "ELECTRO",
+            "mode": "S",
+            "folder": "Electro",
+            "family": "Download"
+        },
+        "FOLDER006": {
+            "Style": "AMBIENT",
+            "mode": "S",
+            "folder": "Ambient",
+            "family": "Download"
+        },
+        "FOLDER007": {
+            "Style": "ACID",
+            "mode": "S",
+            "folder": "Acid",
+            "family": "Download"
+        },
+        "FOLDER008": {
+            "Style": "HOUSE",
+            "mode": "S",
+            "folder": "House",
+            "family": "Download"
+        },
+        "FOLDER009": {
+            "Style": "DOWNTEMPO",
+            "mode": "S",
+            "folder": "DownTempo",
+            "family": "Download"
+        },
+        "FOLDER010": {
+            "Style": "SUOMI",
+            "mode": "S",
+            "folder": "PsySuomi",
+            "family": "Download"
+        },
+        "FOLDER011": {
+            "Style": "PSY-CHILL",
+            "mode": "S",
+            "folder": "PsyChill",
+            "family": "Download"
+        },
+        "FOLDER012": {
+            "Style": "REGGAE",
+            "mode": "S",
+            "folder": "Reggae",
+            "family": "Download"
+        },
+        "FOLDER013": {
+            "Style": "REGGAE",
+            "mode": "D",
+            "folder": "Reggae Labels",
+            "family": "Label"
+        },
+        "FOLDER014": {
+            "Style": "HARDTEK",
+            "mode": "S",
+            "folder": "Hardtek",
+            "family": "Download"
+        },
+        "FOLDER015": {
+            "Style": "ROCK",
+            "mode": "S",
+            "folder": "Rock",
+            "family": "Download"
+        },
+        "FOLDER016": {
+            "Style": "ROCK",
+            "mode": "D",
+            "folder": "Rock Artists",
+            "family": "Download"
+        },
+        "FOLDER017": {
+            "Style": "DRUMBASS",
+            "mode": "S",
+            "folder": "Drum Vinyls",
+            "family": "Download"
+        },
+        "FOLDER018": {
+            "Style": "PSY-DARK",
+            "mode": "D",
+            "folder": "PsyDark",
+            "family": "Download"
+        },
+        "FOLDER019": {
+            "Style": "TRANCE",
+            "mode": "D",
+            "folder": "Psytrance\\_master",
+            "family": "Download"
+        },
+        "FOLDER020": {
+            "Style": "TRANCE",
+            "mode": "D",
+            "folder": "Psytrance\\_years",
+            "family": "Download"
+        },
+        "FOLDER021": {
+            "Style": "TRANCE",
+            "mode": "D",
+            "folder": "Psytrance\\_Labels",
+            "family": "Label"
+        }
+    },
+    "MP3_TEST_CATEGORY": {
+        "FOLDER001": {
+            "Style": "ACID",
+            "mode": "S",
+            "folder": "Acid",
+            "family": "Download"
+        }
+    },
+    "LOSSLESS_MYSQL": {
+        "raci": "\\\\HOMERSTATION\\_LossLess",
+        "cate": "LOSSLESS_CATEGORY",
+        "typb": "mysql",
+        "serv": "homerstation",
+        "user": "AdmInvent",
+        "pass": "JMctOz7a6TWnrJHB86pL",
+        "base": "DBALBUMS",
+        "port": 3307
+    },
+    "LOSSLESS_SQLITE": {
+        "raci": "\\\\HOMERSTATION\\_LossLess",
+        "cate": "LOSSLESS_CATEGORY",
+        "typb": "sqlite",
+        "serv": null,
+        "user": null,
+        "pass": null,
+        "base": null,
+        "port": null
+    },
+    "LOSSLESS_SQLSERVER": {
+        "raci": "\\\\HOMERSTATION\\_LossLess",
+        "cate": "LOSSLESS_CATEGORY",
+        "typb": "mssql",
+        "serv": "FRACTAL-DB",
+        "user": "dbalbums",
+        "pass": "dbalbums2017",
+        "base": "DBALBUMS",
+        "port": 1433
+    },
+    "LOSSLESS_TEST": {
+        "raci": "D:\\WorkDev\\DBAlbumsTEST",
+        "cate": "LOSSLESS_CATEGORY",
+        "typb": "mysql",
+        "serv": "doubbigstation",
+        "user": "AdmInvent",
+        "pass": "MwRbBR2HA8PFQjuu",
+        "base": "DBALBUMSTEST",
+        "port": 3307
+    },
+    "LOSSLESS_TEST_SQLITE": {
+        "raci": "D:\\WorkDev\\DBAlbumsTEST",
+        "cate": "LOSSLESS_CATEGORY",
+        "typb": "sqlite",
+        "serv": null,
+        "user": null,
+        "pass": null,
+        "base": null,
+        "port": null
+    },
+    "MP3_MYSQL": {
+        "raci": "\\\\HOMERSTATION\\_Mp3",
+        "cate": "MP3_CATEGORY",
+        "typb": "mysql",
+        "serv": "homerstation",
+        "user": "AdmInvent",
+        "pass": "JMctOz7a6TWnrJHB86pL",
+        "base": "DBALBUMSMP3",
+        "port": 3307
+    },
+    "MP3_SQLITE": {
+        "raci": "\\\\HOMERSTATION\\_Mp3",
+        "cate": "MP3_CATEGORY",
+        "typb": "sqlite",
+        "serv": null,
+        "user": null,
+        "pass": null,
+        "base": null,
+        "port": null
+    },
+    "MP3_TEST_MYSQL": {
+        "raci": "\\\\HOMERSTATION\\_Mp3",
+        "cate": "MP3_TEST_CATEGORY",
+        "typb": "mysql",
+        "serv": "doubbigstation",
+        "user": "AdmInvent",
+        "pass": "MwRbBR2HA8PFQjuu",
+        "base": "DBALBUMSMP3TEST",
+        "port": 3307
+    }
+}
