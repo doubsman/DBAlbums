@@ -18,6 +18,7 @@ class ConnectDatabase(LibDatabase):
 	def __init__(self, parent, envt, fileini, basesqli , connexionName): # = 'qt_sql_default_connection'):
 		"""Init invent, build list albums exists in database."""
 		super(ConnectDatabase, self).__init__(parent)
+		
 		self.envt = envt
 		self.basesqli = basesqli
 		self.parent = parent
@@ -27,6 +28,7 @@ class ConnectDatabase(LibDatabase):
 		self.MODE_SQLI = self.group_envt['typb']
 		self.BASE_RAC = r'' + self.group_envt['raci']
 		self.RACI_DOU = self.group_envt['cate']
+		self.dbcrea = self.Json_params.getMember('SCRIPT_CREATE')	# scripts creation database
 		# open Database
 		if self.MODE_SQLI == 'sqlite':
 			basename = self.basesqli.format(envt = self.envt)
@@ -40,25 +42,46 @@ class ConnectDatabase(LibDatabase):
 			BASE_NAM = self.group_envt['base']
 			BASE_PRT = self.group_envt['port']
 			self.openDatabase(self.MODE_SQLI, BASE_SEV, BASE_USR, BASE_PAS, BASE_NAM, BASE_PRT, self.basesqli , connexionName)
-		# create Objects if new database
-		if self.boolcn:
-			if self.MODE_SQLI == 'sqlite':
-				if not(self.buildbase):
+		# Create Objects in database
+		self.boolcon = self.boolcn
+		self.db = self.qtdbdb
+		self.createObjetsDatabase(self.MODE_SQLI, self.buildbase, self.qtdbdb)
+
+	def createDBAlbumsSqlLite(self, basename):
+		"""create SqlLite Database."""
+		qDebug('Process Creation Database Sqlite ' + basename)
+		qtdblite = self.createDatabaseSqlLite(basename, 'DBCREA')
+		# create objects database
+		self.createObjetsDatabase('sqlite', True, qtdblite)
+		# copy table
+		self.signalchgt.emit((1/5)*100, 'Copy datas table ALBUMS...')
+		self.copyDatasTable('ALBUMS', self.qtdbdb, qtdblite)
+		self.signalchgt.emit((2/5)*100, 'Copy table TRACKS...')
+		self.copyDatasTable('TRACKS', self.qtdbdb, qtdblite)
+		self.signalchgt.emit((3/5)*100, 'Copy datas table COVERS...')
+		self.copyDatasTable('COVERS', self.qtdbdb, qtdblite)
+		self.signalchgt.emit((4/5)*100, 'Copy datas table FOOBAR...')
+		self.copyDatasTable('FOOBAR', self.qtdbdb, qtdblite)
+		self.signalchgt.emit((5/5)*100, 'Operations completed')
+
+	def createObjetsDatabase(self, modesql, boolbuild, qtdblite):
+		"""Create Objects in new database."""
+		self.PATH_PROG = path.dirname(path.abspath(__file__))
+		self.dbcrea = path.join(self.PATH_PROG, 'SQL', self.dbcrea[modesql])
+		if self.boolcon:
+			if modesql == 'sqlite':
+				if not(boolbuild):
 					# build database tables/view
-					self.execSqlFile(self.parent.CREA_SQLI)
+					self.execSqlFile(self.dbcrea)
 			else:
 				# table album exist ?
 				request = self.getrequest('tableexist')
-				self.buildbase = (len(self.sqlToArray(request)) > 0)
-				if not(self.buildbase):
-					if self.MODE_SQLI == 'mysql':
-						# build database tables/view
-						self.execSqlFile(self.parent.CREA_MYSQ)
-					elif self.MODE_SQLI == 'mssql':
-						# build database tables/view
-						self.execSqlFile(self.parent.CREA_MSSQ)
-		self.boolcon = self.boolcn
-		self.db = self.qtdbdb
+				boolbuild = (len(self.sqlToArray(request, qtdblite)) > 0)
+				if not(boolbuild):
+					# build database tables/view
+					self.execSqlFile(self.dbcrea)
+		if boolbuild is None:
+			self.buildbase = False
 
 	def getrequest(self, name):
 		"""Store requests."""
@@ -193,111 +216,3 @@ class ConnectDatabase(LibDatabase):
 		savefile.write(cover[0])
 		savefile.close()
 
-
-class DBCreateSqLite(QObject):
-	signalchgt = pyqtSignal(int, str)		# signal browse
-	
-	def __init__(self, basename, parent=None):
-		"""Init."""
-		super(DBCreateSqLite, self).__init__(parent)
-		self.parent = parent
-		self.basename = basename
-		if path.isfile(basename):
-			remove(basename)
-	
-	def createObjSqlLite(self, dbsource, filerequestcreate):
-		"""create SqlLite Database."""
-		qDebug('Process Creation Database Sqlite ' + self.basename)
-		# create sqlite database
-		cnxlite = 'CREA'
-		dblite = QSqlDatabase.addDatabase("QSQLITE", cnxlite)
-		dblite.setDatabaseName(self.basename)
-		if dblite.isValid():
-			boolcon = dblite.open()
-			if boolcon:	
-				# create objects database
-				self.parent.CnxConnect.execSqlFile(filerequestcreate, dblite)
-				# copy table
-				self.signalchgt.emit((1/5)*100, 'Copy table ALBUMS...')
-				self.copytable(dbsource, dblite, 'ALBUMS')
-				self.signalchgt.emit((2/5)*100, 'Copy table TRACKS...')
-				self.copytable(dbsource, dblite, 'TRACKS')
-				self.signalchgt.emit((3/5)*100, 'Copy table COVERS...')
-				self.copytable(dbsource, dblite, 'COVERS')
-				self.signalchgt.emit((4/5)*100, 'Copy table FOOBAR...')
-				self.copytable(dbsource, dblite, 'FOOBAR')
-				self.signalchgt.emit((5/5)*100, 'Operations completed')
-		else:
-			qDebug('no create', self.basename)
-	
-	def copytable(self, dbsrc, dbdes, tablename):
-		listcolumns =  self.parent.CnxConnect.getListColumnsTable(tablename)
-		numberscolumns = len(listcolumns)
-		# build query insert
-		request = 'INSERT INTO ' + tablename + '('
-		request += ', '.join('`{0}`'.format(w) for w in listcolumns) + ') VALUES '
-		request += '(' + ', '.join(['?'] * numberscolumns) + ')' 
-		# query 
-		querylite = QSqlQuery(dbdes)
-		query = QSqlQuery(dbsrc)
-		query.exec_("SELECT * FROM "+tablename)
-		while query.next():
-			querylite.prepare(request)
-			for indcol in range(query.record().count()):
-				querylite.bindValue(indcol, query.value(indcol))
-			if not querylite.exec_():
-				qDebug(tablename+10*' '+querylite.lastError().text())
-				listparam = list(querylite.boundValues().values())
-				for i in range(len(listparam)):
-					qDebug(10*' '+ str(i) + ' ' + str(listparam[i].decode('ascii', 'ignore')))
-			# Waiting problem Disk I/O error
-			sleep(0.1)
-
-
-class DBCcopyTable(QObject):
-	
-	def __init__(self, parent=None):
-		"""Init."""
-		super(DBCcopyTable, self).__init__(parent)
-		self.parent = parent
-	
-	def execSqlFile(self, sql_file, dbcnx=None):
-		"""Exec script SQL file..."""
-		counter = 0
-		request = ''
-		for line in open(sql_file, 'r'):
-			request += line
-			if line.endswith(';\n'):
-				counter = counter + 1
-				request = request.rstrip('\n')
-				qDebug(request)
-				query = QSqlQuery(request, dbcnx)
-				if not query.exec_():
-					errorText = query.lastError().text()
-					qDebug(query.lastQuery())
-					qDebug(errorText)
-				query.clear
-				request = ''
-
-	def copyCovers(self, dbdes):
-		dbsrc = QSqlDatabase.addDatabase("QMYSQL")
-		dbsrc.setHostName('homerstation')
-		dbsrc.setDatabaseName('InventMP3')
-		dbsrc.setUserName('admInventMP3')
-		dbsrc.setPassword('nuDbC6spVZxtkKC8')
-		dbsrc.setPort(3306)
-		if dbsrc.isValid():
-			dbsrc.open()
-		self.copytable(dbsrc, dbdes, 'COVERS')
-
-if __name__ == '__main__':
-	pass
-#//2005 db.setDatabaseName(DRIVER={SQL Server};SERVER=localhost\SQLExpress;DATABASE=secundaria;UID=sa;PWD=contraseña;WSID=.;Trusted_connection=yes)
-#//2008 db.setDatabaseName("DRIVER={SQL Server Native Client 10.0};SERVER=localhost\SQLExpress;DATABASE=myDbName;UID=user;PWD=userPwd;WSID=.;Trusted_connection=yes")
-#//2012 db.setDatabaseName("DRIVER={SQL Server Native Client 11.0};SERVER=localhost\SQLExpress;DATABASE=myDbName;UID=user;PWD=userPwd;WSID=.;Trusted_connection=yes")
-#boolconnect, dbbase, modsql, rootDk, lstcat = connectDatabase('MP3')
-#print(boolconnect, dbbase, modsql, rootDk, lstcat)
-#copytable = DBCcopyTable()
-#copytable.execSqlFile("E:\Download\InventMP3_old.sql", dbbase)
-#createsqllite = DBCreateSqLite(r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\TEXT.DB')
-#createsqllite.createObjSqlLite(dbbase, r'\\Homerstation\_pro\Projets\DBALBUMSQT5\SQL\Create_sqllite_database.sql')

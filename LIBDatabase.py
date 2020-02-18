@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from os import  path, remove
 from copy import deepcopy
 from time import sleep
 from codecs import open
@@ -45,7 +46,7 @@ class LibDatabase(QObject):
 			self.qtdbdb.setDatabaseName(self.dbbase)
 			self.qtdbdb.setUserName(self.dbuser)
 			self.qtdbdb.setPassword(self.dbpass)
-			self.qtdbdb.setPort(self.dbport)			
+			self.qtdbdb.setPort(self.dbport)
 		elif self.dbtype == 'mssql':
 			self.qtdbdb = QSqlDatabase.addDatabase("QODBC3", self.qtname)
 			driver = "DRIVER={SQL Server Native Client 11.0};Server=" + self.dbserv + ";Database=" + self.dbbase
@@ -111,7 +112,7 @@ class LibDatabase(QObject):
 		return self.translateRequest(request), listcolumns
 
 	def translateRequest(self, requestname):
-		"""Corection path windows-linux."""
+		"""Corection request mysql tto mssql."""
 		if self.dbtype == 'mssql':
 			requestname = requestname.replace(' `', ' [').replace('` ', '] ')#.replace("`,", '],')
 		return requestname
@@ -167,10 +168,12 @@ class LibDatabase(QObject):
 			listcolumns.append(query.record().fieldName(column))
 		return listcolumns
 
-	def sqlToArray(self, request):
+	def sqlToArray(self, request, dbcnx = None):
 		"""Select to array data."""
+		if dbcnx is None:
+			dbcnx = self.qtdbdb
 		arraydata = []
-		query = QSqlQuery(self.qtdbdb)
+		query = QSqlQuery(dbcnx)
 		if not query.exec_(request):
 			errorText = query.lastError().text()
 			qDebug(query.lastQuery())
@@ -227,13 +230,22 @@ class LibDatabase(QObject):
 				query.clear
 				request = ''
 
-	def copytable(self, dbsrc, dbdes, tablename):
-		listcolumns =  self.parent.CnxConnect.getListColumnsTable(tablename)
-		numberscolumns = len(listcolumns)
-		# build query insert
-		request = 'INSERT INTO ' + tablename + '('
-		request += ', '.join('`{0}`'.format(w) for w in listcolumns) + ') VALUES '
-		request += '(' + ', '.join(['?'] * numberscolumns) + ')' 
+	def createDatabaseSqlLite(self, basename, qtname):
+		"""create SqlLite Database."""
+		if path.isfile(basename):
+			remove(basename)
+		# create sqlite database
+		qtdblite = QSqlDatabase.addDatabase("QSQLITE", qtname)
+		qtdblite.setDatabaseName(basename)
+		if qtdblite.isValid():
+			qtdblite.open()
+		return qtdblite
+
+	def copyDatasTable(self, tablename, dbdes, dbsrc = None):
+		"""Copy datas table to other daabase type."""
+		if dbsrc is None:
+			dbsrc = self.qtdbdb
+		request = self.buildRequest('INSERT', tablename)
 		# query 
 		querylite = QSqlQuery(dbdes)
 		query = QSqlQuery(dbsrc)

@@ -25,7 +25,7 @@ from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
 from DBFunction import (runCommand, openFolder, centerWidget, buildalbumnamehtml,
 						displayCounters, displayStars, ThemeColors, qtmymessagehandler)
-from DBDatabase import ConnectDatabase, DBCreateSqLite
+from DBDatabase import ConnectDatabase
 from DBSLoading import DBloadingGui
 from DBAlbsMini import DBAlbumsQT5Mini
 from DBModelAbs import ModelTableAlbumsABS, ModelTableTracksABS
@@ -46,9 +46,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	PATH_PROG = path.dirname(path.abspath(__file__))
 	LOGS_PROG = path.join(PATH_PROG, 'LOG')
 	BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
-	CREA_MYSQ = path.join(PATH_PROG, 'SQL', "Create_mysql_database.sql")
-	CREA_SQLI = path.join(PATH_PROG, 'SQL', "Create_sqllite_database.sql")
-	CREA_MSQL = path.join(PATH_PROG, 'SQL', "Create_mssql_database.sql")
 	FOOB_UPSC = path.join(PATH_PROG, 'SQL', "UpdateScore_Playlists_Foobar.sql")
 	RESS_LABS = path.join(PATH_PROG, 'IMG' , 'LAB')
 	RESS_ICOS = path.join(PATH_PROG, 'IMG' , 'ICO')
@@ -1289,9 +1286,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	def createLocalBase(self):
 		"""Create base Sqlite."""
 		filename = self.BASE_SQLI.format(envt=self.envits+'_SQLITE')
-		createsqllite = DBCreateSqLite(filename)
-		createsqllite.signalchgt.connect(self.updateGaugeBar)
-		createsqllite.createObjSqlLite(self.dbbase, self.CREA_SQLI)
+		self.CnxConnect.createDBAlbumsSqlLite(filename)
+		self.CnxConnect.signalchgt.connect(self.updateGaugeBar)
 		QMessageBox.information(self,'Create Database SQLite', 'Operation successfull')
 
 	def exportAlbums(self):
