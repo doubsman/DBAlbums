@@ -7,11 +7,11 @@ from DBDatabase import ConnectDatabase
 class DBPThreadsListStyle(QThread):
 	finished = pyqtSignal(list)
 	
-	def __init__(self, parent, envt, fileini, baseqli):
+	def __init__(self, parent, envt, jsondataini, baseqli):
 		super(DBPThreadsListStyle, self).__init__(parent)
 		self.parent = parent
 		self.envt = envt
-		self.fileini = fileini
+		self.Json_params = jsondataini
 		self.baseqli = baseqli
 		self.CnxDat = None
 	
@@ -19,8 +19,8 @@ class DBPThreadsListStyle(QThread):
 		self.wait()
 	
 	def run(self):
-		# build list styles albums
-		self.CnxDat = ConnectDatabase(None, self.envt, self.fileini, self.baseqli, 'dbthread')
+		# build list styles albums self.parent.Json_params
+		self.CnxDat = ConnectDatabase(None, self.envt, self.baseqli, self.Json_params, 'dbthread')
 		request = self.CnxDat.getrequest('listgenres')
 		self.listgenres = self.CnxDat.sqlToArray(request)
 		liststyles = []

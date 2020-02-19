@@ -48,8 +48,8 @@ class DBPlayer(QWidget):
 	signaltxt = pyqtSignal(str)
 	signalnum = pyqtSignal(int)
 
-	def __init__(self):
-		super(DBPlayer, self).__init__()
+	def __init__(self, parent):
+		super(DBPlayer, self).__init__(parent)
 		self.setMaximumSize(16777215, 35)
 		# Init Player
 		self.messtitle = TITL_PROG

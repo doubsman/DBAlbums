@@ -155,7 +155,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 		# buttons
 		self.btn_clearsearch.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
-		self.btn_findtrack.setIcon(QIcon(path.join(self.RESS_ICOS, 'target.png')))
 
 		# minimize ? height main windows
 		self.thunnbline = self.HEIG_LHUN
@@ -199,11 +198,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.tbl_albums.verticalHeader().setVisible(False)
 		self.tbl_tracks.verticalHeader().setVisible(False)
 
-		# player
-		self.playerAudio = DBPlayer()
-		self.horizontalplayer.addWidget(self.playerAudio)
-		self.horizontalplayer.setSpacing(0)
-
 		# progres bar
 		self.gaugeBar = QProgressBar(self)
 		self.gaugeBar.setVisible(False)
@@ -211,8 +205,14 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.gaugeBar.setMaximum(100)
 		self.statusbar.addPermanentWidget(self.gaugeBar)
 
-		# zoom in/out button statu bar
-		self.sbframe = QFrame(self.centralwidget)
+		# status bar icons zoom in/out / theme / player ...
+		# player
+		self.playerAudio = DBPlayer(self)
+		self.btn_target = QPushButton(self)
+		self.btn_target.setIcon(QIcon(path.join(self.RESS_ICOS, 'target.png')))
+		self.statusbar.addPermanentWidget(self.btn_target)
+		self.statusbar.addPermanentWidget(self.playerAudio)
+		self.sbframe = QFrame(self)
 		self.sbframe.setMinimumSize(QSize(80, 0))
 		self.sbframe.setFrameShape(QFrame.StyledPanel)
 		self.sbframe.setFrameShadow(QFrame.Raised)
@@ -288,7 +288,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.lin_search.textChanged.connect(self.onTextEdited)
 		self.btn_clearsearch.clicked.connect(self.clearFilters)
 		self.chb_searchtracks.clicked.connect(self.onFiltersChanged)
-		self.btn_findtrack.clicked.connect(self.findPlayAlbum)
+		self.btn_target.clicked.connect(self.findPlayAlbum)
 		self.btn_zoomout.clicked.connect(self.zoomOutThnunnails)
 		self.btn_zoomin.clicked.connect(self.zoomInThnunnails)
 		self.btn_nogrid.clicked.connect(self.noDisplayTab)
@@ -577,7 +577,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			if self.boolCnx:
 				self.CnxConnect.closeDatabase()
 			# connect
-			self.CnxConnect = ConnectDatabase(self, self.envits, self.FILE__INI, self.BASE_SQLI, 'dbmain')
+			self.CnxConnect = ConnectDatabase(self, self.envits, self.BASE_SQLI, self.Json_params, 'dbmain')
 			self.boolCnx = self.CnxConnect.boolcon
 			self.dbbase = self.CnxConnect.qtdbdb
 			self.modsql = self.CnxConnect.MODE_SQLI
@@ -645,7 +645,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					self.lin_search.setCompleter(self.com_autcom)
 					# build list style
 					qDebug('qthread build list style')
-					self.obj = DBPThreadsListStyle(self, self.envits, self.FILE__INI, self.BASE_SQLI)
+					self.obj = DBPThreadsListStyle(self, self.envits, self.Json_params, self.BASE_SQLI)
 					self.obj.finished.connect(self.fillListGenres)
 					self.obj.start()
 

@@ -2,28 +2,25 @@
 # -*- coding: utf-8 -*-
 
 from os import  path, remove
-from copy import deepcopy
-from time import sleep
 from codecs import open
-from PyQt5.QtCore import Qt, qDebug, QObject, QByteArray, QIODevice, QBuffer, pyqtSignal
-from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5.QtCore import Qt, qDebug, QByteArray, QIODevice, QBuffer, pyqtSignal
+from PyQt5.QtSql import QSqlQuery
 from PyQt5.QtGui import QPixmap
-from DBFileJson import JsonParams
 from LIBDatabase import LibDatabase
 
 
 class ConnectDatabase(LibDatabase):
 	signalchgt = pyqtSignal(int, str)		# signal browse
 
-	def __init__(self, parent, envt, fileini, basesqli , connexionName): # = 'qt_sql_default_connection'):
+	def __init__(self, parent, envt, basesqli, jsondataini, connexionName): # = 'qt_sql_default_connection'):
 		"""Init invent, build list albums exists in database."""
 		super(ConnectDatabase, self).__init__(parent)
-		
+		self.parent = parent
 		self.envt = envt
 		self.basesqli = basesqli
-		self.parent = parent
 		self.connexionName = connexionName
-		self.Json_params = JsonParams(fileini)
+		self.Json_params = jsondataini
+
 		self.group_envt = self.Json_params.getMember(envt)
 		self.MODE_SQLI = self.group_envt['typb']
 		self.BASE_RAC = r'' + self.group_envt['raci']
@@ -47,22 +44,22 @@ class ConnectDatabase(LibDatabase):
 		self.db = self.qtdbdb
 		self.createObjetsDatabase(self.MODE_SQLI, self.buildbase, self.qtdbdb)
 
-	def createDBAlbumsSqlLite(self, basename):
+	def createDBAlbumsSqlLite(self, basesqli):
 		"""create SqlLite Database."""
-		qDebug('Process Creation Database Sqlite ' + basename)
-		qtdblite = self.createDatabaseSqlLite(basename, 'DBCREA')
+		qDebug('Process Creation Database Sqlite ' + basesqli)
+		if path.isfile(basesqli):
+			remove(basesqli)
+		qtdblite = self.createDatabaseSqlLite(basesqli, 'DBCREA')
 		# create objects database
 		self.createObjetsDatabase('sqlite', True, qtdblite)
 		# copy table
-		self.signalchgt.emit((1/5)*100, 'Copy datas table ALBUMS...')
-		self.copyDatasTable('ALBUMS', self.qtdbdb, qtdblite)
-		self.signalchgt.emit((2/5)*100, 'Copy table TRACKS...')
-		self.copyDatasTable('TRACKS', self.qtdbdb, qtdblite)
-		self.signalchgt.emit((3/5)*100, 'Copy datas table COVERS...')
-		self.copyDatasTable('COVERS', self.qtdbdb, qtdblite)
-		self.signalchgt.emit((4/5)*100, 'Copy datas table FOOBAR...')
-		self.copyDatasTable('FOOBAR', self.qtdbdb, qtdblite)
-		self.signalchgt.emit((5/5)*100, 'Operations completed')
+		listtable =  ['ALBUMS', 'TRACKS', 'COVERS', 'FOOBAR']
+		counter = 1
+		for tablename in listtable:
+			self.signalchgt.emit((counter/len(listtable))*100, 'Copy datas table ' + tablename)
+			self.copyDatasTable(tablename, self.qtdbdb, qtdblite)
+			counter += 1 
+		self.signalchgt.emit(100, 'Operations completed')
 
 	def createObjetsDatabase(self, modesql, boolbuild, qtdblite):
 		"""Create Objects in new database."""
