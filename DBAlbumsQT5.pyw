@@ -18,7 +18,7 @@ from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
 from PyQt5.QtCore import (Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, #QCoreApplication,
 						QSize, QRect, qInstallMessageHandler, qDebug, QUrl)
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QInputDialog, QLineEdit,
-						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel)
+						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout)
 from PyQt5.QtMultimedia import QMediaPlayer
 # Gui QtDesigner : compiler .ui sans Eric6: pyuic5 file.ui -o Ui_main_file.py
 from Ui_DBALBUMS import Ui_MainWindow
@@ -127,18 +127,22 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.loadingGui = None
 
 		# font
-		font = QFont()
-		font.setFamily(self.FONT_MAI)
-		font.setFixedPitch(True)
-		font.setPointSize(self.FONT_SIZE)
-		self.lab_search.setFont(font)
-		self.lab_scorealb.setFont(font)
-		self.lab_scoretrk.setFont(font)
-		self.lab_album.setFont(font)
-		self.lab_label.setFont(font)
-		self.lab_comenvt.setFont(font)
-		self.chb_searchtracks.setFont(font)
-		self.statusbar.setFont(font)
+		self.fontbig = QFont()
+		self.fontbig.setFamily(self.FONT_MAI)
+		self.fontbig.setFixedPitch(True)
+		self.fontbig.setPointSize(self.FONT_SIZE)
+		self.fontmini = QFont()
+		self.fontmini.setFamily(self.FONT_MAI)
+		self.fontmini.setFixedPitch(True)
+		self.fontmini.setPointSize(self.FONT_SIZE - 2)
+		self.lab_search.setFont(self.fontbig)
+		self.lab_scorealb.setFont(self.fontbig)
+		self.lab_scoretrk.setFont(self.fontbig)
+		self.lab_album.setFont(self.fontbig)
+		self.lab_label.setFont(self.fontbig)
+		self.lab_comenvt.setFont(self.fontmini)
+		self.chb_searchtracks.setFont(self.fontmini)
+		self.statusbar.setFont(self.fontbig)
 
 		# center
 		centerWidget(self)
@@ -171,7 +175,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 		# thunbnails list
 		self.thunbnails = DBThunbnails(self, self.sizeTN, self.thunnbline)
-		self.thunbnails.setMaximumSize(QSize(16777215, (self.sizeTN+4) * self.thunnbline))
+		self.thunbnails.setMaximumSize(QSize(16777215, self.sizeTN * self.thunnbline))
 		self.layout2thunbnails.addWidget(self.thunbnails)
 
 		# scroring
@@ -206,30 +210,40 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.statusbar.addPermanentWidget(self.gaugeBar)
 
 		# status bar icons zoom in/out / theme / player ...
-		# player
-		self.playerAudio = DBPlayer(self)
 		self.btn_target = QPushButton(self)
 		self.btn_target.setIcon(QIcon(path.join(self.RESS_ICOS, 'target.png')))
 		self.statusbar.addPermanentWidget(self.btn_target)
+		# player
+		self.playerAudio = DBPlayer(self)
+		self.playerAudio.seekSliderLabel1.setFont(self.fontmini)
+		self.playerAudio.seekSliderLabel2.setFont(self.fontmini)
+		self.playerAudio.volumeDescBtn.setFont(self.fontbig)
+		self.playerAudio.volumeIncBtn.setFont(self.fontbig)
 		self.statusbar.addPermanentWidget(self.playerAudio)
+		layout = QHBoxLayout(self)
+		layout.setAlignment(Qt.AlignCenter)
 		self.sbframe = QFrame(self)
 		self.sbframe.setMinimumSize(QSize(80, 0))
 		self.sbframe.setFrameShape(QFrame.StyledPanel)
 		self.sbframe.setFrameShadow(QFrame.Raised)
-		self.btn_zoomout = QPushButton(self.sbframe)
+		self.btn_zoomout = QPushButton(self)
 		self.btn_zoomout.setStyleSheet("border: none;")
 		self.btn_zoomout.setGeometry(QRect(2, 3, 16, 16))
 		self.btn_zoomout.setIcon(QIcon(path.join(self.RESS_ICOS, 'zoomout.png')))
-		self.lab_zoom = QLabel(self.sbframe)
-		self.lab_zoom.setMaximumSize(QSize(35, 20))
-		self.lab_zoom.setStyleSheet("color: lime;background-color: black;border-radius: 5px;")
-		self.lab_zoom.setGeometry(QRect(22, 1, 35, 23))
+		self.lab_zoom = QLabel(self)
+		#self.lab_zoom.setMaximumSize(QSize(35, 40))
+		self.lab_zoom.setStyleSheet("color: lime;background-color: black;border-radius: 4px;")
+		#self.lab_zoom.setGeometry(QRect(22, 1, 35, 23))
 		self.lab_zoom.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
 		self.lab_zoom.setText(str(self.cuzoom) +'%')
-		self.btn_zoomin = QPushButton(self.sbframe)
+		self.btn_zoomin = QPushButton(self)
 		self.btn_zoomin.setStyleSheet("border: none;")
 		self.btn_zoomin.setGeometry(QRect(60, 3, 16, 16))
 		self.btn_zoomin.setIcon(QIcon(path.join(self.RESS_ICOS, 'zoomin.png')))
+		layout.addWidget(self.btn_zoomout)
+		layout.addWidget(self.lab_zoom)
+		layout.addWidget(self.btn_zoomin)
+		self.sbframe.setLayout(layout)
 		self.statusbar.addPermanentWidget(self.sbframe)
 		self.btn_nogrid = QPushButton(self)
 		self.btn_nogrid.setStyleSheet("border: none;")
@@ -1209,7 +1223,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		if listrows is not None:
 			for ind in listrows:
 				# new name album
-				namealbum = path.basename(self.tableMdlAlb.getData(ind, 'PATHNAME'))
+				oldnamealbum = self.tableMdlAlb.getData(ind, 'PATHNAME')
+				oldnamealbum = self.Json_params.convertUNC(oldnamealbum)
+				namealbum = path.basename(oldnamealbum)
 				namealbum = self.Json_params.convertUNC(namealbum)
 				if not(namealbum.startswith('[')):
 					newpropos = '[' +self.tableMdlAlb.getData(ind, 'TAGISRC')+ '] ' + namealbum
@@ -1220,8 +1236,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					# reinit player for access file
 					self.playerAudio.addMediaslist(None, 0, namealbum)
 					# rename folder
-					newpathalbum = path.join(path.dirname(path.abspath(self.tableMdlAlb.getData(ind, 'PATHNAME'))), newname)
-					rename(namealbum, newpathalbum)
+					newpathalbum = path.join(path.dirname(path.abspath(oldnamealbum)), newname)
+					rename(oldnamealbum, newpathalbum)
 					# [CATEGORY, FAMILY, 'DELETE/UPDATE/ADD', ID_CD, 'NAME', 'PATHNAME']
 					list_actions.append([self.tableMdlAlb.getData(ind, 'CATEGORY'),
 										self.tableMdlAlb.getData(ind, 'FAMILY'),

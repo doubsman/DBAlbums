@@ -210,9 +210,13 @@ class CardAlbum(QObject):
 				
 				# year tag
 				if cardalbum['YEAR'] is None:
-					cardalbum['YEAR'] = cardtrack['DATE']
+					if cardtrack['DATE'] is not None:
+						yearfind = match(r'.*([1-2][0-9]{3})', cardtrack['DATE'])
+						if yearfind:
+							cardalbum['YEAR'] = yearfind.group(1)
 				else:
 					if cardtrack['DATE'] is not None:
+						# compare year
 						if cardalbum['YEAR'] != cardtrack['DATE'][:4]:
 							self.signaltxt.emit('WARNING : year tag {tag} <> year path {pat}'.format(tag=cardtrack['DATE'], pat=cardalbum['YEAR'][:4]), 2)
 			else:

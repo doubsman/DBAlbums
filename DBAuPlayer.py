@@ -5,6 +5,7 @@
 # # Audio pyQT5 Player by SFI
 # ############################################################################
 from os import path
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QUrl, pyqtSignal
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist#, QMediaMetaData
 from PyQt5.QtWidgets import (QHBoxLayout, QPushButton, QSlider, QStyleOptionSlider,
@@ -12,7 +13,6 @@ from PyQt5.QtWidgets import (QHBoxLayout, QPushButton, QSlider, QStyleOptionSlid
 
 VERS_PROG = '1.00'
 TITL_PROG = "Player v{v} : ".format(v=VERS_PROG)
-WINS_ICO = "DBAlbums-icone.ico"
 
 
 class MySlider(QSlider):
@@ -50,6 +50,9 @@ class DBPlayer(QWidget):
 
 	def __init__(self, parent):
 		super(DBPlayer, self).__init__(parent)
+		self.PATH_PROG = path.dirname(path.abspath(__file__))
+		self.RESS_ICOS = path.join(self.PATH_PROG, 'IMG' , 'ICO')
+
 		self.setMaximumSize(16777215, 35)
 		# Init Player
 		self.messtitle = TITL_PROG
@@ -71,26 +74,28 @@ class DBPlayer(QWidget):
 		self.playBtn = QPushButton()
 		self.playBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
 		self.playBtn.setStyleSheet('border: 0px;')
-		stopBtn = QPushButton()
-		stopBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaStop))
-		stopBtn.setStyleSheet('border: 0px;')
-		prevBtn = QPushButton()
-		prevBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipBackward))
-		prevBtn.setStyleSheet('border: 0px;')
-		nextBtn = QPushButton()
-		nextBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipForward))
-		nextBtn.setStyleSheet('border: 0px;')
-		volumeDescBtn = QPushButton('▼')
-		volumeDescBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
-		volumeDescBtn.setMaximumWidth(30)
-		volumeDescBtn.setStyleSheet('border: 0px;')
-		volumeIncBtn = QPushButton('▲')
-		volumeIncBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
-		volumeIncBtn.setMaximumWidth(40)
-		volumeIncBtn.setStyleSheet('border: 0px;')
-		infoBtn = QPushButton()
-		infoBtn.setIcon(self.style().standardIcon(QStyle.SP_FileDialogContentsView))
-		infoBtn.setStyleSheet('border: 0px;')
+		self.stopBtn = QPushButton()
+		self.stopBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaStop))
+		self.stopBtn.setStyleSheet('border: 0px;')
+		self.prevBtn = QPushButton()
+		self.prevBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipBackward))
+		self.prevBtn.setStyleSheet('border: 0px;')
+		self.nextBtn = QPushButton()
+		self.nextBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipForward))
+		self.nextBtn.setStyleSheet('border: 0px;')
+		self.volumeDescBtn = QPushButton('')
+		self.volumeDescBtn.setIcon(QIcon(path.join(self.RESS_ICOS, 'decrease.png')))
+		#self.volumeDescBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
+		self.volumeDescBtn.setMaximumWidth(40)
+		self.volumeDescBtn.setStyleSheet('border: 0px;')
+		self.volumeIncBtn = QPushButton('')
+		self.volumeIncBtn.setIcon(QIcon(path.join(self.RESS_ICOS, 'increase.png')))
+		#self.volumeIncBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
+		self.volumeIncBtn.setMaximumWidth(40)
+		self.volumeIncBtn.setStyleSheet('border: 0px;')
+		self.infoBtn = QPushButton()
+		self.infoBtn.setIcon(self.style().standardIcon(QStyle.SP_FileDialogContentsView))
+		self.infoBtn.setStyleSheet('border: 0px;')
 
 		# seek slider
 		self.seekSlider = MySlider(Qt.Horizontal)
@@ -103,29 +108,29 @@ class DBPlayer(QWidget):
 		self.seekSliderLabel2 = QLabel('0:00')
 
 		# layout
-		controlArea = QHBoxLayout()
-		controlArea.addWidget(prevBtn)
-		controlArea.addWidget(self.playBtn)
-		controlArea.addWidget(stopBtn)
-		controlArea.addWidget(nextBtn)
-		controlArea.addWidget(self.seekSliderLabel1)
-		controlArea.addWidget(self.seekSlider)
-		controlArea.addWidget(self.seekSliderLabel2)
-		controlArea.addWidget(infoBtn)
-		controlArea.addWidget(volumeDescBtn)
-		controlArea.addWidget(volumeIncBtn)
+		self.controlArea = QHBoxLayout(self)
+		self.controlArea.addWidget(self.prevBtn)
+		self.controlArea.addWidget(self.playBtn)
+		self.controlArea.addWidget(self.stopBtn)
+		self.controlArea.addWidget(self.nextBtn)
+		self.controlArea.addWidget(self.seekSliderLabel1)
+		self.controlArea.addWidget(self.seekSlider)
+		self.controlArea.addWidget(self.seekSliderLabel2)
+		self.controlArea.addWidget(self.infoBtn)
+		self.controlArea.addWidget(self.volumeDescBtn)
+		self.controlArea.addWidget(self.volumeIncBtn)
 
 		# link buttons to media
 		self.seekSlider.sliderMoved.connect(self.seekPosition)
 		self.playBtn.clicked.connect(self.playHandler)
-		stopBtn.clicked.connect(self.stopHandler)
-		volumeDescBtn.clicked.connect(self.decreaseVolume)
-		volumeIncBtn.clicked.connect(self.increaseVolume)
-		prevBtn.clicked.connect(self.prevItemPlaylist)
-		nextBtn.clicked.connect(self.nextItemPlaylist)
-		infoBtn.clicked.connect(self.displaySongInfo)
+		self.stopBtn.clicked.connect(self.stopHandler)
+		self.volumeDescBtn.clicked.connect(self.decreaseVolume)
+		self.volumeIncBtn.clicked.connect(self.increaseVolume)
+		self.prevBtn.clicked.connect(self.prevItemPlaylist)
+		self.nextBtn.clicked.connect(self.nextItemPlaylist)
+		self.infoBtn.clicked.connect(self.displaySongInfo)
 
-		return controlArea
+		return self.controlArea
 
 	def playHandler(self):
 		if self.player.state() == QMediaPlayer.PlayingState:
