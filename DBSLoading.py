@@ -36,7 +36,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		req = self.parent.CnxConnect.buildRequestTCD("CATEGORY", "FAMILY", "ALBUMS", "ALBUM", "1", True)
 		self.buildTab(req, self.tableWid1)
 		# tab2
-		req = self.parent.CnxConnect.buildRequestTCD("CATEGORY", "FAMILY", "ALBUMS", "SIZE (GO)", "ROUND( `Size` /1024,1)", True)
+		req = self.parent.CnxConnect.buildRequestTCD("CATEGORY", "FAMILY", "ALBUMS", "SIZE (GO)", "ROUND(( `Size` * 1.00) /1024 , 1)", True)
 		self.buildTab(req, self.tableWid2)
 		# tab3
 		req = self.parent.CnxConnect.buildRequestTCD("YEAR", "CATEGORY", "ALBUMS", "YEAR", "1", True)

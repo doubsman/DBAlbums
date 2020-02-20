@@ -38,7 +38,7 @@ from DBPThreads import DBPThreadsListStyle
 from DBTImports import InventGui
 from DBParams import ParamsGui
 from DBFileJson import JsonParams
-
+from DBScoring import ScoreWidget
 
 class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 	"""DBAlbums main constants."""
@@ -136,8 +136,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.fontmini.setFixedPitch(True)
 		self.fontmini.setPointSize(self.FONT_SIZE - 2)
 		self.lab_search.setFont(self.fontbig)
-		self.lab_scorealb.setFont(self.fontbig)
-		self.lab_scoretrk.setFont(self.fontbig)
 		self.lab_album.setFont(self.fontbig)
 		self.lab_label.setFont(self.fontbig)
 		self.lab_comenvt.setFont(self.fontmini)
@@ -179,16 +177,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.layout2thunbnails.addWidget(self.thunbnails)
 
 		# scroring
-		self.sli_scorealb.setMaximumSize(16777215, 18)
-		self.sli_scorealb.setMinimum(0)
-		self.sli_scorealb.setMaximum(len(self.SCOR_ALBUMS)-1)
-		self.btn_scorealb.setVisible(False)
-		self.sli_scorealb.setValue(0)
-		self.sli_scoretrk.setMaximumSize(16777215, 18)
-		self.sli_scoretrk.setMinimum(0)
-		self.sli_scoretrk.setMaximum(len(self.SCOR_TRACKS)-1)
-		self.btn_scoretrk.setVisible(False)
-		self.sli_scoretrk.setValue(0)
+		self.widgetscorealbum = ScoreWidget(self, self.SCOR_ALBUMS)
+		self.horizontaltitlescore.addWidget(self.widgetscorealbum)
+		self.widgetscoretracks = ScoreWidget(self, self.SCOR_TRACKS)
+		self.horizontalscoretrk.addWidget(self.widgetscoretracks)
 
 		# title album
 		self.lab_album.setOpenLinks(False)
@@ -331,12 +323,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.lab_album.anchorClicked.connect(self.onAnchorClicked)
 		self.labelcover.mousePressEvent = self.onPressCover
 		self.labelcover.signalcoverchgt.connect(self.updateAlbumsDnd)
-		self.sli_scorealb.valueChanged.connect(self.onModifyScoreAlbum)
-		self.sli_scoretrk.valueChanged.connect(self.onModifyScoreTrack)
-		self.btn_scorealb.clicked.connect(self.onPressButtonEnrScoreAlbum)
-		self.btn_scoretrk.clicked.connect(self.onPressButtonEnrScoreTrack)
 		self.playerAudio.signaltxt.connect(self.updateStatusBar)
 		self.playerAudio.signalnum.connect(self.selectPlayingTack)
+		self.widgetscoretracks.signalscorenew.connect(self.saveScoreTrack)
+		self.widgetscorealbum.signalscorenew.connect(self.saveScoreAlbum)
 
 		# DISABLED OPTIONS for OS linux: no foobar, tagscan
 		if platform == "darwin" or platform == 'linux':
@@ -601,9 +591,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			if not self.boolCnx:
 				# no connect
 				self.updateStatusBar("Connect Failed, please select other environment...")
-				# init scrore
-				#self.sli_scorealb.setValue(0)
-				#self.sli_scoretrk.setValue(0)
 			else:
 				# mode sqllite, no menu create base
 				if self.modsql == 'sqlite':
@@ -683,7 +670,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.tbl_albums.selectRow(indexes.row())
 			indexes = self.tbl_albums.currentIndex()
 			indexes = self.tableMdlAlb.SortFilterProxy.mapToSource(indexes)
-		#print('displayAlbum', indexes.isValid())
 		if indexes.isValid():
 			# select thunbnail
 			thun_index = self.tableMdlAlb.SortFilterProxy.mapFromSource(indexes)
@@ -747,8 +733,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			self.lab_album.setHtml(txt_album)
 
 			# fill score album
-			self.sli_scorealb.setValue(self.ScoreAlbum)
-			self.lab_scorealb.setText(displayStars(self.ScoreAlbum, self.SCOR_ALBUMS))
+			self.widgetscorealbum.scorereinit(self.ScoreAlbum)
 
 			# fill cover
 			if self.pathcover[0:len(self.TEXT_NCO)] == self.TEXT_NCO:
@@ -773,7 +758,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 			# select track default
 			if self.tableMdlTrk.rowCount() > 0:
 				self.tbl_tracks.selectRow(0)
-				self.curTrk = 0
+				self.curtrk = 0
 			self.displaytrack()
 			self.setCursor(Qt.ArrowCursor)
 
@@ -781,43 +766,14 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		"""Display info current select track."""
 		if self.tableMdlTrk.rowCount() > 0:
 			self.ScoreTrack = self.tableMdlTrk.getData(self.curtrk, 'SCORE')
-			self.sli_scoretrk.setEnabled(True)
-			self.lab_scoretrk.setEnabled(True)
+			self.widgetscoretracks.setEnabled(True)
 		else:
 			self.curtrk = None
 			self.ScoreTrack = 0
-			self.sli_scoretrk.setEnabled(False)
-			self.lab_scoretrk.setEnabled(False)
-		self.sli_scoretrk.setValue(self.ScoreTrack)
-		self.lab_scoretrk.setText(displayStars(self.ScoreTrack, self.SCOR_TRACKS))
-
-	def onModifyScoreAlbum(self,  event):
-		"""Modify Score Album."""
-		listrows = self.getRowsfromListAlbums()
-		if listrows is not None:
-			self.lab_scorealb.setText(displayStars(self.sli_scorealb.value(), self.SCOR_ALBUMS))
-			# display button update
-			if self.ScoreAlbum != self.sli_scorealb.value():
-				self.btn_scorealb.setVisible(True)
-				nbselect = len(listrows)
-				self.btn_scorealb.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
-				self.btn_scorealb.setText('x' + str(nbselect))
-			else:
-				self.btn_scorealb.setVisible(False)
-
-	def onModifyScoreTrack(self,  event):
-		"""Modify Score Track."""
-		listrows = self.getRowsfromListTracks()
-		if listrows is not None:
-			self.lab_scoretrk.setText(displayStars(self.sli_scoretrk.value(), self.SCOR_TRACKS))
-			if self.ScoreTrack != self.sli_scoretrk.value():
-				self.btn_scoretrk.setVisible(True)
-				nbselect = len(listrows)
-				self.btn_scoretrk.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
-				self.btn_scoretrk.setText('x' + str(nbselect))
-			else:
-				self.btn_scoretrk.setVisible(False)
-
+			self.widgetscoretracks.setEnabled(False)
+		# fill score
+		self.widgetscoretracks.scorereinit(self.ScoreTrack)
+	
 	def onSelectThunbnail(self, row):
 		"""Reception signal : Select thunbnail."""
 		index = self.tableMdlAlb.index(row, 0)
@@ -1039,26 +995,24 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		"""views artworks covers storage."""
 		ArtworksGui(self.AlbumPath, self.albumname, self.pathcover, self.w_main, self.h_main, self.sizeTN, self)
 
-	def onPressButtonEnrScoreAlbum(self):
+	def saveScoreAlbum(self, score):
 		"""Update Score Album."""
+		print('track')
 		listrows = self.getRowsfromListAlbums()
 		if listrows is not None:
-			self.ScoreAlbum = self.sli_scorealb.value()
+			self.ScoreAlbum = score
 			for rowalb in listrows:
-				self.tableMdlAlb.updateScore(rowalb, self.ScoreAlbum)
-		# Button
-		self.btn_scorealb.setVisible(False)
+				self.tableMdlAlb.updateScore(rowalb, score)
 		self.tableMdlAlb.SortFilterProxy.invalidate()
 
-	def onPressButtonEnrScoreTrack(self):
+	def saveScoreTrack(self, score):
 		"""Update Score Track."""
+		print('score')
 		listrows = self.getRowsfromListTracks()
 		if listrows is not None:
-			self.ScoreTrack = self.sli_scoretrk.value()
+			self.ScoreTrack = score
 			for rowtrk in listrows:
-				self.tableMdlTrk.updateScore(rowtrk, self.ScoreTrack)
-		# Button
-		self.btn_scoretrk.setVisible(False)
+				self.tableMdlTrk.updateScore(rowtrk, score)
 		self.tableMdlTrk.SortFilterProxy.invalidate()
 
 	def popUpBaseAlbums(self, position):

@@ -16,10 +16,11 @@ class ConnectDatabase(LibDatabase):
 		"""Init invent, build list albums exists in database."""
 		super(ConnectDatabase, self).__init__(parent)
 		self.parent = parent
-		self.envt = envt
-		self.basesqli = basesqli
-		self.connexionName = connexionName
-		self.Json_params = jsondataini
+		self.envt = envt					# current environnement
+		self.basesqli = basesqli			# name base sqllite
+		self.buildbase = False				# build objets in new database
+		self.connexionName = connexionName	# QT name connection
+		self.Json_params = jsondataini		# params Json file ini 
 
 		self.group_envt = self.Json_params.getMember(envt)
 		self.MODE_SQLI = self.group_envt['typb']

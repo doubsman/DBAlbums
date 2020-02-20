@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2020-02-18, 11:12:19 -->
+<!-- Saved: 2020-02-20, 15:44:58 -->
 <!-- Copyright (C) 2020 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -15,7 +15,6 @@
   <Eol index="0"/>
   <Sources>
     <Source>DBAlbsMini.py</Source>
-    <Source>DBAlbums.ini</Source>
     <Source>DBAlbums.json</Source>
     <Source>DBAlbumsQT5.pyw</Source>
     <Source>DBArtworks.py</Source>
@@ -31,6 +30,7 @@
     <Source>DBPThreads.py</Source>
     <Source>DBParams.py</Source>
     <Source>DBSLoading.py</Source>
+    <Source>DBScoring.py</Source>
     <Source>DBTImpoALB.py</Source>
     <Source>DBTImpoANA.py</Source>
     <Source>DBTImpoCUE.py</Source>
@@ -55,8 +55,6 @@
   </Forms>
   <Others>
     <Other>.gitignore</Other>
-    <Other>DBAlbums.e4p</Other>
-    <Other>DBAlbums.ini</Other>
     <Other>DBHistory.txt</Other>
     <Other>DBInstall.txt</Other>
   </Others>
