@@ -37,34 +37,6 @@ def progress(count, total, suffix=''):
     stdout.flush()
 
 
-class ThemeColors(QObject):
-	def __init__(self, nametheme):
-		"""init theme list"""
-		super(ThemeColors, self).__init__()
-		self.themes = ['blue', 'green', 'brown', 'grey', 'pink']
-		self.curthe = self.themes.index(nametheme)
-		self.selectTheme(nametheme)
-	
-	def selectTheme(self, nametheme):
-		"""Select theme "http://www.rapidtables.com/web/color/html-color-codes.htm"."""
-		if nametheme == self.themes[0]:
-			self.listcolors = ['lightsteelblue', 'lavender', 'lightgray', 'silver', 'dodgerblue']
-		elif nametheme == self.themes[1]:
-			self.listcolors = ['darkseagreen', 'honeydew', 'lightgray', 'silver', 'mediumseagreen']
-		elif nametheme == self.themes[2]:
-			self.listcolors = ['tan', 'papayawhip', 'lightgray', 'silver', 'peru']
-		elif nametheme == self.themes[3]:
-			self.listcolors = ['darkgray', 'azure', 'lightgray', 'silver', 'dimgray']
-		elif nametheme == self.themes[4]:
-			self.listcolors = ['rosybrown', 'lavenderblush', 'lightgray', 'silver', 'sienna']
-	
-	def nextTheme(self):
-		"""Next color theme."""
-		self.curthe += 1 
-		self.curthe = self.curthe % len(self.themes)
-		nametheme = self.themes[self.curthe]
-		self.selectTheme(nametheme)
-
 def displayArrayDict(arraydatadict, colList=None, carcolumn = ' ', carline = '-'):
 	"""Create var string with array."""
 	displaytabulate = ''
@@ -91,17 +63,6 @@ def displayCounters(num=0, text=''):
 	else:
 		strnum = str(num)
 	return (strnum + strtxt)
-
-
-def displayStars(star, scorelist):
-	"""scoring."""
-	maxstar = len(scorelist)-1
-	txt_score = scorelist[star]
-	txt_color = "<font color=yellow><big>" + star*'★' + "</p></big></font>" 
-	txt_color += "<font color=\"black\"><big>" +(maxstar-star)*'☆' + "</big></font>"
-	txt_color += "<br/><font color=\"black\"><small>" + txt_score + " </small></font>" 
-	#return (txt_score+'  '+star*'★'+(maxstar-star)*'☆')
-	return txt_color
 
 
 def centerWidget(widget):

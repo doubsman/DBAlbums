@@ -26,7 +26,7 @@ class ConnectDatabase(LibDatabase):
 		self.MODE_SQLI = self.group_envt['typb']
 		self.BASE_RAC = r'' + self.group_envt['raci']
 		self.RACI_DOU = self.group_envt['cate']
-		self.dbcrea = self.Json_params.getMember('SCRIPT_CREATE')	# scripts creation database
+		self.dbcrea = self.Json_params.getMember('SCRIPTS')	# scripts creation database
 		# open Database
 		if self.MODE_SQLI == 'sqlite':
 			basename = self.basesqli.format(envt = self.envt)
@@ -65,7 +65,7 @@ class ConnectDatabase(LibDatabase):
 	def createObjetsDatabase(self, modesql, boolbuild, qtdblite):
 		"""Create Objects in new database."""
 		self.PATH_PROG = path.dirname(path.abspath(__file__))
-		self.dbcrea = path.join(self.PATH_PROG, 'SQL', self.dbcrea[modesql])
+		self.dbcrea = path.join(self.PATH_PROG, 'SQL', self.dbcrea['create_' + modesql])
 		if self.boolcon:
 			if modesql == 'sqlite':
 				if not(boolbuild):
@@ -118,7 +118,7 @@ class ConnectDatabase(LibDatabase):
 		# last ID
 		if name == 'lastid':
 			if self.MODE_SQLI == 'mssql':
-				request = "SELECT IDENT_CURRENT(‘tablename’)"
+				request = "SELECT IDENT_CURRENT('ALBUMS')"
 			if self.MODE_SQLI == 'mysql':
 				request = "SELECT LAST_INSERT_ID() as lastid;"
 			if self.MODE_SQLI == 'sqlite':

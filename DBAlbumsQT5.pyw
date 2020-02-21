@@ -24,7 +24,8 @@ from PyQt5.QtMultimedia import QMediaPlayer
 from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
 from DBFunction import (runCommand, openFolder, centerWidget, buildalbumnamehtml,
-						displayCounters, displayStars, ThemeColors, qtmymessagehandler)
+						displayCounters, qtmymessagehandler)
+from DBGuiTheme import ThemeColors
 from DBDatabase import ConnectDatabase
 from DBSLoading import DBloadingGui
 from DBAlbsMini import DBAlbumsQT5Mini
@@ -625,9 +626,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 				self.tbl_albums.setModel(self.tableMdlAlb.SortFilterProxy)
 				self.tableMdlAlb.SortFilterProxy.layoutChanged.connect(self.onListAlbumsChanged)
 				qDebug('Fill list albums end')
+				
+				# reinit thumbnail + combos filters
+				if not refresh:
+					# fill thunbnails + combos
+					self.onListAlbumsChanged()
 
-				# fill thunbnails + combos
-				self.onListAlbumsChanged()
 				# data ?
 				if self.tableMdlAlb.rowCount() > 0:
 					if refresh:
@@ -997,7 +1001,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def saveScoreAlbum(self, score):
 		"""Update Score Album."""
-		print('track')
 		listrows = self.getRowsfromListAlbums()
 		if listrows is not None:
 			self.ScoreAlbum = score
@@ -1007,7 +1010,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def saveScoreTrack(self, score):
 		"""Update Score Track."""
-		print('score')
 		listrows = self.getRowsfromListTracks()
 		if listrows is not None:
 			self.ScoreTrack = score

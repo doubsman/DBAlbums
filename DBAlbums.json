@@ -39,9 +39,10 @@
         "envt3"     : "LOSSLESS_SQLSERVER",
         "envt4"     : "LOSSLESS_TEST",
         "envt5"     : "LOSSLESS_TEST_SQLITE",
-        "envt6"     : "MP3_MYSQL",
-        "envt7"     : "MP3_SQLITE",
-        "envt8"     : "MP3_TEST_MYSQL"
+        "envt6"     : "LOSSLESS_TEST_SQLSERVER",
+        "envt7"     : "MP3_MYSQL",
+        "envt8"     : "MP3_SQLITE",
+        "envt9"     : "MP3_TEST_MYSQL"
     },
     "LOSSLESS_CATEGORY": {
         "FOLDER001" : { "Style" : "CLASSIC", "mode" : "D", "folder" : "CLASSIC", "family" : null },
@@ -126,6 +127,16 @@
         "base"      : null,
         "port"      : null
     },
+    "LOSSLESS_TEST_SQLSERVER": {
+        "raci"      : "D:\\WorkDev\\DBAlbumsTEST",
+        "cate"      : "LOSSLESS_CATEGORY",
+        "typb"      : "mssql",
+        "serv"      : "FRACTAL-DB",
+        "user"      : "dbalbums",
+        "pass"      : "dbalbums2017",
+        "base"      : "DBTEST",
+        "port"      : 1433
+    },
     "MP3_MYSQL": {
         "raci"      : "\\\\HOMERSTATION\\_Mp3",
         "cate"      : "MP3_CATEGORY",
@@ -156,9 +167,10 @@
         "base"      : "DBALBUMSMP3TEST",
         "port"      : 3307
     },
-    "SCRIPT_CREATE" : {
-        "mysql"      : "Create_mysql_database.sql",
-        "mssql"      : "Create_mssql_database.sql",
-        "sqlite"     : "Create_sqllite_database.sql"
+    "SCRIPTS" : {
+        "create_mysql"      : "Create_mysql_database.sql",
+        "create_mssql"      : "Create_mssql_database.sql",
+        "create_sqlite"     : "Create_sqllite_database.sql",
+        "control_integrity" : "Control_database.sql"
     }
 }

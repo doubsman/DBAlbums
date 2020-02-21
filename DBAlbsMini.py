@@ -7,7 +7,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QTableView, QPushButton,
 							QMenu, QLineEdit, QStyle, QAbstractItemView, QCompleter)
 from DBDatabase import ConnectDatabase
-from DBFunction import displayCounters, centerWidget, openFolder, ThemeColors
+from DBFunction import displayCounters, centerWidget, openFolder
+from DBGuiTheme import ThemeColors
 from DBModelAbs import ModelTableAlbumsABS	# model tables
 from DBArtworks import CoverViewGui			# viewer image b64
 from DBFileJson import JsonParams

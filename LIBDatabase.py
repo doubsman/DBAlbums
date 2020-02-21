@@ -176,8 +176,8 @@ class LibDatabase(QObject):
 		query = QSqlQuery(dbcnx)
 		if not query.exec_(request):
 			errorText = query.lastError().text()
-			qDebug(query.lastQuery())
-			qDebug(ascii(errorText))
+			qDebug(query.lastQuery().encode("UTF-8"))
+			qDebug(ascii(errorText).encode("UTF-8"))
 		indexes = query.record().count()
 		while query.next():
 			if indexes == 1:
@@ -218,17 +218,18 @@ class LibDatabase(QObject):
 		counter = 0
 		request = ''
 		for line in open(sql_file, 'r'):
-			request += line.rstrip('\n').lstrip('\t')
-			if line.endswith(';\n'):
-				counter = counter + 1
-				qDebug(request)
-				query = QSqlQuery(request, dbcnx)
-				if not query.exec_():
-					errorText = query.lastError().text()
-					qDebug(query.lastQuery())
-					qDebug(errorText)
-				query.clear
-				request = ''
+			if not(line.startswith('--')):
+				request += line.rstrip('\n').lstrip('\t')
+				if line.endswith(';\n'):
+					counter = counter + 1
+					qDebug(request)
+					query = QSqlQuery(request, dbcnx)
+					if not query.exec_():
+						errorText = query.lastError().text()
+						qDebug(query.lastQuery())
+						qDebug(errorText.encode("UTF-8"))
+					query.clear
+					request = ''
 
 	def createDatabaseSqlLite(self, basename, qtname):
 		"""create SqlLite Database."""

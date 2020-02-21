@@ -3,9 +3,9 @@
 
 from os import path
 from PyQt5.QtCore import pyqtSignal, QSize
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import (QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, 
-							QLabel, QStyle, QPushButton)
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QWidget, QGridLayout, QHBoxLayout, QStyle, QPushButton
+
 
 class ScoreWidget(QWidget):
 	"""Widget Thunbnails for main & artworks viewers."""
@@ -23,7 +23,7 @@ class ScoreWidget(QWidget):
 		self.scoredict = scoredict
 		self.nbbutton = 0
 		
-		self.setMaximumSize(QSize(120 , 50))
+		self.setMaximumSize(QSize(100 , 30))
 		self.layout = QHBoxLayout(self)
 		self.layoutsave = QGridLayout(self)
 		self.layout.setContentsMargins(0, 0, 0, 0)
@@ -33,6 +33,7 @@ class ScoreWidget(QWidget):
 		self.btnsav.setVisible(False)
 		self.layoutscore = QGridLayout(self)
 		self.layoutscore.setContentsMargins(0, 0, 0, 0)
+		self.layoutscore.setSpacing(0)
 		self.layoutsave.addWidget(self.btnsav)
 
 		# Create buttons
@@ -58,12 +59,9 @@ class ScoreWidget(QWidget):
 
 	def scorechange(self, newscore):
 		"""Modify button funttion score."""
-		#self.btnsav.setText(self.scoredict[newscore])
 		self.btnsav.setToolTip(self.scoredict[newscore])
 		if newscore == 1 and self.scorecure == 1:
 			newscore = 0
-		elif newscore == 1 and self.scorecure == 0:
-			newscore = 1
 		if newscore != self.scorecure:
 			for colbut in range(0, self.nbbutton):
 				if self.layoutscore.itemAtPosition(0, colbut) != 0:
