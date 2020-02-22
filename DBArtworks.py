@@ -5,13 +5,13 @@ from os import path
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot, QSize
 from PyQt5.QtWidgets import QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, QLabel, QDialog
-from DBFunction import openFolder, getListFiles, centerWidget
+from DBFunction import openFolder, getListFiles
 from DBThunbnai import DBThunbnails
 
 
 class CoverViewGui(QDialog):
 	"""Cover class."""
-	def __init__(self, cover, namealbum, w, h, parent=None):
+	def __init__(self, parent, cover, namealbum, w, h):
 		super(CoverViewGui, self).__init__()
 		self.parent = parent
 		self.resize(w, h)
@@ -22,7 +22,7 @@ class CoverViewGui(QDialog):
 		self.setWindowFlags(Qt.WindowSystemMenuHint)
 		self.setWindowFlags(Qt.WindowCloseButtonHint)
 		self.setWindowIcon(QIcon(self.parent.WINS_ICO))
-		centerWidget(self)
+		self.parent.centerWidget(self)
 		self.namealbum = namealbum
 		self.cover = cover
 		self.label = QLabel(self)
@@ -54,8 +54,7 @@ class CoverViewGui(QDialog):
 # ##################################################################
 class ArtworksGui(QWidget):
 	"""AcdSee lite."""
-	def __init__(self, pathartworks, nametittle, createcover, w, h, sizeTN, parent=None):
-		#super(ArtworksGui, self).__init__(parent)
+	def __init__(self, parent, pathartworks, nametittle, createcover, w, h, sizeTN):
 		super(ArtworksGui, self).__init__()
 		self.parent = parent
 		self.resize(w, h)
@@ -91,9 +90,9 @@ class ArtworksGui(QWidget):
 		if createcover[0:len(self.parent.TEXT_NCO)] != self.parent.TEXT_NCO:
 			self.action_COV.setEnabled(False)
 
-		layout = QVBoxLayout(self)
+		layout = QVBoxLayout()
 		
-		lyaout = QGridLayout(self)
+		lyaout = QGridLayout()
 		lyaout.addWidget(self.thunbnails)
 		lyaout.setContentsMargins(0, 0, 0, 0)
 		lyaout.setSpacing(0)
@@ -103,7 +102,7 @@ class ArtworksGui(QWidget):
 		layout.setSpacing(5)
 		layout.setContentsMargins(7, 7, 7, 7)
 		self.setLayout(layout)
-		centerWidget(self)
+		self.parent.centerWidget(self)
 		self.show()
 
 		# build list covers

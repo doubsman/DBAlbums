@@ -3,9 +3,8 @@
 
 from sys import platform, stdout
 from os import path, walk, listdir
-from PyQt5.QtCore import (QProcess, QObject, QTime, QtInfoMsg, qDebug, 
+from PyQt5.QtCore import (QProcess, QTime, QtInfoMsg, qDebug, 
 						QtWarningMsg, QtCriticalMsg, QtFatalMsg)
-from PyQt5.QtWidgets import QDesktopWidget
 
 
 # Logging
@@ -37,24 +36,6 @@ def progress(count, total, suffix=''):
     stdout.flush()
 
 
-def displayArrayDict(arraydatadict, colList=None, carcolumn = ' ', carline = '-'):
-	"""Create var string with array."""
-	displaytabulate = ''
-	if not colList: 
-		colList = list(arraydatadict[0].keys() if arraydatadict else [])
-	myList = [colList]
-	for item in arraydatadict: 
-		myList.append([str(item[col] or '') for col in colList])
-	colSize = [max(map(len,col)) for col in zip(*myList)]
-	formatStr = (' ' + carcolumn + ' ').join(["{{:<{}}}".format(i) for i in colSize])
-	# Seperating line
-	myList.insert(1, [carline * i for i in colSize])
-	for item in myList: 
-		displaytabulate += '\n' + (formatStr.format(*item))
-	displaytabulate += '\n'
-	return displaytabulate
-
-
 def displayCounters(num=0, text=''):
 	"""format 0 000 + plural."""
 	strtxt = " %s%s" % (text, "s"[num == 1:])
@@ -63,14 +44,6 @@ def displayCounters(num=0, text=''):
 	else:
 		strnum = str(num)
 	return (strnum + strtxt)
-
-
-def centerWidget(widget):
-	"""Center Widget."""
-	qtrectangle = widget.frameGeometry()
-	centerPoint = QDesktopWidget().availableGeometry().center()
-	qtrectangle.moveCenter(centerPoint)
-	widget.move(qtrectangle.topLeft())
 
 
 def getListFiles(folder, masks=None, exact=None):
@@ -136,24 +109,6 @@ def getFolderSize(folder):
 		elif path.isdir(itempath):
 			total_size += getFolderSize(itempath)
 	return total_size
-
-
-def logit(dat, filename):
-	"""Send message to log file."""
-	rt = open(filename, "a")
-	rt.write(dat+"\n")
-	rt.close()
-
-
-def buildCommandPowershell(script, *argv):
-	"""Build command PowerShell."""
-	command = [r'-ExecutionPolicy', 'Unrestricted',
-				'-WindowStyle', 'Hidden',
-				'-File',
-				script]
-	for arg in argv:
-		command += (arg,)
-	return 'powershell.exe', command
 
 
 def runCommand(prog, *argv):

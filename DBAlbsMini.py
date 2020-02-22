@@ -7,14 +7,14 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QTableView, QPushButton,
 							QMenu, QLineEdit, QStyle, QAbstractItemView, QCompleter)
 from DBDatabase import ConnectDatabase
-from DBFunction import displayCounters, centerWidget, openFolder
-from DBGuiTheme import ThemeColors
+from DBFunction import displayCounters, openFolder
+from DBGuiTheme import GuiThemeWidget
 from DBModelAbs import ModelTableAlbumsABS	# model tables
 from DBArtworks import CoverViewGui			# viewer image b64
 from DBFileJson import JsonParams
 
 
-class DBAlbumsQT5Mini(QMainWindow):
+class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget):
 	"""Init mini Gui constants."""
 		
 	def __init__(self, parent=None):
@@ -35,7 +35,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.setWindowTitle(self.TITL_PROG + ' : [' + self.ENVT_DEF + ']')
 		self.h_main = 400
 		self.resize(1248, self.h_main)
-		centerWidget(self)
+		self.centerWidget(self)
 		
 		self.menua = QMenu()
 		self.action_OPF = self.menua.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
@@ -49,7 +49,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.btn_style = QPushButton()
 		self.btn_style.setIcon(self.style().standardIcon(QStyle.SP_DialogResetButton))
 		self.btn_style.setStyleSheet("border: none;")
-		self.btn_style.clicked.connect(lambda: [self.curthe.nextTheme(), self.applyTheme()])
+		self.btn_style.clicked.connect(lambda: [self.nextTheme(), self.applyTheme()])
 		self.statusBar().addPermanentWidget(self.btn_style)
 		
 		self.CnxConnect = ConnectDatabase(self, self.envits, self.FILE__INI, self.BASE_SQLI)
@@ -73,7 +73,7 @@ class DBAlbumsQT5Mini(QMainWindow):
 		self.mytable.setContextMenuPolicy(Qt.CustomContextMenu)
 		self.mytable.customContextMenuRequested.connect(self.popUpTreeAlbums)
 		
-		self.curthe = ThemeColors(self.THEM_COL)
+		self.defineThemes(self.THEM_COL, self.Json_params.getMember('themes'))
 		self.applyTheme()
 			
 		req = self.CnxConnect.getrequest('albumslist', self.modsql)
@@ -149,15 +149,15 @@ class DBAlbumsQT5Mini(QMainWindow):
 					'QScrollBar:horizontal{{height: 14px;}}' \
 					'QTableView{{alternate-background-color: {col3};background-color: {col4};}}' \
 					'QTableView::item:selected{{ background-color:{col5}; color:white;}}'
-		mainstyle = mainstyle.format(col1 = self.curthe.listcolors[0], 
-									col2 = self.curthe.listcolors[1], 
-									col3 = self.curthe.listcolors[2], 
-									col4 = self.curthe.listcolors[3],
-									col5 = self.curthe.listcolors[4])
+		mainstyle = mainstyle.format(col1 = self.listcolors[0], 
+									col2 = self.listcolors[1], 
+									col3 = self.listcolors[2], 
+									col4 = self.listcolors[3],
+									col5 = self.listcolors[4])
 		self.setStyleSheet(mainstyle)
 		# treeview
 		gridstyle = 'QHeaderView::section{{background-color: {col2};border-radius:1px;margin: 1px;padding: 2px;}}'
-		gridstyle = gridstyle.format(col2 = self.curthe.listcolors[1])
+		gridstyle = gridstyle.format(col2 = self.listcolors[1])
 		self.mytable.setStyleSheet(gridstyle)
 
 

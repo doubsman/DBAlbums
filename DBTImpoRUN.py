@@ -4,7 +4,6 @@
 
 from PyQt5.QtCore import QObject, pyqtSignal
 from DBTImpoALB import CardAlbum
-from DBFunction import displayArrayDict
 
 class ReleaseInvent(QObject):
 	signalrun = pyqtSignal(int, str)		# percent / message
@@ -46,9 +45,9 @@ class ReleaseInvent(QObject):
 		self.signalend.emit()
 
 	def emitDisplayCardAlbum(self, cardalbum, cardtracks):
-		self.signaltxt.emit(displayArrayDict([cardalbum], ('ID_CD', 'CATEGORY', 'FAMILY', 'TAGMETHOD', 'POSITIONHDD', 'NAME')), 0)
-		self.signaltxt.emit(displayArrayDict([cardalbum], ('AUDIOTRACKS', 'TRACKS', 'LENGTHDISPLAY', 'CUE', 'PIC', 'SIZE', 'CD', 'YEAR', 'ISRC', 'LABEL', 'TAGISRC', 'TAGLABEL', 'COUNTRY')), 0)
-		self.signaltxt.emit(displayArrayDict(cardtracks, ('TRACKORDER', 'LENGTHDISPLAY', 'ARTIST', 'TITLE', 'TYPEMEDIA', 'DATE', 'GENRE', 'DISC', 'FILENAME')), 0)
+		self.signaltxt.emit(self.displayArrayDict([cardalbum], ('ID_CD', 'CATEGORY', 'FAMILY', 'TAGMETHOD', 'POSITIONHDD', 'NAME')), 0)
+		self.signaltxt.emit(self.displayArrayDict([cardalbum], ('AUDIOTRACKS', 'TRACKS', 'LENGTHDISPLAY', 'CUE', 'PIC', 'SIZE', 'CD', 'YEAR', 'ISRC', 'LABEL', 'TAGISRC', 'TAGLABEL', 'COUNTRY')), 0)
+		self.signaltxt.emit(self.displayArrayDict(cardtracks, ('TRACKORDER', 'LENGTHDISPLAY', 'ARTIST', 'TITLE', 'TYPEMEDIA', 'DATE', 'GENRE', 'DISC', 'FILENAME')), 0)
 		
 	def updateAlbum(self, category, family, folder, idcd):
 		"""Build album card."""
@@ -115,4 +114,19 @@ class ReleaseInvent(QObject):
 	def infoAnalysealbum(self, text, level):
 		self.signaltxt.emit(text, level)
 
-
+	def displayArrayDict(self, arraydatadict, colList=None, carcolumn = ' ', carline = '-'):
+		"""Create var string with array."""
+		displaytabulate = ''
+		if not colList: 
+			colList = list(arraydatadict[0].keys() if arraydatadict else [])
+		myList = [colList]
+		for item in arraydatadict: 
+			myList.append([str(item[col] or '') for col in colList])
+		colSize = [max(map(len,col)) for col in zip(*myList)]
+		formatStr = (' ' + carcolumn + ' ').join(["{{:<{}}}".format(i) for i in colSize])
+		# Seperating line
+		myList.insert(1, [carline * i for i in colSize])
+		for item in myList: 
+			displaytabulate += '\n' + (formatStr.format(*item))
+		displaytabulate += '\n'
+		return displaytabulate

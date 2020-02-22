@@ -6,7 +6,6 @@ from PyQt5.QtGui import QFont, QMovie
 from PyQt5.QtCore import Qt, pyqtSlot, QDateTime
 from PyQt5.QtSql import QSqlQueryModel
 from PyQt5.QtWidgets import QWidget
-from DBFunction import centerWidget
 from Ui_DBLOADING import Ui_LoadingWindow
 
 
@@ -19,7 +18,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		self.parent = parent
 		self.setWindowFlags(Qt.WindowStaysOnTopHint)
 		self.setWindowFlags(Qt.SplashScreen)
-		centerWidget(self)
+		self.parent.centerWidget(self)
 		# font
 		font = QFont()
 		font.setFamily(self.parent.FONT_MAI)
@@ -86,11 +85,11 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		mainstyle = 'QWidget{{background-color: {col2};}}' \
 					'QScrollBar:vertical{{width: 14px;}}' \
 					'QScrollBar:horizontal{{height: 14px;}}'
-		mainstyle = mainstyle.format(col2 = self.parent.curthe.listcolors[1])
+		mainstyle = mainstyle.format(col2 = self.parent.listcolors[1])
 		self.setStyleSheet(mainstyle)
 		gridstyle = 'alternate-background-color: {col3};background-color: {col4};'
-		gridstyle = gridstyle.format(col3 = self.parent.curthe.listcolors[2], 
-									col4 = self.parent.curthe.listcolors[3])
+		gridstyle = gridstyle.format(col3 = self.parent.listcolors[2], 
+									col4 = self.parent.listcolors[3])
 		self.tableWid1.setStyleSheet(gridstyle)
 		self.tableWid2.setStyleSheet(gridstyle)
 		self.tableWid3.setStyleSheet(gridstyle)

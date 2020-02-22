@@ -9,7 +9,7 @@ from PyQt5.QtCore import (Qt, qDebug, pyqtSignal,
 						pyqtSlot, QThread, QDateTime)
 from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit, QScrollBar
 from PyQt5.QtSql import QSqlQuery
-from DBFunction import centerWidget, openFolder
+from DBFunction import openFolder
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import BuildInvent
 from DBTImpoRUN import ReleaseInvent
@@ -58,7 +58,7 @@ class myThreadTimer(QThread):
 class InventGui(QWidget, Ui_UpdateWindows):
 	signalend = pyqtSignal()
 	
-	def __init__(self, list_albums, list_columns, list_category, typeupdate, envt, themecolor, parent=None):
+	def __init__(self, parent, list_albums, list_columns, list_category, typeupdate, envt):
 		"""Init Gui, start invent"""
 		super(InventGui, self).__init__()
 		self.setupUi(self)
@@ -66,14 +66,13 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.resize(self.parent.WIDT_MAIN, self.parent.HEIG_MAIN-300)
 		self.setWindowIcon(QIcon(self.parent.WINS_ICO))
 		self.setWindowTitle(self.parent.TITL_PROG + ' : Update Database (Environment : ' + envt + ' mode : ' + typeupdate + ')')
-		centerWidget(self)
+		self.parent.centerWidget(self)
 		
 		self.list_albums = list_albums
 		self.list_category = list_category
 		self.list_columns = list_columns
 		self.envits = envt
 		self.typeupdate = typeupdate
-		self.curthe = themecolor
 		self.logname = QDateTime.currentDateTime().toString('yyMMddhhmmss') + "_UPDATE_DATABASE_" + self.envits + ".log"
 		self.logname = path.join(self.parent.LOGS_PROG, self.logname)
 		self.total_p = None
@@ -306,13 +305,13 @@ class InventGui(QWidget, Ui_UpdateWindows):
 					'QScrollBar:vertical{{width: 14px;}}' \
 					'QScrollBar:horizontal{{height: 14px;}}' \
 					'QTableView::item:selected{{ background-color:{col5}; color:white;}}'
-		mainstyle = mainstyle.format(col1 = self.curthe.listcolors[0],
-									col2 = self.curthe.listcolors[1], 
-									col5 = self.curthe.listcolors[4])
+		mainstyle = mainstyle.format(col1 = self.parent.listcolors[0],
+									col2 = self.parent.listcolors[1], 
+									col5 = self.parent.listcolors[4])
 		self.setStyleSheet(mainstyle)
 		gridstyle = 'alternate-background-color: {col3};background-color: {col4};'
-		gridstyle = gridstyle.format(col3 = self.curthe.listcolors[2], 
-									col4 = self.curthe.listcolors[3])
+		gridstyle = gridstyle.format(col3 = self.parent.listcolors[2], 
+									col4 = self.parent.listcolors[3])
 		self.tbl_update.setStyleSheet(gridstyle)
 
 	def closeImport(self):

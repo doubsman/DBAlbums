@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2020, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.67"
+__version__ = "1.68"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -23,9 +23,9 @@ from PyQt5.QtMultimedia import QMediaPlayer
 # Gui QtDesigner : compiler .ui sans Eric6: pyuic5 file.ui -o Ui_main_file.py
 from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
-from DBFunction import (runCommand, openFolder, centerWidget, buildalbumnamehtml,
+from DBFunction import (runCommand, openFolder, buildalbumnamehtml,
 						displayCounters, qtmymessagehandler)
-from DBGuiTheme import ThemeColors
+from DBGuiTheme import GuiThemeWidget
 from DBDatabase import ConnectDatabase
 from DBSLoading import DBloadingGui
 from DBAlbsMini import DBAlbumsQT5Mini
@@ -41,7 +41,7 @@ from DBParams import ParamsGui
 from DBFileJson import JsonParams
 from DBScoring import ScoreWidget
 
-class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
+class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 	"""DBAlbums main constants."""
 	qDebug('Start')
 	PATH_PROG = path.dirname(path.abspath(__file__))
@@ -144,7 +144,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.statusbar.setFont(self.fontbig)
 
 		# center
-		centerWidget(self)
+		self.centerWidget(self)
 
 		# menu bar
 		self.setWindowTitle(self.TITL_PROG)
@@ -213,7 +213,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.playerAudio.volumeDescBtn.setFont(self.fontbig)
 		self.playerAudio.volumeIncBtn.setFont(self.fontbig)
 		self.statusbar.addPermanentWidget(self.playerAudio)
-		layout = QHBoxLayout(self)
+		layout = QHBoxLayout()
 		layout.setAlignment(Qt.AlignCenter)
 		self.sbframe = QFrame(self)
 		self.sbframe.setMinimumSize(QSize(80, 0))
@@ -283,7 +283,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 							"Search www.Discogs.com...", self.searchDiscogs)
 
 		# theme color
-		self.curthe = ThemeColors(self.THEM_COL)
+		self.defineThemes(self.THEM_COL, self.Json_params.getMember('themes'))
 		self.applyTheme()
 
 		# timer Delay action QLineEdit
@@ -299,7 +299,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		self.btn_zoomout.clicked.connect(self.zoomOutThnunnails)
 		self.btn_zoomin.clicked.connect(self.zoomInThnunnails)
 		self.btn_nogrid.clicked.connect(self.noDisplayTab)
-		self.btn_themecolor.clicked.connect(lambda: [self.curthe.nextTheme(), self.applyTheme()])
+		self.btn_themecolor.clicked.connect(lambda: [self.nextTheme(), self.applyTheme()])
 		self.com_category.currentIndexChanged.connect(self.onFiltersChanged)
 		self.com_family.currentIndexChanged.connect(self.onFiltersChanged)
 		self.com_label.currentIndexChanged.connect(self.onFiltersChanged)
@@ -424,24 +424,24 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 					'QScrollArea{{background-color: {col2};}}' \
 					'QToolTip{{border-radius:3px;background-color: {col2};}}' \
 					'QTableView::item:selected{{ background-color:{col5}; color:white;}}'
-		mainstyle = mainstyle.format(col1 = self.curthe.listcolors[0],
-									col2 = self.curthe.listcolors[1],
-									col3 = self.curthe.listcolors[2],
-									col4 = self.curthe.listcolors[3],
-									col5 = self.curthe.listcolors[4])
+		mainstyle = mainstyle.format(col1 = self.listcolors[0],
+									col2 = self.listcolors[1],
+									col3 = self.listcolors[2],
+									col4 = self.listcolors[3],
+									col5 = self.listcolors[4])
 		self.setStyleSheet(mainstyle)
 		# treeview
 		gridstyle = 'QHeaderView::section{{background-color: {col2};border-radius:1px;margin: 1px;padding: 2px;}}'
-		gridstyle = gridstyle.format(col2 = self.curthe.listcolors[1])
+		gridstyle = gridstyle.format(col2 = self.listcolors[1])
 		self.tbl_albums.setStyleSheet(gridstyle)
 		self.tbl_tracks.setStyleSheet(gridstyle)
 		# labels title album
 		labestyle = 'background-color: {col2};border: 5px solid {col2};border-radius: 10px;'
-		labestyle = labestyle.format(col2 = self.curthe.listcolors[1])
+		labestyle = labestyle.format(col2 = self.listcolors[1])
 		self.lab_label.setStyleSheet(labestyle)
 		self.lab_album.setStyleSheet(labestyle)
 		# thunnail widget
-		self.thunbnails.scrollAreaWidgetthunbnails.setStyleSheet('background-color: {col2};'.format(col2 = self.curthe.listcolors[1]))
+		self.thunbnails.scrollAreaWidgetthunbnails.setStyleSheet('background-color: {col2};'.format(col2 = self.listcolors[1]))
 
 	def showLoadingGui(self, event=None):
 		"""display splashscreen infos."""
@@ -993,11 +993,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		"""Display large cover MD5."""
 		if self.pathcover is not None:
 			if self.pathcover[0:len(self.TEXT_NCO)] != self.TEXT_NCO:
-				CoverViewGui(self.coveral, self.albumname, self.h_main, self.h_main, self)
+				CoverViewGui(self, self.coveral, self.albumname, self.h_main, self.h_main)
 
 	def viewArtworks(self):
 		"""views artworks covers storage."""
-		ArtworksGui(self.AlbumPath, self.albumname, self.pathcover, self.w_main, self.h_main, self.sizeTN, self)
+		ArtworksGui(self, self.AlbumPath, self.albumname, self.pathcover, self.w_main, self.h_main, self.sizeTN)
 
 	def saveScoreAlbum(self, score):
 		"""Update Score Album."""
@@ -1125,17 +1125,16 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 
 	def openParams(self):
 		"""Open Gui PARAMS"""
-		self.dbparams = ParamsGui(self.envits, self.FILE__INI, self.curthe)
+		self.dbparams = ParamsGui(self, self.envits, self.FILE__INI)
 
 	def buildInventPython(self, typeupdate):
 		"""Browse folder base for update."""
-		self.prepareInvent = InventGui(self.tableMdlAlb.arraydata,
+		self.prepareInvent = InventGui(self, 
+									self.tableMdlAlb.arraydata,
 									self.tableMdlAlb.myindex,
 									self.lstcat,
 									typeupdate,
-									self.envits,
-									self.curthe,
-									self)
+									self.envits)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 		self.prepareInvent.startAnalyse()
 
@@ -1161,13 +1160,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 							self.curAlb,
 							self.albumname,
 							self.Json_params.convertUNC(self.AlbumPath)])
-		self.prepareInvent = InventGui(self.tableMdlAlb.arraydata,
+		self.prepareInvent = InventGui(self,
+								self.tableMdlAlb.arraydata,
 								self.tableMdlAlb.myindex,
 								self.lstcat,
 								'UPDATE',
-								self.envits,
-								self.curthe,
-								self)
+								self.envits)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 		self.prepareInvent.realiseActions(list_actions)
 
@@ -1202,13 +1200,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 										self.tableMdlAlb.getData(ind, 'NAME'),
 										newpathalbum])
 			if list_actions:
-				self.prepareInvent = InventGui(self.tableMdlAlb.arraydata,
+				self.prepareInvent = InventGui(self,
+										self.tableMdlAlb.arraydata,
 										self.tableMdlAlb.myindex,
 										self.lstcat,
 										'UPDATE',
-										self.envits,
-										self.curthe,
-										self)
+										self.envits)
 				self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 				self.prepareInvent.realiseActions(list_actions)
 				self.playerAudio.addMediaslist(self.homMed, self.curtrk, self.albumname)
@@ -1232,13 +1229,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 									self.tableMdlAlb.getData(ind, 'ID_CD'),
 									self.tableMdlAlb.getData(ind, 'NAME'),
 									pathname])
-			self.prepareInvent = InventGui(self.tableMdlAlb.arraydata,
+			self.prepareInvent = InventGui(self,
+									self.tableMdlAlb.arraydata,
 									self.tableMdlAlb.myindex,
 									self.lstcat,
 									'UPDATE',
-									self.envits,
-									self.curthe,
-									self)
+									self.envits)
 			self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 			self.prepareInvent.realiseActions(list_actions)
 
@@ -1246,12 +1242,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow):
 		"""Force update database for a request selection."""
 		request="SELECT CATEGORY, FAMILY, 'UPDATE', ID_CD, NAME, PATHNAME FROM ALBUMS WHERE PIC > 0 AND ALBUMS.COVER='<No Picture>' AND ID_CD> 12142;"
 		list_actions = self.CnxConnect.sqlToArray(request)
-		self.prepareInvent = InventGui(self.tableMdlAlb.arraydata,
+		self.prepareInvent = InventGui(self,
+									self.tableMdlAlb.arraydata,
 									self.tableMdlAlb.myindex,
 									self.lstcat,
 									'UPDATE',
-									self.envits,
-									self.curthe)
+									self.envits)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 		self.prepareInvent.realiseActions(list_actions)
 

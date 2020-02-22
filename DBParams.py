@@ -6,7 +6,7 @@ from sys import platform
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import qDebug
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, QMessageBox
-from DBFunction import centerWidget, runCommand
+from DBFunction import runCommand
 from DBFileJson import JsonParams
 from Ui_DBPARAMS import Ui_ParamsJson
 
@@ -14,9 +14,9 @@ from Ui_DBPARAMS import Ui_ParamsJson
 class ParamsGui(QWidget, Ui_ParamsJson):
 	"""Display GUI file Json parameters."""
 
-	def __init__(self, envt, fileini, themecolor, parent=None):
+	def __init__(self, parent, envt, fileini):
 		"""Init Gui, start invent"""
-		super(ParamsGui, self).__init__(parent)
+		super(ParamsGui, self).__init__()
 		self.parent = parent
 		self.setupUi(self)
 
@@ -84,12 +84,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.resize(self.WIDT_MAIN, self.HEIG_MAIN - 250)
 		self.setWindowIcon(QIcon(self.WINS_ICO))
 		self.setWindowTitle(self.TITL_PROG + path.join(self.PATH_PROG, self.FILE__INI))
-		centerWidget(self)
+		self.parent.centerWidget(self)
 		
 		self.envits = envt
 		self.ENVT_DEF = self.envits
-		self.curthe = themecolor
 		self.NAME_EVT, self.CURT_EVT = self.Json_params.buildListEnvt(self.envits)
+		self.CURT_EVT = self.parent.curthe
 		self.comboBox_Envt.addItems(self.NAME_EVT)
 		self.comboBox_Envt.setCurrentIndex(self.CURT_EVT)
 		
@@ -216,13 +216,13 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 					'QScrollBar:vertical{{width: 14px;}}' \
 					'QScrollBar:horizontal{{height: 14px;}}' \
 					'QTableWidget::item:selected{{ background-color:{col5}; color:white;}}'
-		mainstyle = mainstyle.format(col1 = self.curthe.listcolors[0],
-									col2 = self.curthe.listcolors[1], 
-									col5 = self.curthe.listcolors[4])
+		mainstyle = mainstyle.format(col1 = self.parent.listcolors[0],
+									col2 = self.parent.listcolors[1], 
+									col5 = self.parent.listcolors[4])
 		self.setStyleSheet(mainstyle)
 		gridstyle = 'alternate-background-color: {col3};background-color: {col4};'
-		gridstyle = gridstyle.format(col3 = self.curthe.listcolors[2], 
-									col4 = self.curthe.listcolors[3])
+		gridstyle = gridstyle.format(col3 = self.parent.listcolors[2], 
+									col4 = self.parent.listcolors[3])
 									
 		self.tableWidget_general.setStyleSheet(gridstyle)
 		self.tableWidget_envt.setStyleSheet(gridstyle)

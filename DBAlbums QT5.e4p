@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2020-02-20, 15:44:58 -->
+<!-- Saved: 2020-02-22, 21:50:57 -->
 <!-- Copyright (C) 2020 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -24,6 +24,7 @@
     <Source>DBFileJson.py</Source>
     <Source>DBFoobarpl.py</Source>
     <Source>DBFunction.py</Source>
+    <Source>DBGuiTheme.py</Source>
     <Source>DBHistory.txt</Source>
     <Source>DBInstall.txt</Source>
     <Source>DBModelAbs.py</Source>
