@@ -24,14 +24,15 @@ class ScoreWidget(QWidget):
 		self.nbbutton = 0
 		
 		self.setMaximumSize(QSize(100 , 30))
-		self.layout = QHBoxLayout(self)
-		self.layoutsave = QGridLayout(self)
+		self.layout = QHBoxLayout()
 		self.layout.setContentsMargins(0, 0, 0, 0)
 		self.layout.setSpacing(0)
+		
+		self.layoutsave = QGridLayout()
 		self.btnsav = QPushButton(self)
 		self.btnsav.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
 		self.btnsav.setVisible(False)
-		self.layoutscore = QGridLayout(self)
+		self.layoutscore = QGridLayout()
 		self.layoutscore.setContentsMargins(0, 0, 0, 0)
 		self.layoutscore.setSpacing(0)
 		self.layoutsave.addWidget(self.btnsav)

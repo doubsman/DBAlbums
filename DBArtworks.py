@@ -4,12 +4,12 @@
 from os import path
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot, QSize
-from PyQt5.QtWidgets import QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, QLabel, QDialog
 from DBFunction import openFolder, getListFiles, centerWidget
 from DBThunbnai import DBThunbnails
 
 
-class CoverViewGui(QWidget):
+class CoverViewGui(QDialog):
 	"""Cover class."""
 	def __init__(self, cover, namealbum, w, h, parent=None):
 		super(CoverViewGui, self).__init__()

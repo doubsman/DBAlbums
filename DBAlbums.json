@@ -33,6 +33,19 @@
         "2"         : "top",
         "3"         : "best\\selection"
     },
+    "scripts" : {
+        "create_mysql"      : "Create_mysql_database.sql",
+        "create_mssql"      : "Create_mssql_database.sql",
+        "create_sqlite"     : "Create_sqllite_database.sql",
+        "control_integrity" : "Control_database.sql"
+    },
+    "themes" : {
+        "blue"      : ["lightsteelblue", "lavender", "lightgray", "silver", "dodgerblue"],
+        "green"     : ["darkseagreen", "honeydew", "lightgray", "silver", "mediumseagreen"],
+        "brown"     : ["tan", "papayawhip", "lightgray", "silver", "peru"],
+        "grey"      : ["darkgray", "azure", "lightgray", "silver", "dimgray"],
+        "pink"      : ["rosybrown", "lavenderblush", "lightgray", "silver", "sienna"]
+    },
     "environments": {
         "envt1"     : "LOSSLESS_MYSQL",
         "envt2"     : "LOSSLESS_SQLITE",
@@ -166,11 +179,5 @@
         "pass"      : "MwRbBR2HA8PFQjuu",
         "base"      : "DBALBUMSMP3TEST",
         "port"      : 3307
-    },
-    "SCRIPTS" : {
-        "create_mysql"      : "Create_mysql_database.sql",
-        "create_mssql"      : "Create_mssql_database.sql",
-        "create_sqlite"     : "Create_sqllite_database.sql",
-        "control_integrity" : "Control_database.sql"
     }
 }

@@ -26,7 +26,7 @@ class ConnectDatabase(LibDatabase):
 		self.MODE_SQLI = self.group_envt['typb']
 		self.BASE_RAC = r'' + self.group_envt['raci']
 		self.RACI_DOU = self.group_envt['cate']
-		self.dbcrea = self.Json_params.getMember('SCRIPTS')	# scripts creation database
+		self.dbcrea = self.Json_params.getMember('scripts')	# scripts creation database
 		# open Database
 		if self.MODE_SQLI == 'sqlite':
 			basename = self.basesqli.format(envt = self.envt)
