@@ -18,7 +18,7 @@
         "font01_ttx": "Lucida Console",
         "font00_unx": "Carlito",
         "font00_siz": 12,
-        "name_theme": "blue"
+        "name_theme": "brown"
     },
     "programs": {
         "txt_win"   : "C:\\Program Files (x86)\\Notepad++\\notepad++.exe",
@@ -43,8 +43,9 @@
         "blue"      : ["lightsteelblue", "lavender", "lightgray", "silver", "dodgerblue"],
         "green"     : ["darkseagreen", "honeydew", "lightgray", "silver", "mediumseagreen"],
         "brown"     : ["tan", "papayawhip", "lightgray", "silver", "peru"],
+        "pink"      : ["rosybrown", "lavenderblush", "lightgray", "silver", "sienna"],
         "grey"      : ["darkgray", "azure", "lightgray", "silver", "dimgray"],
-        "pink"      : ["rosybrown", "lavenderblush", "lightgray", "silver", "sienna"]
+        "dark"      : ["lightslategray", "gainsboro", "lightgray", "silver", "dimgray"]
     },
     "environments": {
         "envt1"     : "LOSSLESS_MYSQL",

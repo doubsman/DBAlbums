@@ -143,9 +143,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 		self.chb_searchtracks.setFont(self.fontmini)
 		self.statusbar.setFont(self.fontbig)
 
-		# center
-		self.centerWidget(self)
-
 		# menu bar
 		self.setWindowTitle(self.TITL_PROG)
 		self.setWindowIcon(QIcon(self.WINS_ICO))
@@ -166,22 +163,19 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 			# resize main one line for thunbnails
 			self.thunnbline = 1
 			self.h_main = self.h_main - (self.sizeTN * self.thunnbline)
-			# table: new height main no deploy !!!!
-			#self.tbl_albums.setMaximumSize(QSize(16777215, 300))
-			# main: adapt new height
 			self.setMinimumSize(QSize(self.w_main, self.h_main - 370))
 		self.resize(self.w_main, self.h_main)
 
 		# thunbnails list
 		self.thunbnails = DBThunbnails(self, self.sizeTN, self.thunnbline)
 		self.thunbnails.setMaximumSize(QSize(16777215, self.sizeTN * self.thunnbline))
-		self.layout2thunbnails.addWidget(self.thunbnails)
+		self.horizontalLayout_THU.addWidget(self.thunbnails)
 
 		# scroring
 		self.widgetscorealbum = ScoreWidget(self, self.SCOR_ALBUMS)
-		self.horizontaltitlescore.addWidget(self.widgetscorealbum)
+		self.horizontalLayoutLAB.addWidget(self.widgetscorealbum)
 		self.widgetscoretracks = ScoreWidget(self, self.SCOR_TRACKS)
-		self.horizontalscoretrk.addWidget(self.widgetscoretracks)
+		self.horizontalLayoutSCR.addWidget(self.widgetscoretracks)
 
 		# title album
 		self.lab_album.setOpenLinks(False)
@@ -281,6 +275,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 							"Rename Album...", self.renameAlbums)
 		self.action_DIS = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'discogs.png')),
 							"Search www.Discogs.com...", self.searchDiscogs)
+
+		# center
+		self.centerWidget(self)
 
 		# theme color
 		self.defineThemes(self.THEM_COL, self.Json_params.getMember('themes'))
