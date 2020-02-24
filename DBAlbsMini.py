@@ -23,14 +23,15 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget):
 		self.BASE_SQLI = path.join(self.PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
 		self.RESS_ICOS = path.join(self.PATH_PROG, 'IMG' , 'ICO')
 		self.VERS_PROG = '1.01'
-		self.TITL_PROG = "♫ DBAlbums mini v{v} (2020)".format(v=VERS_PROG)
-		self.FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
-		Json_params = JsonParams(self.FILE__INI)
-		group_dbalbums = Json_params.getMember('dbalbums')
+		self.TITL_PROG = "♫ DBAlbums mini v{v} (2020)".format(v=self.VERS_PROG)
+		self.FILE__INI = path.join(self.PATH_PROG, 'DBAlbums.json')
+		self.Json_params = JsonParams(self.FILE__INI)
+		group_dbalbums = self.Json_params.getMember('dbalbums')
 		self.WINS_ICO = path.join(self.PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
 		self.PICM_NCO = path.join(self.PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
 		self.THEM_COL = group_dbalbums['name_theme']
 		self.ENVT_DEF = group_dbalbums['envt_deflt']
+		self.NAME_EVT, self.CURT_EVT = self.Json_params.buildListEnvt(self.ENVT_DEF)
 		self.setWindowIcon(QIcon(self.WINS_ICO))
 		self.setWindowTitle(self.TITL_PROG + ' : [' + self.ENVT_DEF + ']')
 		self.h_main = 400
@@ -51,13 +52,13 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget):
 		self.btn_style.setStyleSheet("border: none;")
 		self.btn_style.clicked.connect(lambda: [self.nextTheme(), self.applyTheme()])
 		self.statusBar().addPermanentWidget(self.btn_style)
-		
-		self.CnxConnect = ConnectDatabase(self, self.envits, self.FILE__INI, self.BASE_SQLI)
+
+		self.CnxConnect = ConnectDatabase(self, self.NAME_EVT[self.CURT_EVT], self.BASE_SQLI, self.Json_params, 'dbmini')
 		boolconnect = self.CnxConnect.boolcon
 		self.dbbase = self.CnxConnect.qtdbdb
 		self.modsql = self.CnxConnect.MODE_SQLI
 		self.rootDk = self.CnxConnect.BASE_RAC
-		self.lstcat = self.Json_params.buildListcategory(self.envits)
+		self.lstcat = self.Json_params.buildListcategory(self.NAME_EVT[self.CURT_EVT])
 
 		autoList = self.CnxConnect.sqlToArray(self.CnxConnect.getrequest('autocompletion'))
 		self.com_autcom = QCompleter(autoList, self.textsearch)
@@ -76,7 +77,7 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget):
 		self.defineThemes(self.THEM_COL, self.Json_params.getMember('themes'))
 		self.applyTheme()
 			
-		req = self.CnxConnect.getrequest('albumslist', self.modsql)
+		req = self.CnxConnect.getrequest('albumslist')
 		self.model = ModelTableAlbumsABS(self, req)
 		self.model.SortFilterProxy.layoutChanged.connect(self.listChanged)
 		self.model.SortFilterProxy.sort(-1)
@@ -119,6 +120,7 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget):
 		pass
 
 	def displayTitle(self):
+		txt_sch = (r'Search Result "' + self.textsearch.text() + '" :' if len(self.textsearch.text()) > 0 else '')
 		if int(((self.model.SortFilterProxy.cpt_len/60/60)/24)*10)/10 < 1:
 			# seoncd -> Hours
 			txt_len = str(int(((self.model.SortFilterProxy.cpt_len/60/60))*10)/10) + ' Hours'
@@ -129,10 +131,8 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget):
 			txt_siz =  str(self.model.SortFilterProxy.cpt_siz) + ' Mo'
 		else:
 			txt_siz = str(int(self.model.SortFilterProxy.cpt_siz/1024)) + ' Go'
-		txt_sch = (self.textsearch.text() if len(self.textsearch.text()) > 0 else 'all')
-		message = "Search Result \"{sch}\" :  {alb} | {trk} | {cds} | {siz} | {dur}"
-		message = message.format(alb=displayCounters(self.model.SortFilterProxy.rowCount(), 'Album'),
-								cds=displayCounters(self.model.SortFilterProxy.cpt_cds, 'CD'),
+			message = "{sch} {alb} | {trk} | {siz} | {dur}"
+		message = message.format(alb=displayCounters(self.model.SortFilterProxy.rowCount(), 'Product'),
 								trk=displayCounters(self.model.SortFilterProxy.cpt_trk, 'Track'),
 								siz=txt_siz,
 								dur=txt_len,

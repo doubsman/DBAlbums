@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+__author__ = "doubsman"
+__copyright__ = "Copyright 2020, DBAlbums Project"
+__credits__ = ["doubsman"]
+__license__ = "GPL"
+__version__ = "1.00"
+__maintainer__ = "doubsman"
+__email__ = "doubsman@doubsman.fr"
+__status__ = "Production"
+
+
 from os import  path, remove
 from copy import deepcopy
 from time import sleep

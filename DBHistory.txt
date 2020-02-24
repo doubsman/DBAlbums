@@ -1,13 +1,11 @@
 DBALbums 2.0
 ------------
 
-double-clic list albums -> play album			OK 1.66
-problem suppression (commit?)
-problem orphelin threat time					?? 1.66
-log update not end creation						OK 1.66
 list views with filters backup
 listen score update auto 1 after 1min
 best display time
+thread thumbnail
+thread update
 
 """ DBAlbums History Version : Doubsman dev.
 1.63 ini to json file 

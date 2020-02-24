@@ -512,8 +512,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 			else:
 				txt_siz = str(int(self.tableMdlAlb.SortFilterProxy.cpt_siz/1024)) + ' Go'
 			message = "{sch} {alb} | {trk} | {cds} | {siz} | {dur}"
-			message = message.format(alb=displayCounters(self.tableMdlAlb.SortFilterProxy.rowCount(), 'Album'),
-									cds=displayCounters(self.tableMdlAlb.SortFilterProxy.cpt_cds, 'CD'),
+			message = message.format(alb=displayCounters(self.tableMdlAlb.SortFilterProxy.rowCount(), 'Product'),
+									cds=displayCounters(self.tableMdlAlb.SortFilterProxy.cpt_cds, 'Face'),
 									trk=displayCounters(self.tableMdlAlb.SortFilterProxy.cpt_trk, 'Track'),
 									siz=txt_siz,
 									dur=txt_len,

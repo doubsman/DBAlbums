@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2020-02-22, 21:50:57 -->
+<!-- Saved: 2020-02-24, 16:29:14 -->
 <!-- Copyright (C) 2020 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -43,6 +43,7 @@
     <Source>DBThunbnai.py</Source>
     <Source>LIBDatabase.py</Source>
     <Source>Ui_DBALBUMS.py</Source>
+    <Source>Ui_DBAlbums_Uimain.py</Source>
     <Source>Ui_DBLOADING.py</Source>
     <Source>Ui_DBPARAMS.py</Source>
     <Source>Ui_DBUPDATE.py</Source>
@@ -50,6 +51,7 @@
   </Sources>
   <Forms>
     <Form>DBALBUMS.ui</Form>
+    <Form>DBAlbums_Uimain.ui</Form>
     <Form>DBLOADING.ui</Form>
     <Form>DBPARAMS.ui</Form>
     <Form>DBUPDATE.ui</Form>
