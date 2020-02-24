@@ -7,14 +7,15 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QTableView, QPushButton,
 							QMenu, QLineEdit, QStyle, QAbstractItemView, QCompleter)
 from DBDatabase import ConnectDatabase
-from DBFunction import displayCounters, openFolder
+from DBFunction import displayCounters
 from DBGuiTheme import GuiThemeWidget
 from DBModelAbs import ModelTableAlbumsABS	# model tables
 from DBArtworks import CoverViewGui			# viewer image b64
 from DBFileJson import JsonParams
+from LIBFilesProc import FilesProcessing
 
 
-class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget):
+class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget, FilesProcessing):
 	"""Init mini Gui constants."""
 		
 	def __init__(self, parent=None):
@@ -114,7 +115,7 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget):
 		indexes = self.model.SortFilterProxy.mapToSource(indexes[0])
 		self.currow = indexes.row()
 		albumpath = self.model.getData(self.currow, 'PATHNAME')
-		openFolder(albumpath)
+		self.folder_open(albumpath)
 
 	def listChanged(self):
 		pass

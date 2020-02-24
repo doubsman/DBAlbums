@@ -5,12 +5,13 @@
 from os import path
 from copy import deepcopy
 from PyQt5.QtCore import QObject, qDebug
-from DBFunction import getListFilesNoSubFolders
 from DBTImpoCUE import CueParser
 from DBTImpoTAG import DBMediasTags
+# general Libs
+from LIBFilesProc import FilesProcessing
 
 
-class CardTracks(QObject):
+class CardTracks(FilesProcessing, QObject):
 	DCardTrack = 	{	'ID_TRACK': None,
 						'ID_CD': None,
 						'FILENAME': None,
@@ -86,7 +87,7 @@ class CardTracks(QObject):
 		"""transfert file media tags to Card Tracks, no sub folders."""
 		mask_amedias = ('.flac','.ape','.wma','.mp3','.wv','.aac','.mpc')
 		listcardtrack = []
-		listtracksfile = list(getListFilesNoSubFolders(pathfile, mask_amedias))
+		listtracksfile = self.folder_list_files(pathfile, False, mask_amedias)
 		for track in listtracksfile:
 			mycardtrack = deepcopy(self.DCardTrack)
 			#print hex(id(mycardtrack))

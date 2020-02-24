@@ -23,8 +23,7 @@ from PyQt5.QtMultimedia import QMediaPlayer
 # Gui QtDesigner : compiler .ui sans Eric6: pyuic5 file.ui -o Ui_main_file.py
 from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
-from DBFunction import (runCommand, openFolder, buildalbumnamehtml,
-						displayCounters, qtmymessagehandler)
+from DBFunction import buildalbumnamehtml, qtmymessagehandler
 from DBGuiTheme import GuiThemeWidget
 from DBDatabase import ConnectDatabase
 from DBSLoading import DBloadingGui
@@ -37,11 +36,14 @@ from DBThunbnai import DBThunbnails
 from DBDragDrop import QLabeldnd
 from DBPThreads import DBPThreadsListStyle
 from DBTImports import InventGui
-from DBParams import ParamsGui
+from DBParams   import ParamsGui
 from DBFileJson import JsonParams
-from DBScoring import ScoreWidget
+from DBScoring  import ScoreWidget
+# general Libs
+from LIBFilesProc import FilesProcessing
 
-class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
+
+class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessing):
 	"""DBAlbums main constants."""
 	qDebug('Start')
 	PATH_PROG = path.dirname(path.abspath(__file__))
@@ -258,7 +260,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_FileDialogDetailedView),
 							"Params Environments Json...", lambda: self.openParams())
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
-							"Open Logs Folder...", lambda flog=self.LOGS_PROG: openFolder(flog))
+							"Open Logs Folder...", lambda flog=self.LOGS_PROG: self.folder_open(flog))
 		# popup albums
 		self.menua = QMenu()
 		self.action_VIA = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'art.png')),
@@ -511,10 +513,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 				txt_siz =  str(self.tableMdlAlb.SortFilterProxy.cpt_siz) + ' Mo'
 			else:
 				txt_siz = str(int(self.tableMdlAlb.SortFilterProxy.cpt_siz/1024)) + ' Go'
-			message = "{sch} {alb} | {trk} | {cds} | {siz} | {dur}"
-			message = message.format(alb=displayCounters(self.tableMdlAlb.SortFilterProxy.rowCount(), 'Product'),
-									cds=displayCounters(self.tableMdlAlb.SortFilterProxy.cpt_cds, 'Face'),
-									trk=displayCounters(self.tableMdlAlb.SortFilterProxy.cpt_trk, 'Track'),
+			message = "{sch} {alb} | {trk} | {siz} | {dur}"
+			message = message.format(alb=self.formatCounter(self.tableMdlAlb.SortFilterProxy.rowCount(), 'Product'),
+									trk=self.formatCounter(self.tableMdlAlb.SortFilterProxy.cpt_trk, 'Track'),
 									siz=txt_siz,
 									dur=txt_len,
 									sch=txt_sch)
@@ -1031,9 +1032,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 				if len(listrows) > 1:
 					self.action_VIA.setEnabled(False)
 					self.action_OPF.setEnabled(False)
-					self.action_EXA.setText("Export cover/csv " + displayCounters(len(listrows), 'Album(s)')+"...")
-					self.action_UAP.setText("Update " + displayCounters(len(listrows), 'Album(s)') + "...")
-					self.action_RAP.setText("Rename " + displayCounters(len(listrows), 'Album(s)') + "...")
+					self.action_EXA.setText("Export cover/csv " + self.formatCounter(len(listrows), 'Album(s)')+"...")
+					self.action_UAP.setText("Update " + self.formatCounter(len(listrows), 'Album(s)') + "...")
+					self.action_RAP.setText("Rename " + self.formatCounter(len(listrows), 'Album(s)') + "...")
 					self.action_TAG.setEnabled(False)
 					self.menua.exec_(self.tbl_albums.viewport().mapToGlobal(position))
 
@@ -1104,15 +1105,24 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 		else:
 			return None
 
+	def formatCounter(self, num=0, text=''):
+		"""format 0 000 + plural."""
+		strtxt = " %s%s" % (text, "s"[num == 1:])
+		if num > 9999:
+			strnum = '{0:,}'.format(num).replace(",", " ")
+		else:
+			strnum = str(num)
+		return (strnum + strtxt)
+
 	def getFolder(self):
 		"""Open album folder."""
-		openFolder(self.AlbumPath)
+		self.folder_open(self.AlbumPath)
 
 	def openTagScan(self):
 		"""Open program TAGs. edit."""
 		# reinit player for access file
 		self.playerAudio.addMediaslist(None, 0, None)
-		runCommand(self.TAGS_SCAN, self.AlbumPath)
+		self.execute_command(self.TAGS_SCAN, self.AlbumPath)
 
 	def searchDiscogs(self):
 		"""Search album in discogs."""
@@ -1279,7 +1289,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 								textcol = textcol.toString('dd/mm/yyyy hh:mm:ss')
 							textrow.append(textcol)
 						wr.writerow(textrow)
-				openFolder(path.dirname(filename))
+				self.folder_open(path.dirname(filename))
 				self.statusBar().showMessage('Export csv list Albums /n Create file csv Sucessfull to :'+filename, 7000)
 			elif extension == '.jpg':
 				# extract base64\mysql to file JPEG
@@ -1289,7 +1299,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget):
 					filecover = filecover+'.'+extension
 					self.CnxConnect.sqlImageToFile(filecover, self.tableMdlAlb.getData(ind, 'ID_CD'))
 				self.statusBar().showMessage('Export covers Albums /n Create covers Sucessfull to :'+path.dirname(filename), 7000)
-				openFolder(path.dirname(filename))
+				self.folder_open(path.dirname(filename))
 
 	@pyqtSlot()
 	def closeEvent(self, event):

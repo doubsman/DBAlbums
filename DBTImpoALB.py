@@ -7,14 +7,15 @@ from sys import platform
 from re import match
 from copy import deepcopy
 from PyQt5.QtCore import QObject, QDateTime, pyqtSignal
-from DBFunction import getListFiles, getListFolders, getFolderSize, getListFilesNoSubFolders
 from DBTImpoCUE import CueParser
 from DBTImpoTRK import CardTracks
 from DBTImpoTAG import DBMediasTags
 from DBFileJson import JsonParams
+# general Libs
+from LIBFilesProc import FilesProcessing
 
 
-class CardAlbum(QObject):
+class CardAlbum(FilesProcessing, QObject):
 	signaltxt = pyqtSignal(str, int)		# message / level display
 	
 	mask_artwork = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')	
@@ -67,14 +68,14 @@ class CardAlbum(QObject):
 		cardalbum = deepcopy(self.DCardAlbum)
 		listcardtrack = []
 		cardalbum['NAME'] = path.basename(pathalbum).replace('_',' ').replace('-WEB','')
-		list_tracksaudio = list(getListFiles(pathalbum, self.mask_amedias))
+		list_tracksaudio = self.folder_list_files(pathalbum, True, self.mask_amedias)
 		cardalbum['AUDIOTRACKS'] = len(list_tracksaudio)
 		if cardalbum['AUDIOTRACKS'] > 0:
 			cardalbum['CATEGORY'] = category
 			cardalbum['FAMILY'] = family
 			cardalbum['PATHNAME'] = pathalbum
-			cardalbum['PIC'] = len(list(getListFiles(pathalbum, self.mask_artwork)))
-			cardalbum['SIZE'] = int(round(getFolderSize(pathalbum)/1024/1024, 0))
+			cardalbum['PIC'] = len(self.folder_list_files(pathalbum, True, self.mask_artwork))
+			cardalbum['SIZE'] = int(round(self.folder_size(pathalbum)/1024/1024, 0))
 			if platform == "darwin" or platform == 'linux':
 				carseparat = '/'
 			else:
@@ -84,13 +85,13 @@ class CardAlbum(QObject):
 			cardalbum['POSITIONHDD'] = pathalbum.split(carseparat)[-3] + carseparat + pathalbum.split(carseparat)[-2]
 			
 			# cover path
-			coversfile = list(getListFilesNoSubFolders(pathalbum, self.mask_acovers, 'Exactly'))
+			coversfile = self.folder_list_files(pathalbum, False, self.mask_acovers, 'Exactly')
 			coversfile.sort()
 			if len(coversfile) > 0:
 				# get first
 				cardalbum['COVER'] = coversfile[0]
 			else:
-				coversfile = list(getListFiles(pathalbum, self.mask_acovers, 'Exactly'))
+				coversfile = self.folder_list_files(pathalbum, True, self.mask_acovers, 'Exactly')
 				coversfile.sort()
 				if len(coversfile) > 0:
 					cardalbum['COVER'] = coversfile[0]
@@ -118,7 +119,7 @@ class CardAlbum(QObject):
 				
 			# list valid CUEsheet file
 			listfilescue = []
-			filescue = list(getListFiles(pathalbum, ('.cue', )))
+			filescue = self.folder_list_files(pathalbum, True, ('.cue', ))
 			for filecue in filescue:
 				try:
 					parser = CueParser(filecue)
@@ -137,7 +138,7 @@ class CardAlbum(QObject):
 			if len(listfilescue) < cardalbum['AUDIOTRACKS']:
 				cardalbum['TAGMETHOD'] = 'TAG'
 				# album folder numbers of CD ?
-				audioroot = list(getListFilesNoSubFolders(pathalbum,  self.mask_amedias))
+				audioroot = self.folder_list_files(pathalbum, False,  self.mask_amedias)
 				if len(audioroot) > 0:
 					cardalbum['CD'] += 1
 					albumcardtracks = CardTracks().defineListTracksFiles(pathalbum)
@@ -146,11 +147,11 @@ class CardAlbum(QObject):
 							cardtrack['TRACKORDER'] = str(cardtrack['TRACKNUMBER'].split('/')[0]).zfill(2)
 					listcardtrack += albumcardtracks
 				elif len(audioroot) < cardalbum['AUDIOTRACKS']:
-					albumfolders = getListFolders(pathalbum)
+					albumfolders = self.folder_list_folders(pathalbum)
 					albumfolders.sort(reverse=False)
 					for albumfolder in albumfolders:
 						fullalbumfolder = path.join(pathalbum, albumfolder)
-						if len(list(getListFilesNoSubFolders(fullalbumfolder, self.mask_amedias))) > 0:
+						if len(self.folder_list_files(fullalbumfolder, False, self.mask_amedias)) > 0:
 							cardalbum['CD'] += 1
 							albumcardtracks = CardTracks().defineListTracksFiles(fullalbumfolder)
 							counter = 1
@@ -230,7 +231,7 @@ class CardAlbum(QObject):
 			
 			# cover if one image artwork
 			if cardalbum['COVER'] == self.TEXT_NCO and cardalbum['PIC'] == 1:
-				cardalbum['COVER'] = list(getListFiles(pathalbum, self.mask_artwork))[0]
+				cardalbum['COVER'] = self.folder_list_files(pathalbum, True, self.mask_artwork)[0]
 			
 			# cover tag
 			if cardalbum['COVER'] == self.TEXT_NCO:
@@ -274,7 +275,7 @@ class CardAlbum(QObject):
 				
 			# cover from multiple pics
 			if cardalbum['COVER'] == self.TEXT_NCO and cardalbum['PIC'] > 1:
-				listcovers = list(getListFiles(pathalbum, self.mask_artwork))
+				listcovers = self.folder_list_files(pathalbum, True, self.mask_artwork)
 				for listcover in listcovers:
 					if 'front' in listcover.lower():
 						cardalbum['COVER'] = listcover

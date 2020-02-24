@@ -7,10 +7,11 @@ from hashlib import md5
 from datetime import datetime
 from time import ctime
 from PyQt5.QtCore import QObject, pyqtSignal
-from DBFunction import getListFolders, getListFiles, getFolderSize
+# general Libs
+from LIBFilesProc import FilesProcessing
 
 
-class BuildInvent(QObject):
+class BuildInvent(FilesProcessing, QObject):
 	# signal
 	signalchgt = pyqtSignal(int, str)		# signal browse
 	signaltext = pyqtSignal(str, int)
@@ -51,7 +52,7 @@ class BuildInvent(QObject):
 			self.signaltext.emit('ANALYSE FOLDERS: ' + '.'.join(item for item in rowcategory if item), 1)
 			# LOSSLESS invent
 			if 'LOSSLESS' in self.envt:
-				listsubfolders = list(getListFolders(cracines))
+				listsubfolders = self.folder_list_folders(cracines)
 				for fposition in listsubfolders:
 					# define family
 					boolfami, family = self.convertPositionFamily(fposition)
@@ -92,7 +93,7 @@ class BuildInvent(QObject):
 	def analyseSubFolders(self, category, family, folder, typefolder):
 		"""Browse sub folders or sub/sub folders"""
 		if typefolder == 'S':
-			listsubfolders = list(getListFolders(folder))
+			listsubfolders = self.folder_list_folders(folder)
 			for subfolder in listsubfolders:
 				subfolder = path.join(folder, subfolder)
 				self.numbers += 1
@@ -100,11 +101,11 @@ class BuildInvent(QObject):
 				self.testUpdateAlbum(category, family, subfolder)
 		elif typefolder == 'D':
 			# sub folders
-			listsubfolders = list(getListFolders(folder))
+			listsubfolders = self.folder_list_folders(folder)
 			for subfolder in listsubfolders:
 				subfolder = path.join(folder, subfolder)
 				self.signaltext.emit('ANALYSE SUBFOLDERS: ' + subfolder, 1)
-				listsubsubfolders = list(getListFolders(subfolder))
+				listsubsubfolders = self.folder_list_folders(subfolder)
 				for subsubfolder in listsubsubfolders:
 					subsubfolder = path.join(subfolder, subsubfolder)
 					self.numbers += 1
@@ -130,7 +131,7 @@ class BuildInvent(QObject):
 
 	def testUpdateAlbum(self, category, family, folder):
 		"""Test album for init statut NEW, UPDATE, PRESENT, DELETE."""
-		nb_amedias = len(list(getListFiles(folder, self.mask_amedias)))
+		nb_amedias = len(self.folder_list_files(folder, True, self.mask_amedias))
 		if nb_amedias > 0:
 			# exist in database ?
 			testalbum = self.albumExist(folder)
@@ -138,13 +139,13 @@ class BuildInvent(QObject):
 				self.list_invent.append(testalbum[self.list_columns.index('ID_CD')])
 				if self.typeupdate == 'UPDATE':
 					# Compare size
-					sizefolder = int(round(getFolderSize(folder)/1024/1024, 0))
+					sizefolder = int(round(self.folder_size(folder)/1024/1024, 0))
 					# Compare date
-					modifydate = ctime(max(stat(root).st_mtime for root in list(getListFiles(folder))))
+					modifydate = ctime(max(stat(root).st_mtime for root in self.folder_list_files(folder)))
 					modifydate = datetime.strptime(modifydate, "%a %b %d %H:%M:%S %Y")
 					#datefolder = ctime(path.getmtime(folder))
 					#datefolder = datetime.strptime(datefolder, "%a %b %d %H:%M:%S %Y")
-					creationdate = ctime(max(stat(root).st_ctime for root in list(getListFiles(folder))))
+					creationdate = ctime(max(stat(root).st_ctime for root in self.folder_list_files(folder)))
 					creationdate = datetime.strptime(creationdate, "%a %b %d %H:%M:%S %Y")
 					recentdate = max(modifydate, creationdate)
 					if isinstance(testalbum[self.list_columns.index('MODIFIED')], str):

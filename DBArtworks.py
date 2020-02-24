@@ -5,7 +5,6 @@ from os import path
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot, QSize
 from PyQt5.QtWidgets import QMenu, QWidget, QSizePolicy, QGridLayout, QVBoxLayout, QLabel, QDialog
-from DBFunction import openFolder, getListFiles
 from DBThunbnai import DBThunbnails
 
 
@@ -83,7 +82,7 @@ class ArtworksGui(QWidget):
 		
 		# popup albums
 		self.menua = QMenu()
-		self.action_OFC = self.menua.addAction("Open Folder...", lambda c=pathartworks: openFolder(c))
+		self.action_OFC = self.menua.addAction("Open Folder...", lambda c=pathartworks: self.parent.folder_open(c))
 		self.action_COV = self.menua.addAction("Create cover file...", self.createFileCover)
 		
 		# create cover option only if no cover file
@@ -107,7 +106,7 @@ class ArtworksGui(QWidget):
 
 		# build list covers
 		self.nametittle = nametittle
-		self.fileslist = list(getListFiles(pathartworks, self.parent.MASKCOVER))
+		self.fileslist = self.parent.folder_list_files(pathartworks, True, self.parent.MASKCOVER)
 		self.filelist = self.fileslist[0]
 
 		# build thunbnails

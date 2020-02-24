@@ -6,7 +6,6 @@ from sys import platform
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import qDebug
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, QMessageBox
-from DBFunction import runCommand
 from DBFileJson import JsonParams
 from Ui_DBPARAMS import Ui_ParamsJson
 
@@ -123,7 +122,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		
 	def openJson(self):
 		"""Open json file with text editor."""
-		runCommand(self.EDIT_TEXT, self.FILE__INI)
+		self.parent.execute_command(self.EDIT_TEXT, self.FILE__INI)
 	
 	def writeFileJson(self):
 		self.Json_params.saveJson()

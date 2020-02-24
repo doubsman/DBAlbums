@@ -9,7 +9,6 @@ from PyQt5.QtCore import (Qt, qDebug, pyqtSignal,
 						pyqtSlot, QThread, QDateTime)
 from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit, QScrollBar
 from PyQt5.QtSql import QSqlQuery
-from DBFunction import openFolder
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import BuildInvent
 from DBTImpoRUN import ReleaseInvent
@@ -284,7 +283,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		indexes = self.tbl_update.selectedIndexes()
 		self.currow = indexes[0].row()
 		albumpath = self.tableMdlUpd._array[self.currow][5]
-		openFolder(albumpath)
+		self.parent.folder_open(albumpath)
 
 	def popUpTreeUpdate(self, position):
 		self.menua.exec_(self.tbl_update.viewport().mapToGlobal(position))

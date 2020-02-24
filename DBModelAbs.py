@@ -116,7 +116,6 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		self.listidtxt = []
 		self.cpt_siz = 0
 		self.cpt_len = 0
-		self.cpt_cds = 0
 		self.cpt_trk = 0
 		self.listcat = []
 		self.listfam = []
@@ -144,7 +143,6 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		self.filtcoun = filtcoun
 		self.cpt_siz = 0
 		self.cpt_len = 0
-		self.cpt_cds = 0
 		self.cpt_trk = 0
 		self.listcat = []
 		self.listfam = []
@@ -202,8 +200,6 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		# cumuls
 		index = self.parent.index(sourceRow, self.parent.myindex.index('SIZE'), sourceParent)
 		self.cpt_siz += self.parent.data(index).value()
-		index = self.parent.index(sourceRow, self.parent.myindex.index('CD'), sourceParent)
-		self.cpt_cds += self.parent.data(index).value()
 		index = self.parent.index(sourceRow, self.parent.myindex.index('TRACKS'), sourceParent)
 		self.cpt_trk += self.parent.data(index).value()
 		index = self.parent.index(sourceRow, self.parent.myindex.index('LENGTHDISPLAY'), sourceParent)

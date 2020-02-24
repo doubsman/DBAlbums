@@ -4,7 +4,6 @@
 from os import path
 from PyQt5.QtCore import qDebug, QObject, pyqtSignal
 from PyQt5.QtSql import QSqlQuery
-from DBFunction import getListFiles
 # dev ext https://github.com/rr-/fpl_reader
 from fpl_reader import read_playlist
 
@@ -23,7 +22,7 @@ class playlistFoobar2000(QObject):
 
 	def dirPlaylist(self):
 		"""build list of playlists foobar 2000."""
-		playfiles = list(getListFiles(self.folder, (".fpl",)))
+		playfiles = self.parent.folder_list_files(self.folder, True, (".fpl",))
 		for playfile in playfiles:
 			self.readPlaylist(playfile)
 	
