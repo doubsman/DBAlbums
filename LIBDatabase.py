@@ -227,19 +227,19 @@ class LibDatabase(QObject):
 			dbcnx = self.qtdbdb
 		counter = 0
 		request = ''
+		query = QSqlQuery(dbcnx)
 		for line in open(sql_file, 'r'):
 			if not(line.startswith('--')):
 				request += line.rstrip('\n').lstrip('\t')
 				if line.endswith(';\n'):
 					counter = counter + 1
 					qDebug(request)
-					query = QSqlQuery(request, dbcnx)
-					if not query.exec_():
+					if not query.exec_(request):
 						errorText = query.lastError().text()
 						qDebug(query.lastQuery())
 						qDebug(errorText.encode("UTF-8"))
-					query.clear
 					request = ''
+		query.clear
 
 	def createDatabaseSqlLite(self, basename, qtname):
 		"""create SqlLite Database."""

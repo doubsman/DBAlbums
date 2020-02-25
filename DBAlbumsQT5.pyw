@@ -15,30 +15,29 @@ from sys import platform, argv, exit
 from os import path, getcwd, rename
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
-from PyQt5.QtCore import (Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, #QCoreApplication,
-						QSize, QRect, qInstallMessageHandler, qDebug, QUrl)
+from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QInputDialog, QLineEdit,
 						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout)
 from PyQt5.QtMultimedia import QMediaPlayer
 # Gui QtDesigner : compiler .ui sans Eric6: pyuic5 file.ui -o Ui_main_file.py
 from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
-from DBFunction import buildalbumnamehtml, qtmymessagehandler
-from DBGuiTheme import GuiThemeWidget
-from DBDatabase import ConnectDatabase
-from DBSLoading import DBloadingGui
-from DBAlbsMini import DBAlbumsQT5Mini
-from DBModelAbs import ModelTableAlbumsABS, ModelTableTracksABS
-from DBArtworks import ArtworksGui, CoverViewGui
-from DBFoobarpl import playlistFoobar2000
-from DBAuPlayer import DBPlayer
-from DBThunbnai import DBThunbnails
-from DBDragDrop import QLabeldnd
-from DBPThreads import DBPThreadsListStyle
-from DBTImports import InventGui
-from DBParams   import ParamsGui
-from DBFileJson import JsonParams
-from DBScoring  import ScoreWidget
+from DBFormatALB import StringFormatAlbum
+from DBGuiTheme  import GuiThemeWidget
+from DBDatabase  import ConnectDatabase
+from DBSLoading  import DBloadingGui
+from DBAlbsMini  import DBAlbumsQT5Mini
+from DBModelAbs  import ModelTableAlbumsABS, ModelTableTracksABS
+from DBArtworks  import ArtworksGui, CoverViewGui
+from DBFoobarpl  import playlistFoobar2000
+from DBAuPlayer  import DBPlayer
+from DBThunbnai  import DBThunbnails
+from DBDragDrop  import QLabeldnd
+from DBPThreads  import DBPThreadsListStyle
+from DBTImports  import InventGui
+from DBParams    import ParamsGui
+from DBFileJson  import JsonParams
+from DBScoring   import ScoreWidget
 # general Libs
 from LIBFilesProc import FilesProcessing
 
@@ -190,6 +189,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		# tab list no header row
 		self.tbl_albums.verticalHeader().setVisible(False)
 		self.tbl_tracks.verticalHeader().setVisible(False)
+		self.tbl_albums.setSelectionBehavior(self.tbl_albums.SelectRows)
+		self.tbl_tracks.setSelectionBehavior(self.tbl_tracks.SelectRows)
 
 		# progres bar
 		self.gaugeBar = QProgressBar(self)
@@ -284,6 +285,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		# theme color
 		self.defineThemes(self.THEM_COL, self.Json_params.getMember('themes'))
 		self.applyTheme()
+
+		# Album formmat html
+		self.FormatAlb = StringFormatAlbum(self)
+		#self.lab_label.setMaximumSize(150, 16777215)
 
 		# timer Delay action QLineEdit
 		self.m_typingTimer = QTimer(self)
@@ -501,7 +506,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		"""Build main message status bar."""
 		txt_sch = (r'Search Result "' + self.lin_search.text() + '" :' if len(self.lin_search.text()) > 0 else '')
 		if self.tableMdlAlb.rowCount()==0:
-			message = "Search Result \"{sch}\" : nothing".format(sch=txt_sch)
+			message = "{sch} nothing".format(sch=txt_sch)
 		else:
 			if int(((self.tableMdlAlb.SortFilterProxy.cpt_len/60/60)/24)*10)/10 < 1:
 				# convert second -> Hours
@@ -521,6 +526,15 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 									sch=txt_sch)
 		self.maintitle = message
 		self.updateStatusBar(self.maintitle)
+
+	def formatCounter(self, num=0, text=''):
+		"""format 0 000 + plural."""
+		strtxt = " %s%s" % (text, "s"[num == 1:])
+		if num > 9999:
+			strnum = '{0:,}'.format(num).replace(",", " ")
+		else:
+			strnum = str(num)
+		return (strnum + strtxt)
 
 	def updateStatusBar(self, message, t=0):
 		"""Update Status Bar Message"""
@@ -676,13 +690,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			# select thunbnail
 			thun_index = self.tableMdlAlb.SortFilterProxy.mapFromSource(indexes)
 			self.thunbnails.selectThunbnail(thun_index.row())
-			#self.thunbnails.selectThunbnail(indexsrc.row())
-			#if self.tableMdlAlb.getData(indexes.row(), 'NAME') != self.albumname:
 			self.setCursor(Qt.WaitCursor)
 			self.posrow = indexsrc.row()
 			self.currow = indexes.row()
 			self.curAlb = self.tableMdlAlb.getData(self.currow, 'ID_CD')
-			#self.curMd5 = self.tableMdlAlb.getData(self.currow, 'MD5')
 			self.albumname = self.tableMdlAlb.getData(self.currow, 'NAME')
 			self.ScoreAlbum = self.tableMdlAlb.getData(self.currow, 'SCORE')
 			self.pathcover = self.tableMdlAlb.getData(self.currow, 'COVER')
@@ -702,27 +713,16 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			for i in range(len(self.tableMdlTrk.T_C_WIDTH)):
 				self.tbl_tracks.setColumnWidth(i, self.tableMdlTrk.T_C_WIDTH[i])
 			self.tbl_tracks.verticalHeader().setDefaultSectionSize(self.tableMdlTrk.C_HEIGHT)
-			#self.tbl_tracks.resizeColumnsToContents()
-			#self.tbl_tracks.resizeRowsToContents()
-			#self.tbl_tracks.horizontalHeader().setStretchLastSection(True)
 
-			# build stats album
-			cpt_len = self.tableMdlTrk.getSum('LENGTHDISPLAY')
-			txt_album, img_lab = buildalbumnamehtml(self.albumname,
-										str(self.tableMdlAlb.getData(self.currow, 'LABEL')),
-										str(self.tableMdlAlb.getData(self.currow, 'ISRC')),
-										str(self.tableMdlAlb.getData(self.currow, 'COUNTRY')),
-										str(self.tableMdlAlb.getData(self.currow, 'YEAR')),
-										int(self.tableMdlAlb.getData(self.currow, 'CD')),
-										self.tableMdlTrk.rowCount(),
-										int(((cpt_len/60)*10)/10),
-										int(self.tableMdlAlb.getData(self.currow, 'PIC')),
-										self.AlbumPath,
-										self.RESS_LABS, self.RESS_ICOS, self.RESS_FLAG)
+			# build album html
+			self.FormatAlb.formatAlbums()
+			txt_album = self.FormatAlb.infoshtml
+			img_lab = self.FormatAlb.imglabel
+
 			# img label
 			if img_lab is not None:
 				plabel = QPixmap(img_lab)
-				self.lab_label.setPixmap(plabel)
+				self.lab_label.setPixmap(plabel.scaled(300, 160, Qt.KeepAspectRatio))
 				self.lab_label.setVisible(True)
 			else:
 				self.lab_label.setText('<b>' + self.tableMdlAlb.getData(self.currow, 'CATEGORY') + '</b>')
@@ -1105,15 +1105,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		else:
 			return None
 
-	def formatCounter(self, num=0, text=''):
-		"""format 0 000 + plural."""
-		strtxt = " %s%s" % (text, "s"[num == 1:])
-		if num > 9999:
-			strnum = '{0:,}'.format(num).replace(",", " ")
-		else:
-			strnum = str(num)
-		return (strnum + strtxt)
-
 	def getFolder(self):
 		"""Open album folder."""
 		self.folder_open(self.AlbumPath)
@@ -1320,8 +1311,6 @@ if __name__ == '__main__':
 	PATH_PROG = path.dirname(path.abspath(__file__))
 	#chdir(PATH_PROG)
 	QDir.setCurrent(PATH_PROG)
-	# debug
-	qInstallMessageHandler(qtmymessagehandler)
 	app = QApplication(argv)
 	if len(argv)>1 and argv[1] == 'MINI':
 		DB = DBAlbumsQT5Mini()

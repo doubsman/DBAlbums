@@ -7,7 +7,6 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QTableView, QPushButton,
 							QMenu, QLineEdit, QStyle, QAbstractItemView, QCompleter)
 from DBDatabase import ConnectDatabase
-from DBFunction import displayCounters
 from DBGuiTheme import GuiThemeWidget
 from DBModelAbs import ModelTableAlbumsABS	# model tables
 from DBArtworks import CoverViewGui			# viewer image b64
@@ -55,7 +54,6 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget, FilesProcessing):
 		self.statusBar().addPermanentWidget(self.btn_style)
 
 		self.CnxConnect = ConnectDatabase(self, self.NAME_EVT[self.CURT_EVT], self.BASE_SQLI, self.Json_params, 'dbmini')
-		boolconnect = self.CnxConnect.boolcon
 		self.dbbase = self.CnxConnect.qtdbdb
 		self.modsql = self.CnxConnect.MODE_SQLI
 		self.rootDk = self.CnxConnect.BASE_RAC
@@ -133,8 +131,8 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget, FilesProcessing):
 		else:
 			txt_siz = str(int(self.model.SortFilterProxy.cpt_siz/1024)) + ' Go'
 			message = "{sch} {alb} | {trk} | {siz} | {dur}"
-		message = message.format(alb=displayCounters(self.model.SortFilterProxy.rowCount(), 'Product'),
-								trk=displayCounters(self.model.SortFilterProxy.cpt_trk, 'Track'),
+		message = message.format(alb=self.formatCounter(self.model.SortFilterProxy.rowCount(), 'Product'),
+								trk=self.formatCounter(self.model.SortFilterProxy.cpt_trk, 'Track'),
 								siz=txt_siz,
 								dur=txt_len,
 								sch=txt_sch)
@@ -160,6 +158,16 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget, FilesProcessing):
 		gridstyle = 'QHeaderView::section{{background-color: {col2};border-radius:1px;margin: 1px;padding: 2px;}}'
 		gridstyle = gridstyle.format(col2 = self.listcolors[1])
 		self.mytable.setStyleSheet(gridstyle)
+
+	def formatCounter(self, num=0, text=''):
+		"""format 0 000 + plural."""
+		strtxt = " %s%s" % (text, "s"[num == 1:])
+		if num > 9999:
+			strnum = '{0:,}'.format(num).replace(",", " ")
+		else:
+			strnum = str(num)
+		return (strnum + strtxt)
+
 
 
 if __name__ == '__main__':

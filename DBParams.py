@@ -5,7 +5,7 @@ from os import path
 from sys import platform
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import qDebug
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, QMessageBox
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, QMessageBox, QStyle
 from DBFileJson import JsonParams
 from Ui_DBPARAMS import Ui_ParamsJson
 
@@ -91,6 +91,11 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.CURT_EVT = self.parent.curthe
 		self.comboBox_Envt.addItems(self.NAME_EVT)
 		self.comboBox_Envt.setCurrentIndex(self.CURT_EVT)
+		
+		# decos
+		self.btn_save.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
+		self.btn_open.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
+		self.btn_quit.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
 		
 		# events
 		self.comboBox_Envt.currentIndexChanged.connect(self.updateEnvt)

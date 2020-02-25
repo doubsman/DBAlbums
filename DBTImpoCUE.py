@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from PyQt5.QtCore import qDebug, qInstallMessageHandler
+from PyQt5.QtCore import qDebug
 from copy import deepcopy
-from DBFunction import qtmymessagehandler
 
 
 class CueParser(object):
@@ -146,21 +145,21 @@ class CueParser(object):
 		pass
 
 
-if __name__ == '__main__':
-	qInstallMessageHandler(qtmymessagehandler)
-	cuefile = r'E:\Work\ZTest\TAG_bluid\TRANCE\Download\2017\[OVNICD089] Ovnimoon & Rigel - Omnipresent Technology (2014)\Ovnimoon & Rigel - Omnipresent Technology.cue'
-	parser = CueParser(cuefile, 4560)
-	header = parser.get_data_global()
-	for key in header.keys():
-		print(key, '=', header[key])
-	print("---------")	
-	listtracks = parser.get_data_tracks()
-	print(len(listtracks), 'Tracks')
-	print("---------")	
-	for track in listtracks:
-		for key in track.keys():
-			print(key, '=', track[key])
-		print("---------")		
+#if __name__ == '__main__':
+#	qInstallMessageHandler(qtmymessagehandler)
+#	cuefile = r'E:\Work\ZTest\TAG_bluid\TRANCE\Download\2017\[OVNICD089] Ovnimoon & Rigel - Omnipresent Technology (2014)\Ovnimoon & Rigel - Omnipresent Technology.cue'
+#	parser = CueParser(cuefile, 4560)
+#	header = parser.get_data_global()
+#	for key in header.keys():
+#		print(key, '=', header[key])
+#	print("---------")	
+#	listtracks = parser.get_data_tracks()
+#	print(len(listtracks), 'Tracks')
+#	print("---------")	
+#	for track in listtracks:
+#		for key in track.keys():
+#			print(key, '=', track[key])
+#		print("---------")		
 
 
 

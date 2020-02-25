@@ -7,7 +7,7 @@ from time import time, sleep
 from PyQt5.QtGui import QFont, QIcon, QColor, QTextCursor
 from PyQt5.QtCore import (Qt, qDebug, pyqtSignal,
 						pyqtSlot, QThread, QDateTime)
-from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit, QScrollBar
+from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit
 from PyQt5.QtSql import QSqlQuery
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import BuildInvent

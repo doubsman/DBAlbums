@@ -34,7 +34,7 @@ class FilesProcessing(QObject):
 
 	def folder_list_files(self, folderPath, boolsubfolders=True, masks=None, exact=None):
 		"""Build files list."""
-		self.listfiles = []
+		listfiles = []
 		for folderName, subfolders, filenames in walk(folderPath):
 			if subfolders and subfolders:
 				for subfolder in subfolders:
@@ -43,22 +43,22 @@ class FilesProcessing(QObject):
 				if masks is None:
 					# no mask
 					if filename not in self.blacklist:
-						self.listfiles.append(path.join(folderName, filename))
+						listfiles.append(path.join(folderName, filename))
 				else:
 					# same
 					if exact:
 						if filename.lower() in masks:
 							if filename not in self.blacklist:
-									self.listfiles.append(path.join(folderName, filename))
+									listfiles.append(path.join(folderName, filename))
 					else:
 						# mask joker *.
 						for xmask in masks:
 							if filename[-len(xmask):].lower() in xmask:
 								if filename not in self.blacklist:
-									self.listfiles.append(path.join(folderName, filename))
+									listfiles.append(path.join(folderName, filename))
 			if not boolsubfolders:
 				break
-		return self.listfiles
+		return listfiles
 
 	def folder_list_folders(self, folderPath):
 		"""Build folders list."""

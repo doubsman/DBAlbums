@@ -75,7 +75,7 @@ class ModelDBAbstract(QAbstractTableModel):
 			elif colname is None:
 				return self.arraydata[row][col]
 		return QVariant()
-
+	
 	def getList(self, colname, desc=True):
 		"""Build list column."""
 		mylist = []
