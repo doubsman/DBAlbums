@@ -71,9 +71,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	ENVT_DEF = group_dbalbums['envt_deflt']
 	THUN_DIS = group_dbalbums['thnail_dis']
 	THUN_NOD = group_dbalbums['thnail_nod']
-	THUN_DBA = path.join(PATH_PROG, 'IMG', group_dbalbums['picm_endof'])
 	COVE_SIZ = group_dbalbums['covers_siz']
 	LOGO_PNG = group_dbalbums['progr_logo']
+	MASKCOVER = group_dbalbums['mask_cover']
+	MASKAUDIO = group_dbalbums['mask_audio']
 	group_programs = Json_params.getMember('programs')
 	TAGS_SCAN = group_programs['tagscan']
 	FOOB_PLAY = group_programs['foobarP']
@@ -91,7 +92,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	NAME_EVT, CURT_EVT = Json_params.buildListEnvt(ENVT_DEF)
 	C_HEIGHT = 21
 	COEF_ZOOM = 100
-	MASKCOVER = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')
+
 
 	def __init__(self, parent=None):
 		"""Init gui."""

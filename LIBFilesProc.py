@@ -129,7 +129,7 @@ class FilesProcessing(QObject):
 		argums = []
 		for arg in argv:
 			argums += (arg,)
-		p = QProcess()
+		p = QProcess(self)
 		p.startDetached(prog, argums)
 
 	def convertUNC(self, folderPath):

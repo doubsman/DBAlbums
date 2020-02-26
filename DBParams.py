@@ -4,7 +4,7 @@
 from os import path
 from sys import platform
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import qDebug
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, QMessageBox, QStyle
 from DBFileJson import JsonParams
 from Ui_DBPARAMS import Ui_ParamsJson
@@ -24,7 +24,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.LOGS_PROG = path.join(self.PATH_PROG, 'LOG')
 		self.C_HEIGHT = 25
 		# Read File DBAlbums.json
-		qDebug('ParamsGui: read json params file')
 		self.FILE__INI = fileini
 		self.Json_params = JsonParams(self.FILE__INI)
 		
@@ -64,6 +63,8 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 					'font01_ttx' : 'name font consol execution ({v})'.format(v=group_dbalbums['font01_ttx']),
 					'font00_siz' : 'size font main ({v})'.format(v=group_dbalbums['font00_siz']),
 					'name_theme' : 'style colors (blue, green, brown, grey, pink) ({v})'.format(v=group_dbalbums['name_theme']),
+					'mask_audio' : 'list extensions audio files ({v})'.format(v=group_dbalbums['mask_audio']),
+					'mask_cover' : 'list extensions pictures files ({v})'.format(v=group_dbalbums['mask_cover']),
 					'txt_win' : '<program> text editor Windows',
 					'txt_lin' : '<program> text editor Debian',
 					'tagscan' : '<program> program extern for tags',
@@ -110,15 +111,18 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		#self.tableWidget_category.itemSelectionChanged.connect(self.updateListcategory)
 		
 		# tbl General init
-		self.updateTable(self.tableWidget_general, group_dbalbums , ['Group', 'Parameters', 'Values', 'Informations'], False, False, 'dbalbums')
-		self.updateTable(self.tableWidget_general, group_programs , None, True, False, 'programs')
-		self.updateTable(self.tableWidget_general, group_scorealb , None, True, False, 'score')
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('dbalbums') , ['Group', 'Parameters', 'Values', 'Informations'], False, False, 'dbalbums')
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('programs') , None, True, False, 'programs')
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('score') , None, True, False, 'score')
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('scripts') , None, True, False, 'scripts')
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('themes') , None, True, False, 'themes')
 		
 		# complete column help
 		self.textEdit.append(self.HELP_TXT)
 		row = 0
 		while row < self.tableWidget_general.rowCount():
 			nameitem = QTableWidgetItem(self.HELP_LST.get(self.tableWidget_general.item(row,1).text()))
+			nameitem.setFlags(Qt.ItemIsEditable)
 			self.tableWidget_general.setItem(row,3,nameitem)
 			row += 1
 
@@ -135,6 +139,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 	
 	def writeFileJson(self):
 		self.Json_params.saveJson()
+		self.parent.execute_command(self.EDIT_TEXT, self.FILE__INI)
 		
 	def changeCategory(self, row, col):
 		"""Modify Category"""
@@ -175,8 +180,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			if listcolumns:
 				table.setColumnCount(len(listcolumns))
 				table.setHorizontalHeaderLabels(listcolumns)
-			else:
-				qDebug('First create table desire liscolumns')
 			row = 0
 		else:
 			# add rows
@@ -188,9 +191,11 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			table.setRowCount(len(listitems) + row)
 			for key, value in listitems.items():
 				nameitem = QTableWidgetItem(str(key))
+				nameitem.setFlags(Qt.ItemIsEditable)
 				codeitem = QTableWidgetItem(str(value))
 				if groupjson:
 					grpsitem = QTableWidgetItem(str(groupjson))
+					grpsitem.setFlags(Qt.ItemIsEditable)
 					table.setItem(row,0,grpsitem)
 					table.setItem(row,1,nameitem)			
 					table.setItem(row,2,codeitem)

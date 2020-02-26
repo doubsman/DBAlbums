@@ -18,10 +18,12 @@
         "font01_ttx": "Lucida Console",
         "font00_unx": "Carlito",
         "font00_siz": 12,
-        "name_theme": "brown"
+        "name_theme": "brown",
+        "mask_audio": [".flac",".ape",".wma",".mp3",".wv",".aac",".mpc"],
+        "mask_cover": [".jpg", ".jpeg", ".png", ".bmp", ".tif", ".bmp", ".tiff"]
     },
     "programs": {
-        "txt_win"   : "C:\\Program Files (x86)\\Notepad++\\notepad++.exe",
+        "txt_win"   : "C:\\Program Files\\Notepad++\\notepad++.exe",
         "txt_lin"   : "mousepad",
         "foobarP"   : "C:\\Users\\Mister doubs\\AppData\\Roaming\\foobar2000\\playlists-v1.3",
         "discogs"   : "http://www.discogs.com/search?q=%NAME",
