@@ -14,6 +14,7 @@ class StringFormatAlbum(QObject):
 		self.parent = parent
 		self.infoshtml = ''
 		self.imglabel = ''
+		self.heighticon = '18'
 
 	def formatCounters(self, num, text = ''):
 		"""format 0 000 + plural."""
@@ -28,7 +29,11 @@ class StringFormatAlbum(QObject):
 		# infos albums
 		name      = self.parent.tableMdlAlb.getData(self.parent.currow, 'NAME')
 		label     = str(self.parent.tableMdlAlb.getData(self.parent.currow, 'LABEL'))
+		if label == '':
+			label = str(self.parent.tableMdlAlb.getData(self.parent.currow, 'TAGLABEL'))
 		isrc      = str(self.parent.tableMdlAlb.getData(self.parent.currow, 'ISRC'))
+		if isrc == '':
+			isrc  = str(self.parent.tableMdlAlb.getData(self.parent.currow, 'TAGISRC'))
 		country   = str(self.parent.tableMdlAlb.getData(self.parent.currow, 'COUNTRY'))
 		year      = str(self.parent.tableMdlAlb.getData(self.parent.currow, 'YEAR'))
 		nbcd      = int(self.parent.tableMdlAlb.getData(self.parent.currow, 'CD'))
@@ -54,6 +59,8 @@ class StringFormatAlbum(QObject):
 		infonameal = infonameal.replace('2CD', '')
 		infonameal = infonameal.replace(' EP ', ' ')
 		infonameal = infonameal.replace('VA - ', '')
+		infonameal = infonameal.replace('(single)', '')
+		infonameal = infonameal.replace('(Single)', '')
 		sctxt = infonameal.split(' - ')[0].rstrip().replace(' ', '_')
 		infonameal = infonameal.replace('('+snbcd+'CD)', '').replace(snbcd+'CD', '')
 		infonameal = infonameal.replace(snbcd+'CD', '').replace(snbcd+'CD', '')
@@ -65,6 +72,7 @@ class StringFormatAlbum(QObject):
 			if label.find('(')>0:
 				label = label[0:label.find('(')].rstrip()
 			label = label.replace(' - ', ' ').title()
+			label = 'Label: ' + label
 			imglabel = path.join(self.parent.RESS_LABS, label.replace(' ','_') +'.jpg')
 			if not path.isfile(imglabel):
 				qDebug('no image label : ' + imglabel)
@@ -73,7 +81,7 @@ class StringFormatAlbum(QObject):
 				imglabel = None
 			# isrc
 			if isrc != "":
-				infoslabel = '<a style="' + stylehtml + '" href="dbfunction://l'+label.replace(' ', '_')+'">' + label + '[' + isrc + ']' + '</a>'
+				infoslabel = '<a style="' + stylehtml + '" href="dbfunction://l'+label.replace(' ', '_')+'">' + label + ' [' + isrc + ']' + '</a>'
 			else:
 				infoslabel = '<a style="' + stylehtml + '" href="dbfunction://l'+label.replace(' ', '_')+'">' + label + '</a>'
 		elif infoslabel != "":
@@ -92,12 +100,12 @@ class StringFormatAlbum(QObject):
 		if country != "":
 			flagfile = path.join(self.parent.RESS_FLAG, country.replace(' ', '-') + '.png')
 			if path.isfile(flagfile):
-				imageflag = '<img style="vertical-align:Bottom;" src="' + flagfile + '" height="17">'
+				imageflag = '<img style="vertical-align:Bottom;" src="' + flagfile + '" height="' + self.heighticon + '">'
 				imageflag = '<a style="' + stylehtml + '" href="dbfunction://c' + country + '">' + imageflag + '</a>'
 
 		# nb cd
 		if nbcd<6:
-			infosnbcd = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'cdrom.png') + '" height="17">'
+			infosnbcd = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'cdrom.png') + '" height="' + self.heighticon + '">'
 			infosnbcd = nbcd*infosnbcd
 		else:
 			infosnbcd = self.formatCounters(nbcd, 'CD')
@@ -108,35 +116,34 @@ class StringFormatAlbum(QObject):
 		infopowe = ''
 		if path.exists(albumPath):
 			# folder
-			inffolder =  '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'folder.png') + '" height="17">'
+			inffolder =  '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'folder.png') + '" height="' + self.heighticon + '">'
 			inffolder = '<a style=' + stylehtml + ' href="dbfunction://f">' + inffolder + '</a>'
-			# tagscan / powershell
+			# update
+			infopowe = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'update.png') + '" height="' + self.heighticon + '">'
+			infopowe = '<a style="' + stylehtml + '" href="dbfunction://p">' + infopowe + '</a>'
+			# tagscan
 			if platform == "win32":
-				infotags = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'tag.png') + '" height="17">'
+				infotags = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'tag.png') + '" height="' + self.heighticon + '">'
 				infotags = '<a style="' + stylehtml + '" href="dbfunction://t">' + infotags + '</a>'
-				infopowe = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'update.png') + '" height="17">'
-				infopowe = '<a style="' + stylehtml + '" href="dbfunction://p">' + infopowe + '</a>'
-			else:
-				infotags = infopowe = ''
 		
 		# others
 		infotrack = self.formatCounters(nbtracks, 'Track')
 		infoduree = self.formatCounters(nbmin, 'min')
-		infoartco = self.formatCounters(nbcovers, 'art')
+		infoartco = self.formatCounters(nbcovers, 'pic')
 		infopics = ''
 		
 		# artwork
 		if nbcovers>0:
 			infoartco = '<a style="' + stylehtml + '" href="dbfunction://a">' + infoartco + '</a>'
-			infopics = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'art.png') + '" height="17">'
+			infopics = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'art.png') + '" height="' + self.heighticon + '">'
 			infopics = '<a style="' + stylehtml + '" href="dbfunction://a">' + infopics + '</a>'
 		infoshtml = '<span>' + infonameal + '</span>' + imageflag + ' ' + infosnbcd + ' ' + infopics + ' ' + inffolder + ' ' + infotags + ' ' + infopowe + '<br/>'
 		if infoslabel != "":
 			#if infosaisrc != "":
 			#	infoshtml += infoslabel + ' • ' + infosaisrc + ' • '
 			#else:
-			infoshtml += infoslabel + ' • '
-		infoshtml += infotrack + ' • ' + infoartco + ' • ' + infoduree + ' • ' + infosayear
+			infoshtml += infoslabel + '<br/>'
+		infoshtml += infotrack + ' • ' + infoduree + ' • ' + infoartco + ' (' + infosayear + ')'
 		self.infoshtml = infoshtml
 		self.imglabel = imglabel
 

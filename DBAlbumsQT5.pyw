@@ -176,7 +176,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.widgetscorealbum = ScoreWidget(self, self.SCOR_ALBUMS)
 		self.horizontalLayoutLAB.addWidget(self.widgetscorealbum)
 		self.widgetscoretracks = ScoreWidget(self, self.SCOR_TRACKS)
-		self.horizontalLayoutSCR.addWidget(self.widgetscoretracks)
+		#self.horizontalLayoutSCR.addWidget(self.widgetscoretracks)
+		self.horizontalLayoutLAB.addWidget(self.widgetscoretracks)
+		self.widgetscoretracks.hide()
 
 		# title album
 		self.lab_album.setOpenLinks(False)
@@ -679,6 +681,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 	def displayAlbum(self):
 		"""Display info current select album."""
+		self.widgetscorealbum.show()
+		self.widgetscoretracks.hide()
 		indexsrc = self.tbl_albums.currentIndex()
 		indexes = self.tableMdlAlb.SortFilterProxy.mapToSource(indexsrc)
 		# select default first row
@@ -763,11 +767,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			if self.tableMdlTrk.rowCount() > 0:
 				self.tbl_tracks.selectRow(0)
 				self.curtrk = 0
-			self.displaytrack()
+			#self.displaytrack()
 			self.setCursor(Qt.ArrowCursor)
 
 	def displaytrack(self):
 		"""Display info current select track."""
+		self.widgetscorealbum.hide()
+		self.widgetscoretracks.show()
 		if self.tableMdlTrk.rowCount() > 0:
 			self.ScoreTrack = self.tableMdlTrk.getData(self.curtrk, 'SCORE')
 			self.widgetscoretracks.setEnabled(True)
