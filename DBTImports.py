@@ -6,7 +6,7 @@ from codecs import open
 from time import time, sleep
 from PyQt5.QtGui import QFont, QIcon, QColor, QTextCursor
 from PyQt5.QtCore import (Qt, qDebug, pyqtSignal,
-						pyqtSlot, QThread, QDateTime)
+						pyqtSlot, QDateTime, QTimer)
 from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit
 from PyQt5.QtSql import QSqlQuery
 from DBModelAbs import ModelTableUpdatesABS
@@ -15,43 +15,32 @@ from DBTImpoRUN import ReleaseInvent
 from Ui_DBUPDATE import Ui_UpdateWindows
 
 
-class timerThread(QThread):
-	timeElapsed = pyqtSignal(int)
 
-	def __init__(self, parent=None):
-		super(timerThread, self).__init__(parent)
-		self.timeStart = None
+class QTimerWithPause(QTimer):
+	def __init__(self, parent = None):
+		QTimer.__init__(self, parent)
+		self.startTime = 0
+		self.interval = 0
+	 
+	def startTimer(self, interval):
+		self.interval = interval
+		self.startTime = QDateTime.currentDateTime()
+		QTimer.start(self, interval)
+ 
+	def pause(self):
+		if self.isActive():
+			self.stop()
+			currenttime = QDateTime.currentDateTime()
+			elapsedTime = self.startTime.secsTo(currenttime)
 
-	def start(self, timeStart):
-		self.timeStart = timeStart
-		return super(timerThread, self).start()
+	def resume(self):
+		if not self.isActive():
+			self.start()
 
-	def run(self):
-		while self.parent().isRunning():
-			self.timeElapsed.emit(time() - self.timeStart)
-			sleep(1)
-		self.terminate()
-
-
-class myThreadTimer(QThread):
-	timeElapsed = pyqtSignal(int)
-	
-	def __init__(self, parent=None):
-		super(myThreadTimer, self).__init__(parent)
-		self.timerThread = timerThread(self)
-		self.timerThread.timeElapsed.connect(self.timeElapsed.emit)
-	
-	def stop(self):
-		self.timerThread.terminate()
-		self.terminate()
-		
-	def run(self):
-		self.timerThread.start(time())
-		iterations = 3600
-		while iterations:
-			#print("Running {0}".format(self.__class__.__name__))
-			iterations -= 1
-			sleep(1)
+	def getelapsedTime(self):
+		currenttime = QDateTime.currentDateTime()
+		elapsedTime = self.startTime.secsTo(currenttime)
+		return elapsedTime
 
 
 class InventGui(QWidget, Ui_UpdateWindows):
@@ -116,9 +105,10 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.lcdTime.setSegmentStyle(QLCDNumber.Flat)
 		
 		self.seconds = 0
-		self.myThreadtime = myThreadTimer(self)
-		self.myThreadtime.timeElapsed.connect(self.showlcd)
-		self.myThreadtime.start()
+		self.timer = QTimerWithPause(self)
+		self.timer.timeout.connect(self.showlcd)
+		self.timer.startTimer(1000)
+		self.showlcd()
 		
 		self.tbl_update.setContextMenuPolicy(Qt.CustomContextMenu)
 		self.tbl_update.customContextMenuRequested.connect(self.popUpTreeUpdate)
@@ -174,7 +164,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 			self.albumnew = self.prepareInvent.albumnew
 			self.alupdate = self.prepareInvent.alupdate
 			self.aldelete = self.prepareInvent.aldelete
-			self.myThreadtime.stop()
+			self.timer.pause()
 		else:
 			# no analyse
 			self.btn_quit.setText('Close')
@@ -233,7 +223,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 			self.updateInfos('\n- Create log file : ' + self.logname)
 			self.textEditrelease.moveCursor(QTextCursor.Start)
 			self.textEditrelease.ensureCursorVisible()
-			self.myThreadtime.stop()
+			self.timer.pause()
 			# refresh
 			self.signalend.emit()
 			QMessageBox.information(self,'Update Database', 'Completed Operations in '+self.total_p)
@@ -288,8 +278,9 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	def popUpTreeUpdate(self, position):
 		self.menua.exec_(self.tbl_update.viewport().mapToGlobal(position))
 	
-	@pyqtSlot(int)
-	def showlcd(self, seconds):
+	#@pyqtSlot(int)
+	def showlcd(self):
+		seconds = self.timer.getelapsedTime()
 		hours, seconds =  seconds // 3600, seconds % 3600
 		minutes, seconds = seconds // 60, seconds % 60
 		self.total_p = "%02d:%02d:%02d" % (hours, minutes, seconds)
@@ -315,7 +306,5 @@ class InventGui(QWidget, Ui_UpdateWindows):
 
 	def closeImport(self):
 		"""Close Windows."""
-		self.myThreadtime.quit()
-		self.myThreadtime.stop()
 		self.destroy()
 

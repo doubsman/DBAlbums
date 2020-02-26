@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from os import path
-from PyQt5.QtGui import QFont, QMovie
+from PyQt5.QtGui import QFont, QMovie, QIcon
 from PyQt5.QtCore import Qt, pyqtSlot, QDateTime
 from PyQt5.QtSql import QSqlQueryModel
 from PyQt5.QtWidgets import QWidget
@@ -13,12 +13,15 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 	"""Loading."""
 	
 	def __init__(self, parent, title):
-		super(DBloadingGui, self).__init__(parent)
+		super(DBloadingGui, self).__init__()
 		self.setupUi(self)
 		self.parent = parent
-		self.setWindowFlags(Qt.WindowStaysOnTopHint)
-		self.setWindowFlags(Qt.SplashScreen)
-		self.parent.centerWidget(self)
+		self.setToolTip('[F1] Exit')
+		#self.setWindowFlags(Qt.WindowStaysOnTopHint)
+		#self.setWindowFlags(Qt.SplashScreen)
+		self.setWindowIcon(QIcon(self.parent.WINS_ICO))
+		self.setWindowTitle(self.parent.TITL_PROG + ' : SplashScreen')
+
 		# font
 		font = QFont()
 		font.setFamily(self.parent.FONT_MAI)
@@ -40,6 +43,8 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		# tab3
 		req = self.parent.CnxConnect.buildRequestTCD("YEAR", "CATEGORY", "ALBUMS", "YEAR", "1", True)
 		self.buildTab(req, self.tableWid3)
+		# center widget
+		self.parent.centerWidget(self)
 		# message
 		basedate = self.parent.CnxConnect.sqlToArray(self.parent.CnxConnect.getrequest('datedatabase'))
 		txt_message = self.parent.CnxConnect.MODE_SQLI
@@ -50,8 +55,6 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		else:
 			txt_message += " Base \nlast modified :\n"+basedate[0].replace('T',' ')
 		self.lab_text.setText(title+"\nConnected "+txt_message)
-		# quit
-		self.btn_quit.clicked.connect(lambda: self.hide())
 		# theme
 		self.applyTheme()
 
@@ -88,7 +91,8 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		mainstyle = mainstyle.format(col2 = self.parent.listcolors[1])
 		self.setStyleSheet(mainstyle)
 		gridstyle = 'alternate-background-color: {col3};background-color: {col4};'
-		gridstyle = gridstyle.format(col3 = self.parent.listcolors[2], 
+		gridstyle = gridstyle.format(col3 = self.parent.listcolors[2],
+									col2 = self.parent.listcolors[1],
 									col4 = self.parent.listcolors[3])
 		self.tableWid1.setStyleSheet(gridstyle)
 		self.tableWid2.setStyleSheet(gridstyle)

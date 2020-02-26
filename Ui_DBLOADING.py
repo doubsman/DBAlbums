@@ -1,52 +1,39 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'R:\Projets\DBALBUMSQT5\DBLOADING.ui'
+# Form implementation generated from reading ui file 'R:\Python\DBAlbums\DBLOADING.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_LoadingWindow(object):
     def setupUi(self, LoadingWindow):
         LoadingWindow.setObjectName("LoadingWindow")
-        LoadingWindow.setWindowModality(QtCore.Qt.ApplicationModal)
-        LoadingWindow.resize(400, 350)
-        LoadingWindow.setStyleSheet("")
-        self.verticalLayoutWidget = QtWidgets.QWidget(LoadingWindow)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 381, 331))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        LoadingWindow.resize(450, 350)
+        LoadingWindow.setStyleSheet("border-radius: 10px;")
+        self.verticalLayout = QtWidgets.QVBoxLayout(LoadingWindow)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(7, -1, 7, -1)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.lab_logo = QtWidgets.QLabel(self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lab_logo.sizePolicy().hasHeightForWidth())
-        self.lab_logo.setSizePolicy(sizePolicy)
-        self.lab_logo.setMinimumSize(QtCore.QSize(100, 102))
-        self.lab_logo.setBaseSize(QtCore.QSize(0, 0))
+        self.horizontalLayout_logo = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_logo.setObjectName("horizontalLayout_logo")
+        self.lab_logo = QtWidgets.QLabel(LoadingWindow)
         self.lab_logo.setText("")
         self.lab_logo.setObjectName("lab_logo")
-        self.horizontalLayout.addWidget(self.lab_logo)
-        self.lab_text = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.horizontalLayout_logo.addWidget(self.lab_logo)
+        self.lab_text = QtWidgets.QLabel(LoadingWindow)
         self.lab_text.setText("")
-        self.lab_text.setScaledContents(False)
         self.lab_text.setAlignment(QtCore.Qt.AlignCenter)
         self.lab_text.setObjectName("lab_text")
-        self.horizontalLayout.addWidget(self.lab_text)
-        self.frame = QtWidgets.QFrame(self.verticalLayoutWidget)
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.horizontalLayout.addWidget(self.frame)
-        self.verticalLayout.addLayout(self.horizontalLayout)
-        self.tabWidget = QtWidgets.QTabWidget(self.verticalLayoutWidget)
+        self.horizontalLayout_logo.addWidget(self.lab_text)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_logo.addItem(spacerItem)
+        self.verticalLayout.addLayout(self.horizontalLayout_logo)
+        self.horizontalLayout_tab = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_tab.setObjectName("horizontalLayout_tab")
+        self.tabWidget = QtWidgets.QTabWidget(LoadingWindow)
         self.tabWidget.setObjectName("tabWidget")
         self.tab_1 = QtWidgets.QWidget()
         self.tab_1.setAccessibleName("")
@@ -99,16 +86,8 @@ class Ui_LoadingWindow(object):
         self.gridLayout_5.addWidget(self.tableWid3, 0, 0, 1, 1)
         self.gridLayout_6.addLayout(self.gridLayout_5, 1, 0, 1, 1)
         self.tabWidget.addTab(self.tab_3, "")
-        self.verticalLayout.addWidget(self.tabWidget)
-        self.btn_quit = QtWidgets.QPushButton(LoadingWindow)
-        self.btn_quit.setGeometry(QtCore.QRect(375, 4, 20, 23))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btn_quit.sizePolicy().hasHeightForWidth())
-        self.btn_quit.setSizePolicy(sizePolicy)
-        self.btn_quit.setBaseSize(QtCore.QSize(20, 24))
-        self.btn_quit.setObjectName("btn_quit")
+        self.horizontalLayout_tab.addWidget(self.tabWidget)
+        self.verticalLayout.addLayout(self.horizontalLayout_tab)
 
         self.retranslateUi(LoadingWindow)
         self.tabWidget.setCurrentIndex(0)
@@ -120,7 +99,6 @@ class Ui_LoadingWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_1), _translate("LoadingWindow", "Style"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("LoadingWindow", "Volume"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("LoadingWindow", "Year"))
-        self.btn_quit.setText(_translate("LoadingWindow", "X"))
 
 
 if __name__ == "__main__":
@@ -131,4 +109,3 @@ if __name__ == "__main__":
     ui.setupUi(LoadingWindow)
     LoadingWindow.show()
     sys.exit(app.exec_())
-

@@ -92,6 +92,10 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.comboBox_Envt.addItems(self.NAME_EVT)
 		self.comboBox_Envt.setCurrentIndex(self.CURT_EVT)
 		
+		# font
+		self.label_general.setFont(self.parent.fontbig)
+		self.label_cate.setFont(self.parent.fontbig)
+
 		# decos
 		self.btn_save.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
 		self.btn_open.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
@@ -219,15 +223,16 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 					'QComboBox{{background-color: {col2};}}' \
 					'QScrollBar:vertical{{width: 14px;}}' \
 					'QScrollBar:horizontal{{height: 14px;}}' \
+					'QTableView{{alternate-background-color: {col3};background-color: {col4};}}' \
 					'QTableWidget::item:selected{{ background-color:{col5}; color:white;}}'
 		mainstyle = mainstyle.format(col1 = self.parent.listcolors[0],
-									col2 = self.parent.listcolors[1], 
+									col2 = self.parent.listcolors[1],
+									col3 = self.parent.listcolors[2],
+									col4 = self.parent.listcolors[3], 
 									col5 = self.parent.listcolors[4])
 		self.setStyleSheet(mainstyle)
-		gridstyle = 'alternate-background-color: {col3};background-color: {col4};'
-		gridstyle = gridstyle.format(col3 = self.parent.listcolors[2], 
-									col4 = self.parent.listcolors[3])
-									
+		gridstyle = 'QHeaderView::section{{background-color: {col2};border-radius:1px;margin: 1px;padding: 2px;}}'
+		gridstyle = gridstyle.format(col2 = self.parent.listcolors[1])						
 		self.tableWidget_general.setStyleSheet(gridstyle)
 		self.tableWidget_envt.setStyleSheet(gridstyle)
 		self.tableWidget_category.setStyleSheet(gridstyle)

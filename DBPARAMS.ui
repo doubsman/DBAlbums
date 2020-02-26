@@ -29,7 +29,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QTableWidget" name="tableWidget_general"/>
+        <widget class="QTableWidget" name="tableWidget_general">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -64,7 +68,11 @@
         </layout>
        </item>
        <item>
-        <widget class="QTableWidget" name="tableWidget_envt"/>
+        <widget class="QTableWidget" name="tableWidget_envt">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -90,7 +98,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QTableWidget" name="tableWidget_category"/>
+        <widget class="QTableWidget" name="tableWidget_category">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QTextEdit" name="textEdit"/>

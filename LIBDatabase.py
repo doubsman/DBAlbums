@@ -217,7 +217,7 @@ class LibDatabase(QObject):
 	def deleteLineTable(self, tableName, columnnamekey, idvalue):
 		"""Delete enr table."""
 		request = ('DELETE FROM ' + tableName + ' WHERE ' + columnnamekey + ' =' + str(idvalue))
-		qDebug(request)
+		#qDebug(request)
 		query = QSqlQuery(self.qtdbdb)	
 		return query.exec_(request)	
 

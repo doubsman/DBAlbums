@@ -17,7 +17,7 @@ from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
 from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QInputDialog, QLineEdit,
-						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout)
+						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout, QSizePolicy)
 from PyQt5.QtMultimedia import QMediaPlayer
 # Gui QtDesigner : compiler .ui sans Eric6: pyuic5 file.ui -o Ui_main_file.py
 from Ui_DBALBUMS import Ui_MainWindow
@@ -410,9 +410,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		if self.tbl_albums.isVisible():
 			self.tbl_albums.hide()
 			self.thunbnails.setMaximumSize(QSize(16777215,16777215))
+			self.tbl_tracks.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred))
 		else:
 			self.tbl_albums.show()
-			self.thunbnails.setMaximumSize(QSize(16777215, (self.sizeTN+4) * self.thunnbline))
+			self.tbl_tracks.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+			self.thunbnails.setMaximumSize(QSize(16777215, (self.sizeTN) * self.thunnbline))
 
 	def applyTheme(self):
 		"""Apply color Theme to main Gui."""
