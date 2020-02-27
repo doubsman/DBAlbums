@@ -667,7 +667,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 					self.lin_search.setCompleter(self.com_autcom)
 					# build list style
 					qDebug('qthread build list style')
-					self.obj = DBPThreadsListStyle(self, self.envits, self.Json_params, self.BASE_SQLI)
+					self.obj = DBPThreadsListStyle(self.envits, self.Json_params, self.BASE_SQLI)
 					self.obj.finished.connect(self.fillListGenres)
 					self.obj.start()
 

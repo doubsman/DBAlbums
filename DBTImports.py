@@ -10,37 +10,9 @@ from PyQt5.QtCore import (Qt, qDebug, pyqtSignal,
 from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit
 from PyQt5.QtSql import QSqlQuery
 from DBModelAbs import ModelTableUpdatesABS
-from DBTImpoANA import BuildInvent
+from DBTImpoANA import ThreadAnalyseInvent
 from DBTImpoRUN import ReleaseInvent
 from Ui_DBUPDATE import Ui_UpdateWindows
-
-
-
-class QTimerWithPause(QTimer):
-	def __init__(self, parent = None):
-		QTimer.__init__(self, parent)
-		self.startTime = 0
-		self.interval = 0
-	 
-	def startTimer(self, interval):
-		self.interval = interval
-		self.startTime = QDateTime.currentDateTime()
-		QTimer.start(self, interval)
- 
-	def pause(self):
-		if self.isActive():
-			self.stop()
-			currenttime = QDateTime.currentDateTime()
-			elapsedTime = self.startTime.secsTo(currenttime)
-
-	def resume(self):
-		if not self.isActive():
-			self.start()
-
-	def getelapsedTime(self):
-		currenttime = QDateTime.currentDateTime()
-		elapsedTime = self.startTime.secsTo(currenttime)
-		return elapsedTime
 
 
 class InventGui(QWidget, Ui_UpdateWindows):
@@ -63,7 +35,6 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.typeupdate = typeupdate
 		self.logname = QDateTime.currentDateTime().toString('yyMMddhhmmss') + "_UPDATE_DATABASE_" + self.envits + ".log"
 		self.logname = path.join(self.parent.LOGS_PROG, self.logname)
-		self.total_p = None
 		self.albumnew = 0
 		self.alupdate = 0
 		self.aldelete = 0
@@ -71,6 +42,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.actionerror = 0
 		self.selecttrowg = 0
 		self.list_actions = []
+		self.now = 0				# time elapsed
 		
 		font = QFont()
 		font.setFamily("Courier New")
@@ -95,20 +67,11 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.textEditrelease.setLineWrapMode(QTextEdit.NoWrap)
 		self.textEditrelease.setReadOnly(True)
 		self.textEditrelease.setFont(fontconsol)
-		#self.vScrollBar = QScrollBar(self.textEditrelease.verticalScrollBar())
-		#self.vScrollBar = QScrollBar(self.textEditrelease)
-		#self.vScrollBar.sliderPressed.connect(self.onScrollPressed)
 	
 		self.btn_action.clicked.connect(self.realiseActions)
 		self.btn_action.setEnabled(False)
 		self.btn_quit.clicked.connect(self.closeImport)
 		self.lcdTime.setSegmentStyle(QLCDNumber.Flat)
-		
-		self.seconds = 0
-		self.timer = QTimerWithPause(self)
-		self.timer.timeout.connect(self.showlcd)
-		self.timer.startTimer(1000)
-		self.showlcd()
 		
 		self.tbl_update.setContextMenuPolicy(Qt.CustomContextMenu)
 		self.tbl_update.customContextMenuRequested.connect(self.popUpTreeUpdate)
@@ -125,22 +88,24 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	def startAnalyse(self):
 		qDebug('Start BuildInvent')
 		self.setCursor(Qt.WaitCursor)
-		self.prepareInvent = BuildInvent(self.list_albums,
-									self.list_columns,
-									self.list_category,
-									self.typeupdate,
-									self.envits)
+		self.start_timer()
+		self.prepareInvent = ThreadAnalyseInvent(self.list_albums,
+												self.list_columns,
+												self.list_category,
+												self.typeupdate,
+												self.envits)
 		self.prepareInvent.signalchgt.connect(self.onBuild)
 		self.prepareInvent.signaltext.connect(self.updateInfos)
-		self.prepareInvent.inventDatabase()
+		self.prepareInvent.start()
 		self.setCursor(Qt.ArrowCursor)
-		self.lab_result.setText('Completed Analyse in '+self.total_p)
+		self.lab_result.setText('Completed Analyse in ' + self.runtime)
 		qDebug('End BuildInvent')
 		
 		self.btn_quit.setText('Close')
 		if len(self.prepareInvent.list_action) > 0 and not self.checkBoxStart.isChecked():
 				self.btn_action.setEnabled(True)
-		self.realiseActions()
+		else:
+			self.realiseActions()
 	
 	def onBuild(self, percent, message):
 		"""Display advance browsing folders."""
@@ -154,7 +119,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.lab_releaseadvance.setText(mesresu)
 		self.tableMdlUpd.update(self.prepareInvent.list_action)
 		self.tbl_update.scrollToBottom()
-		QApplication.processEvents()
+		#QApplication.processEvents()
 	
 	def realiseActions(self, list_actions=None):
 		"""Execute Actions Update."""
@@ -164,7 +129,6 @@ class InventGui(QWidget, Ui_UpdateWindows):
 			self.albumnew = self.prepareInvent.albumnew
 			self.alupdate = self.prepareInvent.alupdate
 			self.aldelete = self.prepareInvent.aldelete
-			self.timer.pause()
 		else:
 			# no analyse
 			self.btn_quit.setText('Close')
@@ -210,23 +174,22 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		mesresu += '\nUPDATE  : ' + format(self.alupdate, '05d')
 		mesresu += '\nDELETE  : ' + format(self.aldelete, '05d')
 		self.lab_releaseadvance.setText(mesresu)
-		QApplication.processEvents()
+		#QApplication.processEvents()
 		
 	@pyqtSlot()	
 	def updateEnd(self):
 		"""Operations finished."""
-		QApplication.processEvents()
-		self.lab_release.setText('Completed Operations in '+self.total_p)
+		self.lab_release.setText('Completed Operations in ' + self.runtime)
 		if len(self.list_actions) > 0:
 			# create log file
-			self.updateInfos('\n- Completed Operations in '+self.total_p)
+			self.updateInfos('\n- Completed Operations in ' + self.runtime)
 			self.updateInfos('\n- Create log file : ' + self.logname)
 			self.textEditrelease.moveCursor(QTextCursor.Start)
 			self.textEditrelease.ensureCursorVisible()
-			self.timer.pause()
 			# refresh
 			self.signalend.emit()
-			QMessageBox.information(self,'Update Database', 'Completed Operations in '+self.total_p)
+			self.stop_timer()
+			QMessageBox.information(self,'Update Database', 'Completed Operations in ' + self.runtime)
 	
 	def updateInfos(self, line, level=None):
 		"""Write Reception signal run update."""
@@ -277,15 +240,31 @@ class InventGui(QWidget, Ui_UpdateWindows):
 
 	def popUpTreeUpdate(self, position):
 		self.menua.exec_(self.tbl_update.viewport().mapToGlobal(position))
-	
-	#@pyqtSlot(int)
-	def showlcd(self):
-		seconds = self.timer.getelapsedTime()
-		hours, seconds =  seconds // 3600, seconds % 3600
+
+	def start_timer(self):
+		"""Start Chrono."""
+		# Initialize timer
+		self.timer = QTimer()
+		self.now = 0
+		self.timer.timeout.connect(self.tick_timer)
+		# Start timer and update display
+		self.timer.start(1000)
+		self.update_timer()
+
+	def update_timer(self):
+		"""Update chrono display."""
+		hours, seconds =  self.now // 3600, self.now % 3600
 		minutes, seconds = seconds // 60, seconds % 60
-		self.total_p = "%02d:%02d:%02d" % (hours, minutes, seconds)
-		self.lcdTime.display(self.total_p)
-		QApplication.processEvents()
+		self.runtime = "%02d:%02d:%02d" % (hours, minutes, seconds)
+		self.lcdTime.display(self.runtime)
+
+	def tick_timer(self):
+		"""Tic tac."""
+		self.now += 1
+		self.update_timer()
+
+	def stop_timer(self):
+		self.timer.stop()
 
 	def applyTheme(self):
 		"""Apply color Theme to main Gui."""
@@ -306,5 +285,28 @@ class InventGui(QWidget, Ui_UpdateWindows):
 
 	def closeImport(self):
 		"""Close Windows."""
-		self.destroy()
+		if self.stopisAnalyseRun():
+			self.destroy()
 
+	@pyqtSlot()
+	def closeEvent(self, event):
+		"""Quit."""
+		if self.stopisAnalyseRun():
+			event.accept()
+		else:
+			event.ignore()
+
+	def stopisAnalyseRun(self):
+		self.stop_timer()
+		# analyse in progress ?
+		if self.prepareInvent is not None:
+			if self.prepareInvent.isRunning():
+				response = QMessageBox.question(self, "Confirmation", "Stop Analyse ?", QMessageBox.Yes, QMessageBox.No)
+				if response == QMessageBox.Yes:
+					# stop thread
+					self.prepareInvent.stopAnalyse()
+					qDebug('close Analyse in progress')
+					return True
+				else:
+					return False
+		return True

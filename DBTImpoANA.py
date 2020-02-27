@@ -3,28 +3,29 @@
 
 
 from os import path, stat
-from hashlib import md5
 from datetime import datetime
 from time import ctime
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal
 # general Libs
 from LIBFilesProc import FilesProcessing
 
 
-class BuildInvent(FilesProcessing, QObject):
-	# signal
+class ThreadAnalyseInvent(QThread, FilesProcessing):
+	# signals
 	signalchgt = pyqtSignal(int, str)		# signal browse
 	signaltext = pyqtSignal(str, int)
+
 	# global
 	families =  {	"Physique"			: "Colonne", 
 					"Label/Physique"	: "Labels", 
 					"Download"			: "Download", 
 					"Artists"			: "Artists"}
 	mask_amedias = ('.flac','.ape','.wma','.mp3','.wv','.aac','.mpc')
-	
+
 	def __init__(self, list_albums, list_columns, list_category, typeupdate, envt):
-		"""Init invent, build list albums exists in database."""
-		super(BuildInvent, self).__init__()
+		super(ThreadAnalyseInvent, self).__init__()
+		self.boolstop = False				# stop analyse
+		self.boolexec = False				# analyse in progress
 		self.list_albums = list_albums
 		self.list_catego = list_category
 		self.list_columns = list_columns
@@ -39,12 +40,23 @@ class BuildInvent(FilesProcessing, QObject):
 		self.albumnew = 0
 		self.aldelete = 0
 
-	def inventDatabase(self):
+	def __del__(self):
+		self.wait()
+
+	def stopAnalyse(self):
+		self.boolstop = True
+		while self.boolexec:
+			wait = 1
+
+	def run(self):
 		"""Browse Folders for update database."""
+		self.boolexec = True
 		self.numbers = 0
 		self.signalchgt.emit(self.numbers, '{0:<35}'.format('1/2 Browsing folders'))
 		# PRESENT / UPDATE / ADD
 		for rowcategory in self.list_catego:
+			if self.boolstop:
+				break
 			category = rowcategory[0]
 			typsubfo = rowcategory[1]
 			cracines = rowcategory[2]
@@ -89,12 +101,15 @@ class BuildInvent(FilesProcessing, QObject):
 												albums[self.list_columns.index('NAME')],
 												albums[self.list_columns.index('PATHNAME')]])
 		self.signalchgt.emit(100, '{0:<35}'.format('2/2 Browsing database'))
+		self.boolexec = False
 
 	def analyseSubFolders(self, category, family, folder, typefolder):
 		"""Browse sub folders or sub/sub folders"""
 		if typefolder == 'S':
 			listsubfolders = self.folder_list_folders(folder)
 			for subfolder in listsubfolders:
+				if self.boolstop:
+					break
 				subfolder = path.join(folder, subfolder)
 				self.numbers += 1
 				self.emitLoadindInvent(self.numbers, '1/2 Browsing folders ' + category)
@@ -103,6 +118,8 @@ class BuildInvent(FilesProcessing, QObject):
 			# sub folders
 			listsubfolders = self.folder_list_folders(folder)
 			for subfolder in listsubfolders:
+				if self.boolstop:
+					break
 				subfolder = path.join(folder, subfolder)
 				self.signaltext.emit('ANALYSE SUBFOLDERS: ' + subfolder, 1)
 				listsubsubfolders = self.folder_list_folders(subfolder)
@@ -194,6 +211,5 @@ class BuildInvent(FilesProcessing, QObject):
 		# no exist
 		return albumfind
 
-	def getAlbumMD5(self, folder):
-		"""Encode Album Name."""
-		return md5(path.basename(folder).encode('utf-8')).hexdigest().upper()
+
+
