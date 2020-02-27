@@ -33,6 +33,8 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.list_columns = list_columns
 		self.envits = envt
 		self.typeupdate = typeupdate
+
+		self.prepareInvent = None	# Class Analyse
 		self.logname = QDateTime.currentDateTime().toString('yyMMddhhmmss') + "_UPDATE_DATABASE_" + self.envits + ".log"
 		self.logname = path.join(self.parent.LOGS_PROG, self.logname)
 		self.albumnew = 0
@@ -82,13 +84,13 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.tbl_update.verticalHeader().setDefaultSectionSize(self.tableMdlUpd.C_HEIGHT)
 		self.tbl_update.horizontalHeader().setStretchLastSection(True)
 		
+		self.start_timer()
 		self.applyTheme()
 		self.show()
 
 	def startAnalyse(self):
-		qDebug('Start BuildInvent')
+		qDebug('Start Analyse BuildInvent')
 		self.setCursor(Qt.WaitCursor)
-		self.start_timer()
 		self.prepareInvent = ThreadAnalyseInvent(self.list_albums,
 												self.list_columns,
 												self.list_category,
@@ -98,14 +100,18 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.prepareInvent.signaltext.connect(self.updateInfos)
 		self.prepareInvent.start()
 		self.setCursor(Qt.ArrowCursor)
-		self.lab_result.setText('Completed Analyse in ' + self.runtime)
-		qDebug('End BuildInvent')
 		
+		# actions ?
 		self.btn_quit.setText('Close')
-		if len(self.prepareInvent.list_action) > 0 and not self.checkBoxStart.isChecked():
-				self.btn_action.setEnabled(True)
+		if len(self.prepareInvent.list_action) > 0:
+			# relase manuel
+			self.btn_action.setEnabled(True)
+			if self.checkBoxStart.isChecked():
+				# release
+				self.realiseActions()
 		else:
-			self.realiseActions()
+			self.lab_release.setText('no action')
+			self.progressBarrelease.setValue(0)
 	
 	def onBuild(self, percent, message):
 		"""Display advance browsing folders."""
@@ -119,10 +125,14 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.lab_releaseadvance.setText(mesresu)
 		self.tableMdlUpd.update(self.prepareInvent.list_action)
 		self.tbl_update.scrollToBottom()
-		#QApplication.processEvents()
+		if percent == 100:
+			self.lab_result.setText('Completed Analyse in ' + self.runtime)
 	
 	def realiseActions(self, list_actions=None):
 		"""Execute Actions Update."""
+		self.btn_quit.setText('Close')
+		qDebug('Start Realise Actions')
+		# Analyse ou manuel update
 		if list_actions is None:
 			self.list_actions = self.prepareInvent.list_action
 			self.apresent = self.prepareInvent.apresent
@@ -131,11 +141,10 @@ class InventGui(QWidget, Ui_UpdateWindows):
 			self.aldelete = self.prepareInvent.aldelete
 		else:
 			# no analyse
-			self.btn_quit.setText('Close')
 			self.list_actions = list_actions
 			self.lab_result.setText('No Analyse')
 			self.lab_advance.setText('')
-			self.progressBar.setValue(100)
+			self.progressBar.setValue(0)
 			self.tableMdlUpd.update(self.list_actions)
 			self.apresent = len(self.list_albums)
 			for action in self.list_actions:
@@ -145,11 +154,15 @@ class InventGui(QWidget, Ui_UpdateWindows):
 					self.alupdate += 1
 				elif action[2] == 'ADD':
 					self.albumnew += 1
-		run = ReleaseInvent(self.parent, self.list_actions)
-		run.signalrun.connect(self.updateRun)
-		run.signalend.connect(self.updateEnd)
-		run.signaltxt.connect(self.updateInfos)
-		run.executeActions()
+		if len(self.list_actions) > 0:					
+			run = ReleaseInvent(self.parent, self.list_actions)
+			run.signalrun.connect(self.updateRun)
+			run.signalend.connect(self.updateEnd)
+			run.signaltxt.connect(self.updateInfos)
+			run.executeActions()
+			self.lab_release.setText('Completed Actions in ' + self.runtime)
+		else:
+			self.stop_timer()
 
 	def updateRun(self, percent, text):
 		"""Display run operations update database."""
@@ -174,21 +187,19 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		mesresu += '\nUPDATE  : ' + format(self.alupdate, '05d')
 		mesresu += '\nDELETE  : ' + format(self.aldelete, '05d')
 		self.lab_releaseadvance.setText(mesresu)
-		#QApplication.processEvents()
 		
-	@pyqtSlot()	
 	def updateEnd(self):
 		"""Operations finished."""
 		self.lab_release.setText('Completed Operations in ' + self.runtime)
+		self.stop_timer()
 		if len(self.list_actions) > 0:
 			# create log file
 			self.updateInfos('\n- Completed Operations in ' + self.runtime)
 			self.updateInfos('\n- Create log file : ' + self.logname)
 			self.textEditrelease.moveCursor(QTextCursor.Start)
 			self.textEditrelease.ensureCursorVisible()
-			# refresh
+			# refresh datas
 			self.signalend.emit()
-			self.stop_timer()
 			QMessageBox.information(self,'Update Database', 'Completed Operations in ' + self.runtime)
 	
 	def updateInfos(self, line, level=None):
@@ -220,7 +231,6 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		text_file.write(line+"\n")
 		text_file.close()
 
-	
 	def golbalInsertCovers(self):
 		request = "SELECT ALBUMS.ID_CD, ALBUMS.Cover FROM ALBUMS " \
 					"LEFT JOIN COVERS ON ALBUMS.ID_CD = COVERS.ID_CD " \
@@ -273,13 +283,17 @@ class InventGui(QWidget, Ui_UpdateWindows):
 					'QLCDNumber{{border: none;color: black; background-color: {col1};}}' \
 					'QScrollBar:vertical{{width: 14px;}}' \
 					'QScrollBar:horizontal{{height: 14px;}}' \
+					'QTableView{{alternate-background-color: {col3};background-color: {col4};}}' \
 					'QTableView::item:selected{{ background-color:{col5}; color:white;}}'
 		mainstyle = mainstyle.format(col1 = self.parent.listcolors[0],
-									col2 = self.parent.listcolors[1], 
+									col3 = self.parent.listcolors[2],
+									col4 = self.parent.listcolors[3],
 									col5 = self.parent.listcolors[4])
 		self.setStyleSheet(mainstyle)
-		gridstyle = 'alternate-background-color: {col3};background-color: {col4};'
-		gridstyle = gridstyle.format(col3 = self.parent.listcolors[2], 
+		gridstyle = 'QHeaderView::section{{background-color: {col2};border-radius:1px;margin: 1px;padding: 2px;}}' \
+					'alternate-background-color: {col3};background-color: {col4};'
+		gridstyle = gridstyle.format(col2 = self.parent.listcolors[1],
+									col3 = self.parent.listcolors[2], 
 									col4 = self.parent.listcolors[3])
 		self.tbl_update.setStyleSheet(gridstyle)
 
