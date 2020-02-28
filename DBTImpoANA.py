@@ -46,7 +46,7 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 	def stopAnalyse(self):
 		self.boolstop = True
 		while self.boolexec:
-			wait = 1
+			pass
 
 	def run(self):
 		"""Browse Folders for update database."""

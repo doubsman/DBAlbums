@@ -2,28 +2,40 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal
 from DBTImpoALB import CardAlbum
 
-
-class ReleaseInvent(QObject):
+class ThreadReleaseInvent(QThread):
+	# signals
 	signalrun = pyqtSignal(int, str)		# percent / message
 	signaltxt = pyqtSignal(str, int)		# message / level display
-	signalend = pyqtSignal()
 	signalmacroend = pyqtSignal()
-		
+
 	def __init__(self, parent, list_actions):
-		"""Init invent, build list albums exists in database."""
-		super(ReleaseInvent, self).__init__()
+		"""Realise Action analyse in database."""
+		super(ThreadReleaseInvent, self).__init__()
 		self.parent = parent
 		self.list_action = list_actions
+		self.boolstop = False				# stop actions
+		self.boolexec = False				# actions in progress
 
-	def executeActions(self):
+	def __del__(self):
+		self.wait()
+
+	def stopActions(self):
+		self.boolstop = True
+		while self.boolexec:
+			pass
+
+	def run(self):
 		"""Action for update database.
 			[CATEGORY, FAMILY, 'DELETE/UPDATE/ADD', ID_CD, 'NAME', 'PATHNAME']"""
 		numbersactions = len(self.list_action)
+		self.boolexec = True
 		counter = 1
 		for listalbum in self.list_action:
+			if self.boolstop:
+				break
 			self.signalrun.emit((counter / numbersactions) * 100, listalbum[2])
 			message = "\n- {act} ({num}/{tot}) : {nam}".format(act = listalbum[2],
 															num = counter,
@@ -41,9 +53,8 @@ class ReleaseInvent(QObject):
 			else:
 				self.signaltxt.emit('ERROR : Operation "' + listalbum[2] + '" error', 3)
 			counter += 1 
-		#QApplication.processEvents()
+		self.boolexec = False
 		self.signalrun.emit(100, 'Completed')
-		self.signalend.emit()
 
 	def emitDisplayCardAlbum(self, cardalbum, cardtracks):
 		self.signaltxt.emit(self.displayArrayDict([cardalbum], ('ID_CD', 'CATEGORY', 'FAMILY', 'TAGMETHOD', 'POSITIONHDD', 'NAME')), 0)
@@ -131,3 +142,5 @@ class ReleaseInvent(QObject):
 			displaytabulate += '\n' + (formatStr.format(*item))
 		displaytabulate += '\n'
 		return displaytabulate
+
+

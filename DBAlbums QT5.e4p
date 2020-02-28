@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2020-02-25, 22:57:36 -->
+<!-- Saved: 2020-02-28, 17:16:50 -->
 <!-- Copyright (C) 2020 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -39,7 +39,6 @@
     <Source>DBTImpoTAG.py</Source>
     <Source>DBTImpoTRK.py</Source>
     <Source>DBTImports.py</Source>
-    <Source>DBTestLab.py</Source>
     <Source>DBThunbnai.py</Source>
     <Source>LIBDatabase.py</Source>
     <Source>Ui_DBALBUMS.py</Source>

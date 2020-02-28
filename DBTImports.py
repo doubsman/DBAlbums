@@ -3,15 +3,13 @@
 
 from os import path
 from codecs import open
-from time import time, sleep
 from PyQt5.QtGui import QFont, QIcon, QColor, QTextCursor
-from PyQt5.QtCore import (Qt, qDebug, pyqtSignal,
-						pyqtSlot, QDateTime, QTimer)
-from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber,	QMenu, QStyle, QMessageBox, QTextEdit
+from PyQt5.QtCore import Qt, qDebug, pyqtSignal, pyqtSlot, QDateTime, QTimer
+from PyQt5.QtWidgets import QWidget, QLCDNumber, QMenu, QStyle, QMessageBox, QTextEdit
 from PyQt5.QtSql import QSqlQuery
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import ThreadAnalyseInvent
-from DBTImpoRUN import ReleaseInvent
+from DBTImpoRUN import ThreadReleaseInvent
 from Ui_DBUPDATE import Ui_UpdateWindows
 
 
@@ -35,6 +33,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.typeupdate = typeupdate
 
 		self.prepareInvent = None	# Class Analyse
+		self.runActions = None		# Class Actions
 		self.logname = QDateTime.currentDateTime().toString('yyMMddhhmmss') + "_UPDATE_DATABASE_" + self.envits + ".log"
 		self.logname = path.join(self.parent.LOGS_PROG, self.logname)
 		self.albumnew = 0
@@ -163,11 +162,11 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		"""Execute Actions Analyse."""
 		self.btn_quit.setText('Close')
 		qDebug('Start Realise Actions')
-		self.runActions = ReleaseInvent(self.parent, self.list_actions)
+		self.runActions = ThreadReleaseInvent(self.parent, self.list_actions)
 		self.runActions.signalrun.connect(self.updateActions)
 		self.runActions.signaltxt.connect(self.updateConsole)
-		self.runActions.signalend.connect(self.endActions)
-		self.runActions.executeActions()
+		self.runActions.finished.connect(self.endActions)
+		self.runActions.start()
 
 	def updateActions(self, percent, text):
 		"""Display run operations update database."""
@@ -284,21 +283,32 @@ class InventGui(QWidget, Ui_UpdateWindows):
 			event.ignore()
 
 	def stopProcessRun(self):
-		# ANALYSE
-		self.stop_timer()
+		"""Cancel Processus Analyse + Actions."""
 		# analyse in progress ?
+		runana = runact = False
 		if self.prepareInvent is not None:
 			if self.prepareInvent.isRunning():
-				response = QMessageBox.question(self, "Confirmation", "Stop Analyse ?", QMessageBox.Yes, QMessageBox.No)
-				if response == QMessageBox.Yes:
+				runana = True
+		# actions in pogress ?
+		if self.runActions is not None:
+			if self.runActions.isRunning():
+				runact = True
+		# confirmation
+		if runana or runact:
+			response = QMessageBox.question(self, "Confirmation", "Stop Analyse ?", QMessageBox.Yes, QMessageBox.No)
+			if response == QMessageBox.Yes:
+				self.stop_timer()
+				if runana:
 					# stop thread
 					self.prepareInvent.stopAnalyse()
 					qDebug('close Analyse in progress')
-					return True
-				else:
-					return False
-		# ACTIONS
-
+					self.updateConsole('\n- close Analyse in progress')
+				if runact:
+					# stop thread
+					self.runActions.stopActions()
+					qDebug('close Actions in progress')
+					self.updateConsole('\n- close Actions in progress')
+			return response == QMessageBox.Yes
 		return True
 
 	def golbalInsertCovers(self):
