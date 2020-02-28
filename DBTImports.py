@@ -3,9 +3,9 @@
 
 from os import path
 from codecs import open
-from PyQt5.QtGui import QFont, QIcon, QColor, QTextCursor
+from PyQt5.QtGui import QFont, QIcon, QColor, QTextCursor, QCursor
 from PyQt5.QtCore import Qt, qDebug, pyqtSignal, pyqtSlot, QDateTime, QTimer
-from PyQt5.QtWidgets import QWidget, QLCDNumber, QMenu, QStyle, QMessageBox, QTextEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber, QMenu, QStyle, QMessageBox, QTextEdit
 from PyQt5.QtSql import QSqlQuery
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import ThreadAnalyseInvent
@@ -89,6 +89,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 
 	def startAnalyse(self):
 		qDebug('Start Analyse')
+		QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
 		self.prepareInvent = ThreadAnalyseInvent(self.list_albums,
 												self.list_columns,
 												self.list_category,
@@ -115,6 +116,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	@pyqtSlot()	
 	def endAnalyse(self):
 		"""End Analyse."""
+		QApplication.setOverrideCursor(QCursor(Qt.ArrowCursor))
 		# actions ?
 		if len(self.prepareInvent.list_action) > 0:
 			self.list_actions = self.prepareInvent.list_action
@@ -166,6 +168,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.runActions.signalrun.connect(self.updateActions)
 		self.runActions.signaltxt.connect(self.updateConsole)
 		self.runActions.finished.connect(self.endActions)
+		QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
 		self.runActions.start()
 
 	def updateActions(self, percent, text):
@@ -193,6 +196,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	@pyqtSlot()
 	def endActions(self):
 		"""Operations finished."""
+		QApplication.setOverrideCursor(QCursor(Qt.ArrowCursor))
 		self.lab_release.setText('Completed Operations in ' + self.runtime)
 		self.stop_timer()
 		if len(self.list_actions) > 0:
@@ -287,7 +291,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 				self.runActions.terminate()
 		# confirmation
 		if runana or runact:
-			response = QMessageBox.question(self, "Confirmation", "Stop Analyse ?", QMessageBox.Yes, QMessageBox.No)
+			response = QMessageBox.question(self, "Confirmation", "Stop Update Database in progress ?", QMessageBox.Yes, QMessageBox.No)
 			if response == QMessageBox.Yes:
 				self.stop_timer()
 				if runana:
@@ -302,9 +306,11 @@ class InventGui(QWidget, Ui_UpdateWindows):
 					qDebug('close Actions in progress')
 					self.runActions.terminate()
 					self.updateConsole('\n- close Actions in progress')
+				QApplication.setOverrideCursor(QCursor(Qt.ArrowCursor))
 				event.accept()
 			else:
 				event.ignore()
+		QApplication.setOverrideCursor(QCursor(Qt.ArrowCursor))				
 		event.accept()
 
 	def applyTheme(self):
@@ -327,13 +333,3 @@ class InventGui(QWidget, Ui_UpdateWindows):
 									col3 = self.parent.listcolors[2], 
 									col4 = self.parent.listcolors[3])
 		self.tbl_update.setStyleSheet(gridstyle)
-
-	def golbalInsertCovers(self):
-		request = "SELECT ALBUMS.ID_CD, ALBUMS.Cover FROM ALBUMS " \
-					"LEFT JOIN COVERS ON ALBUMS.ID_CD = COVERS.ID_CD " \
-					"WHERE COVERS.ID_CD IS NULL AND ALBUMS.Cover<>'{textnopic}'"
-		request = request.format(textnopic = self.parent.TEXT_NCO)
-		query = QSqlQuery(self.parent.dbbase)
-		query.exec_(request)
-		while query.next():
-			self.parent.CnxConnect.imagesToSql(query.value(1), query.value(0), self.parent.WIDT_PICM)

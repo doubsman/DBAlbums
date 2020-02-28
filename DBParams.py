@@ -103,14 +103,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.btn_open.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
 		self.btn_quit.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
 		
-		# events
-		self.comboBox_Envt.currentIndexChanged.connect(self.updateEnvt)
-		self.tableWidget_category.cellChanged.connect(self.changeCategory)
-		self.btn_open.clicked.connect(self.openJson)
-		self.btn_quit.clicked.connect(self.closeParams)
-		self.btn_save.clicked.connect(self.writeFileJson)
-		#self.tableWidget_category.itemSelectionChanged.connect(self.updateListcategory)
-		
 		# tbl General init
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('dbalbums') , ['Group', 'Parameters', 'Values', 'Informations'], False, False, 'dbalbums')
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('programs') , None, True, False, 'programs')
@@ -127,6 +119,16 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			self.tableWidget_general.setItem(row,3,nameitem)
 			row += 1
 
+		# events
+		self.comboBox_Envt.currentIndexChanged.connect(self.updateEnvt)
+		self.tableWidget_category.cellChanged.connect(self.changeCategory)
+		self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
+		self.tableWidget_general.cellChanged.connect(self.changeGeneral)
+		self.btn_open.clicked.connect(self.openJson)
+		self.btn_open.clicked.connect(self.openJson)
+		self.btn_quit.clicked.connect(self.closeParams)
+		self.btn_save.clicked.connect(self.writeFileJson)
+
 		self.modifydate = False
 
 		# run
@@ -141,21 +143,65 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 	def writeFileJson(self):
 		self.Json_params.saveJson()
 		self.parent.execute_command(self.EDIT_TEXT, self.FILE__INI)
-		
-	def changeCategory(self, row, col):
-		"""Modify Category"""
-		curItem = self.tableWidget_category.currentItem()
-		QMessageBox.warning(None, "Modified Category", "albums already scanned will remain with the old name\n"
-								+ "row:"+str(row)+" col:"+str(col)+' txt:'+curItem.text())
-		print("row:"+str(row)+" col:"+str(col)+' txt:'+curItem.text())
+
+	def changeGeneral(self, row, col):
+		"""Modify params."""		
+		curItem = self.tableWidget_general.currentItem()
+		# colum family param
+		familypa = self.tableWidget_general.item(row,0).text()
+		# column name param
+		namepara = self.tableWidget_general.item(row,1).text()
+		# old value param
+		oldvalue = self.Json_params.getMember(familypa)[namepara]
+		# value
+		if isinstance(oldvalue, int):
+			newvalue = int(curItem.text())
+		elif isinstance(oldvalue, list):
+			newvalue = curItem.text().replace('[','').replace(']','').replace("'",'').split(', ')
+		else:
+			newvalue = curItem.text()
+		# modify param
+		self.Json_params.getMember(familypa)[namepara] = newvalue
+
+	def changeEnvironment(self, row, col):
+		"""Modify params envt."""
 		self.btn_save.setEnabled(True)
+		curItem = self.tableWidget_envt.currentItem()
+		# value
+		newvalue = curItem.text()
+		# name envt
+		currenvt = self.comboBox_Envt.currentText()
+		# column name param
+		namepara = self.tableWidget_envt.item(row,0).text()
+		# envt json
+		environt = self.Json_params.getMember(currenvt)
+		# old value param
+		oldvalue = self.Json_params.getMember(currenvt)[namepara]
+		# modify param
+		self.Json_params.getMember(currenvt)[namepara] = newvalue
+
+	def changeCategory(self, row, col):
+		"""Modify Category."""
+		self.btn_save.setEnabled(True)
+		curItem = self.tableWidget_category.currentItem()
+		# value
+		newvalue = curItem.text()
+		# column name
+		namecolu = self.tableWidget_category.horizontalHeaderItem(self.tableWidget_category.currentItem().column()).text()
+		# category json
+		category = self.Json_params.getMember(self.label_cate.text())['FOLDER'+format(row + 1, '03d')]
+		# backup value
+		oldvalue = self.Json_params.getMember(self.label_cate.text())['FOLDER'+format(row + 1, '03d')][namecolu]
+		# modify category
+		self.Json_params.getMember(self.label_cate.text())['FOLDER'+format(row + 1, '03d')][namecolu] = newvalue
 
 	def updateEnvt(self, refresh):
-		"""Change table lists content envt + category"""
+		"""Change table lists content envt + category."""
 		if self.envits != self.comboBox_Envt.currentText() or refresh:
 			self.envits = self.comboBox_Envt.currentText()
 			# Environment
 			self.group_envt = self.Json_params.getMember(self.envits)
+			self.tableWidget_envt.cellChanged.disconnect()
 			self.updateTable(self.tableWidget_envt, self.group_envt, ['Parameters', 'Values'])
 			# Category
 			currentcate = self.tableWidget_envt.item(1,1).text()
@@ -167,7 +213,8 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			for itemd in self.list_category:
 				for item in itemd:
 					listcat.append(item)
-			self.updateTable(self.tableWidget_category, listcat, ['Category', 'Mode', 'Folder Name', 'Family'])#, False, True)
+			self.updateTable(self.tableWidget_category, listcat, ['Style', 'Mode', 'Folder', 'Family'])#, False, True)
+			self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
 			self.tableWidget_category.cellChanged.connect(self.changeCategory)
 		
 	def updateTable(self, table, listitems, listcolumns, add = False, ajustlastcolumn = False, groupjson = None):
@@ -192,6 +239,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			table.setRowCount(len(listitems) + row)
 			for key, value in listitems.items():
 				nameitem = QTableWidgetItem(str(key))
+				# column no editable
 				nameitem.setFlags(Qt.ItemIsEditable)
 				codeitem = QTableWidgetItem(str(value))
 				if groupjson:
