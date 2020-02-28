@@ -1174,7 +1174,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 								'UPDATE',
 								self.envits)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
-		self.prepareInvent.realiseActions(list_actions)
+		self.prepareInvent.realiseManualsActions(list_actions)
 
 	def renameAlbums(self):
 		"""Execute macro update."""
@@ -1214,7 +1214,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 										'UPDATE',
 										self.envits)
 				self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
-				self.prepareInvent.realiseActions(list_actions)
+				self.prepareInvent.realiseManualsActions(list_actions)
 				self.playerAudio.addMediaslist(self.homMed, self.curtrk, self.albumname)
 
 	def updateAlbums(self):
@@ -1243,7 +1243,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 									'UPDATE',
 									self.envits)
 			self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
-			self.prepareInvent.realiseActions(list_actions)
+			self.prepareInvent.realiseManualsActions(list_actions)
 
 	def correctionsAlbums(self):
 		"""Force update database for a request selection."""
@@ -1256,7 +1256,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 									'UPDATE',
 									self.envits)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
-		self.prepareInvent.realiseActions(list_actions)
+		self.prepareInvent.realiseManualsActions(list_actions)
 
 	def createLocalBase(self):
 		"""Create base Sqlite."""
