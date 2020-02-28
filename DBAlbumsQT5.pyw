@@ -1310,6 +1310,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.dbbase.close()
 			if self.playerAudio.player.state() == QMediaPlayer.PlayingState:
 				self.playerAudio.player.stop()
+			#QCoreApplication.instance().quit
 			event.accept()
 		else:
 			event.ignore()

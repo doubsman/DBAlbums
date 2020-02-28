@@ -71,7 +71,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	
 		self.btn_action.clicked.connect(self.realiseActions)
 		self.btn_action.setEnabled(False)
-		self.btn_quit.clicked.connect(self.closeImport)
+		self.btn_quit.clicked.connect(self.close)
 		self.lcdTime.setSegmentStyle(QLCDNumber.Flat)
 		
 		self.tbl_update.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -269,30 +269,22 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	def stop_timer(self):
 		self.timer.stop()
 
-	def closeImport(self):
-		"""button Close Windows."""
-		if self.stopProcessRun():
-			self.destroy()
-
 	@pyqtSlot()
 	def closeEvent(self, event):
-		"""Quit without button."""
-		if self.stopProcessRun():
-			event.accept()
-		else:
-			event.ignore()
-
-	def stopProcessRun(self):
 		"""Cancel Processus Analyse + Actions."""
 		# analyse in progress ?
 		runana = runact = False
 		if self.prepareInvent is not None:
 			if self.prepareInvent.isRunning():
 				runana = True
+			else:
+				self.prepareInvent.terminate()
 		# actions in pogress ?
 		if self.runActions is not None:
 			if self.runActions.isRunning():
 				runact = True
+			else:
+				self.runActions.terminate()
 		# confirmation
 		if runana or runact:
 			response = QMessageBox.question(self, "Confirmation", "Stop Analyse ?", QMessageBox.Yes, QMessageBox.No)
@@ -302,24 +294,18 @@ class InventGui(QWidget, Ui_UpdateWindows):
 					# stop thread
 					self.prepareInvent.stopAnalyse()
 					qDebug('close Analyse in progress')
+					self.prepareInvent.terminate()
 					self.updateConsole('\n- close Analyse in progress')
 				if runact:
 					# stop thread
 					self.runActions.stopActions()
 					qDebug('close Actions in progress')
+					self.runActions.terminate()
 					self.updateConsole('\n- close Actions in progress')
-			return response == QMessageBox.Yes
-		return True
-
-	def golbalInsertCovers(self):
-		request = "SELECT ALBUMS.ID_CD, ALBUMS.Cover FROM ALBUMS " \
-					"LEFT JOIN COVERS ON ALBUMS.ID_CD = COVERS.ID_CD " \
-					"WHERE COVERS.ID_CD IS NULL AND ALBUMS.Cover<>'{textnopic}'"
-		request = request.format(textnopic = self.parent.TEXT_NCO)
-		query = QSqlQuery(self.parent.dbbase)
-		query.exec_(request)
-		while query.next():
-			self.parent.CnxConnect.imagesToSql(query.value(1), query.value(0), self.parent.WIDT_PICM)
+				event.accept()
+			else:
+				event.ignore()
+		event.accept()
 
 	def applyTheme(self):
 		"""Apply color Theme to main Gui."""
@@ -341,3 +327,13 @@ class InventGui(QWidget, Ui_UpdateWindows):
 									col3 = self.parent.listcolors[2], 
 									col4 = self.parent.listcolors[3])
 		self.tbl_update.setStyleSheet(gridstyle)
+
+	def golbalInsertCovers(self):
+		request = "SELECT ALBUMS.ID_CD, ALBUMS.Cover FROM ALBUMS " \
+					"LEFT JOIN COVERS ON ALBUMS.ID_CD = COVERS.ID_CD " \
+					"WHERE COVERS.ID_CD IS NULL AND ALBUMS.Cover<>'{textnopic}'"
+		request = request.format(textnopic = self.parent.TEXT_NCO)
+		query = QSqlQuery(self.parent.dbbase)
+		query.exec_(request)
+		while query.next():
+			self.parent.CnxConnect.imagesToSql(query.value(1), query.value(0), self.parent.WIDT_PICM)

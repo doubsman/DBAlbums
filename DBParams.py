@@ -94,8 +94,9 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.comboBox_Envt.setCurrentIndex(self.CURT_EVT)
 		
 		# font
-		self.label_general.setFont(self.parent.fontbig)
-		self.label_cate.setFont(self.parent.fontbig)
+		self.label_libgeneral.setFont(self.parent.fontbig)
+		self.label_libcate.setFont(self.parent.fontbig)
+		self.label_libenvt.setFont(self.parent.fontbig)
 
 		# decos
 		self.btn_save.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
@@ -158,7 +159,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			self.updateTable(self.tableWidget_envt, self.group_envt, ['Parameters', 'Values'])
 			# Category
 			currentcate = self.tableWidget_envt.item(1,1).text()
-			self.label_cate.setText("Category : " + currentcate + " ")
+			self.label_cate.setText(currentcate)
 			self.tableWidget_category.cellChanged.disconnect()
 			self.list_category = []
 			self.list_category += self.Json_params.buildListcategory(self.envits)

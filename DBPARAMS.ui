@@ -19,7 +19,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_general">
        <item>
-        <widget class="QLabel" name="label_general">
+        <widget class="QLabel" name="label_libgeneral">
          <property name="text">
           <string>General</string>
          </property>
@@ -47,14 +47,17 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_environments">
        <item>
+        <widget class="QLabel" name="label_libenvt">
+         <property name="text">
+          <string>Environment</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_combo">
-         <item>
-          <widget class="QLabel" name="lab_envt">
-           <property name="text">
-            <string>Environment</string>
-           </property>
-          </widget>
-         </item>
          <item>
           <widget class="QComboBox" name="comboBox_Envt">
            <property name="sizePolicy">
@@ -92,6 +95,16 @@
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_category">
+       <item>
+        <widget class="QLabel" name="label_libcate">
+         <property name="text">
+          <string>Category</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
@@ -186,7 +199,7 @@
      <item>
       <widget class="QPushButton" name="btn_open">
        <property name="text">
-        <string>Open Json</string>
+        <string>View Json</string>
        </property>
       </widget>
      </item>
