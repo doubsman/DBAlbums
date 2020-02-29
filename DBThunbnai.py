@@ -43,8 +43,7 @@ class TNLabel(QLabel):
 		#self.setFrameStyle(QFrame.Plain)
 
 	def writeText(self, labelpixmap, labelsize, labeltext):
-		"""Add text to cover if is blank."""
-		# add text infos
+		"""Add text to cover."""
 		painter = QPainter(labelpixmap)
 		painter.setRenderHint(QPainter.Antialiasing)
 		painter.drawPixmap(QRect(0, 0, labelpixmap.width(), labelpixmap.width()), labelpixmap)
@@ -74,7 +73,7 @@ class TNLabel(QLabel):
 		return labelpixmap, booltxt
 
 
-# ##################################################################
+
 class DBThunbnails(QWidget):
 	"""Widget Thunbnails for main & artworks viewers."""
 	# signal

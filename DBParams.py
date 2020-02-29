@@ -87,18 +87,30 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.parent.centerWidget(self)
 		
 		self.envits = envt
-		self.ENVT_DEF = self.envits
 		self.NAME_EVT, self.CURT_EVT = self.Json_params.buildListEnvt(self.envits)
-		self.CURT_EVT = self.parent.curthe
+		self.CURT_EVT = 0 
+		for item in self.NAME_EVT:
+			if item == self.envits:
+				break
+			self.CURT_EVT += 1
 		self.comboBox_Envt.addItems(self.NAME_EVT)
 		self.comboBox_Envt.setCurrentIndex(self.CURT_EVT)
 		
+		# list category
+		self.listcategory = []
+		for envt in self.NAME_EVT:
+			self.listcategory.append(self.Json_params.getMember(envt)['cate'])
+		# remove doublons
+		self.listcategory = list(set(self.listcategory))
+		self.comboBox_cate.addItems(self.listcategory)
+
 		# font
 		self.label_libgeneral.setFont(self.parent.fontbig)
 		self.label_libcate.setFont(self.parent.fontbig)
 		self.label_libenvt.setFont(self.parent.fontbig)
 
 		# decos
+		self.btn_save.setEnabled(False)
 		self.btn_save.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
 		self.btn_open.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
 		self.btn_quit.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
@@ -121,6 +133,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 
 		# events
 		self.comboBox_Envt.currentIndexChanged.connect(self.updateEnvt)
+		self.comboBox_cate.currentIndexChanged.connect(self.updateCategory)
 		self.tableWidget_category.cellChanged.connect(self.changeCategory)
 		self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
 		self.tableWidget_general.cellChanged.connect(self.changeGeneral)
@@ -145,7 +158,8 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.parent.execute_command(self.EDIT_TEXT, self.FILE__INI)
 
 	def changeGeneral(self, row, col):
-		"""Modify params."""		
+		"""Modify params."""
+		self.btn_save.setEnabled(True)
 		curItem = self.tableWidget_general.currentItem()
 		# colum family param
 		familypa = self.tableWidget_general.item(row,0).text()
@@ -189,14 +203,14 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		# column name
 		namecolu = self.tableWidget_category.horizontalHeaderItem(self.tableWidget_category.currentItem().column()).text()
 		# category json
-		category = self.Json_params.getMember(self.label_cate.text())['FOLDER'+format(row + 1, '03d')]
+		category = self.Json_params.getMember(self.comboBox_cate.currentText())['FOLDER'+format(row + 1, '03d')]
 		# backup value
-		oldvalue = self.Json_params.getMember(self.label_cate.text())['FOLDER'+format(row + 1, '03d')][namecolu]
+		oldvalue = self.Json_params.getMember(self.comboBox_cate.currentText())['FOLDER'+format(row + 1, '03d')][namecolu]
 		# modify category
-		self.Json_params.getMember(self.label_cate.text())['FOLDER'+format(row + 1, '03d')][namecolu] = newvalue
+		self.Json_params.getMember(self.comboBox_cate.currentText())['FOLDER'+format(row + 1, '03d')][namecolu] = newvalue
 
 	def updateEnvt(self, refresh):
-		"""Change table lists content envt + category."""
+		"""Change table lists content envt."""
 		if self.envits != self.comboBox_Envt.currentText() or refresh:
 			self.envits = self.comboBox_Envt.currentText()
 			# Environment
@@ -205,18 +219,31 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			self.updateTable(self.tableWidget_envt, self.group_envt, ['Parameters', 'Values'])
 			# Category
 			currentcate = self.tableWidget_envt.item(1,1).text()
-			self.label_cate.setText(currentcate)
-			self.tableWidget_category.cellChanged.disconnect()
-			self.list_category = []
-			self.list_category += self.Json_params.buildListcategory(self.envits)
-			listcat = []
-			for itemd in self.list_category:
-				for item in itemd:
-					listcat.append(item)
-			self.updateTable(self.tableWidget_category, listcat, ['Style', 'Mode', 'Folder', 'Family'])#, False, True)
 			self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
-			self.tableWidget_category.cellChanged.connect(self.changeCategory)
-		
+			# select combo catergory
+			indexcate = 0 
+			for item in self.listcategory:
+				if item == currentcate:
+					break
+				indexcate += 1
+			self.comboBox_cate.setCurrentIndex(indexcate)
+
+	def updateCategory(self):
+		"""Change table lists content category."""
+		self.tableWidget_category.cellChanged.disconnect()
+		# lien envt cate
+		for envt in self.NAME_EVT:
+			if self.comboBox_cate.currentText() == self.Json_params.getMember(envt)['cate']:
+				break
+		self.content_category = self.Json_params.buildListcategory(envt)
+		print('kiki')
+		listcat = []
+		for itemd in self.content_category:
+			for item in itemd:
+				listcat.append(item)
+		self.updateTable(self.tableWidget_category, listcat, ['Style', 'Mode', 'Folder', 'Family'])#, False, True)
+		self.tableWidget_category.cellChanged.connect(self.changeCategory)
+
 	def updateTable(self, table, listitems, listcolumns, add = False, ajustlastcolumn = False, groupjson = None):
 		"""generic insert QtableWidget data"""
 		if not add:

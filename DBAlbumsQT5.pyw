@@ -277,7 +277,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 							"Edit Tags (TagScan)...", self.openTagScan)
 		self.action_UAP = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'update.png')),
 							"Update Album...", self.updateAlbums)
-		self.action_RAP = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'update.png')),
+		self.action_RAP = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'rename.png')),
 							"Rename Album...", self.renameAlbums)
 		self.action_DIS = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'discogs.png')),
 							"Search www.Discogs.com...", self.searchDiscogs)

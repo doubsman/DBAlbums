@@ -26,7 +26,7 @@
             ".mp3",
             ".wv",
             ".aac",
-            ".mpcc"
+            ".mpc"
         ],
         "mask_cover": [
             ".jpg",

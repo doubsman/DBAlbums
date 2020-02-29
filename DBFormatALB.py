@@ -69,7 +69,7 @@ class StringFormatAlbum(QObject):
 		# label	+ isrc
 		imglabel = None
 		if label != "":
-			if label.find('(')>0:
+			if label.find('(') > 0:
 				label = label[0:label.find('(')].rstrip()
 			label = label.replace(' - ', ' ').title()
 			label = 'Label: ' + label
@@ -133,7 +133,7 @@ class StringFormatAlbum(QObject):
 		infopics = ''
 		
 		# artwork
-		if nbcovers>0:
+		if nbcovers > 1:
 			infoartco = '<a style="' + stylehtml + '" href="dbfunction://a">' + infoartco + '</a>'
 			infopics = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'art.png') + '" height="' + self.heighticon + '">'
 			infopics = '<a style="' + stylehtml + '" href="dbfunction://a">' + infopics + '</a>'
