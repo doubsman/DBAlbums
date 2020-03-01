@@ -91,6 +91,9 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QTextEdit" name="textEdit_envt"/>
+       </item>
       </layout>
      </item>
      <item>
@@ -152,7 +155,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit"/>
+        <widget class="QTextEdit" name="textEdit_cate"/>
        </item>
       </layout>
      </item>

@@ -3,7 +3,7 @@
 
 from os import path
 from sys import platform
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, 
 							QMessageBox, QStyle, QInputDialog, QLineEdit, QMenu)
@@ -45,7 +45,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.THEM_COL = group_dbalbums['name_theme']
 		self.TEXT_NCO = group_dbalbums['text_nocov']
 		self.FONT_CON = group_dbalbums['font01_ttx']
-		self.HELP_LST = {'prog_build' : 'version program ({v})'.format(v=self.VERS_PROG),
+		self.HELP_GENE = {'prog_build' : 'version program ({v})'.format(v=self.VERS_PROG),
 					'wgui_width' : 'width pixels main windows ({v})'.format(v=self.WIDT_MAIN),
 					'wgui_heigh' : 'height pixels main windows ({v})'.format(v=self.HEIG_MAIN),
 					'text_nocov' : 'Define text for no covers ({v})'.format(v=self.TEXT_NCO),
@@ -76,12 +76,14 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 					'2' : '<score> label notation display',
 					'3' : '<score> label notation display'
 					}
-		self.HELP_TXT = "Category\n"
-		self.HELP_TXT +="- Name : name (rock, classic...)\n"
-		self.HELP_TXT +="- Mode : D (double tree folder) or S = (simple tree folder)\n"
-		self.HELP_TXT +="- Folder : music location folder\n"
-		self.HELP_TXT +="- Family : name (physique, web, vynils)\n"
-	
+		self.HELP_CATE = "Category\n"
+		self.HELP_CATE +="- Name : name (rock, classic...)\n"
+		self.HELP_CATE +="- Mode : D (double tree folder) or S = (simple tree folder)\n"
+		self.HELP_CATE +="- Folder : music location folder\n"
+		self.HELP_CATE +="           complete folder = parameter[raci] + [Folder]\n"
+		self.HELP_CATE +="- Family : name (physique, web, vynils)\n"
+		self.HELP_ENVT = "Environment parameters database connexion\n"
+
 		self.resize(self.WIDT_MAIN, self.HEIG_MAIN - 250)
 		self.setWindowIcon(QIcon(self.WINS_ICO))
 		self.setWindowTitle(self.TITL_PROG + path.join(self.PATH_PROG, self.FILE__INI))
@@ -103,9 +105,15 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.comboBox_cate.addItems(self.listcategory)
 
 		# font
+		font = QFont()
+		font.setFamily("Courier New")
+		font.setFixedPitch(True)
+		font.setPointSize(8)
 		self.label_libgeneral.setFont(self.parent.fontbig)
 		self.label_libcate.setFont(self.parent.fontbig)
 		self.label_libenvt.setFont(self.parent.fontbig)
+		self.textEdit_cate.setFont(font)
+		self.textEdit_envt.setFont(font)
 
 		# decos
 		self.btn_save.setEnabled(False)
@@ -121,12 +129,14 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('themes') , None, True, False, 'themes')
 		
 		# complete column help
-		self.textEdit.append(self.HELP_TXT)
+		self.textEdit_cate.append(self.HELP_CATE)
+		self.textEdit_envt.append(self.HELP_ENVT)
+
 		row = 0
 		while row < self.tableWidget_general.rowCount():
-			nameitem = QTableWidgetItem(self.HELP_LST.get(self.tableWidget_general.item(row,1).text()))
+			nameitem = QTableWidgetItem(self.HELP_GENE.get(self.tableWidget_general.item(row,1).text()))
 			nameitem.setFlags(Qt.ItemIsEditable)
-			self.tableWidget_general.setItem(row,3,nameitem)
+			self.tableWidget_general.setItem(row, 3, nameitem)
 			row += 1
 
 		# pop up
@@ -148,8 +158,8 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.btn_save.clicked.connect(self.writeFileJson)
 		self.btn_addcate.clicked.connect(self.addCategory)
 		self.btn_delcate.clicked.connect(self.delCategory)
-		self.btn_addenvt.setEnabled(False)
-		self.btn_delenvt.setEnabled(False)
+		self.btn_addenvt.clicked.connect(self.addEnvironment)
+		self.btn_delenvt.clicked.connect(self.delEnvironment)
 
 		# run
 		self.updateEnvt(True)
@@ -173,6 +183,16 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			return text
 		return None
 
+	def addEnvironment(self):
+		pass
+
+	def delEnvironment(self):
+		self.btn_save.setEnabled(True)
+		delenvt = self.comboBox_envt.currentText()
+		buttonReply = QMessageBox.question(self, 'Delete Environment', "Delete category : " + delenvt, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+		if buttonReply == QMessageBox.Yes:
+			pass
+
 	def addCategory(self):
 		# demand new name
 		self.btn_save.setEnabled(True)
@@ -182,14 +202,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 				QMessageBox.information(self, 'Add Categories', newcate + ' already present')
 			else:
 				row = len(self.listcategory)
-				# add new / add list json  auto ?
-				self.listcategory.append(newcate)
 				# modify link category to connexion
 				nameitem = QTableWidgetItem(str(newcate))
 				self.tableWidget_envt.setItem(1, 1, nameitem)
 				self.Json_params.data[self.comboBox_Envt.currentText()]['cate'] = newcate
 				# add virgin json var
-				self.Json_params.addLineCategory(newcate)
+				self.Json_params.addCategory(newcate)
 				# modify combo and new position
 				self.comboBox_cate.currentIndexChanged.disconnect() 
 				self.comboBox_cate.addItem(newcate)
@@ -211,8 +229,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			self.comboBox_cate.currentIndexChanged.disconnect() 
 			self.deleteComboCategory(delcate)
 			# del category json var
-			del(self.Json_params.data[delcate])
-			self.listcategory.remove(delcate)
+			self.Json_params.delCategory(delcate)
 			# modify link category to connexion
 			self.Json_params.data[self.comboBox_Envt.currentText()]['cate'] = self.listcategory[0]
 			self.comboBox_cate.currentIndexChanged.connect(self.updateCategory)
@@ -221,10 +238,13 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 	def delLineCategory(self):
 		self.btn_save.setEnabled(True)
 		cate = self.comboBox_cate.currentText()
-		row = self.tableWidget_category.selectedIndexes()[0].row()
-		self.Json_params.delLineCategory(cate, row + 1)
-		self.updateCategory()
-		
+		try:
+			row = self.tableWidget_category.selectedIndexes()[0].row()
+			self.Json_params.delLineCategory(cate, row + 1)
+			self.updateCategory()
+		except:
+			pass
+
 	def changeGeneral(self, row, col):
 		"""Modify params."""
 		self.btn_save.setEnabled(True)
@@ -315,16 +335,13 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		"""Change table lists content category."""
 		self.tableWidget_category.cellChanged.disconnect()
 		self.tableWidget_category.setRowCount(0)
-		# lien envt cate
-		for envt in self.NAME_EVT:
-			if self.comboBox_cate.currentText() == self.Json_params.getMember(envt)['cate']:
-				break
-		self.content_category = self.Json_params.buildListcategory(envt)
 		listcat = []
-		for itemd in self.content_category:
-			for item in itemd:
-				listcat.append(item)
-		self.updateTable(self.tableWidget_category, listcat, ['Style', 'Mode', 'Folder', 'Family'])#, False, True)
+		listcolumns = ['Style', 'Mode', 'Folder', 'Family']
+		self.content_category =	self.Json_params.data[self.comboBox_cate.currentText()]
+		for key, value in self.content_category.items():
+			for key in listcolumns:
+				listcat.append(value[key.lower()])
+		self.updateTable(self.tableWidget_category, listcat, listcolumns)
 		self.tableWidget_category.cellChanged.connect(self.changeCategory)
 
 	def updateTable(self, table, listitems, listcolumns, add = False, ajustlastcolumn = False, groupjson = None):

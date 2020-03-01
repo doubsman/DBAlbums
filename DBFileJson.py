@@ -30,6 +30,25 @@ class JsonParams(QObject):
 				Curt_Evt = len(list_envt)
 			list_envt.append(listenvt[envt])
 		return list_envt, Curt_Evt
+	
+	def addEnvt(self, envt):
+		# add new envt
+		number = len(self.data['environments']) + 1
+		virginline = self.data[self.data['environments'][0]]['envt001'].copy()
+		for key in virginline:
+			virginline[key] = 'None'
+		folder = 'envt' + format(number, '01d')
+		self.data[envt] = {folder : virginline}
+		# add list envt
+		listenvt = self.data["environments"]
+		listenvt.append(envt)
+
+	def delEnvt(self, envt):
+		del self.data[envt]
+		# add list envt
+		listenvt = self.data["environments"]
+		listenvt.remove(envt)
+		# renumeroration envtx
 
 	def buildDictScore(self):
 		"""Build list scoring."""
@@ -56,20 +75,39 @@ class JsonParams(QObject):
 			list_pathcollection.append([mstyle, mode, racate, family])
 		return list_pathcollection
 
+	def addCategory(self, namecate):
+		"""Create new Category + add list."""
+		self.addLineCategory(namecate)
+		# add list category
+		listcate = self.data['categories']
+		listcate.append(namecate)
+
+	def delCategory(self, namecate):
+		"""Delete Category + del list."""
+		del self.data[namecate]
+		# remove list category
+		listcate = self.data['categories']
+		listcate.remove(namecate)
+
 	def addLineCategory(self, category):
+		"""Creation category if new line and no exist."""
 		try:
 			number  = len(self.data[category]) + 1
 		except:
 			# new category
 			number = 1
-			self.data[category] = {}	
-		virginline = { "style" : '', "mode" : '', "folder" : '', "family" : '' }
+			self.data[category] = {}
+		virginline = self.data[self.data['categories'][0]]['FOLDER001'].copy()
+		for key in virginline:
+			virginline[key] = ''
+		#virginline = { "style" : '', "mode" : '', "folder" : '', "family" : '' }
 		folder = 'FOLDER' + format(number, '03d')
 		self.data[category][folder] = virginline
 
 	def delLineCategory(self, category, number):
 		folder = 'FOLDER' + format(number, '03d')
-		del(self.data[category][folder])
+		del self.data[category][folder]
+		# renumeroration FOLDERxxx
 
 	def saveJson(self):
 		"""Save Json file conofiguration."""
