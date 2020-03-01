@@ -21,7 +21,7 @@
        <item>
         <widget class="QLabel" name="label_libgeneral">
          <property name="text">
-          <string>General</string>
+          <string>General : Parameters</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -49,7 +49,7 @@
        <item>
         <widget class="QLabel" name="label_libenvt">
          <property name="text">
-          <string>Environment</string>
+          <string>Environment : Database</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -69,7 +69,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btn_supenvt">
+          <widget class="QPushButton" name="btn_delenvt">
            <property name="text">
             <string>Del</string>
            </property>
@@ -98,7 +98,7 @@
        <item>
         <widget class="QLabel" name="label_libcate">
          <property name="text">
-          <string>Category</string>
+          <string>Category : Storage</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -111,7 +111,7 @@
           <widget class="QComboBox" name="comboBox_cate"/>
          </item>
          <item>
-          <widget class="QPushButton" name="btn_supcate">
+          <widget class="QPushButton" name="btn_delcate">
            <property name="text">
             <string>Del</string>
            </property>

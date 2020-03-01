@@ -5,7 +5,8 @@ from os import path
 from sys import platform
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, QMessageBox, QStyle
+from PyQt5.QtWidgets import (QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, 
+							QMessageBox, QStyle, QInputDialog, QLineEdit, QMenu)
 from DBFileJson import JsonParams
 from Ui_DBPARAMS import Ui_ParamsJson
 
@@ -86,6 +87,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.setWindowTitle(self.TITL_PROG + path.join(self.PATH_PROG, self.FILE__INI))
 		self.parent.centerWidget(self)
 		
+		# list + combo envt
 		self.envits = envt
 		self.NAME_EVT, self.CURT_EVT = self.Json_params.buildListEnvt(self.envits)
 		self.CURT_EVT = 0 
@@ -96,12 +98,8 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.comboBox_Envt.addItems(self.NAME_EVT)
 		self.comboBox_Envt.setCurrentIndex(self.CURT_EVT)
 		
-		# list category
-		self.listcategory = []
-		for envt in self.NAME_EVT:
-			self.listcategory.append(self.Json_params.getMember(envt)['cate'])
-		# remove doublons
-		self.listcategory = list(set(self.listcategory))
+		# list + combo category
+		self.listcategory = self.Json_params.getMember('categories')
 		self.comboBox_cate.addItems(self.listcategory)
 
 		# font
@@ -131,24 +129,36 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			self.tableWidget_general.setItem(row,3,nameitem)
 			row += 1
 
+		# pop up
+		self.menua = QMenu()
+		self.action2 = self.menua.addAction("add line", self.addLineCategory)
+		self.action3 = self.menua.addAction("del line", self.delLineCategory)
+
 		# events
-		self.comboBox_Envt.currentIndexChanged.connect(self.updateEnvt)
 		self.comboBox_cate.currentIndexChanged.connect(self.updateCategory)
+		self.comboBox_Envt.currentIndexChanged.connect(self.updateEnvt)
 		self.tableWidget_category.cellChanged.connect(self.changeCategory)
+		self.tableWidget_category.setContextMenuPolicy(Qt.CustomContextMenu)
+		self.tableWidget_category.customContextMenuRequested.connect(self.popUpcate)
 		self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
 		self.tableWidget_general.cellChanged.connect(self.changeGeneral)
 		self.btn_open.clicked.connect(self.openJson)
 		self.btn_open.clicked.connect(self.openJson)
 		self.btn_quit.clicked.connect(self.closeParams)
 		self.btn_save.clicked.connect(self.writeFileJson)
-
-		self.modifydate = False
+		self.btn_addcate.clicked.connect(self.addCategory)
+		self.btn_delcate.clicked.connect(self.delCategory)
+		self.btn_addenvt.setEnabled(False)
+		self.btn_delenvt.setEnabled(False)
 
 		# run
 		self.updateEnvt(True)
 		self.applyTheme()
 		self.show()
-		
+
+	def popUpcate(self, position):
+		self.menua.exec_(self.tableWidget_category.viewport().mapToGlobal(position))
+
 	def openJson(self):
 		"""Open json file with text editor."""
 		self.parent.execute_command(self.EDIT_TEXT, self.FILE__INI)
@@ -157,6 +167,64 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.Json_params.saveJson()
 		self.parent.execute_command(self.EDIT_TEXT, self.FILE__INI)
 
+	def getText(self, tittle, text):
+		text, okPressed = QInputDialog.getText(self, tittle, text, QLineEdit.Normal, "")
+		if okPressed and text != '':
+			return text
+		return None
+
+	def addCategory(self):
+		# demand new name
+		self.btn_save.setEnabled(True)
+		newcate = self.getText('Add Categories', 'Name :')
+		if newcate is not None:
+			if newcate in self.listcategory:
+				QMessageBox.information(self, 'Add Categories', newcate + ' already present')
+			else:
+				row = len(self.listcategory)
+				# add new / add list json  auto ?
+				self.listcategory.append(newcate)
+				# modify link category to connexion
+				nameitem = QTableWidgetItem(str(newcate))
+				self.tableWidget_envt.setItem(1, 1, nameitem)
+				self.Json_params.data[self.comboBox_Envt.currentText()]['cate'] = newcate
+				# add virgin json var
+				self.Json_params.addLineCategory(newcate)
+				# modify combo and new position
+				self.comboBox_cate.currentIndexChanged.disconnect() 
+				self.comboBox_cate.addItem(newcate)
+				self.comboBox_cate.currentIndexChanged.connect(self.updateCategory)
+				self.selectComboCategory(newcate)
+	
+	def addLineCategory(self):
+		self.btn_save.setEnabled(True)
+		cate = self.comboBox_cate.currentText()
+		self.Json_params.addLineCategory(cate)
+		self.updateCategory()
+
+	def delCategory(self):
+		self.btn_save.setEnabled(True)
+		delcate = self.comboBox_cate.currentText()
+		buttonReply = QMessageBox.question(self, 'Delete Category', "Delete category : " + delcate, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+		if buttonReply == QMessageBox.Yes:
+			# modify combo and new position
+			self.comboBox_cate.currentIndexChanged.disconnect() 
+			self.deleteComboCategory(delcate)
+			# del category json var
+			del(self.Json_params.data[delcate])
+			self.listcategory.remove(delcate)
+			# modify link category to connexion
+			self.Json_params.data[self.comboBox_Envt.currentText()]['cate'] = self.listcategory[0]
+			self.comboBox_cate.currentIndexChanged.connect(self.updateCategory)
+			self.comboBox_cate.setCurrentIndex(0)
+
+	def delLineCategory(self):
+		self.btn_save.setEnabled(True)
+		cate = self.comboBox_cate.currentText()
+		row = self.tableWidget_category.selectedIndexes()[0].row()
+		self.Json_params.delLineCategory(cate, row + 1)
+		self.updateCategory()
+		
 	def changeGeneral(self, row, col):
 		"""Modify params."""
 		self.btn_save.setEnabled(True)
@@ -175,7 +243,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		else:
 			newvalue = curItem.text()
 		# modify param
-		self.Json_params.getMember(familypa)[namepara] = newvalue
+		self.Json_params.data[familypa][namepara] = newvalue
 
 	def changeEnvironment(self, row, col):
 		"""Modify params envt."""
@@ -192,7 +260,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		# old value param
 		oldvalue = self.Json_params.getMember(currenvt)[namepara]
 		# modify param
-		self.Json_params.getMember(currenvt)[namepara] = newvalue
+		self.Json_params.data[currenvt][namepara] = newvalue
 
 	def changeCategory(self, row, col):
 		"""Modify Category."""
@@ -201,13 +269,13 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		# value
 		newvalue = curItem.text()
 		# column name
-		namecolu = self.tableWidget_category.horizontalHeaderItem(self.tableWidget_category.currentItem().column()).text()
+		namecolu = self.tableWidget_category.horizontalHeaderItem(self.tableWidget_category.currentItem().column()).text().lower()
 		# category json
-		category = self.Json_params.getMember(self.comboBox_cate.currentText())['FOLDER'+format(row + 1, '03d')]
+		category = self.Json_params.data[self.comboBox_cate.currentText()]['FOLDER'+format(row + 1, '03d')]
 		# backup value
-		oldvalue = self.Json_params.getMember(self.comboBox_cate.currentText())['FOLDER'+format(row + 1, '03d')][namecolu]
+		oldvalue = category[namecolu]
 		# modify category
-		self.Json_params.getMember(self.comboBox_cate.currentText())['FOLDER'+format(row + 1, '03d')][namecolu] = newvalue
+		self.Json_params.data[self.comboBox_cate.currentText()]['FOLDER'+format(row + 1, '03d')][namecolu] = newvalue
 
 	def updateEnvt(self, refresh):
 		"""Change table lists content envt."""
@@ -221,22 +289,37 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			currentcate = self.tableWidget_envt.item(1,1).text()
 			self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
 			# select combo catergory
-			indexcate = 0 
-			for item in self.listcategory:
-				if item == currentcate:
-					break
-				indexcate += 1
-			self.comboBox_cate.setCurrentIndex(indexcate)
+			self.selectComboCategory(currentcate)
+
+	def selectComboCategory(self, cate):
+		# select combo catergory
+		indexcate = 0 
+		for item in self.listcategory:
+			if item == cate:
+				break
+			indexcate += 1
+		self.comboBox_cate.setCurrentIndex(indexcate)
+		if indexcate == 0:
+			self.updateCategory()
+
+	def deleteComboCategory(self, cate):
+		# select combo catergory
+		indexcate = 0 
+		for item in self.listcategory:
+			if item == cate:
+				break
+			indexcate += 1
+		self.comboBox_cate.removeItem(indexcate)
 
 	def updateCategory(self):
 		"""Change table lists content category."""
 		self.tableWidget_category.cellChanged.disconnect()
+		self.tableWidget_category.setRowCount(0)
 		# lien envt cate
 		for envt in self.NAME_EVT:
 			if self.comboBox_cate.currentText() == self.Json_params.getMember(envt)['cate']:
 				break
 		self.content_category = self.Json_params.buildListcategory(envt)
-		print('kiki')
 		listcat = []
 		for itemd in self.content_category:
 			for item in itemd:
@@ -249,6 +332,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		if not add:
 			# init table
 			#table.clear()
+			table.setRowCount(0)
 			table.setColumnCount(0)
 			table.verticalHeader().setDefaultSectionSize(self.C_HEIGHT)
 			table.verticalHeader().setVisible(False)
@@ -284,6 +368,8 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			table.setRowCount(len(listitems) / len(listcolumns) + row)
 			col = 0
 			for value in listitems:
+				if value is None:
+					value= ''
 				nameitem = QTableWidgetItem(str(value))			
 				table.setItem(row,col,nameitem)
 				if col < len(listcolumns) -1:

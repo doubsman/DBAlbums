@@ -15,6 +15,7 @@ class JsonParams(QObject):
 		data_file = open(self.file_json, 'r')
 		self.data = load(data_file)
 		data_file.close()
+		#self.data = loads(self.data_file).read())
 
 	def getMember(self, member):
 		"""Return array infos member of json."""
@@ -46,7 +47,7 @@ class JsonParams(QObject):
 		listcate = self.data[category]
 		for cate in listcate:
 			# one element
-			mstyle = listcate[cate]["Style"]
+			mstyle = listcate[cate]["style"]
 			family = listcate[cate]["family"]
 			racate = listcate[cate]["folder"]
 			mode = listcate[cate]["mode"]
@@ -54,6 +55,21 @@ class JsonParams(QObject):
 			racate = self.convertUNC(racate)
 			list_pathcollection.append([mstyle, mode, racate, family])
 		return list_pathcollection
+
+	def addLineCategory(self, category):
+		try:
+			number  = len(self.data[category]) + 1
+		except:
+			# new category
+			number = 1
+			self.data[category] = {}	
+		virginline = { "style" : '', "mode" : '', "folder" : '', "family" : '' }
+		folder = 'FOLDER' + format(number, '03d')
+		self.data[category][folder] = virginline
+
+	def delLineCategory(self, category, number):
+		folder = 'FOLDER' + format(number, '03d')
+		del(self.data[category][folder])
 
 	def saveJson(self):
 		"""Save Json file conofiguration."""

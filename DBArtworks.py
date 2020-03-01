@@ -50,7 +50,7 @@ class CoverViewGui(QDialog):
 																					ho = str(self.cover.height())))
 
 
-# ##################################################################
+
 class ArtworksGui(QWidget):
 	"""AcdSee lite."""
 	def __init__(self, parent, pathartworks, nametittle, createcover, w, h, sizeTN):
@@ -177,34 +177,3 @@ class ArtworksGui(QWidget):
 		self.mycover.save(path_cover)
 
 
-# # TEST
-#from DBFileJson import JsonParams
-
-# class TESTArtWork(QObject):
-	# PATH_PROG = path.dirname(path.abspath(__file__))
-	# FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
-	# Json_params = JsonParams(FILE__INI)
-	# group_dbalbums = Json_params.getMember('dbalbums')
-	# VERS_PROG = group_dbalbums['prog_build']
-	# TITL_PROG = "DBAlbums v{v} (2017)".format(v=VERS_PROG)
-	# TITL_PROG = TITL_PROG + " : Artwork viewer"
-	# WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
-	# TEXT_NCO = group_dbalbums['text_nocov']
-	# MASKCOVER = ('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.bmp', '.tiff')
-
-	# def __init__(self, filtername = '', PathDownload = '',  parent=None):
-		# super(TESTArtWork, self).__init__(None)
-		# self.parent = parent
-		# ArtworksGui(r"D:\WorkDev\DBAlbumsTEST\ROCK\Download\Red Hot Chili Peppers - Californication (1999)", 
-							# 'test', 
-							# 'chocolat', 
-							# 1250, 
-							# 1060, 
-							# 150, 
-							# self)
-
-# if __name__ == '__main__':
-	# app = QApplication(argv)
-	# run = TESTArtWork()
-	# rc = app.exec_()
-	# exit(rc)
