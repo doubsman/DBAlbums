@@ -62,7 +62,7 @@
         "envt010"   : "MP3_TEST_SQLITE"
     },
     "categories"    : [ "LOSSLESS_CATEGORY", "MP3_CATEGORY", "MP3_TEST_CATEGORY" ],
-    "families"      : {   
+    "families"      : {
         "Physique"       : "Colonne",
         "Label/Physique" : "Labels",
         "Download"       : "Download",

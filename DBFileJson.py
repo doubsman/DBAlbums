@@ -53,22 +53,21 @@ class JsonParams(QObject):
 		del self.data[envt]
 		# remove list envt
 		listenvt = self.data["environments"]
-		# ?????
-		keysup = listenvt.keys()[(listenvt.values()).index(envt)]
+		keysup = [key for key, value in listenvt.items() if value == envt][0]
 		row = 1
 		rows = len(listenvt)
 		boolrenum = False
 		for key, value in listenvt.items():
-			# begin renum
+			folderdes = 'envt' + format(row, '03d')
 			if key == keysup:
 				boolrenum = True
+			# begin renum
 			if boolrenum:
-				folderdes = 'envt' + format(row, '03d')
-				foldersrc = 'envt' + format(row + 1, '03d')
-				listenvt[folderdes] = listenvt[foldersrc]
-			if row == rows:
-				del listenvt[folderdes]
+				if row < rows:
+					foldersrc = 'envt' + format(row + 1, '03d')
+					listenvt[folderdes] = listenvt[foldersrc]
 			row += 1
+		del listenvt[folderdes]
 
 	def buildDictScore(self):
 		"""Build list scoring."""

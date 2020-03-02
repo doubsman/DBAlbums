@@ -102,15 +102,16 @@
         ]
     },
     "environments": {
-        "envt1": "LOSSLESS_MYSQL",
-        "envt2": "LOSSLESS_SQLITE",
-        "envt3": "LOSSLESS_SQLSERVER",
-        "envt4": "LOSSLESS_TEST",
-        "envt5": "LOSSLESS_TEST_SQLITE",
-        "envt6": "LOSSLESS_TEST_SQLSERVER",
-        "envt7": "MP3_MYSQL",
-        "envt8": "MP3_SQLITE",
-        "envt9": "MP3_TEST_MYSQL"
+        "envt001": "LOSSLESS_MYSQL",
+        "envt002": "LOSSLESS_SQLITE",
+        "envt003": "LOSSLESS_SQLSERVER",
+        "envt004": "LOSSLESS_TEST",
+        "envt005": "LOSSLESS_TEST_SQLITE",
+        "envt006": "LOSSLESS_TEST_SQLSERVER",
+        "envt007": "MP3_MYSQL",
+        "envt008": "MP3_SQLITE",
+        "envt009": "MP3_TEST_MYSQL",
+        "envt010": "MP3_TEST_SQLITE"
     },
     "categories": [
         "LOSSLESS_CATEGORY",
@@ -124,25 +125,31 @@
         "Artists": "Artists"
     },
     "LOSSLESS_CATEGORY": {
-        "FOLDER001": {
+        "folder001": {
             "style": "CLASSIC",
             "mode": "T",
             "folder": "CLASSIC",
             "family": null
         },
-        "FOLDER002": {
+        "folder002": {
             "style": "TECHNO",
             "mode": "T",
             "folder": "TECHNO",
             "family": null
         },
-        "FOLDER004": {
+        "folder003": {
+            "style": "TRANCE",
+            "mode": "T",
+            "folder": "TRANCE",
+            "family": null
+        },
+        "folder004": {
             "style": "ROCK",
             "mode": "T",
             "folder": "ROCK",
             "family": null
         },
-        "FOLDER005": {
+        "folder005": {
             "style": "REGGAE",
             "mode": "T",
             "folder": "REGGAE",
@@ -150,127 +157,127 @@
         }
     },
     "MP3_CATEGORY": {
-        "FOLDER001": {
+        "folder001": {
             "style": "TECHNO",
             "mode": "D",
             "folder": "Techno Artists",
             "family": "Download"
         },
-        "FOLDER002": {
+        "folder002": {
             "style": "TECHNO",
             "mode": "D",
             "folder": "Techno Labels",
             "family": "Label"
         },
-        "FOLDER003": {
+        "folder003": {
             "style": "TECHNO",
             "mode": "S",
             "folder": "Techno",
             "family": "Download"
         },
-        "FOLDER004": {
+        "folder004": {
             "style": "PSYTECHNO",
             "mode": "S",
             "folder": "Psytechno",
             "family": "Download"
         },
-        "FOLDER005": {
+        "folder005": {
             "style": "ELECTRO",
             "mode": "S",
             "folder": "Electro",
             "family": "Download"
         },
-        "FOLDER006": {
+        "folder006": {
             "style": "AMBIENT",
             "mode": "S",
             "folder": "Ambient",
             "family": "Download"
         },
-        "FOLDER007": {
+        "folder007": {
             "style": "ACID",
             "mode": "S",
             "folder": "Acid",
             "family": "Download"
         },
-        "FOLDER008": {
+        "folder008": {
             "style": "HOUSE",
             "mode": "S",
             "folder": "House",
             "family": "Download"
         },
-        "FOLDER009": {
+        "folder009": {
             "style": "DOWNTEMPO",
             "mode": "S",
             "folder": "DownTempo",
             "family": "Download"
         },
-        "FOLDER010": {
+        "folder010": {
             "style": "SUOMI",
             "mode": "S",
             "folder": "PsySuomi",
             "family": "Download"
         },
-        "FOLDER011": {
+        "folder011": {
             "style": "PSY-CHILL",
             "mode": "S",
             "folder": "PsyChill",
             "family": "Download"
         },
-        "FOLDER012": {
+        "folder012": {
             "style": "REGGAE",
             "mode": "S",
             "folder": "Reggae",
             "family": "Download"
         },
-        "FOLDER013": {
+        "folder013": {
             "style": "REGGAE",
             "mode": "D",
             "folder": "Reggae Labels",
             "family": "Label"
         },
-        "FOLDER014": {
+        "folder014": {
             "style": "HARDTEK",
             "mode": "S",
             "folder": "Hardtek",
             "family": "Download"
         },
-        "FOLDER015": {
+        "folder015": {
             "style": "ROCK",
             "mode": "S",
             "folder": "Rock",
             "family": "Download"
         },
-        "FOLDER016": {
+        "folder016": {
             "style": "ROCK",
             "mode": "D",
             "folder": "Rock Artists",
             "family": "Download"
         },
-        "FOLDER017": {
+        "folder017": {
             "style": "DRUMBASS",
             "mode": "S",
             "folder": "Drum Vinyls",
             "family": "Download"
         },
-        "FOLDER018": {
+        "folder018": {
             "style": "PSY-DARK",
             "mode": "D",
             "folder": "PsyDark",
             "family": "Download"
         },
-        "FOLDER019": {
+        "folder019": {
             "style": "TRANCE",
             "mode": "D",
             "folder": "Psytrance\\_master",
             "family": "Download"
         },
-        "FOLDER020": {
+        "folder020": {
             "style": "TRANCE",
             "mode": "D",
             "folder": "Psytrance\\_years",
             "family": "Download"
         },
-        "FOLDER021": {
+        "folder021": {
             "style": "TRANCE",
             "mode": "D",
             "folder": "Psytrance\\_Labels",
@@ -278,7 +285,7 @@
         }
     },
     "MP3_TEST_CATEGORY": {
-        "FOLDER001": {
+        "folder001": {
             "style": "ACID",
             "mode": "S",
             "folder": "Acid",
@@ -374,5 +381,15 @@
         "pass": "MwRbBR2HA8PFQjuu",
         "base": "DBALBUMSMP3TEST",
         "port": 3307
+    },
+    "MP3_TEST_SQLITE": {
+        "raci": "\\\\HOMERSTATION\\_Mp3",
+        "cate": "MP3_TEST_CATEGORY",
+        "typb": "sqlite",
+        "serv": null,
+        "user": null,
+        "pass": null,
+        "base": null,
+        "port": null
     }
 }
