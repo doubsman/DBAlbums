@@ -94,7 +94,9 @@ class InventGui(QWidget, Ui_UpdateWindows):
 												self.list_columns,
 												self.list_category,
 												self.typeupdate,
-												self.envits)
+												self.envits,
+												self.parent.MASKAUDIO,
+												self.parent.FAMILIES)
 		self.prepareInvent.signalchgt.connect(self.updateAnalyse)
 		self.prepareInvent.signaltext.connect(self.updateConsole)
 		self.prepareInvent.finished.connect(self.endAnalyse)

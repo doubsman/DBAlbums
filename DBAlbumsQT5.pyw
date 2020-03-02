@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2020, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.68"
+__version__ = "1.69"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -90,6 +90,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		EDIT_TEXT = r'' + group_programs['txt_win']
 	SCOR_TRACKS = SCOR_ALBUMS = Json_params.buildDictScore()
 	NAME_EVT, CURT_EVT = Json_params.buildListEnvt(ENVT_DEF)
+	FAMILIES = Json_params.getMember('families')
 	C_HEIGHT = 21
 	COEF_ZOOM = 100
 
@@ -558,6 +559,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 	def selectEnvt(self, numcombo):
 		"""Select Envt in Combobox."""
+		self.CURT_EVT = numcombo
 		self.connectEnvt()
 
 	def connectEnvt(self, refresh=False):

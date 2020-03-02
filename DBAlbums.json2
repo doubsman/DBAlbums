@@ -1,6 +1,6 @@
 {
     "dbalbums": {
-        "prog_build": 1.68,
+        "prog_build": 1.69,
         "wgui_width": 1400,
         "wgui_heigh": 1060,
         "text_nocov": "<No Picture>",
@@ -115,164 +115,163 @@
     "categories": [
         "LOSSLESS_CATEGORY",
         "MP3_CATEGORY",
-        "MP3_TEST_CATEGORY",
-        "KOKO"
+        "MP3_TEST_CATEGORY"
     ],
+    "families": {
+        "Physique": "Colonne",
+        "Label/Physique": "Labels",
+        "Download": "Download",
+        "Artists": "Artists"
+    },
     "LOSSLESS_CATEGORY": {
         "FOLDER001": {
-            "Style": "CLASSIC",
-            "mode": "D",
+            "style": "CLASSIC",
+            "mode": "T",
             "folder": "CLASSIC",
             "family": null
         },
         "FOLDER002": {
-            "Style": "TECHNO",
-            "mode": "D",
+            "style": "TECHNO",
+            "mode": "T",
             "folder": "TECHNO",
             "family": null
         },
-        "FOLDER003": {
-            "Style": "TRANCE",
-            "mode": "D",
-            "folder": "TRANCE",
-            "family": null
-        },
         "FOLDER004": {
-            "Style": "ROCK",
-            "mode": "D",
+            "style": "ROCK",
+            "mode": "T",
             "folder": "ROCK",
             "family": null
         },
         "FOLDER005": {
-            "Style": "REGGAE",
-            "mode": "D",
+            "style": "REGGAE",
+            "mode": "T",
             "folder": "REGGAE",
             "family": null
         }
     },
     "MP3_CATEGORY": {
         "FOLDER001": {
-            "Style": "TECHNO",
+            "style": "TECHNO",
             "mode": "D",
             "folder": "Techno Artists",
             "family": "Download"
         },
         "FOLDER002": {
-            "Style": "TECHNO",
+            "style": "TECHNO",
             "mode": "D",
             "folder": "Techno Labels",
             "family": "Label"
         },
         "FOLDER003": {
-            "Style": "TECHNO",
+            "style": "TECHNO",
             "mode": "S",
             "folder": "Techno",
             "family": "Download"
         },
         "FOLDER004": {
-            "Style": "PSYTECHNO",
+            "style": "PSYTECHNO",
             "mode": "S",
             "folder": "Psytechno",
             "family": "Download"
         },
         "FOLDER005": {
-            "Style": "ELECTRO",
+            "style": "ELECTRO",
             "mode": "S",
             "folder": "Electro",
             "family": "Download"
         },
         "FOLDER006": {
-            "Style": "AMBIENT",
+            "style": "AMBIENT",
             "mode": "S",
             "folder": "Ambient",
             "family": "Download"
         },
         "FOLDER007": {
-            "Style": "ACID",
+            "style": "ACID",
             "mode": "S",
             "folder": "Acid",
             "family": "Download"
         },
         "FOLDER008": {
-            "Style": "HOUSE",
+            "style": "HOUSE",
             "mode": "S",
             "folder": "House",
             "family": "Download"
         },
         "FOLDER009": {
-            "Style": "DOWNTEMPO",
+            "style": "DOWNTEMPO",
             "mode": "S",
             "folder": "DownTempo",
             "family": "Download"
         },
         "FOLDER010": {
-            "Style": "SUOMI",
+            "style": "SUOMI",
             "mode": "S",
             "folder": "PsySuomi",
             "family": "Download"
         },
         "FOLDER011": {
-            "Style": "PSY-CHILL",
+            "style": "PSY-CHILL",
             "mode": "S",
             "folder": "PsyChill",
             "family": "Download"
         },
         "FOLDER012": {
-            "Style": "REGGAE",
+            "style": "REGGAE",
             "mode": "S",
             "folder": "Reggae",
             "family": "Download"
         },
         "FOLDER013": {
-            "Style": "REGGAE",
+            "style": "REGGAE",
             "mode": "D",
             "folder": "Reggae Labels",
             "family": "Label"
         },
         "FOLDER014": {
-            "Style": "HARDTEK",
+            "style": "HARDTEK",
             "mode": "S",
             "folder": "Hardtek",
             "family": "Download"
         },
         "FOLDER015": {
-            "Style": "ROCK",
+            "style": "ROCK",
             "mode": "S",
             "folder": "Rock",
             "family": "Download"
         },
         "FOLDER016": {
-            "Style": "ROCK",
+            "style": "ROCK",
             "mode": "D",
             "folder": "Rock Artists",
             "family": "Download"
         },
         "FOLDER017": {
-            "Style": "DRUMBASS",
+            "style": "DRUMBASS",
             "mode": "S",
             "folder": "Drum Vinyls",
             "family": "Download"
         },
         "FOLDER018": {
-            "Style": "PSY-DARK",
+            "style": "PSY-DARK",
             "mode": "D",
             "folder": "PsyDark",
             "family": "Download"
         },
         "FOLDER019": {
-            "Style": "TRANCE",
+            "style": "TRANCE",
             "mode": "D",
             "folder": "Psytrance\\_master",
             "family": "Download"
         },
         "FOLDER020": {
-            "Style": "TRANCE",
+            "style": "TRANCE",
             "mode": "D",
             "folder": "Psytrance\\_years",
             "family": "Download"
         },
         "FOLDER021": {
-            "Style": "TRANCE",
+            "style": "TRANCE",
             "mode": "D",
             "folder": "Psytrance\\_Labels",
             "family": "Label"
@@ -280,7 +279,7 @@
     },
     "MP3_TEST_CATEGORY": {
         "FOLDER001": {
-            "Style": "ACID",
+            "style": "ACID",
             "mode": "S",
             "folder": "Acid",
             "family": "Download"
@@ -328,7 +327,7 @@
     },
     "LOSSLESS_TEST_SQLITE": {
         "raci": "D:\\WorkDev\\DBAlbumsTEST",
-        "cate": "KOKO",
+        "cate": "LOSSLESS_CATEGORY",
         "typb": "sqlite",
         "serv": null,
         "user": null,
@@ -375,19 +374,5 @@
         "pass": "MwRbBR2HA8PFQjuu",
         "base": "DBALBUMSMP3TEST",
         "port": 3307
-    },
-    "KOKO": {
-        "FOLDER001": {
-            "Style": "",
-            "mode": "",
-            "folder": "",
-            "family": ""
-        },
-        "FOLDER002": {
-            "Style": "",
-            "mode": "",
-            "folder": "",
-            "family": ""
-        }
     }
 }

@@ -15,14 +15,7 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 	signalchgt = pyqtSignal(int, str)		# signal browse
 	signaltext = pyqtSignal(str, int)
 
-	# global
-	families =  {	"Physique"			: "Colonne", 
-					"Label/Physique"	: "Labels", 
-					"Download"			: "Download", 
-					"Artists"			: "Artists"}
-	mask_amedias = ('.flac','.ape','.wma','.mp3','.wv','.aac','.mpc')
-
-	def __init__(self, list_albums, list_columns, list_category, typeupdate, envt):
+	def __init__(self, list_albums, list_columns, list_category, typeupdate, envt, mask_amedias, families):
 		super(ThreadAnalyseInvent, self).__init__()
 		self.boolstop = False				# stop analyse
 		self.boolexec = False				# analyse in progress
@@ -32,6 +25,8 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 		self.totalalbums = len(self.list_albums)
 		self.typeupdate = typeupdate
 		self.envt = envt
+		self.mask_amedias = mask_amedias
+		self.families = families
 		self.list_invent = []
 		self.list_finaly = []
 		self.list_action = []
@@ -61,26 +56,15 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 			typsubfo = rowcategory[1]
 			cracines = rowcategory[2]
 			position = rowcategory[3]
-			self.signaltext.emit('ANALYSE FOLDERS: ' + '.'.join(item for item in rowcategory if item), 1)
-			# LOSSLESS invent
-			if 'LOSSLESS' in self.envt:
-				listsubfolders = self.folder_list_folders(cracines)
-				for fposition in listsubfolders:
-					# define family
-					boolfami, family = self.convertPositionFamily(fposition)
-					folder = path.join(cracines, fposition)
-					if boolfami:
-						# no sub folders for folder LOSSLESS Download if no TRANCE
-						if family == 'Download' and category != 'TRANCE':
-							self.analyseSubFolders(category, family, folder, 'S')
-						else:
-							self.analyseSubFolders(category, family, folder, typsubfo)
-			else:
-				# MP3 invent
-				# define family
-				boolfami, family = self.convertPositionFamily(position)
-				if boolfami:
+			self.signaltext.emit('ANALYSE CATEGORY         : [' + '.'.join(item for item in rowcategory if item), 1)
+			if typsubfo != 'T':
+				family = self.convertPositionFamily(position)
+				# filter folders ??
+				if family != '':
 					self.analyseSubFolders(category, family, cracines, typsubfo)
+			else:
+				# cacul family in name folder
+				self.analyseSubFolders(category, None, cracines, typsubfo)
 		# DELETE
 		self.numbers = 0
 		self.signalchgt.emit(self.numbers, '{0:<35}'.format('2/2 Browsing database'))
@@ -106,6 +90,7 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 	def analyseSubFolders(self, category, family, folder, typefolder):
 		"""Browse sub folders or sub/sub folders"""
 		if typefolder == 'S':
+			# simple folder
 			listsubfolders = self.folder_list_folders(folder)
 			for subfolder in listsubfolders:
 				if self.boolstop:
@@ -120,25 +105,31 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 			for subfolder in listsubfolders:
 				if self.boolstop:
 					break
-				subfolder = path.join(folder, subfolder)
-				self.signaltext.emit('ANALYSE SUBFOLDERS: ' + subfolder, 1)
-				listsubsubfolders = self.folder_list_folders(subfolder)
-				for subsubfolder in listsubsubfolders:
-					subsubfolder = path.join(subfolder, subsubfolder)
-					self.numbers += 1
-					self.emitLoadindInvent(self.numbers, '1/2 Browsing folders ' + category)
-					self.testUpdateAlbum(category, family, subsubfolder)		
+				subsubfolder = path.join(folder, subfolder)
+				self.signaltext.emit('      ANALYSE SUBFOLDERS : ' + subsubfolder, 1)
+				self.analyseSubFolders(category, family, subsubfolder, 'S')
+		elif typefolder == 'T':
+			# sub sub folders
+			listsubfolders = self.folder_list_folders(folder)
+			for fposition in listsubfolders:
+				if self.boolstop:
+					break
+				# define family
+				family = self.convertPositionFamily(fposition)
+				subsubsubfolder = path.join(folder, fposition)
+				self.signaltext.emit('   ANALYSE FOLDERS       : ' + subsubsubfolder, 1)
+				# filter folders ??
+				if family != '':
+					self.analyseSubFolders(category, family, subsubsubfolder, 'D')
 		
 	def convertPositionFamily(self, position):
 		"""Convert position to family via dict."""
 		family = ''
-		boolfami = False
-		for fam, pos in self.families.items():
-			if pos in position or position in pos:
-				family = fam
-				boolfami = True
+		for key, fol in self.families.items():
+			if fol in position or position in fol:
+				family = key
 				break
-		return boolfami, family
+		return family
 	
 	def emitLoadindInvent(self, number,  message = ''):
 		"""Browsing folders in progress."""

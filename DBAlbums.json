@@ -1,6 +1,6 @@
 {
     "dbalbums": {
-        "prog_build": 1.68,
+        "prog_build": 1.69,
         "wgui_width": 1400,
         "wgui_heigh": 1060,
         "text_nocov": "<No Picture>",
@@ -50,49 +50,56 @@
         "dark"      : ["lightslategray", "gainsboro", "lightgray", "silver", "dimgray"]
     },
     "environments": {
-        "envt1"     : "LOSSLESS_MYSQL",
-        "envt2"     : "LOSSLESS_SQLITE",
-        "envt3"     : "LOSSLESS_SQLSERVER",
-        "envt4"     : "LOSSLESS_TEST",
-        "envt5"     : "LOSSLESS_TEST_SQLITE",
-        "envt6"     : "LOSSLESS_TEST_SQLSERVER",
-        "envt7"     : "MP3_MYSQL",
-        "envt8"     : "MP3_SQLITE",
-        "envt9"     : "MP3_TEST_MYSQL"
+        "envt001"   : "LOSSLESS_MYSQL",
+        "envt002"   : "LOSSLESS_SQLITE",
+        "envt003"   : "LOSSLESS_SQLSERVER",
+        "envt004"   : "LOSSLESS_TEST",
+        "envt005"   : "LOSSLESS_TEST_SQLITE",
+        "envt006"   : "LOSSLESS_TEST_SQLSERVER",
+        "envt007"   : "MP3_MYSQL",
+        "envt008"   : "MP3_SQLITE",
+        "envt009"   : "MP3_TEST_MYSQL",
+        "envt010"   : "MP3_TEST_SQLITE"
     },
     "categories"    : [ "LOSSLESS_CATEGORY", "MP3_CATEGORY", "MP3_TEST_CATEGORY" ],
+    "families"      : {   
+        "Physique"       : "Colonne",
+        "Label/Physique" : "Labels",
+        "Download"       : "Download",
+        "Artists"        : "Artists"
+    },
     "LOSSLESS_CATEGORY": {
-        "FOLDER001" : { "style" : "CLASSIC", "mode" : "D", "folder" : "CLASSIC", "family" : null },
-        "FOLDER002" : { "style" : "TECHNO",  "mode" : "D", "folder" : "TECHNO", "family" : null },
-        "FOLDER003" : { "style" : "TRANCE",  "mode" : "D", "folder" : "TRANCE", "family" : null },
-        "FOLDER004" : { "style" : "ROCK",    "mode" : "D", "folder" : "ROCK", "family" : null },
-        "FOLDER005" : { "style" : "REGGAE",  "mode" : "D", "folder" : "REGGAE", "family" : null }
+        "folder001" : { "style" : "CLASSIC", "mode" : "T", "folder" : "CLASSIC", "family" : null },
+        "folder002" : { "style" : "TECHNO",  "mode" : "T", "folder" : "TECHNO", "family" : null },
+        "folder003" : { "style" : "TRANCE",  "mode" : "T", "folder" : "TRANCE", "family" : null },
+        "folder004" : { "style" : "ROCK",    "mode" : "T", "folder" : "ROCK", "family" : null },
+        "folder005" : { "style" : "REGGAE",  "mode" : "T", "folder" : "REGGAE", "family" : null }
     },
     "MP3_CATEGORY": {
-        "FOLDER001" : { "style" : "TECHNO",   "mode" : "D", "folder" : "Techno Artists", "family" : "Download" },
-        "FOLDER002" : { "style" : "TECHNO",   "mode" : "D", "folder" : "Techno Labels", "family" : "Label" },
-        "FOLDER003" : { "style" : "TECHNO",   "mode" : "S", "folder" : "Techno", "family" : "Download" },
-        "FOLDER004" : { "style" : "PSYTECHNO","mode" : "S", "folder" : "Psytechno", "family" : "Download" },
-        "FOLDER005" : { "style" : "ELECTRO",  "mode" : "S", "folder" : "Electro", "family" : "Download" },
-        "FOLDER006" : { "style" : "AMBIENT",  "mode" : "S", "folder" : "Ambient", "family" : "Download" },
-        "FOLDER007" : { "style" : "ACID",     "mode" : "S", "folder" : "Acid", "family" : "Download" },
-        "FOLDER008" : { "style" : "HOUSE",    "mode" : "S", "folder" : "House", "family" : "Download" },
-        "FOLDER009" : { "style" : "DOWNTEMPO","mode" : "S", "folder" : "DownTempo", "family" : "Download" },
-        "FOLDER010" : { "style" : "SUOMI",    "mode" : "S", "folder" : "PsySuomi", "family" : "Download" },
-        "FOLDER011" : { "style" : "PSY-CHILL","mode" : "S", "folder" : "PsyChill", "family" : "Download" },
-        "FOLDER012" : { "style" : "REGGAE",   "mode" : "S", "folder" : "Reggae", "family" : "Download" },
-        "FOLDER013" : { "style" : "REGGAE",   "mode" : "D", "folder" : "Reggae Labels", "family" : "Label" },
-        "FOLDER014" : { "style" : "HARDTEK",  "mode" : "S", "folder" : "Hardtek", "family" : "Download" },
-        "FOLDER015" : { "style" : "ROCK",     "mode" : "S", "folder" : "Rock", "family" : "Download" },
-        "FOLDER016" : { "style" : "ROCK",     "mode" : "D", "folder" : "Rock Artists", "family" : "Download" },
-        "FOLDER017" : { "style" : "DRUMBASS", "mode" : "S", "folder" : "Drum Vinyls", "family" : "Download" },
-        "FOLDER018" : { "style" : "PSY-DARK", "mode" : "D", "folder" : "PsyDark", "family" : "Download" },
-        "FOLDER019" : { "style" : "TRANCE",   "mode" : "D", "folder" : "Psytrance\\_master", "family" : "Download" },
-        "FOLDER020" : { "style" : "TRANCE",   "mode" : "D", "folder" : "Psytrance\\_years", "family" : "Download" },
-        "FOLDER021" : { "style" : "TRANCE",   "mode" : "D", "folder" : "Psytrance\\_Labels", "family" : "Label" }
+        "folder001" : { "style" : "TECHNO",   "mode" : "D", "folder" : "Techno Artists", "family" : "Download" },
+        "folder002" : { "style" : "TECHNO",   "mode" : "D", "folder" : "Techno Labels", "family" : "Label" },
+        "folder003" : { "style" : "TECHNO",   "mode" : "S", "folder" : "Techno", "family" : "Download" },
+        "folder004" : { "style" : "PSYTECHNO","mode" : "S", "folder" : "Psytechno", "family" : "Download" },
+        "folder005" : { "style" : "ELECTRO",  "mode" : "S", "folder" : "Electro", "family" : "Download" },
+        "folder006" : { "style" : "AMBIENT",  "mode" : "S", "folder" : "Ambient", "family" : "Download" },
+        "folder007" : { "style" : "ACID",     "mode" : "S", "folder" : "Acid", "family" : "Download" },
+        "folder008" : { "style" : "HOUSE",    "mode" : "S", "folder" : "House", "family" : "Download" },
+        "folder009" : { "style" : "DOWNTEMPO","mode" : "S", "folder" : "DownTempo", "family" : "Download" },
+        "folder010" : { "style" : "SUOMI",    "mode" : "S", "folder" : "PsySuomi", "family" : "Download" },
+        "folder011" : { "style" : "PSY-CHILL","mode" : "S", "folder" : "PsyChill", "family" : "Download" },
+        "folder012" : { "style" : "REGGAE",   "mode" : "S", "folder" : "Reggae", "family" : "Download" },
+        "folder013" : { "style" : "REGGAE",   "mode" : "D", "folder" : "Reggae Labels", "family" : "Label" },
+        "folder014" : { "style" : "HARDTEK",  "mode" : "S", "folder" : "Hardtek", "family" : "Download" },
+        "folder015" : { "style" : "ROCK",     "mode" : "S", "folder" : "Rock", "family" : "Download" },
+        "folder016" : { "style" : "ROCK",     "mode" : "D", "folder" : "Rock Artists", "family" : "Download" },
+        "folder017" : { "style" : "DRUMBASS", "mode" : "S", "folder" : "Drum Vinyls", "family" : "Download" },
+        "folder018" : { "style" : "PSY-DARK", "mode" : "D", "folder" : "PsyDark", "family" : "Download" },
+        "folder019" : { "style" : "TRANCE",   "mode" : "D", "folder" : "Psytrance\\_master", "family" : "Download" },
+        "folder020" : { "style" : "TRANCE",   "mode" : "D", "folder" : "Psytrance\\_years", "family" : "Download" },
+        "folder021" : { "style" : "TRANCE",   "mode" : "D", "folder" : "Psytrance\\_Labels", "family" : "Label" }
     },
     "MP3_TEST_CATEGORY": {
-        "FOLDER001" : { "style" : "ACID",     "mode" : "S", "folder" : "Acid", "family" : "Download" }
+        "folder001" : { "style" : "ACID",     "mode" : "S", "folder" : "Acid", "family" : "Download" }
     },
     "LOSSLESS_MYSQL": {
         "raci"      : "\\\\HOMERSTATION\\_LossLess",
@@ -183,5 +190,15 @@
         "pass"      : "MwRbBR2HA8PFQjuu",
         "base"      : "DBALBUMSMP3TEST",
         "port"      : 3307
+    },
+    "MP3_TEST_SQLITE": {
+        "raci"      : "\\\\HOMERSTATION\\_Mp3",
+        "cate"      : "MP3_TEST_CATEGORY",
+        "typb"      : "sqlite",
+        "serv"      : null,
+        "user"      : null,
+        "pass"      : null,
+        "base"      : null,
+        "port"      : null
     }
 }
