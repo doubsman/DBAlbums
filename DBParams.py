@@ -116,6 +116,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.btn_save.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
 		self.btn_open.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
 		self.btn_quit.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
+		self.btn_delenvt.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+		self.btn_delcate.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+		self.btn_addenvt.setIcon(self.style().standardIcon(QStyle.SP_TitleBarNormalButton))
+		self.btn_addcate.setIcon(self.style().standardIcon(QStyle.SP_TitleBarNormalButton))
+
+
 		
 		# tbl General init
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('dbalbums') , ['Group', 'Parameters', 'Values', 'Informations'], False, False, 'dbalbums')
@@ -170,8 +176,10 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.parent.execute_command(self.EDIT_TEXT, self.FILE__INI)
 	
 	def writeFileJson(self):
-		self.Json_params.saveJson()
-		self.parent.execute_command(self.EDIT_TEXT, self.FILE__INI)
+		buttonReply = QMessageBox.question(self, 'Save modifications', "Create new file configuration ?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+		if buttonReply == QMessageBox.Yes:
+			oldjson, newjson = self.Json_params.saveJson()
+			QMessageBox.information(self, 'Save Configuration', 'Configuration succes write to :' + newjson + '\nOld file config backup to : ' + oldjson)
 
 	def getText(self, tittle, text):
 		text, okPressed = QInputDialog.getText(self, tittle, text, QLineEdit.Normal, "")
@@ -181,12 +189,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 
 	def addEnvironment(self):
 		# demand new name
-		self.btn_save.setEnabled(True)
 		newenvt = self.getText('Add Environments', 'Name :')
 		if newenvt is not None:
 			if newenvt in self.NAME_EVT:
 				QMessageBox.information(self, 'Add Environments', newenvt + ' already present')
 			else:
+				self.btn_save.setEnabled(True)
 				row = len(self.NAME_EVT)
 				# add virgin json var
 				self.Json_params.addEnvt(newenvt)
@@ -197,15 +205,14 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 				self.comboBox_Envt.addItem(newenvt)
 				self.NAME_EVT.append(newenvt)
 				self.envits = newenvt
-				# ???????
 				self.comboBox_Envt.currentIndexChanged.connect(self.updateEnvt)
 				self.selectComboEnvt(newenvt)
 
 	def delEnvironment(self):
-		self.btn_save.setEnabled(True)
 		delenvt = self.comboBox_Envt.currentText()
 		buttonReply = QMessageBox.question(self, 'Delete Environment', "Delete Environment : " + delenvt, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 		if buttonReply == QMessageBox.Yes:
+			self.btn_save.setEnabled(True)
 			# modify combo and new position
 			self.comboBox_Envt.currentIndexChanged.disconnect() 
 			self.deleteComboEnvironment(delenvt)
@@ -215,12 +222,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 
 	def addCategory(self):
 		# demand new name
-		self.btn_save.setEnabled(True)
 		newcate = self.getText('Add Categories', 'Name :')
 		if newcate is not None:
 			if newcate in self.listcategory:
 				QMessageBox.information(self, 'Add Categories', newcate + ' already present')
 			else:
+				self.btn_save.setEnabled(True)
 				row = len(self.listcategory)
 				# modify link category to connexion tablewidget
 				nameitem = QTableWidgetItem(str(newcate))
@@ -379,7 +386,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.tableWidget_category.cellChanged.disconnect()
 		self.tableWidget_category.setRowCount(0)
 		listcat = []
-		listcolumns = ['Style', 'Mode', 'Folder', 'Family']
+		#listcolumns = ['Style', 'Mode', 'Folder', 'Family']
+		listcolumns = list(self.Json_params.getMember(self.comboBox_cate.currentText())['folder001'].keys())
+		row = 0
+		for col in listcolumns:
+			listcolumns[row] = listcolumns[row].title()
+			row += 1
 		self.content_category =	self.Json_params.getMember(self.comboBox_cate.currentText())
 		for key, value in self.content_category.items():
 			for key in listcolumns:

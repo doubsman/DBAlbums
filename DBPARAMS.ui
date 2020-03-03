@@ -193,7 +193,7 @@
      <item>
       <widget class="QPushButton" name="btn_quit">
        <property name="text">
-        <string>Cancel</string>
+        <string>Quit</string>
        </property>
       </widget>
      </item>

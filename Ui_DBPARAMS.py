@@ -135,7 +135,7 @@ class Ui_ParamsJson(object):
         self.btn_addcate.setText(_translate("ParamsJson", "Add"))
         self.btn_save.setText(_translate("ParamsJson", "Save Json"))
         self.btn_open.setText(_translate("ParamsJson", "View Json"))
-        self.btn_quit.setText(_translate("ParamsJson", "Cancel"))
+        self.btn_quit.setText(_translate("ParamsJson", "Quit"))
 
 
 if __name__ == "__main__":

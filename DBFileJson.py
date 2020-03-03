@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from os import path
+from os import path, rename
 from sys import platform
 from json import load, dumps
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QObject, QDateTime
 
 
 class JsonParams(QObject):
@@ -138,9 +138,16 @@ class JsonParams(QObject):
 
 	def saveJson(self):
 		"""Save Json file conofiguration."""
-		data_file = open(self.file_json+'2', 'w+')
+		# rename old
+		oldname = None
+		if path.exists(self.file_json):
+			oldname = self.file_json.replace('.json','') + QDateTime.currentDateTime().toString('yyMMddhhmmss') + ".json"
+			rename(self.file_json, oldname)
+			print(oldname)
+		data_file = open(self.file_json, 'w+')
 		data_file.write(dumps(self.data, indent=4))
 		data_file.close()
+		return oldname, self.file_json
 
 	def convertUNC(self, path):
 		""" convert path UNC to linux."""
