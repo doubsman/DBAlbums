@@ -81,6 +81,12 @@ class JsonParams(QObject):
 	def delEnvt(self, envt):
 		del self.data['environments'][envt]
 
+	def addFami(self, key):
+		self.data['families'][key] = 'news'
+
+	def delFami(self, key):
+		del self.data['families'][key]
+
 	def buildDictScore(self):
 		"""Build list scoring."""
 		dict_score = {}

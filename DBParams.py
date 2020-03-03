@@ -128,9 +128,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('scripts') , None, True, False, 'scripts')
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('themes') , None, True, False, 'themes')
 
-		# family
-		self.updateFamily()
-		
 		# complete column help
 		self.textEdit_cate.append(self.HELP_CATE)
 		row = 0
@@ -144,6 +141,9 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.menua = QMenu()
 		self.action2 = self.menua.addAction("add line", self.addLineCategory)
 		self.action3 = self.menua.addAction("del line", self.delLineCategory)
+		self.menub = QMenu()
+		self.action4 = self.menub.addAction("add line", self.addLineFamily)
+		self.action5 = self.menub.addAction("del line", self.delLineFamily)
 
 		# events
 		self.comboBox_cate.currentIndexChanged.connect(self.updateCategory)
@@ -153,6 +153,8 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.tableWidget_category.customContextMenuRequested.connect(self.popUpcate)
 		self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
 		self.tableWidget_general.cellChanged.connect(self.changeGeneral)
+		self.tableWidget_family.setContextMenuPolicy(Qt.CustomContextMenu)
+		self.tableWidget_family.customContextMenuRequested.connect(self.popUpfami)
 		self.tableWidget_family.cellChanged.connect(self.changeFamily)
 		self.btn_open.clicked.connect(self.openJson)
 		self.btn_open.clicked.connect(self.openJson)
@@ -165,12 +167,16 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.btn_delenvt.clicked.connect(self.delEnvironment)
 
 		# run
+		self.updateFamily()
 		self.updateEnvt(True)
 		self.applyTheme()
 		self.show()
 
 	def popUpcate(self, position):
 		self.menua.exec_(self.tableWidget_category.viewport().mapToGlobal(position))
+
+	def popUpfami(self, position):
+		self.menub.exec_(self.tableWidget_family.viewport().mapToGlobal(position))
 
 	def openJson(self):
 		"""Open json file with text editor."""
@@ -279,6 +285,20 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		except:
 			pass
 
+	def addLineFamily(self):
+		self.Json_params.addFami('familyname')
+		self.updateFamily()
+
+	def delLineFamily(self):
+		try:
+			row = self.tableWidget_family.selectedIndexes()[0].row()
+			# key
+			key = self.tableWidget_family.item(row,0).text()
+			self.Json_params.delFami(key)
+			self.updateFamily()
+		except:
+			pass
+
 	def changeGeneral(self, row, col):
 		"""Modify params."""
 		curItem = self.tableWidget_general.currentItem()
@@ -326,7 +346,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		# backup value
 		oldvalue = category[namecolu]
 		# modify category
-		self.modJsonCate(self.comboBox_cate.currentText(), 'folder'+format(row + 1, '03d'), namecolu, newvalue)
+		self.Json_params.modJsonCate(self.comboBox_cate.currentText(), 'folder'+format(row + 1, '03d'), namecolu, newvalue)
 
 	def changeFamily(self, row, col):
 		"""Modify Family."""
@@ -336,8 +356,9 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		# backup value
 		oldvalue = self.Json_params.getContentMember('family')
 		# modify family
-		self.modJsonFami(row, col, newvalue, oldvalue)
+		self.Json_params.modJsonFami(row, col, newvalue, oldvalue)
 		pass
+		# #################
 
 	def updateEnvt(self, refresh):
 		"""Change table lists content envt."""
@@ -346,7 +367,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			# Environment
 			self.group_envt = self.Json_params.getContentMember('environments', self.envits)
 			self.tableWidget_envt.cellChanged.disconnect()
-			self.updateTable(self.tableWidget_envt, self.group_envt, ['Parameters', 'Values'])
+			self.updateTable(self.tableWidget_envt, self.group_envt, ['Parameters', 'Values'], False, True)
 			# Category
 			currentcate = self.tableWidget_envt.item(1,1).text()
 			self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
@@ -408,7 +429,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		for key, value in self.content_category.items():
 			for key in listcolumns:
 				listcat.append(value[key.lower()])
-		self.updateTable(self.tableWidget_category, listcat, listcolumns)
+		self.updateTable(self.tableWidget_category, listcat, listcolumns, False, True)
 		self.tableWidget_category.cellChanged.connect(self.changeCategory)
 
 	def updateFamily(self):
@@ -420,7 +441,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		for key, value in self.Json_params.getMember('families').items():
 			listcat.append(key)
 			listcat.append(value)
-		self.updateTable(self.tableWidget_family, listcat, listcolumns)
+		self.updateTable(self.tableWidget_family, listcat, listcolumns, False, True)
 		self.tableWidget_family.cellChanged.connect(self.changeCategory)
 
 	def updateTable(self, table, listitems, listcolumns, add = False, ajustlastcolumn = False, groupjson = None):
