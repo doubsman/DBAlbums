@@ -60,7 +60,7 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 			if typsubfo != 'T':
 				family = self.convertPositionFamily(position)
 				# filter folders ??
-				if family != '':
+				if family != '': #or position == ''
 					self.analyseSubFolders(category, family, cracines, typsubfo)
 			else:
 				# cacul family in name folder
@@ -118,8 +118,8 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 				family = self.convertPositionFamily(fposition)
 				subsubsubfolder = path.join(folder, fposition)
 				self.signaltext.emit('          FOLDERS       :    └-' + fposition, 1)
-				# filter folders ??
-				if family != '':
+				# filter folders family 
+				if family != '':#or position == ''
 					self.analyseSubFolders(category, family, subsubsubfolder, 'D')
 		
 	def convertPositionFamily(self, position):

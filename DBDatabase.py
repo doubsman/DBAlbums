@@ -22,7 +22,7 @@ class ConnectDatabase(LibDatabase):
 		self.connexionName = connexionName	# QT name connection
 		self.Json_params = jsondataini		# params Json file ini 
 
-		self.group_envt = self.Json_params.getMember(envt)
+		self.group_envt = self.Json_params.getContentMember('environments', envt)
 		self.MODE_SQLI = self.group_envt['typb']
 		self.BASE_RAC = r'' + self.group_envt['raci']
 		self.RACI_DOU = self.group_envt['cate']

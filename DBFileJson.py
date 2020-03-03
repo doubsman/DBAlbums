@@ -12,62 +12,74 @@ class JsonParams(QObject):
 		"""Init invent, build list albums exists in database."""
 		super(JsonParams, self).__init__(parent)
 		self.file_json = file_json
+		self.loadJson()
+
+	def loadJson(self):
+		"""Load Json file configuration."""
 		data_file = open(self.file_json, 'r')
 		self.data = load(data_file)
 		data_file.close()
 		#self.data = loads(self.data_file).read())
+		self.jsonlistcategories = list(self.data['categories'].keys())
+		self.jsonlistenvironments = list(self.data['environments'].keys())
+
+	def reloadJson(self, filejson):
+		"""Change file Json configuration."""
+		self.file_json = filejson
+		self.loadJson()
 
 	def getMember(self, member):
 		"""Return array infos member of json."""
 		return(self.data[member])
+	
+	def getContentMember(self, group, member):
+		"""Return array infos member member of json."""
+		return self.data[group][member]
 
 	def modJson(self, group, param, value):
 		self.data[group][param] = value
 
+	def modJsonEnvt(self, group, param, value):
+		self.data['environments'][group][param] = value
+
 	def modJsonCate(self, group, param, column, value):
-		self.data[group][param][column] = value
+		self.data['categories'][group][param][column] = value
+
+	def modJsonFami(self, row, col, value, oldvalue):
+		currow = 0
+		for key, val in self.data['family'].items():
+			if currow == row:
+				if col == 0:
+					# rename keys
+					self.data['families'][value] = val
+					del self.data['families'][oldvalue]
+				else:
+					# change value
+					self.data['families'][key] = value
+				break
+			currow += 1
 
 	def buildListEnvt(self, curenvt):
 		"""Build list environments."""
 		list_envt = []
-		listenvt = self.data["environments"]
+		listenvt = list(self.data['environments'].keys())
 		for envt in listenvt:
-			if listenvt[envt]==curenvt:
+			if envt == curenvt:
 				Curt_Evt = len(list_envt)
-			list_envt.append(listenvt[envt])
+			list_envt.append(envt)
 		return list_envt, Curt_Evt
 	
 	def addEnvt(self, envt):
 		# add new envt
-		number = len(self.data['environments']) + 1
-		virginline = (self.data[self.data['environments']['envt001']]).copy()
+		number = len(self.data['environments'].keys()) + 1
+		virginline = (self.data['environments'][list(self.data['environments'].keys())[0]]).copy()
 		for key in virginline:
-			virginline[key] = ''
+			virginline[key] = None
 		folder = 'envt' + format(number, '03d')
-		self.data[envt] = virginline
-		# add list envt
-		listenvt = self.data["environments"]
-		listenvt[folder] = envt
+		self.data['environments'][envt] = virginline
 
 	def delEnvt(self, envt):
-		del self.data[envt]
-		# remove list envt
-		listenvt = self.data["environments"]
-		keysup = [key for key, value in listenvt.items() if value == envt][0]
-		row = 1
-		rows = len(listenvt)
-		boolrenum = False
-		for key, value in listenvt.items():
-			folderdes = 'envt' + format(row, '03d')
-			if key == keysup:
-				boolrenum = True
-			# begin renum
-			if boolrenum:
-				if row < rows:
-					foldersrc = 'envt' + format(row + 1, '03d')
-					listenvt[folderdes] = listenvt[foldersrc]
-			row += 1
-		del listenvt[folderdes]
+		del self.data['environments'][envt]
 
 	def buildDictScore(self):
 		"""Build list scoring."""
@@ -79,10 +91,10 @@ class JsonParams(QObject):
 
 	def buildListcategory(self, envt):
 		"""Build list category simple and double from json file."""
-		racine =  self.data[envt]["raci"]
-		category = self.data[envt]["cate"]
+		racine =  self.data['environments'][envt]["raci"]
+		category = self.data['environments'][envt]["cate"]
 		list_pathcollection = []
-		listcate = self.data[category]
+		listcate = self.data['categories'][category]
 		for cate in listcate:
 			# one element
 			mstyle = listcate[cate]["style"]
@@ -97,44 +109,37 @@ class JsonParams(QObject):
 	def addCategory(self, namecate):
 		"""Create new Category + add list."""
 		self.addLineCategory(namecate)
-		# add list category
-		listcate = self.data['categories']
-		listcate.append(namecate)
 
 	def delCategory(self, namecate):
 		"""Delete Category + del list."""
-		del self.data[namecate]
-		# remove list category
-		listcate = self.data['categories']
-		listcate.remove(namecate)
+		del self.data['categories'][namecate]
 
 	def addLineCategory(self, category):
 		"""Creation category if new line and no exist."""
 		try:
-			number  = len(self.data[category]) + 1
+			number  = len(self.data['categories'][category]) + 1
 		except:
 			# new category
 			number = 1
-			self.data[category] = {}
-		virginline = (self.data[self.data['categories'][0]]['folder001']).copy()
+			self.data['categories'][category] = {}
+		virginline = (self.data['categories'][list(self.data['categories'].keys())[0]]['folder001']).copy()
 		for key in virginline:
 			virginline[key] = ''
 		#virginline = { "style" : '', "mode" : '', "folder" : '', "family" : '' }
 		folder = 'folder' + format(number, '03d')
-		self.data[category][folder] = virginline
+		self.data['categories'][category][folder] = virginline
 
 	def delLineCategory(self, category, number):
 		folder = 'folder' + format(number, '03d')
-		rows = len(self.data[category])
-		del self.data[category][folder]
+		rows = len(self.data['categories'][category])
 		# renumeroration FOLDERxxx
 		for row in range(number, rows + 1):
 			folderdes = 'folder' + format(row, '03d')
 			foldersrc = 'folder' + format(row + 1, '03d')
 			if row == rows:
-				del self.data[category][folderdes]
+				del self.data['categories'][category][folderdes]
 			else:
-				self.data[category][folderdes] = self.data[category][foldersrc]
+				self.data['categories'][category][folderdes] = self.data['categories'][category][foldersrc]
 
 	def saveJson(self):
 		"""Save Json file conofiguration."""

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from os import path
+from os import path, getcwd
 from sys import platform
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QWidget, QTableWidgetItem, QAbstractScrollArea, QHeaderView, 
-							QMessageBox, QStyle, QInputDialog, QLineEdit, QMenu)
+							QMessageBox, QFileDialog, QStyle, QInputDialog, QLineEdit, QMenu)
 from DBFileJson import JsonParams
 from Ui_DBPARAMS import Ui_ParamsJson
 
@@ -97,7 +97,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.comboBox_Envt.setCurrentIndex(self.CURT_EVT)
 		
 		# list + combo category
-		self.listcategory = self.Json_params.getMember('categories')
+		self.listcategory = self.Json_params.jsonlistcategories
 		self.comboBox_cate.addItems(self.listcategory)
 
 		# font
@@ -108,20 +108,18 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.label_libgeneral.setFont(self.parent.fontbig)
 		self.label_libcate.setFont(self.parent.fontbig)
 		self.label_libenvt.setFont(self.parent.fontbig)
+		self.label_libfamily.setFont(self.parent.fontbig)
 		self.textEdit_cate.setFont(font)
-		self.textEdit_envt.setFont(font)
 
 		# decos
-		self.btn_save.setEnabled(False)
 		self.btn_save.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
+		self.btn_load.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
 		self.btn_open.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
 		self.btn_quit.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
 		self.btn_delenvt.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
 		self.btn_delcate.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
 		self.btn_addenvt.setIcon(self.style().standardIcon(QStyle.SP_TitleBarNormalButton))
 		self.btn_addcate.setIcon(self.style().standardIcon(QStyle.SP_TitleBarNormalButton))
-
-
 		
 		# tbl General init
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('dbalbums') , ['Group', 'Parameters', 'Values', 'Informations'], False, False, 'dbalbums')
@@ -129,11 +127,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('score') , None, True, False, 'score')
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('scripts') , None, True, False, 'scripts')
 		self.updateTable(self.tableWidget_general, self.Json_params.getMember('themes') , None, True, False, 'themes')
+
+		# family
+		self.updateFamily()
 		
 		# complete column help
 		self.textEdit_cate.append(self.HELP_CATE)
-		self.textEdit_envt.append(self.HELP_ENVT)
-
 		row = 0
 		while row < self.tableWidget_general.rowCount():
 			nameitem = QTableWidgetItem(self.HELP_GENE.get(self.tableWidget_general.item(row,1).text()))
@@ -154,10 +153,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.tableWidget_category.customContextMenuRequested.connect(self.popUpcate)
 		self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
 		self.tableWidget_general.cellChanged.connect(self.changeGeneral)
+		self.tableWidget_family.cellChanged.connect(self.changeFamily)
 		self.btn_open.clicked.connect(self.openJson)
 		self.btn_open.clicked.connect(self.openJson)
 		self.btn_quit.clicked.connect(self.closeParams)
 		self.btn_save.clicked.connect(self.writeFileJson)
+		self.btn_load.clicked.connect(self.loadFileJson)
 		self.btn_addcate.clicked.connect(self.addCategory)
 		self.btn_delcate.clicked.connect(self.delCategory)
 		self.btn_addenvt.clicked.connect(self.addEnvironment)
@@ -181,6 +182,15 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			oldjson, newjson = self.Json_params.saveJson()
 			QMessageBox.information(self, 'Save Configuration', 'Configuration succes write to :' + newjson + '\nOld file config backup to : ' + oldjson)
 
+	def loadFileJson(self):
+		file_json = QFileDialog.getOpenFileName(self,
+								"Load file configuration Json format",
+								getcwd(),
+								"Json (*.json)")
+		file_json = self.file_json[0]
+		self.Json_params.loadJson(file_json)
+		QMessageBox.information(self, 'Load Configuration', 'Configuration succes write to :' + file_json)
+
 	def getText(self, tittle, text):
 		text, okPressed = QInputDialog.getText(self, tittle, text, QLineEdit.Normal, "")
 		if okPressed and text != '':
@@ -194,12 +204,11 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			if newenvt in self.NAME_EVT:
 				QMessageBox.information(self, 'Add Environments', newenvt + ' already present')
 			else:
-				self.btn_save.setEnabled(True)
 				row = len(self.NAME_EVT)
 				# add virgin json var
 				self.Json_params.addEnvt(newenvt)
 				# add category default
-				self.Json_params.modJson(newenvt, 'cate', self.comboBox_cate.currentText())
+				self.Json_params.modJsonEnvt(newenvt, 'cate', self.comboBox_cate.currentText())
 				# modify combo and new position
 				self.comboBox_Envt.currentIndexChanged.disconnect() 
 				self.comboBox_Envt.addItem(newenvt)
@@ -212,7 +221,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		delenvt = self.comboBox_Envt.currentText()
 		buttonReply = QMessageBox.question(self, 'Delete Environment', "Delete Environment : " + delenvt, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 		if buttonReply == QMessageBox.Yes:
-			self.btn_save.setEnabled(True)
 			# modify combo and new position
 			self.comboBox_Envt.currentIndexChanged.disconnect() 
 			self.deleteComboEnvironment(delenvt)
@@ -227,12 +235,11 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			if newcate in self.listcategory:
 				QMessageBox.information(self, 'Add Categories', newcate + ' already present')
 			else:
-				self.btn_save.setEnabled(True)
 				row = len(self.listcategory)
 				# modify link category to connexion tablewidget
 				nameitem = QTableWidgetItem(str(newcate))
 				self.tableWidget_envt.setItem(1, 1, nameitem)
-				self.Json_params.modJson(self.comboBox_Envt.currentText(), 'cate', newcate)
+				self.Json_params.modJsonEnvt(self.comboBox_Envt.currentText(), 'cate', newcate)
 				# add virgin json var
 				self.Json_params.addCategory(newcate)
 				# modify combo and new position
@@ -242,13 +249,11 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 				self.selectComboCategory(newcate)
 	
 	def addLineCategory(self):
-		self.btn_save.setEnabled(True)
 		cate = self.comboBox_cate.currentText()
 		self.Json_params.addLineCategory(cate)
 		self.updateCategory()
 
 	def delCategory(self):
-		self.btn_save.setEnabled(True)
 		delcate = self.comboBox_cate.currentText()
 		buttonReply = QMessageBox.question(self, 'Delete Category', "Delete category : " + delcate, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 		if buttonReply == QMessageBox.Yes:
@@ -261,12 +266,11 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			nameitem = QTableWidgetItem(str(newcate))
 			self.tableWidget_envt.setItem(1, 1, nameitem)
 			# modify  category json var
-			self.Json_params.modJson(self.comboBox_Envt.currentText(), 'cate', newcate)
+			self.Json_params.modJsonEnvt(self.comboBox_Envt.currentText(), 'cate', newcate)
 			self.comboBox_cate.currentIndexChanged.connect(self.updateCategory)
 			self.comboBox_cate.setCurrentIndex(0)
 
 	def delLineCategory(self):
-		self.btn_save.setEnabled(True)
 		cate = self.comboBox_cate.currentText()
 		try:
 			row = self.tableWidget_category.selectedIndexes()[0].row()
@@ -277,7 +281,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 
 	def changeGeneral(self, row, col):
 		"""Modify params."""
-		self.btn_save.setEnabled(True)
 		curItem = self.tableWidget_general.currentItem()
 		# colum family param
 		familypa = self.tableWidget_general.item(row,0).text()
@@ -297,7 +300,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 
 	def changeEnvironment(self, row, col):
 		"""Modify params envt."""
-		self.btn_save.setEnabled(True)
 		curItem = self.tableWidget_envt.currentItem()
 		# value
 		newvalue = curItem.text()
@@ -306,33 +308,43 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		# column name param
 		namepara = self.tableWidget_envt.item(row,0).text()
 		# envt json
-		environt = self.Json_params.getMember(currenvt)
+		environt = self.Json_params.getContentMember('environments', currenvt)
 		# old value param
-		oldvalue = self.Json_params.getMember(currenvt)[namepara]
+		oldvalue = environt[namepara]
 		# modify param
-		self.Json_params.modJson(currenvt, namepara, newvalue)
+		self.Json_params.modJsonEnvt(currenvt, namepara, newvalue)
 
 	def changeCategory(self, row, col):
 		"""Modify Category."""
-		self.btn_save.setEnabled(True)
 		curItem = self.tableWidget_category.currentItem()
 		# value
 		newvalue = curItem.text()
 		# column name
 		namecolu = self.tableWidget_category.horizontalHeaderItem(self.tableWidget_category.currentItem().column()).text().lower()
 		# category json
-		category = self.Json_params.getMember(self.comboBox_cate.currentText())['folder'+format(row + 1, '03d')]
+		category = self.Json_params.getContentMember('categories', self.comboBox_cate.currentText())['folder'+format(row + 1, '03d')]
 		# backup value
 		oldvalue = category[namecolu]
 		# modify category
 		self.modJsonCate(self.comboBox_cate.currentText(), 'folder'+format(row + 1, '03d'), namecolu, newvalue)
+
+	def changeFamily(self, row, col):
+		"""Modify Family."""
+		curItem = self.tableWidget_family.currentItem()
+		# value
+		newvalue = curItem.text()
+		# backup value
+		oldvalue = self.Json_params.getContentMember('family')
+		# modify family
+		self.modJsonFami(row, col, newvalue, oldvalue)
+		pass
 
 	def updateEnvt(self, refresh):
 		"""Change table lists content envt."""
 		if self.envits != self.comboBox_Envt.currentText() or refresh:
 			self.envits = self.comboBox_Envt.currentText()
 			# Environment
-			self.group_envt = self.Json_params.getMember(self.envits)
+			self.group_envt = self.Json_params.getContentMember('environments', self.envits)
 			self.tableWidget_envt.cellChanged.disconnect()
 			self.updateTable(self.tableWidget_envt, self.group_envt, ['Parameters', 'Values'])
 			# Category
@@ -387,17 +399,29 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.tableWidget_category.setRowCount(0)
 		listcat = []
 		#listcolumns = ['Style', 'Mode', 'Folder', 'Family']
-		listcolumns = list(self.Json_params.getMember(self.comboBox_cate.currentText())['folder001'].keys())
+		listcolumns = list(self.Json_params.getContentMember('categories', self.comboBox_cate.currentText())['folder001'].keys())
 		row = 0
 		for col in listcolumns:
 			listcolumns[row] = listcolumns[row].title()
 			row += 1
-		self.content_category =	self.Json_params.getMember(self.comboBox_cate.currentText())
+		self.content_category =	self.Json_params.getContentMember('categories', self.comboBox_cate.currentText())
 		for key, value in self.content_category.items():
 			for key in listcolumns:
 				listcat.append(value[key.lower()])
 		self.updateTable(self.tableWidget_category, listcat, listcolumns)
 		self.tableWidget_category.cellChanged.connect(self.changeCategory)
+
+	def updateFamily(self):
+		"""Change table lists content family."""
+		listcolumns = ['Name', 'Folder content']
+		self.tableWidget_family.cellChanged.disconnect()
+		listcat = []
+		self.tableWidget_family.setRowCount(0)
+		for key, value in self.Json_params.getMember('families').items():
+			listcat.append(key)
+			listcat.append(value)
+		self.updateTable(self.tableWidget_family, listcat, listcolumns)
+		self.tableWidget_family.cellChanged.connect(self.changeCategory)
 
 	def updateTable(self, table, listitems, listcolumns, add = False, ajustlastcolumn = False, groupjson = None):
 		"""generic insert QtableWidget data"""
