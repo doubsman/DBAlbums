@@ -12,12 +12,11 @@ __status__ = "Production"
 
 
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QObject, qDebug, QDateTime, QProcess
-from os import walk, rename, path, mkdir, remove, rmdir, startfile, listdir
+from PyQt5.QtCore import QObject, QProcess
+from os import walk, path, remove, rmdir, startfile, listdir
 from sys import argv,platform
 from glob import glob
 from shutil import move, rmtree
-from codecs import open
 
 
 class FilesProcessing(QObject):

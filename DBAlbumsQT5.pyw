@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2020, DBAlbums Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.69"
+__version__ = "1.70"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -153,9 +153,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		# combos Envt
 		self.com_envt.addItems(self.NAME_EVT)
 		self.com_envt.setCurrentIndex(self.CURT_EVT)
+		
 		# add Tip
 		self.com_envt.setToolTip('Environment')
-
+		self.btn_clearsearch.setToolTip('Clean Search filters')
+		
 		# buttons
 		self.btn_clearsearch.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
 

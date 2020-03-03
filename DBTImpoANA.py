@@ -56,7 +56,7 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 			typsubfo = rowcategory[1]
 			cracines = rowcategory[2]
 			position = rowcategory[3]
-			self.signaltext.emit('ANALYSE CATEGORY         : [' + '.'.join(item for item in rowcategory if item), 1)
+			self.signaltext.emit('ANALYSE CATEGORY        : ' + cracines + ' [' + category + '] (' + typsubfo + ')' , 1)
 			if typsubfo != 'T':
 				family = self.convertPositionFamily(position)
 				# filter folders ??
@@ -106,7 +106,7 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 				if self.boolstop:
 					break
 				subsubfolder = path.join(folder, subfolder)
-				self.signaltext.emit('      ANALYSE SUBFOLDERS : ' + subsubfolder, 1)
+				self.signaltext.emit('             SUBFOLDERS :       └-' + subfolder, 1)
 				self.analyseSubFolders(category, family, subsubfolder, 'S')
 		elif typefolder == 'T':
 			# sub sub folders
@@ -117,7 +117,7 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 				# define family
 				family = self.convertPositionFamily(fposition)
 				subsubsubfolder = path.join(folder, fposition)
-				self.signaltext.emit('   ANALYSE FOLDERS       : ' + subsubsubfolder, 1)
+				self.signaltext.emit('          FOLDERS       :    └-' + fposition, 1)
 				# filter folders ??
 				if family != '':
 					self.analyseSubFolders(category, family, subsubsubfolder, 'D')
