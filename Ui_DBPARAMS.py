@@ -144,7 +144,7 @@ class Ui_ParamsJson(object):
         self.label_libenvt.setText(_translate("ParamsJson", "Environment : Database"))
         self.btn_delenvt.setText(_translate("ParamsJson", "Del"))
         self.btn_addenvt.setText(_translate("ParamsJson", "Add"))
-        self.label_libfamily.setText(_translate("ParamsJson", "Family : Filter / CLassment"))
+        self.label_libfamily.setText(_translate("ParamsJson", "Family : Ranking / Filter (mode=T)"))
         self.label_libcate.setText(_translate("ParamsJson", "Category : Storage"))
         self.btn_delcate.setText(_translate("ParamsJson", "Del"))
         self.btn_addcate.setText(_translate("ParamsJson", "Add"))

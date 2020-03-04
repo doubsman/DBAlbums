@@ -56,14 +56,16 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 			typsubfo = rowcategory[1]
 			cracines = rowcategory[2]
 			position = rowcategory[3]
-			self.signaltext.emit('ANALYSE CATEGORY        : ' + cracines + ' [' + category + '] (' + typsubfo + ')' , 1)
+			self.signaltext.emit('-ANALYSE  CATEGORY  : ' + cracines + ' [' + category + '] (' + typsubfo + ')' , 1)
 			if typsubfo != 'T':
+				# convert family for presentation
 				family = self.convertPositionFamily(position)
-				# filter folders ??
-				if family != '': #or position == ''
-					self.analyseSubFolders(category, family, cracines, typsubfo)
+				if family != '': 
+					# family = folder name 
+					family = position	
+				self.analyseSubFolders(category, family, cracines, typsubfo)
 			else:
-				# cacul family in name folder
+				# cacul family in name folder with filter
 				self.analyseSubFolders(category, None, cracines, typsubfo)
 		# DELETE
 		self.numbers = 0
@@ -79,7 +81,7 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 												albums[self.list_columns.index('ID_CD')],
 												albums[self.list_columns.index('NAME')]])
 				self.list_action.append([albums[self.list_columns.index('CATEGORY')],
-												family,
+												albums[self.list_columns.index('FAMILY')],
 												'DELETE',
 												albums[self.list_columns.index('ID_CD')],
 												albums[self.list_columns.index('NAME')],
@@ -106,7 +108,7 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 				if self.boolstop:
 					break
 				subsubfolder = path.join(folder, subfolder)
-				self.signaltext.emit('             SUBFOLDERS :       └-' + subfolder, 1)
+				self.signaltext.emit('      └-SUBFOLDERS  :       └-' + subfolder, 1)
 				self.analyseSubFolders(category, family, subsubfolder, 'S')
 		elif typefolder == 'T':
 			# sub sub folders
@@ -117,9 +119,9 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 				# define family
 				family = self.convertPositionFamily(fposition)
 				subsubsubfolder = path.join(folder, fposition)
-				self.signaltext.emit('          FOLDERS       :    └-' + fposition, 1)
+				self.signaltext.emit('  └-FOLDERS FAMILY  :    └-' + fposition, 1)
 				# filter folders family 
-				if family != '':#or position == ''
+				if family != '':
 					self.analyseSubFolders(category, family, subsubsubfolder, 'D')
 		
 	def convertPositionFamily(self, position):

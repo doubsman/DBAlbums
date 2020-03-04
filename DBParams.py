@@ -77,13 +77,17 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 					'3' : '<score> label notation display'
 					}
 		self.HELP_CATE = "Category\n"
-		self.HELP_CATE +="- Name : name (rock, classic...)\n"
-		self.HELP_CATE +="- Mode : D (double tree folder) or S = (simple tree folder)\n"
-		self.HELP_CATE +="- Folder : music location folder\n"
-		self.HELP_CATE +="- complete folder : parameter[raci] + [Folder]\n"
+		self.HELP_CATE +="- Style : name (rock, classic...)\n"
+		self.HELP_CATE +="- Mode S/D : Simple or Double tree folder\n"
+		self.HELP_CATE +="           define column family\n"
+		self.HELP_CATE +="- Mode T : Triple tree folder\n"
+		self.HELP_CATE +="           define table family\n"
+		self.HELP_CATE +="           raci [T]\n"
+		self.HELP_CATE +="             └subfolders : family tab filter\n"
+		self.HELP_CATE +="               └subfolders\n"
+		self.HELP_CATE +="                 └folders albums\n"
+		self.HELP_CATE +="- Folder : parameter[raci] + [Folder]\n"
 		self.HELP_CATE +="- Family : name (physique, web, vinyls)\n"
-		self.HELP_ENVT = "Environment parameters database connexion\n"
-		self.HELP_ENVT += "- Raci : common folder, 'None' possible Value for no agregation\n"
 		self.resize(self.WIDT_MAIN, self.HEIG_MAIN - 250)
 		self.setWindowIcon(QIcon(self.WINS_ICO))
 		self.setWindowTitle(self.TITL_PROG + path.join(self.PATH_PROG, self.FILE__INI))
@@ -102,7 +106,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 
 		# font
 		font = QFont()
-		font.setFamily("Courier New")
+		font.setFamily("Calibri")
 		font.setFixedPitch(True)
 		font.setPointSize(8)
 		self.label_libgeneral.setFont(self.parent.fontbig)
@@ -121,22 +125,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.btn_addenvt.setIcon(self.style().standardIcon(QStyle.SP_TitleBarNormalButton))
 		self.btn_addcate.setIcon(self.style().standardIcon(QStyle.SP_TitleBarNormalButton))
 		
-		# tbl General init
-		self.updateTable(self.tableWidget_general, self.Json_params.getMember('dbalbums') , ['Group', 'Parameters', 'Values', 'Informations'], False, False, 'dbalbums')
-		self.updateTable(self.tableWidget_general, self.Json_params.getMember('programs') , None, True, False, 'programs')
-		self.updateTable(self.tableWidget_general, self.Json_params.getMember('score') , None, True, False, 'score')
-		self.updateTable(self.tableWidget_general, self.Json_params.getMember('scripts') , None, True, False, 'scripts')
-		self.updateTable(self.tableWidget_general, self.Json_params.getMember('themes') , None, True, False, 'themes')
-
-		# complete column help
-		self.textEdit_cate.append(self.HELP_CATE)
-		row = 0
-		while row < self.tableWidget_general.rowCount():
-			nameitem = QTableWidgetItem(self.HELP_GENE.get(self.tableWidget_general.item(row,1).text()))
-			nameitem.setFlags(Qt.ItemIsEditable)
-			self.tableWidget_general.setItem(row, 3, nameitem)
-			row += 1
-
 		# pop up
 		self.menua = QMenu()
 		self.action2 = self.menua.addAction("add line", self.addLineCategory)
@@ -168,6 +156,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 
 		# run
 		self.updateFamily()
+		self.updateGeneral()
 		self.updateEnvt(True)
 		self.applyTheme()
 		self.show()
@@ -193,9 +182,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 								"Load file configuration Json format",
 								getcwd(),
 								"Json (*.json)")
-		file_json = self.file_json[0]
-		self.Json_params.loadJson(file_json)
-		QMessageBox.information(self, 'Load Configuration', 'Configuration succes write to :' + file_json)
+		file_json = file_json[0]
+		self.Json_params.reloadJson(file_json)
+		self.updateFamily()
+		self.updateGeneral()
+		self.updateEnvt(False)
+		QMessageBox.information(self, 'Load Configuration', 'Configuration succes from :' + file_json)
 
 	def getText(self, tittle, text):
 		text, okPressed = QInputDialog.getText(self, tittle, text, QLineEdit.Normal, "")
@@ -205,10 +197,10 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 
 	def addEnvironment(self):
 		# demand new name
-		newenvt = self.getText('Add Environments', 'Name :')
+		newenvt = self.getText('Add Environment', 'Name :')
 		if newenvt is not None:
 			if newenvt in self.NAME_EVT:
-				QMessageBox.information(self, 'Add Environments', newenvt + ' already present')
+				QMessageBox.information(self, 'No Add, Environment', newenvt + ' already present')
 			else:
 				row = len(self.NAME_EVT)
 				# add virgin json var
@@ -248,6 +240,8 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 				self.Json_params.modJsonEnvt(self.comboBox_Envt.currentText(), 'cate', newcate)
 				# add virgin json var
 				self.Json_params.addCategory(newcate)
+				# add list category
+				self.listcategory.append(newcate)
 				# modify combo and new position
 				self.comboBox_cate.currentIndexChanged.disconnect() 
 				self.comboBox_cate.addItem(newcate)
@@ -286,7 +280,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			pass
 
 	def addLineFamily(self):
-		self.Json_params.addFami('familyname')
+		self.Json_params.addFami('family_name')
 		self.updateFamily()
 
 	def delLineFamily(self):
@@ -357,8 +351,49 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		oldvalue = self.Json_params.getContentMember('family')
 		# modify family
 		self.Json_params.modJsonFami(row, col, newvalue, oldvalue)
-		pass
-		# #################
+
+	def selectComboEnvt(self, envt):
+		"""Select combo environment."""
+		indexenvt = self.NAME_EVT.index(envt)
+		self.comboBox_Envt.setCurrentIndex(indexenvt)
+		if indexenvt == 0:
+			self.updateEnvt()
+
+	def selectComboCategory(self, cate):
+		"""Select combo catergory."""
+		indexcate = self.listcategory.index(cate)
+		self.comboBox_cate.setCurrentIndex(indexcate)
+		if indexcate == 0:
+			self.updateCategory()
+
+	def deleteComboCategory(self, cate):
+		"""Select combo catergory."""
+		indexcate = self.listcategory.index(cate)
+		self.comboBox_cate.removeItem(indexcate)
+
+	def deleteComboEnvironment(self, envt):
+		"""Select combo catergory."""
+		indexenvt = self.NAME_EVT.index(envt)
+		self.comboBox_Envt.removeItem(indexenvt)
+
+	def updateGeneral(self):
+		self.tableWidget_general.cellChanged.disconnect()
+		self.tableWidget_general.setRowCount(0)		
+		# tbl General init
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('dbalbums') , ['Group', 'Parameters', 'Values', 'Informations'], False, False, 'dbalbums')
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('programs') , None, True, False, 'programs')
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('score') , None, True, False, 'score')
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('scripts') , None, True, False, 'scripts')
+		self.updateTable(self.tableWidget_general, self.Json_params.getMember('themes') , None, True, False, 'themes')
+		# complete column help
+		self.textEdit_cate.append(self.HELP_CATE)
+		row = 0
+		while row < self.tableWidget_general.rowCount():
+			nameitem = QTableWidgetItem(self.HELP_GENE.get(self.tableWidget_general.item(row,1).text()))
+			nameitem.setFlags(Qt.ItemIsEditable)
+			self.tableWidget_general.setItem(row, 3, nameitem)
+			row += 1
+		self.tableWidget_general.cellChanged.connect(self.changeGeneral)
 
 	def updateEnvt(self, refresh):
 		"""Change table lists content envt."""
@@ -373,46 +408,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			self.tableWidget_envt.cellChanged.connect(self.changeEnvironment)
 			# select combo catergory
 			self.selectComboCategory(currentcate)
-
-	def selectComboEnvt(self, envt):
-		# select combo environment
-		indexenvt = 0 
-		for item in self.NAME_EVT:
-			if item == envt:
-				break
-			indexenvt += 1
-		self.comboBox_Envt.setCurrentIndex(indexenvt)
-		if indexenvt == 0:
-			self.updateEnvt()
-
-	def selectComboCategory(self, cate):
-		# select combo catergory
-		indexcate = 0 
-		for item in self.listcategory:
-			if item == cate:
-				break
-			indexcate += 1
-		self.comboBox_cate.setCurrentIndex(indexcate)
-		if indexcate == 0:
-			self.updateCategory()
-
-	def deleteComboCategory(self, cate):
-		# select combo catergory
-		indexcate = 0 
-		for item in self.listcategory:
-			if item == cate:
-				break
-			indexcate += 1
-		self.comboBox_cate.removeItem(indexcate)
-
-	def deleteComboEnvironment(self, envt):
-		# select combo catergory
-		indexenvt = 0 
-		for item in self.NAME_EVT:
-			if item == envt:
-				break
-			indexenvt += 1
-		self.comboBox_Envt.removeItem(indexenvt)
 
 	def updateCategory(self):
 		"""Change table lists content category."""
@@ -434,7 +429,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 
 	def updateFamily(self):
 		"""Change table lists content family."""
-		listcolumns = ['Name', 'Folder content']
+		listcolumns = ['Family Name', 'Folder content']
 		self.tableWidget_family.cellChanged.disconnect()
 		listcat = []
 		self.tableWidget_family.setRowCount(0)

@@ -94,7 +94,7 @@
        <item>
         <widget class="QLabel" name="label_libfamily">
          <property name="text">
-          <string>Family : Filter / CLassment</string>
+          <string>Family : Ranking / Filter (mode=T)</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

@@ -180,7 +180,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.widgetscorealbum = ScoreWidget(self, self.SCOR_ALBUMS)
 		self.horizontalLayoutLAB.addWidget(self.widgetscorealbum)
 		self.widgetscoretracks = ScoreWidget(self, self.SCOR_TRACKS)
-		#self.horizontalLayoutSCR.addWidget(self.widgetscoretracks)
 		self.horizontalLayoutLAB.addWidget(self.widgetscoretracks)
 		self.widgetscoretracks.hide()
 
@@ -207,6 +206,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 		# status bar icons zoom in/out / theme / player ...
 		self.btn_target = QPushButton(self)
+		self.btn_target.setStyleSheet("border: none;")
 		self.btn_target.setIcon(QIcon(path.join(self.RESS_ICOS, 'target.png')))
 		self.statusbar.addPermanentWidget(self.btn_target)
 		# player
@@ -343,9 +343,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		if platform == "darwin" or platform == 'linux':
 			self.action_IFP.setEnabled(False)   # Import playlists foobar 2000
 			self.action_TAG.setEnabled(False)	# TagScan
-			#self.action_UBP.setEnabled(False)	# Update base
-			#self.action_UBN.setEnabled(False)	# Add news base
-			#self.action_UAP.setEnabled(False)	# Update album
 
 		# init connect
 		self.connectEnvt()
