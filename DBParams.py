@@ -23,6 +23,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		# init Json VAR
 		self.PATH_PROG = path.dirname(path.abspath(__file__))
 		self.LOGS_PROG = path.join(self.PATH_PROG, 'LOG')
+		self.RESS_ICOS = path.join(self.PATH_PROG, 'ICO')
 		self.C_HEIGHT = 25
 		# Read File DBAlbums.json
 		self.FILE__INI = fileini
@@ -52,7 +53,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 					'progr_logo' : 'filename logo program ({v})'.format(v=group_dbalbums['progr_logo']),
 					'wins_icone' : 'filename icone program ({v})'.format(v=group_dbalbums['wins_icone']),
 					'pict_blank' : 'filename cover blank ({v})'.format(v=group_dbalbums['pict_blank']),
-					'picm_endof' : 'last thunbnails display ({v})'.format(v=group_dbalbums['picm_endof']),
 					'envt_deflt' : 'default environment ({v})'.format(v=group_dbalbums['envt_deflt']),
 					'covers_siz' : 'size pixels of cover display ({v})'.format(v=group_dbalbums['covers_siz']),
 					'thun_csize' : 'size pixels scare thunbnails ({v})'.format(v=group_dbalbums['thun_csize']),
@@ -127,11 +127,11 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		
 		# pop up
 		self.menua = QMenu()
-		self.action2 = self.menua.addAction("add line", self.addLineCategory)
-		self.action3 = self.menua.addAction("del line", self.delLineCategory)
+		self.action2 = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'more.png')),"add line", self.addLineCategory)
+		self.action3 = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'less.png')),"del line", self.delLineCategory)
 		self.menub = QMenu()
-		self.action4 = self.menub.addAction("add line", self.addLineFamily)
-		self.action5 = self.menub.addAction("del line", self.delLineFamily)
+		self.action4 = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'more.png')),"add line", self.addLineFamily)
+		self.action5 = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'less.png')),"del line", self.delLineFamily)
 
 		# events
 		self.comboBox_cate.currentIndexChanged.connect(self.updateCategory)

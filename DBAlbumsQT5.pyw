@@ -49,10 +49,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	LOGS_PROG = path.join(PATH_PROG, 'LOG')
 	BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
 	FOOB_UPSC = path.join(PATH_PROG, 'SQL', "UpdateScore_Playlists_Foobar.sql")
-	RESS_LABS = path.join(PATH_PROG, 'IMG' , 'LAB')
-	RESS_ICOS = path.join(PATH_PROG, 'IMG' , 'ICO')
-	RESS_FLAG = path.join(PATH_PROG, 'IMG' , 'FLAG')
-	RESS_LOGO = path.join(PATH_PROG, 'IMG')
+	RESS_ICOS = path.join(PATH_PROG, 'ICO')
+	RESS_PICT = path.join(PATH_PROG, 'IMG')
+	RESS_TEMP = path.join(PATH_PROG, 'TMP')
 	# Read Json params
 	FILE__INI = path.join(PATH_PROG, 'DBAlbums.json')
 	Json_params = JsonParams(FILE__INI)
@@ -60,11 +59,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	group_dbalbums = Json_params.getMember('dbalbums')
 	VERS_PROG = group_dbalbums['prog_build']
 	TITL_PROG = "DBAlbums v{v} (2020)".format(v=VERS_PROG)
+	FLAGS_ZIP = path.join(RESS_PICT, group_dbalbums['flags__zip'])
+	LABEL_ZIP = path.join(RESS_PICT, group_dbalbums['labels_zip'])
 	WIDT_MAIN = group_dbalbums['wgui_width']
 	HEIG_MAIN = group_dbalbums['wgui_heigh']
 	WIDT_PICM = group_dbalbums['thun_csize']
 	HEIG_LHUN = group_dbalbums['thnail_nbl']
-	WINS_ICO = path.join(PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
+	WINS_ICO = path.join(RESS_ICOS, group_dbalbums['wins_icone'])
 	PICM_NCO = path.join(PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
 	THEM_COL = group_dbalbums['name_theme']
 	TEXT_NCO = group_dbalbums['text_nocov']
@@ -252,9 +253,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 		# popup base
 		self.menub = QMenu()
-		self.menub.addAction(self.style().standardIcon(QStyle.SP_MessageBoxInformation),
+		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'information.png')),
 							"Show Informations [F1]", self.showLoadingGui)
-		self.menub.addAction(self.style().standardIcon(QStyle.SP_BrowserReload),
+		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'reload.png')),
 							"Reload base Albums [F5]", lambda: self.connectEnvt(True))
 		self.action_UBP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'update.png')),
 							"Update Base...", lambda: self.buildInventPython('UPDATE'))
@@ -266,15 +267,15 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 							"Import Foobar Playlists, Update Score...", self.importFoobar)
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_FileDialogDetailedView),
 							"Params Environments Json...", lambda: self.openParams())
-		self.menub.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
+		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'folder.png')),
 							"Open Logs Folder...", lambda flog=self.LOGS_PROG: self.folder_open(flog))
 		# popup albums
 		self.menua = QMenu()
 		self.action_VIA = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'art.png')),
 							"View ArtWorks...", self.viewArtworks)
-		self.action_OPF = self.menua.addAction(self.style().standardIcon(QStyle.SP_DialogOpenButton),
+		self.action_OPF = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'folder.png')),
 							"Open Folder...", self.getFolder)
-		self.action_EXA = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'exp.png')),
+		self.action_EXA = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'export.png')),
 							"Export Album...", self.exportAlbums)
 		self.action_TAG = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'tag.png')),
 							"Edit Tags (TagScan)...", self.openTagScan)
@@ -282,6 +283,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 							"Update Album...", self.updateAlbums)
 		self.action_RAP = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'rename.png')),
 							"Rename Album...", self.renameAlbums)
+		self.action_DEL = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'delete.png')),
+							"Delete Album...", self.deleteAlbums)
 		self.action_DIS = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'discogs.png')),
 							"Search www.Discogs.com...", self.searchDiscogs)
 
@@ -1045,6 +1048,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 					self.action_EXA.setText("Export cover/csv " + self.formatCounter(len(listrows), 'Album(s)')+"...")
 					self.action_UAP.setText("Update " + self.formatCounter(len(listrows), 'Album(s)') + "...")
 					self.action_RAP.setText("Rename " + self.formatCounter(len(listrows), 'Album(s)') + "...")
+					self.action_DEL.setText("Delete " + self.formatCounter(len(listrows), 'Album(s)') + "...")
 					self.action_TAG.setEnabled(False)
 					self.menua.exec_(self.tbl_albums.viewport().mapToGlobal(position))
 
@@ -1057,6 +1061,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.action_EXA.setText("Export cover/csv '" + self.albumname[:15] + "' ...")
 		self.action_UAP.setText("Update Album '" + self.albumname[:15] + "' ...")
 		self.action_RAP.setText("Rename Album '" + self.albumname[:15] + "' ...")
+		self.action_DEL.setText("Delete Album '" + self.albumname[:15] + "' ...")
 		# numbers jpg >1 for gui artwork enable
 		if self.tableMdlAlb.getData(self.currow, 'PIC') > 1:
 			self.action_VIA.setEnabled(True)
@@ -1245,6 +1250,39 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 									self.envits)
 			self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 			self.prepareInvent.realiseManualsActions(list_actions)
+
+	def deleteAlbums(self):
+		"""Delete Albums storage + database."""
+		buttonReply = QMessageBox.question(self, 'Delete Album(s)', "Confirm Delete Album(s) Storage and database", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+		if buttonReply == QMessageBox.Yes:
+			self.playerAudio.player.stop()
+			list_actions = []
+			listrows = self.getRowsfromListAlbums()
+			if listrows is not None:
+				for ind in listrows:
+					pathname = self.tableMdlAlb.getData(ind, 'PATHNAME')
+					pathname = self.Json_params.convertUNC(pathname)
+					# delete Storage
+					if path.exists(pathname):
+						# reinit player for access file
+						self.playerAudio.addMediaslist(None, 0, None)
+						self.folder_delete(pathname)
+					typeupdate = 'DELETE'
+					# [CATEGORY, FAMILY, 'DELETE/UPDATE/ADD', ID_CD, 'NAME', 'PATHNAME']
+					list_actions.append([self.tableMdlAlb.getData(ind, 'CATEGORY'),
+										self.tableMdlAlb.getData(ind, 'FAMILY'),
+										typeupdate,
+										self.tableMdlAlb.getData(ind, 'ID_CD'),
+										self.tableMdlAlb.getData(ind, 'NAME'),
+										pathname])
+				self.prepareInvent = InventGui(self,
+										self.tableMdlAlb.arraydata,
+										self.tableMdlAlb.myindex,
+										self.lstcat,
+										'UPDATE',
+										self.envits)
+				self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
+				self.prepareInvent.realiseManualsActions(list_actions)
 
 	def correctionsAlbums(self):
 		"""Force update database for a request selection."""

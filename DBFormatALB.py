@@ -4,17 +4,18 @@
 from os import path
 from sys import platform
 from PyQt5.QtCore import QObject, qDebug
-
+from zipfile import ZipFile
 
 class StringFormatAlbum(QObject):
-	"""Herit class tableMdlAlb."""
+	"""format name albums to present."""
+	
 	def __init__(self, parent):
 		"""Init."""
 		super(StringFormatAlbum, self).__init__(parent)
 		self.parent = parent
 		self.infoshtml = ''
 		self.imglabel = ''
-		self.heighticon = '18'
+		self.heighticon = '22'
 
 	def formatCounters(self, num, text = ''):
 		"""format 0 000 + plural."""
@@ -72,8 +73,9 @@ class StringFormatAlbum(QObject):
 			if label.find('(') > 0:
 				label = label[0:label.find('(')].rstrip()
 			label = label.replace(' - ', ' ').title()
+			self.Extract_FileToPath(self.parent.LABEL_ZIP, label.replace(' ','_') +'.jpg', self.parent.RESS_TEMP)
+			imglabel = path.join(self.parent.RESS_TEMP, label.replace(' ','_') +'.jpg')
 			label = 'Label: ' + label
-			imglabel = path.join(self.parent.RESS_LABS, label.replace(' ','_') +'.jpg')
 			if not path.isfile(imglabel):
 				qDebug('no image label : ' + imglabel)
 				#print('no image label : ' + imglabel)
@@ -98,7 +100,8 @@ class StringFormatAlbum(QObject):
 		# flags
 		imageflag = ''
 		if country != "":
-			flagfile = path.join(self.parent.RESS_FLAG, country.replace(' ', '-') + '.png')
+			self.Extract_FileToPath(self.parent.FLAGS_ZIP, country.replace(' ', '-') + '.png', self.parent.RESS_TEMP)
+			flagfile = path.join(self.parent.RESS_TEMP, country.replace(' ', '-') + '.png')
 			if path.isfile(flagfile):
 				imageflag = '<img style="vertical-align:Bottom;" src="' + flagfile + '" height="' + self.heighticon + '">'
 				imageflag = '<a style="' + stylehtml + '" href="dbfunction://c' + country + '">' + imageflag + '</a>'
@@ -147,3 +150,11 @@ class StringFormatAlbum(QObject):
 		self.infoshtml = infoshtml
 		self.imglabel = imglabel
 
+	def Extract_FileToPath(self, my_zip, my_file, extractpath = None):
+		if not path.exists(path.join(extractpath,my_file)):
+			with ZipFile(my_zip) as zip:
+				for zip_info in zip.infolist():
+					if my_file in zip_info.filename:
+						zip_info.filename = path.basename(zip_info.filename)
+						print(zip_info, extractpath)
+						zip.extract(zip_info, extractpath)

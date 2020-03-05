@@ -21,14 +21,14 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget, FilesProcessing):
 		super(DBAlbumsQT5Mini, self).__init__(parent)
 		self.PATH_PROG = path.dirname(path.abspath(__file__))
 		self.BASE_SQLI = path.join(self.PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
-		self.RESS_ICOS = path.join(self.PATH_PROG, 'IMG' , 'ICO')
+		self.RESS_ICOS = path.join(self.PATH_PROG, 'ICO')
 		self.VERS_PROG = '1.01'
 		self.TITL_PROG = "♫ DBAlbums mini v{v} (2020)".format(v=self.VERS_PROG)
 		self.FILE__INI = path.join(self.PATH_PROG, 'DBAlbums.json')
 		self.Json_params = JsonParams(self.FILE__INI)
 		group_dbalbums = self.Json_params.getMember('dbalbums')
-		self.WINS_ICO = path.join(self.PATH_PROG, 'IMG', group_dbalbums['wins_icone'])
-		self.PICM_NCO = path.join(self.PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
+		self.WINS_ICO = path.join(RESS_ICOS, group_dbalbums['wins_icone'])
+		self.PICM_NCO = path.join(RESS_ICOS, group_dbalbums['pict_blank'])
 		self.THEM_COL = group_dbalbums['name_theme']
 		self.ENVT_DEF = group_dbalbums['envt_deflt']
 		self.NAME_EVT, self.CURT_EVT = self.Json_params.buildListEnvt(self.ENVT_DEF)

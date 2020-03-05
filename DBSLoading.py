@@ -31,7 +31,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		self.tabWidget.currentChanged.connect(self.chgtLogo)
 		# logo gif
 		self.numlogo = 1
-		self.movielogo = QMovie(path.join(self.parent.RESS_LOGO,"logo1.gif"))
+		self.movielogo = QMovie(path.join(self.parent.RESS_PICT,"logo1.gif"))
 		self.lab_logo.setMovie(self.movielogo)
 		self.movielogo.start()
 		# tab1
@@ -77,7 +77,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		self.movielogo.stop()
 		self.numlogo += 1
 		self.numlogo = self.numlogo % 3
-		logo = path.join(self.parent.RESS_LOGO, "logo" +str(self.numlogo) + ".gif")
+		logo = path.join(self.parent.RESS_PICT, "logo" +str(self.numlogo) + ".gif")
 		self.movielogo = QMovie(logo)
 		self.lab_logo.setMovie(self.movielogo)
 		self.movielogo.start()

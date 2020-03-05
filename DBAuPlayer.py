@@ -51,7 +51,7 @@ class DBPlayer(QWidget):
 	def __init__(self, parent):
 		super(DBPlayer, self).__init__(parent)
 		self.PATH_PROG = path.dirname(path.abspath(__file__))
-		self.RESS_ICOS = path.join(self.PATH_PROG, 'IMG' , 'ICO')
+		self.RESS_ICOS = path.join(self.PATH_PROG, 'ICO')
 
 		self.setMaximumSize(16777215, 35)
 		# Init Player

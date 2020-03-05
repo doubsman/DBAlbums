@@ -15,7 +15,7 @@ class ScoreWidget(QWidget):
 	def __init__(self, parent, scoredict, scoreinit = None):
 		super(ScoreWidget, self).__init__(parent)
 		self.PATH_PROG = path.dirname(path.abspath(__file__))
-		self.RESS_ICOS = path.join(self.PATH_PROG, 'IMG' , 'ICO')
+		self.RESS_ICOS = path.join(self.PATH_PROG, 'ICO')
 
 		self.parent = parent
 		self.scoreinit = scoreinit
