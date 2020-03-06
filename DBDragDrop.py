@@ -4,7 +4,7 @@
 from os import path
 from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout
 from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtCore import Qt, QSize, pyqtSignal
+from PyQt5.QtCore import Qt, QSize, pyqtSignal, qDebug
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
 
 
@@ -17,6 +17,7 @@ class QLabeldnd(QLabel):
 		super(QLabel, self).__init__(parent)
 		self.pathcover = pathcover
 		self.size = coversize
+		self.parent = parent
 		self.setMaximumSize(QSize(self.size, self.size))
 		self.setMinimumSize(QSize(self.size, self.size))
 	
@@ -36,10 +37,17 @@ class QLabeldnd(QLabel):
 			self.setPixmap(mypixlab)
 			self.signalcoverchgt.emit(1)
 		elif event.mimeData().hasUrls():
-			url = event.mimeData().urls()[0]
-			nam = QNetworkAccessManager(self)
-			nam.finished.connect(self.finishRequest)
-			nam.get(QNetworkRequest(url))
+			for url in event.mimeData().urls():
+				path = url.toLocalFile()
+				# picture ? update album
+				if path[-4] in ['.jpg', 'jpeg']:
+					nam = QNetworkAccessManager(self)
+					nam.finished.connect(self.finishRequest)
+					nam.get(QNetworkRequest(url))
+					break
+				else:
+					# new albums path
+					qDebug(path)
 		QLabel.dropEvent(self, event)
 
 	def finishRequest(self, reply):

@@ -105,7 +105,8 @@ class StringFormatAlbum(QObject):
 			if path.isfile(flagfile):
 				imageflag = '<img style="vertical-align:Bottom;" src="' + flagfile + '" height="' + self.heighticon + '">'
 				imageflag = '<a style="' + stylehtml + '" href="dbfunction://c' + country + '">' + imageflag + '</a>'
-
+			else:
+				qDebug('no image country : ' + country)
 		# nb cd
 		if nbcd<6:
 			infosnbcd = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'cdrom.png') + '" height="' + self.heighticon + '">'
@@ -151,7 +152,7 @@ class StringFormatAlbum(QObject):
 		self.imglabel = imglabel
 
 	def Extract_FileToPath(self, my_zip, my_file, extractpath = None):
-		if not path.exists(path.join(extractpath,my_file)):
+		if not path.isfile(path.join(extractpath, my_file)):
 			with ZipFile(my_zip) as zip:
 				for zip_info in zip.infolist():
 					if my_file in zip_info.filename:

@@ -132,17 +132,21 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.loadingGui = None
 
 		# font
-		self.fontbig = QFont()
-		self.fontbig.setFamily(self.FONT_MAI)
-		self.fontbig.setFixedPitch(True)
-		self.fontbig.setPointSize(self.FONT_SIZE)
 		self.fontmini = QFont()
 		self.fontmini.setFamily(self.FONT_MAI)
 		self.fontmini.setFixedPitch(True)
 		self.fontmini.setPointSize(self.FONT_SIZE - 2)
+		self.fontbig = QFont()
+		self.fontbig.setFamily(self.FONT_MAI)
+		self.fontbig.setFixedPitch(True)
+		self.fontbig.setPointSize(self.FONT_SIZE)
+		self.fontmaxi = QFont()
+		self.fontmaxi.setFamily(self.FONT_MAI)
+		self.fontmaxi.setFixedPitch(True)
+		self.fontmaxi.setPointSize(self.FONT_SIZE + 4)
 		self.lab_search.setFont(self.fontbig)
 		self.lab_album.setFont(self.fontbig)
-		self.lab_label.setFont(self.fontbig)
+		self.lab_label.setFont(self.fontmaxi)
 		self.lab_comenvt.setFont(self.fontmini)
 		self.chb_searchtracks.setFont(self.fontmini)
 		self.statusbar.setFont(self.fontbig)
@@ -295,9 +299,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.defineThemes(self.THEM_COL, self.Json_params.getMember('themes'))
 		self.applyTheme()
 
-		# Album formmat html
+		# Class Album formmat html
 		self.FormatAlb = StringFormatAlbum(self)
-		#self.lab_label.setMaximumSize(150, 16777215)
 
 		# timer Delay action QLineEdit
 		self.m_typingTimer = QTimer(self)
@@ -733,7 +736,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			# img label
 			if img_lab is not None:
 				plabel = QPixmap(img_lab)
-				self.lab_label.setPixmap(plabel.scaled(300, 160, Qt.KeepAspectRatio))
+				self.lab_label.setPixmap(plabel.scaled(250, 80, Qt.KeepAspectRatio, Qt.SmoothTransformation))
 				self.lab_label.setVisible(True)
 			else:
 				self.lab_label.setText('<b>' + self.tableMdlAlb.getData(self.currow, 'CATEGORY') + '</b>')
