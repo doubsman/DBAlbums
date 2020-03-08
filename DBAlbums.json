@@ -26,7 +26,7 @@
     "programs": {
         "txt_win"   : "C:\\Program Files\\Notepad++\\notepad++.exe",
         "txt_lin"   : "mousepad",
-        "foobarP"   : "C:\\Users\\Mister doubs\\AppData\\Roaming\\foobar2000\\playlists-v1.3",
+        "foobarP"   : "C:\\Users\\Mister doubs\\AppData\\Roaming\\foobar2000\\playlists-v1.4",
         "discogs"   : "http://www.discogs.com/search?q=%NAME",
         "tagscan"   : "\\\\HOMERSTATION\\_Synchro\\_Apps_Portables\\tagscan\\Tagscan.exe"
     },
@@ -40,6 +40,7 @@
         "create_mysql"      : "Create_mysql_database.sql",
         "create_mssql"      : "Create_mssql_database.sql",
         "create_sqlite"     : "Create_sqllite_database.sql",
+        "foobar_score"      : "UpdateScore_Playlists_Foobar.sql",
         "control_integrity" : "Control_database.sql"
     },
     "themes" : {

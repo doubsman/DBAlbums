@@ -3,7 +3,6 @@
 
 from os import path
 from PyQt5.QtCore import qDebug, QObject, pyqtSignal
-from PyQt5.QtSql import QSqlQuery
 # dev ext https://github.com/rr-/fpl_reader
 from fpl_reader import read_playlist
 
@@ -11,7 +10,7 @@ from fpl_reader import read_playlist
 class playlistFoobar2000(QObject):
 	signalchgt = pyqtSignal(int, str)		# signal browse
 	
-	def __init__(self, folder, parent=None):
+	def __init__(self, parent, folder):
 		"""Init."""
 		super(playlistFoobar2000, self).__init__(parent)
 		self.parent = parent
@@ -24,33 +23,9 @@ class playlistFoobar2000(QObject):
 		"""build list of playlists foobar 2000."""
 		playfiles = self.parent.folder_list_files(self.folder, True, (".fpl",))
 		for playfile in playfiles:
+			# update self.trackslist
 			self.readPlaylist(playfile)
 	
-	def importPlaylist(self):
-		"""Insert playlist track in database dans update score."""
-		self.numtracks = len(self.trackslist)
-		counter = 0
-		request = self.parent.CnxConnect.getrequest('playlistfoobar')		
-		self.signalchgt.emit(0, "Crowse playlists fooBar 2000")
-		for footrack in self.trackslist:
-			query = QSqlQuery()
-			query.prepare(request)
-			pos = 0
-			for colval in footrack:
-				query.bindValue(pos, colval)
-				pos += 1
-			if not query.exec_():
-				qDebug(request + ' ' + query.lastError().text())
-				qDebug(','.join(list(str(query.boundValues().values()))))
-				break
-			query.clear
-			counter += 1
-			self.signalchgt.emit((counter/self.numtracks)*100, 'Import playlists FooBar2000 in progess...')
-
-	def updateScore(self, filerequests):
-		self.parent.CnxConnect.signalchgt.connect(self.loadingProgress)
-		update.execSqlFile(filerequests)
-
 	def readPlaylist(self, file_path):
 		"""Buil list track from playlists."""
 		folder = path.dirname(file_path)
@@ -86,10 +61,5 @@ class playlistFoobar2000(QObject):
 		"""open file playlist foobar 2000."""
 		with open(path.join(folder, file_name), 'rb') as handle:
 			return handle.read()
-
-	def loadingProgress(self, int, text):
-		"""Traced back progress."""
-		self.signalchgt.emit(int, text)
-
 
 	

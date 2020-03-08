@@ -22,6 +22,7 @@ class ConnectDatabase(LibDatabase):
 		self.connexionName = connexionName	# QT name connection
 		self.Json_params = jsondataini		# params Json file ini 
 
+		self.PATH_PROG = path.dirname(path.abspath(__file__))
 		self.group_envt = self.Json_params.getContentMember('environments', envt)
 		self.MODE_SQLI = self.group_envt['typb']
 		self.BASE_RAC = r'' + self.group_envt['raci']
@@ -64,20 +65,19 @@ class ConnectDatabase(LibDatabase):
 
 	def createObjetsDatabase(self, modesql, boolbuild, qtdblite):
 		"""Create Objects in new database."""
-		self.PATH_PROG = path.dirname(path.abspath(__file__))
-		self.dbcrea = path.join(self.PATH_PROG, 'SQL', self.dbcrea['create_' + modesql])
+		scrcrea = path.join(self.PATH_PROG, 'SQL', self.dbcrea['create_' + modesql])
 		if self.boolcon:
 			if modesql == 'sqlite':
 				if not(boolbuild):
 					# build database tables/view
-					self.execSqlFile(self.dbcrea)
+					self.execSqlFile(scrcrea)
 			else:
 				# table album exist ?
 				request = self.getrequest('tableexist')
 				boolbuild = (len(self.sqlToArray(request, qtdblite)) > 0)
 				if not(boolbuild):
 					# build database tables/view
-					self.execSqlFile(self.dbcrea)
+					self.execSqlFile(scrcrea)
 		if boolbuild is None:
 			self.buildbase = False
 
@@ -214,3 +214,28 @@ class ConnectDatabase(LibDatabase):
 		savefile.write(cover[0])
 		savefile.close()
 
+	def foobarImportPlaylist(self, trackslist):
+		"""Insert playlist track in database dans update score."""
+		numtracks = len(trackslist)
+		counter = 0
+		request = self.getrequest('playlistfoobar')		
+		self.signalchgt.emit(0, "Browse playlists fooBar 2000")
+		for footrack in trackslist:
+			query = QSqlQuery(self.qtdbdb)
+			query.prepare(request)
+			pos = 0
+			for colval in footrack:
+				query.bindValue(pos, colval)
+				pos += 1
+			if not query.exec_():
+				qDebug(request + ' ' + query.lastError().text())
+				qDebug(','.join(list(str(query.boundValues().values()))))
+				break
+			query.clear
+			counter += 1
+			self.signalchgt.emit((counter/numtracks)*100, 'Import playlists FooBar2000 in progess...')
+
+	def foobarupdateScore(self):
+		"""Update scoring table ALBUMS/TRACKS."""
+		fooscript = path.join(self.PATH_PROG, 'SQL', self.dbcrea['foobar_score'])
+		self.execSqlFile(fooscript)

@@ -48,7 +48,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	PATH_PROG = path.dirname(path.abspath(__file__))
 	LOGS_PROG = path.join(PATH_PROG, 'LOG')
 	BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
-	FOOB_UPSC = path.join(PATH_PROG, 'SQL', "UpdateScore_Playlists_Foobar.sql")
 	RESS_ICOS = path.join(PATH_PROG, 'ICO')
 	RESS_PICT = path.join(PATH_PROG, 'IMG')
 	RESS_TEMP = path.join(PATH_PROG, 'TMP')
@@ -340,6 +339,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.lab_album.anchorClicked.connect(self.onAnchorClicked)
 		self.labelcover.mousePressEvent = self.onPressCover
 		self.labelcover.signalcoverchgt.connect(self.updateAlbumsDnd)
+		self.labelcover.signaladdalbums.connect(self.addeAlbumsDnd)
 		self.playerAudio.signaltxt.connect(self.updateStatusBar)
 		self.playerAudio.signalnum.connect(self.selectPlayingTack)
 		self.widgetscoretracks.signalscorenew.connect(self.saveScoreTrack)
@@ -607,6 +607,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.CnxConnect.closeDatabase()
 			# connect
 			self.CnxConnect = ConnectDatabase(self, self.envits, self.BASE_SQLI, self.Json_params, 'dbmain')
+			self.CnxConnect.signalchgt.connect(self.updateGaugeBar)
 			self.boolCnx = self.CnxConnect.boolcon
 			self.dbbase = self.CnxConnect.qtdbdb
 			self.modsql = self.CnxConnect.MODE_SQLI
@@ -1157,14 +1158,14 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	def importFoobar(self):
 		"""Foobar2000 playlists operations."""
 		# import fpl playlist to mysql DBFOOBAR
-		importfoobar = playlistFoobar2000(self.FOOB_PLAY)
-		importfoobar.signalchgt.connect(self.updateGaugeBar)
-		importfoobar.importPlaylist()
-		if importfoobar.numtracks == 0:
+		# create tracklist
+		importfoobar = playlistFoobar2000(self, self.FOOB_PLAY)
+		self.CnxConnect.foobarImportPlaylist(importfoobar.trackslist)
+		if len(importfoobar.trackslist) == 0:
 			QMessageBox.critical(self, 'Foobar2000 playlists operations', 'Problem import files fpl playlist from : ' + self.FOOB_PLAY)
 		else:
 			# synchro score sql
-			importfoobar.updateScore(self.FOOB_UPSC)
+			self.CnxConnect.foobarupdateScore()
 			QMessageBox.information(self,'Foobar2000 import playlists', 'Operation successfull')
 
 	def updateAlbumsDnd(self):
@@ -1184,6 +1185,15 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 								self.envits)
 		self.prepareInvent.signalend.connect(lambda: self.connectEnvt(True))
 		self.prepareInvent.realiseManualsActions(list_actions)
+
+	def addeAlbumsDnd(self, listadd):
+		"""list path albums add d n d."""
+		# inspect path 
+		for pathadd in listadd:
+			# belongs root database??
+			if self.rootDk in pathadd:
+				qDebug('ok '+pathadd)
+				# problem category
 
 	def renameAlbums(self):
 		"""Execute macro update."""

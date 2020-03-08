@@ -2,7 +2,7 @@
 # coding: utf-8
 
 from os import path
-from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QPushButton
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt, QSize, pyqtSignal, qDebug
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
@@ -11,7 +11,8 @@ from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
 class QLabeldnd(QLabel):
 	# signal
 	signalcoverchgt = pyqtSignal(int)		# cover changed
-	
+	signaladdalbums = pyqtSignal(list)		# add path
+
 	def __init__ (self, parent, pathcover, coversize):
 		"""Init QLabel Dnd."""
 		super(QLabel, self).__init__(parent)
@@ -20,6 +21,7 @@ class QLabeldnd(QLabel):
 		self.parent = parent
 		self.setMaximumSize(QSize(self.size, self.size))
 		self.setMinimumSize(QSize(self.size, self.size))
+		self.listadd = []
 	
 	def dragEnterEvent (self, event):
 		"""Accept url and image."""
@@ -38,16 +40,19 @@ class QLabeldnd(QLabel):
 			self.signalcoverchgt.emit(1)
 		elif event.mimeData().hasUrls():
 			for url in event.mimeData().urls():
-				path = url.toLocalFile()
-				# picture ? update album
-				if path[-4] in ['.jpg', 'jpeg']:
+				urlpath = url.toLocalFile()
+				# picture ? update curent album
+				if urlpath[-4] in ['.jpg', 'jpeg']:
 					nam = QNetworkAccessManager(self)
 					nam.finished.connect(self.finishRequest)
 					nam.get(QNetworkRequest(url))
 					break
 				else:
-					# new albums path
-					qDebug(path)
+					# new albums path ?
+					self.listadd.append(urlpath)
+					#qDebug(urlpath)
+			if self.listadd:
+				self.signaladdalbums.emit(self.listadd)
 		QLabel.dropEvent(self, event)
 
 	def finishRequest(self, reply):
