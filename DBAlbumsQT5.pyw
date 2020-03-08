@@ -64,8 +64,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	HEIG_MAIN = group_dbalbums['wgui_heigh']
 	WIDT_PICM = group_dbalbums['thun_csize']
 	HEIG_LHUN = group_dbalbums['thnail_nbl']
-	WINS_ICO = path.join(RESS_ICOS, group_dbalbums['wins_icone'])
-	PICM_NCO = path.join(PATH_PROG, 'IMG', group_dbalbums['pict_blank'])
+	WINS_ICO = path.join(RESS_PICT, group_dbalbums['wins_icone'])
+	PICM_NCO = path.join(RESS_PICT, group_dbalbums['pict_blank'])
 	THEM_COL = group_dbalbums['name_theme']
 	TEXT_NCO = group_dbalbums['text_nocov']
 	ENVT_DEF = group_dbalbums['envt_deflt']
