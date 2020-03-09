@@ -171,7 +171,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		if sizescreen.size().height() - 100 < self.h_main:
 			# resize main one line for thunbnails
 			self.thunnbline = 1
-			self.h_main = self.h_main - (self.sizeTN * self.thunnbline) - 400
+			self.h_main = self.h_main - (self.sizeTN * self.thunnbline) - 100
 			self.setMinimumSize(QSize(self.w_main, self.h_main))
 		self.resize(self.w_main, self.h_main)
 
@@ -1082,6 +1082,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		if listrows is not None:
 			if len(listrows) == 1:
 				#print('popUpTreeAlbums displayAlbum')
+				#########
 				self.displayAlbum()
 				self.action_TAG.setEnabled(True)
 				self.updateTextPopupAlbum(self.tbl_albums.viewport().mapToGlobal(position))
@@ -1116,11 +1117,15 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			self.action_OPF.setEnabled(True)
 			self.action_UAP.setEnabled(True)
 			self.action_RAP.setEnabled(True)
+			self.action_DEL.setEnabled(True)
+			self.action_TAG.setEnabled(True)
 		else:
 			self.action_OPF.setEnabled(False)
 			self.action_VIA.setEnabled(False)
 			self.action_UAP.setEnabled(False)
 			self.action_RAP.setEnabled(False)
+			self.action_DEL.setText('Delete Album (only database) "' + self.albumname + '"')
+			self.action_TAG.setEnabled(False)
 		self.menua.exec_(position)
 
 	def playMediasAlbum(self, event):
