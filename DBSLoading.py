@@ -21,6 +21,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		#self.setWindowFlags(Qt.SplashScreen)
 		self.setWindowIcon(QIcon(self.parent.WINS_ICO))
 		self.setWindowTitle(self.parent.TITL_PROG + ' : SplashScreen')
+		self.setWindowOpacity(0.95)
 
 		# font
 		font = QFont()

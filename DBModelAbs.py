@@ -232,6 +232,25 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 		# validate rows display ok
 		return True
 
+	def headerData(self, column, orientation, role = Qt.DisplayRole):
+		"""pop-up menu column hidden."""
+		sourceModel = self.sourceModel()
+
+		if role == Qt.TextAlignmentRole:
+			if orientation == Qt.Horizontal:
+				return QVariant(int(Qt.AlignHCenter|Qt.AlignVCenter))
+			return QVariant(int(Qt.AlignHCenter|Qt.AlignVCenter))
+
+		if role == Qt.DisplayRole:
+			if orientation == Qt.Horizontal:
+				return QVariant(sourceModel.A_COLNAME[column])
+			else:
+				return QVariant()
+		else:
+			return QVariant()
+
+		return QVariant(int(column+1))
+
 
 # TABLE DBALBUMS ABSTRACT
 class ModelTableAlbumsABS(ModelDBAbstract):
@@ -244,12 +263,14 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 					'CD', 'Year', 'Time', 'Size', 'Score', 
 					'Pic', 'Country', 'Add', 'Modified', 'Position',
 					'Path', 'Cover', 'Tag', 'ID_CD')
+	# columns hidden
+	H_COLNAME = (	'TLabel', 'TISRC')
 	# treeview columns width
 	A_C_WIDTH = (	60, 90, 250, 0, 110,
-					120, 0, 100, 0, 30,
+					120, 120, 100, 100, 30,
 					30, 40, 50, 40,	50,
 					30, 60, 77, 77, 250,
-					200, 200, 30, 40)
+					500, 500, 30, 40)
 	C_HEIGHT = 21
 	
 	def __init__(self, parent, *args):
@@ -339,6 +360,7 @@ class ProxyModelTracks(QSortFilterProxyModel):
 		"""Filter data model."""
 		# validate rows display ok
 		return True
+
 
 
 # TABLE DBTRACKS SQLQUERY

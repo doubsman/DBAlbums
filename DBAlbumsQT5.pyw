@@ -15,9 +15,9 @@ from sys import platform, argv, exit
 from os import path, getcwd, rename
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
-from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl
+from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl, QPoint
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QInputDialog, QLineEdit,
-						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout, QSizePolicy)
+						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QAction)
 from PyQt5.QtMultimedia import QMediaPlayer
 # Gui QtDesigner : compiler .ui sans Eric6: pyuic5 file.ui -o Ui_main_file.py
 from Ui_DBALBUMS import Ui_MainWindow
@@ -171,8 +171,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		if sizescreen.size().height() - 100 < self.h_main:
 			# resize main one line for thunbnails
 			self.thunnbline = 1
-			self.h_main = self.h_main - (self.sizeTN * self.thunnbline)
-			self.setMinimumSize(QSize(self.w_main, self.h_main - 370))
+			self.h_main = self.h_main - (self.sizeTN * self.thunnbline) - 400
+			self.setMinimumSize(QSize(self.w_main, self.h_main))
 		self.resize(self.w_main, self.h_main)
 
 		# thunbnails list
@@ -200,6 +200,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.tbl_tracks.verticalHeader().setVisible(False)
 		self.tbl_albums.setSelectionBehavior(self.tbl_albums.SelectRows)
 		self.tbl_tracks.setSelectionBehavior(self.tbl_tracks.SelectRows)
+		# tab sort
+		self.tbl_albums.setSortingEnabled(True)
+		self.tbl_tracks.setSortingEnabled(True)
 
 		# progres bar
 		self.gaugeBar = QProgressBar(self)
@@ -213,6 +216,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.btn_target.setStyleSheet("border: none;")
 		self.btn_target.setIcon(QIcon(path.join(self.RESS_ICOS, 'target.png')))
 		self.statusbar.addPermanentWidget(self.btn_target)
+
 		# player
 		self.playerAudio = DBPlayer(self)
 		self.playerAudio.seekSliderLabel1.setFont(self.fontmini)
@@ -220,6 +224,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.playerAudio.volumeDescBtn.setFont(self.fontbig)
 		self.playerAudio.volumeIncBtn.setFont(self.fontbig)
 		self.statusbar.addPermanentWidget(self.playerAudio)
+		# zoom thumbnail
 		layout = QHBoxLayout()
 		layout.setAlignment(Qt.AlignCenter)
 		self.sbframe = QFrame(self)
@@ -245,6 +250,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		layout.addWidget(self.btn_zoomin)
 		self.sbframe.setLayout(layout)
 		self.statusbar.addPermanentWidget(self.sbframe)
+		# others buttons
 		self.btn_nogrid = QPushButton(self)
 		self.btn_nogrid.setStyleSheet("border: none;")
 		self.btn_nogrid.setIcon(self.style().standardIcon(QStyle.SP_FileDialogListView))
@@ -255,7 +261,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.statusbar.addPermanentWidget(self.btn_themecolor)
 
 		# popup base
-		self.menub = QMenu()
+		self.menub = QMenu(self)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'information.png')),
 							"Show Informations [F1]", self.showLoadingGui)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'reload.png')),
@@ -273,7 +279,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'folder.png')),
 							"Open Logs Folder...", lambda flog=self.LOGS_PROG: self.folder_open(flog))
 		# popup albums
-		self.menua = QMenu()
+		self.menua = QMenu(self)
 		self.action_VIA = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'art.png')),
 							"View ArtWorks...", self.viewArtworks)
 		self.action_OPF = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'folder.png')),
@@ -291,6 +297,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.action_DIS = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'discogs.png')),
 							"Search www.Discogs.com...", self.searchDiscogs)
 
+		#popup header albums
+		self.resHeaderMenu = QMenu(self)
+
 		# center
 		self.centerWidget(self)
 
@@ -307,6 +316,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.m_typingTimer.timeout.connect(self.onFiltersChanged)
 
 		# link Gui
+		header = self.tbl_albums.horizontalHeader()
+		header.setContextMenuPolicy(Qt.CustomContextMenu)
+		header.customContextMenuRequested.connect(self.headerRightClicked)
 		self.lin_search.textChanged.connect(self.onTextEdited)
 		self.btn_clearsearch.clicked.connect(self.clearFilters)
 		self.chb_searchtracks.clicked.connect(self.onFiltersChanged)
@@ -428,7 +440,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	def applyTheme(self):
 		"""Apply color Theme to main Gui."""
 		# main
-		mainstyle = 'QMainWindow{{background-color: {col1};border: 1px solid black;}}' \
+		mainstyle = 'QMenu{{background-color: {col1};border: 1px solid black;}}' \
+					'QMainWindow{{background-color: {col1};border: 1px solid black;}}' \
 					'QLineEdit{{background-color: {col2};}}' \
 					'QComboBox{{background-color: {col2};}}' \
 					'QStatusBar{{background-color: {col1};border: 1px solid black;}}' \
@@ -650,6 +663,20 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.tableMdlAlb.signalthubuild.connect(self.onBuild)
 				self.tbl_albums.setModel(self.tableMdlAlb.SortFilterProxy)
 				self.tableMdlAlb.SortFilterProxy.layoutChanged.connect(self.onListAlbumsChanged)
+
+				# build pop-up menu header column name
+				for column in range(self.tableMdlAlb.SortFilterProxy.columnCount()):
+					columnName = self.tableMdlAlb.SortFilterProxy.headerData(column, Qt.Horizontal).value()
+					actn = QAction('%s'%columnName, self.resHeaderMenu, checkable = True)
+					if columnName in self.tableMdlAlb.H_COLNAME:
+						actn.setChecked(False)
+						# columns hidden
+						self.tbl_albums.setColumnHidden(column, True)
+					else:
+						actn.setChecked(True)
+					actn.triggered.connect(self.resHeaderMenuTriggered)
+					self.resHeaderMenu.addAction(actn)
+
 				qDebug('Fill list albums end')
 				
 				# reinit thumbnail + combos filters
@@ -688,6 +715,19 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				if refresh:
 					self.onFiltersChanged()
 
+	def headerRightClicked(self, QPos):
+		parentPosition = self.tbl_albums.mapToGlobal(QPoint(0, 0))
+		menuPosition = parentPosition + QPos
+		self.resHeaderMenu.move(menuPosition)
+		self.resHeaderMenu.show()		 
+
+	def resHeaderMenuTriggered(self, arg):
+		for i, actn in enumerate(self.resHeaderMenu.actions()):
+			if not actn.isChecked():
+				self.tbl_albums.setColumnHidden(i, True)
+			else:
+				self.tbl_albums.setColumnHidden(i, False)
+
 	def displayAlbum(self):
 		"""Display info current select album."""
 		self.widgetscorealbum.show()
@@ -709,7 +749,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			self.posrow = indexsrc.row()
 			self.currow = indexes.row()
 			self.curAlb = self.tableMdlAlb.getData(self.currow, 'ID_CD')
-			self.albumname = self.tableMdlAlb.getData(self.currow, 'NAME')
+			self.albumname = self.tableMdlAlb.getData(self.currow, 'NAME').strip()
 			self.ScoreAlbum = self.tableMdlAlb.getData(self.currow, 'SCORE')
 			self.pathcover = self.tableMdlAlb.getData(self.currow, 'COVER')
 			self.AlbumPath = self.tableMdlAlb.getData(self.currow, 'PATHNAME')
@@ -1062,10 +1102,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 	def updateTextPopupAlbum(self, position):
 		"""Update option menu album enabled."""
-		self.action_EXA.setText("Export cover/csv '" + self.albumname[:15] + "' ...")
-		self.action_UAP.setText("Update Album '" + self.albumname[:15] + "' ...")
-		self.action_RAP.setText("Rename Album '" + self.albumname[:15] + "' ...")
-		self.action_DEL.setText("Delete Album '" + self.albumname[:15] + "' ...")
+		self.action_EXA.setText('Export cover/csv "' + self.albumname + '"')
+		self.action_UAP.setText('Update Album "' + self.albumname + '"')
+		self.action_RAP.setText('Rename Album "' + self.albumname + '"')
+		self.action_DEL.setText('Delete Album "' + self.albumname + '"')
 		# numbers jpg >1 for gui artwork enable
 		if self.tableMdlAlb.getData(self.currow, 'PIC') > 1:
 			self.action_VIA.setEnabled(True)
@@ -1342,15 +1382,15 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 							textrow.append(textcol)
 						wr.writerow(textrow)
 				self.folder_open(path.dirname(filename))
-				self.statusBar().showMessage('Export csv list Albums /n Create file csv Sucessfull to :'+filename, 7000)
+				self.statusBar().showMessage('Export csv list Albums /n Create file csv Sucessfull to :' + filename, 7000)
 			elif extension == '.jpg':
 				# extract base64\mysql to file JPEG
 				for ind in listrows:
 					filecover = path.join(path.dirname(filename), self.tableMdlAlb.getData(ind, 'NAME'))
 					extension = ((self.tableMdlAlb.getData(ind, 'COVER'))[-4:]).replace('.', '')
-					filecover = filecover+'.'+extension
+					filecover = filecover + '.' + extension
 					self.CnxConnect.sqlImageToFile(filecover, self.tableMdlAlb.getData(ind, 'ID_CD'))
-				self.statusBar().showMessage('Export covers Albums /n Create covers Sucessfull to :'+path.dirname(filename), 7000)
+				self.statusBar().showMessage('Export covers Albums /n Create covers Sucessfull to :' + path.dirname(filename), 7000)
 				self.folder_open(path.dirname(filename))
 
 	@pyqtSlot()
