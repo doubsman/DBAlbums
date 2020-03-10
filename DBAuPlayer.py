@@ -85,12 +85,10 @@ class DBPlayer(QWidget):
 		self.nextBtn.setStyleSheet('border: 0px;')
 		self.volumeDescBtn = QPushButton('')
 		self.volumeDescBtn.setIcon(QIcon(path.join(self.RESS_ICOS, 'decrease.png')))
-		#self.volumeDescBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
 		self.volumeDescBtn.setMaximumWidth(40)
 		self.volumeDescBtn.setStyleSheet('border: 0px;')
 		self.volumeIncBtn = QPushButton('')
 		self.volumeIncBtn.setIcon(QIcon(path.join(self.RESS_ICOS, 'increase.png')))
-		#self.volumeIncBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
 		self.volumeIncBtn.setMaximumWidth(40)
 		self.volumeIncBtn.setStyleSheet('border: 0px;')
 		self.infoBtn = QPushButton()
@@ -121,7 +119,8 @@ class DBPlayer(QWidget):
 		self.controlArea.addWidget(self.volumeIncBtn)
 
 		# link buttons to media
-		self.seekSlider.sliderMoved.connect(self.seekPosition)
+		self.seekSlider.valueChanged.connect(self.qmq_setposition)
+		self.seekSlider.sliderMoved.connect(self.qmq_setposition)
 		self.playBtn.clicked.connect(self.playHandler)
 		self.stopBtn.clicked.connect(self.stopHandler)
 		self.volumeDescBtn.clicked.connect(self.decreaseVolume)
@@ -135,8 +134,8 @@ class DBPlayer(QWidget):
 	def playHandler(self):
 		if self.player.state() == QMediaPlayer.PlayingState:
 			self.player.pause()
-			message = (' [Paused at position %s]' % self.seekSliderLabel1.text())
-			self.messtitle = self.namemedia+message
+			message = '[Paused at %s]' % self.seekSliderLabel1.text()
+			self.messtitle = message + self.namemedia
 			self.signaltxt.emit(self.messtitle)
 		else:
 			if self.player.state() == QMediaPlayer.StoppedState:
@@ -152,8 +151,8 @@ class DBPlayer(QWidget):
 			elif self.player.state() == QMediaPlayer.PausedState:
 				self.player.play()
 			if self.player.volume() is not None and self.player.state() == QMediaPlayer.PlayingState:
-				message = ' [Volume %d]' % self.player.volume()
-				self.messtitle = self.namemedia+message
+				message = '[Vol. %d] ' % self.player.volume()
+				self.messtitle = message + self.namemedia
 				self.signaltxt.emit(self.messtitle)
 
 	def stopHandler(self):
@@ -165,7 +164,7 @@ class DBPlayer(QWidget):
 		elif self.player.state() == QMediaPlayer.StoppedState:
 			pass
 		if self.player.volume()is not None and self.player.state() == QMediaPlayer.PlayingState:
-			self.messtitle = self.namemedia+(' [Stopped]')
+			self.messtitle = '[Stop] ' + self.namemedia
 			self.signaltxt.emit(self.messtitle)
 
 	def qmp_stateChanged(self):
@@ -179,21 +178,27 @@ class DBPlayer(QWidget):
 
 	def qmp_positionChanged(self, position):
 		# update position slider
+		self.seekSlider.blockSignals(True)
 		self.seekSlider.setValue(position)
+		self.seekSlider.blockSignals(False)
 		# update the text label
 		self.seekSliderLabel1.setText('%d:%02d' % (int(position/60000), int((position/1000) % 60)))
 	
-	def seekPosition(self, position):
-		if self.player.isSeekable():
-			self.player.setPosition(position)
+	def qmq_setposition(self, position):
+		# imposed position with slider
+		self.seekSlider.blockSignals(True)
+		self.player.stop()
+		self.player.setPosition(position)
+		self.player.play()
+		self.seekSlider.blockSignals(False)
 
 	def qmp_volumeChanged(self):
-		if self.player.volume()is not None:
-			message = (' [Playing at Volume %d]' % (self.player.volume()))
+		if self.player.volume() is not None:
+			message = '[Vol. %d] ' % (self.player.volume())
 			if self.namemedia != '':
-				self.messtitle = self.namemedia+message
+				self.messtitle = message + self.namemedia
 			else:
-				self.messtitle = "Initialisation player "+message
+				self.messtitle = message + "Initialisation player "
 			self.signaltxt.emit(self.messtitle)
 
 	def qmp_durationChanged(self, duration):
@@ -206,9 +211,9 @@ class DBPlayer(QWidget):
 		self.namemedia = path.basename(self.homMed[curmedia])
 		self.namemedia = '[%02d/%02d' % (curmedia+1, nummedia) + '] "' + self.namemedia + '"'
 		self.buildPlaylist()
-		message = (' [Playing at Volume %d]' % (self.player.volume()))
+		message = '[Vol. %d]' % (self.player.volume())
 		if self.player.volume() is not None and self.player.state() == QMediaPlayer.PlayingState:
-			self.messtitle = self.namemedia+message
+			self.messtitle = message + self.namemedia
 			self.signaltxt.emit(self.messtitle)
 	
 	def buildPlaylist(self):

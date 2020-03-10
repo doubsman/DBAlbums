@@ -14,7 +14,7 @@ class StringFormatAlbum(QObject):
 		super(StringFormatAlbum, self).__init__(parent)
 		self.parent = parent
 		self.infoshtml = ''
-		self.imglabel = ''
+		self.imglabel = None
 		self.heighticon = '22'
 
 	def formatCounters(self, num, text = ''):
@@ -62,28 +62,27 @@ class StringFormatAlbum(QObject):
 		infonameal = infonameal.replace('VA - ', '')
 		infonameal = infonameal.replace('(single)', '')
 		infonameal = infonameal.replace('(Single)', '')
-		sctxt = infonameal.split(' - ')[0].rstrip().replace(' ', '_')
+		sctxt = infonameal.split(' - ')[0].rstrip().replace(' ', '_') + ' '
 		infonameal = infonameal.replace('('+snbcd+'CD)', '').replace(snbcd+'CD', '')
 		infonameal = infonameal.replace(snbcd+'CD', '').replace(snbcd+'CD', '')
 		infonameal = '<a style="' + stylehtml + '" href="dbfunction://s' + sctxt + '"><b><big>' + infonameal + '</big></b></a>'
 
 		# label	+ isrc
-		imglabel = None
+		self.imglabel = None
 		if label != "":
 			if label.find('(') > 0:
 				label = label[0:label.find('(')].rstrip()
 			label = label.replace(' - ', ' ').title()
-			self.Extract_FileToPath(self.parent.LABEL_ZIP, label.replace(' ','_') +'.jpg', self.parent.RESS_TEMP)
-			imglabel = path.join(self.parent.RESS_TEMP, label.replace(' ','_') +'.jpg')
-			label = 'Label: ' + label
-			if not path.isfile(imglabel):
-				qDebug('no image label : ' + imglabel)
-				#print('no image label : ' + imglabel)
-				infoslabel = imglabel
-				imglabel = None
+			# only family label
+			if str(self.parent.tableMdlAlb.getData(self.parent.currow, 'LABEL')) != '':
+				self.Extract_FileToPath(self.parent.LABEL_ZIP, label.replace(' ','_') +'.jpg', self.parent.RESS_TEMP)
+				self.imglabel = path.join(self.parent.RESS_TEMP, label.replace(' ','_') +'.jpg')
+				if not path.isfile(self.imglabel):
+					qDebug('no image label : ' + self.imglabel)
+					self.imglabel = None
 			# isrc
 			if isrc != "":
-				infoslabel = '<a style="' + stylehtml + '" href="dbfunction://l'+label.replace(' ', '_')+'">' + label + ' [' + isrc + ']' + '</a>'
+				infoslabel = '<a style="' + stylehtml + '" href="dbfunction://l'+label.replace(' ', '_')+'">' + label + ' [' + isrc + '] ' + '</a>'
 			else:
 				infoslabel = '<a style="' + stylehtml + '" href="dbfunction://l'+label.replace(' ', '_')+'">' + label + '</a>'
 		elif infoslabel != "":
@@ -108,12 +107,11 @@ class StringFormatAlbum(QObject):
 			else:
 				qDebug('no image country : ' + country)
 		# nb cd
-		if nbcd<6:
-			infosnbcd = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'cdrom.png') + '" height="' + self.heighticon + '">'
-			infosnbcd = nbcd*infosnbcd
+		if nbcd > 1:
+			infosnbcd = ' • ' + snbcd + "x"
+			infosnbcd += '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'cdrom.png') + '" height="' + self.heighticon + '">'
 		else:
-			infosnbcd = self.formatCounters(nbcd, 'CD')
-		infosnbcd = ''
+			infosnbcd = ''
 
 		inffolder = ''
 		infotags = ''
@@ -141,15 +139,14 @@ class StringFormatAlbum(QObject):
 			infoartco = '<a style="' + stylehtml + '" href="dbfunction://a">' + infoartco + '</a>'
 			infopics = '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'art.png') + '" height="' + self.heighticon + '">'
 			infopics = '<a style="' + stylehtml + '" href="dbfunction://a">' + infopics + '</a>'
-		infoshtml = '<span>' + infonameal + '</span>' + imageflag + ' ' + infosnbcd + ' ' + infopics + ' ' + inffolder + ' ' + infotags + ' ' + infopowe + '<br/>'
+		
+		# build final
+		self.infoshtml = '<span>' + infonameal + '</span>' + infopics + ' ' + inffolder + ' ' + infotags + ' ' + infopowe + '<br/>'
 		if infoslabel != "":
-			#if infosaisrc != "":
-			#	infoshtml += infoslabel + ' • ' + infosaisrc + ' • '
-			#else:
-			infoshtml += infoslabel + '<br/>'
-		infoshtml += infotrack + ' • ' + infoduree + ' • ' + infoartco + ' (' + infosayear + ')'
-		self.infoshtml = infoshtml
-		self.imglabel = imglabel
+			self.infoshtml += infoslabel + '   ' + imageflag + country + '<br/>'
+		elif country != "":
+			self.infoshtml += imageflag + country + '<br/>'
+		self.infoshtml += infosayear + ' • ' + infotrack + ' • ' + infoduree + ' • ' + infoartco + infosnbcd
 
 	def Extract_FileToPath(self, my_zip, my_file, extractpath = None):
 		if not path.isfile(path.join(extractpath, my_file)):
@@ -157,5 +154,5 @@ class StringFormatAlbum(QObject):
 				for zip_info in zip.infolist():
 					if my_file in zip_info.filename:
 						zip_info.filename = path.basename(zip_info.filename)
-						print(zip_info, extractpath)
+						qDebug('extract (' + my_zip + ') : ' + my_file)
 						zip.extract(zip_info, extractpath)

@@ -780,7 +780,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.lab_label.setPixmap(plabel.scaled(250, 80, Qt.KeepAspectRatio, Qt.SmoothTransformation))
 				self.lab_label.setVisible(True)
 			else:
-				self.lab_label.setText('<b>' + self.tableMdlAlb.getData(self.currow, 'CATEGORY') + '</b>')
+				if str(self.tableMdlAlb.getData(self.currow, 'TAGLABEL')) != '':
+					self.lab_label.setText('<b>' + str(self.tableMdlAlb.getData(self.currow, 'TAGLABEL')) + '</b>')
+				else:
+					self.lab_label.setText('<b>' + self.tableMdlAlb.getData(self.currow, 'CATEGORY') + '</b>')
 			index = self.com_category.findText(self.tableMdlAlb.getData(self.currow, 'CATEGORY'), Qt.MatchFixedString)
 			self.lab_label.mousePressEvent = lambda e, ind=index: self.com_category.setCurrentIndex(ind)
 			self.lab_label.enterEvent = lambda e, cur=Qt.PointingHandCursor: self.setCursor(cur)
