@@ -164,15 +164,17 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		
 		# buttons
 		self.btn_clearsearch.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
-
-		# minimize ? height main windows
-		self.thunnbline = self.HEIG_LHUN
+		
+		# calcul nb lines thumbnails: self.h_main 1200 for 3 lines
 		sizescreen = QApplication.primaryScreen()
-		if sizescreen.size().height() - 100 < self.h_main:
-			# resize main one line for thunbnails
-			self.thunnbline = 1
-			self.h_main = self.h_main - (self.sizeTN * self.thunnbline) - 100
-			self.setMinimumSize(QSize(self.w_main, self.h_main))
+		# tolerance bar start menu windows
+		tol = 50
+		dif = sizescreen.size().height() - self.h_main - tol
+		add = int(dif / self.sizeTN)
+		self.thunnbline = min(self.HEIG_LHUN, self.HEIG_LHUN + add)
+		ret = self.thunnbline - self.HEIG_LHUN
+		self.h_main = self.h_main + (self.sizeTN * ret) #- tol
+		#self.setMinimumSize(QSize(self.w_main, self.h_main))
 		self.resize(self.w_main, self.h_main)
 
 		# thunbnails list

@@ -57,7 +57,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 					'covers_siz' : 'size pixels of cover display ({v})'.format(v=group_dbalbums['covers_siz']),
 					'thun_csize' : 'size pixels scare thunbnails ({v})'.format(v=group_dbalbums['thun_csize']),
 					'thnail_dis' : 'number of thunbnails displaying ({v})'.format(v=group_dbalbums['thnail_dis']),
-					'thnail_nbl' : 'number of lines thunbnails displaying ({v})'.format(v=group_dbalbums['thnail_nbl']),
+					'thnail_nbl' : 'number of max lines thunbnails displaying ({v})'.format(v=group_dbalbums['thnail_nbl']),
 					'thnail_nod' : 'display covers thunbnails 1 or 0 ({v})'.format(v=group_dbalbums['thnail_nod']),
 					'font00_ttx' : 'name font general text for windows ({v})'.format(v=group_dbalbums['font00_ttx']),
 					'font00_unx' : 'name font general text for linux ({v})'.format(v=group_dbalbums['font00_unx']),
