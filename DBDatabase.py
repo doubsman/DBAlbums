@@ -152,6 +152,13 @@ class ConnectDatabase(LibDatabase):
 				request = "'SELECT * FROM information_schema.tables WHERE table_schema = 'DBALUMS' AND table_name = 'ALBUMS' LIMIT 1;"
 			if self.MODE_SQLI == 'mssql':
 				request = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'ALBUMS';"
+		elif name == 'listtables':
+			if self.MODE_SQLI == 'sqlite':
+				request = "SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%';"
+			if self.MODE_SQLI == 'mysql':
+				request = "'SELECT * FROM information_schema.tables WHERE table_schema = 'DBALUMS';"
+			if self.MODE_SQLI == 'mssql':
+				request = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo';"
 		# compatibilité mutli-base	
 		return self.translateRequest(request)
 

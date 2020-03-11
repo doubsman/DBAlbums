@@ -22,22 +22,23 @@ from PyQt5.QtMultimedia import QMediaPlayer
 # Gui QtDesigner : compiler .ui sans Eric6: pyuic5 file.ui -o Ui_main_file.py
 from Ui_DBALBUMS import Ui_MainWindow
 # DB DEV
-from DBFormatALB import StringFormatAlbum
-from DBGuiTheme  import GuiThemeWidget
-from DBDatabase  import ConnectDatabase
-from DBSLoading  import DBloadingGui
-from DBAlbsMini  import DBAlbumsQT5Mini
-from DBModelAbs  import ModelTableAlbumsABS, ModelTableTracksABS
-from DBArtworks  import ArtworksGui, CoverViewGui
-from DBFoobarpl  import playlistFoobar2000
-from DBAuPlayer  import DBPlayer
-from DBThunbnai  import DBThunbnails
-from DBDragDrop  import QLabeldnd
-from DBPThreads  import DBPThreadsListStyle
-from DBTImports  import InventGui
-from DBParams    import ParamsGui
-from DBFileJson  import JsonParams
-from DBScoring   import ScoreWidget
+from DBFormatALB  import StringFormatAlbum
+from DBGuiTheme   import GuiThemeWidget
+from DBDatabase   import ConnectDatabase
+from DBSLoading   import DBloadingGui
+from DBAlbsMini   import DBAlbumsQT5Mini
+from DBModelAbs   import ModelTableAlbumsABS, ModelTableTracksABS
+from DBArtworks   import ArtworksGui, CoverViewGui
+from DBFoobarpl   import playlistFoobar2000
+from DBAuPlayer   import DBPlayer
+from DBThunbnai   import DBThunbnails
+from DBDragDrop   import QLabeldnd
+from DBPThreads   import DBPThreadsListStyle
+from DBTImports   import InventGui
+from DBParams     import ParamsGui
+from DBFileJson   import JsonParams
+from DBScoring    import ScoreWidget
+from DBTablesView import ViewTablesSqlGUI
 # general Libs
 from LIBFilesProc import FilesProcessing
 
@@ -274,12 +275,15 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 							"Add news albums to Base...", lambda: self.buildInventPython('NEW'))
 		self.action_CSD = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'sql.png')),
 							"Create sqlite database...", self.createLocalBase)
-		self.action_IFP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'foo.png')),
+		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'database.png')),
+							"Views Databse Tables...", lambda: self.openViewsdatas())
+		self.action_IFP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'foobar.png')),
 							"Import Foobar Playlists, Update Score...", self.importFoobar)
 		self.menub.addAction(self.style().standardIcon(QStyle.SP_FileDialogDetailedView),
 							"Params Environments Json...", lambda: self.openParams())
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'folder.png')),
 							"Open Logs Folder...", lambda flog=self.LOGS_PROG: self.folder_open(flog))
+
 		# popup albums
 		self.menua = QMenu(self)
 		self.action_VIA = self.menua.addAction(QIcon(path.join(self.RESS_ICOS, 'art.png')),
@@ -1193,6 +1197,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	def openParams(self):
 		"""Open Gui PARAMS"""
 		self.dbparams = ParamsGui(self, self.envits, self.FILE__INI)
+
+	def openViewsdatas(self):
+		"""Open Gui PARAMS"""
+		self.dbviewdatas = ViewTablesSqlGUI(self)
 
 	def buildInventPython(self, typeupdate):
 		"""Browse folder base for update."""
