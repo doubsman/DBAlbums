@@ -276,10 +276,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.action_CSD = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'sql.png')),
 							"Create sqlite database...", self.createLocalBase)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'database.png')),
-							"Views Databse Tables...", lambda: self.openViewsdatas())
+							"Views Database Tables...", lambda: self.openViewsdatas())
 		self.action_IFP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'foobar.png')),
 							"Import Foobar Playlists, Update Score...", self.importFoobar)
-		self.menub.addAction(self.style().standardIcon(QStyle.SP_FileDialogDetailedView),
+		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'params.png')),
 							"Params Environments Json...", lambda: self.openParams())
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'folder.png')),
 							"Open Logs Folder...", lambda flog=self.LOGS_PROG: self.folder_open(flog))
