@@ -5,7 +5,7 @@ __author__ = "doubsman"
 __copyright__ = "Copyright 2020, Files Project"
 __credits__ = ["doubsman"]
 __license__ = "GPL"
-__version__ = "1.00"
+__version__ = "1.01"
 __maintainer__ = "doubsman"
 __email__ = "doubsman@doubsman.fr"
 __status__ = "Production"
@@ -13,11 +13,13 @@ __status__ = "Production"
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QObject, QProcess
-from os import walk, path, remove, rmdir, startfile, listdir
+from os import walk, path, remove, rmdir, system, listdir
 from sys import argv,platform
 from glob import glob
 from shutil import move, rmtree
-
+if platform == "win32":
+	from os import startfile
+	
 
 class FilesProcessing(QObject):
 	"""build list folders name, search youtube and download first video find format mp4."""
@@ -116,7 +118,10 @@ class FilesProcessing(QObject):
 
 	def file_open(self, filePath):
 		"""Open programme association with file."""
-		startfile(filePath)
+		if platform == "win32":
+			startfile(filePath)
+		else:
+			system('xdg-open ' + filePath)
 
 	def file_delete(self, filePath):
 		"""File delete."""
@@ -132,11 +137,16 @@ class FilesProcessing(QObject):
 		p.startDetached(prog, argums)
 
 	def convertUNC(self, folderPath):
-		""" convert path UNC to linux."""
-		# open file unc from Linux (mount \HOMERSTATION\_lossLess)
-		if (platform == "darwin" or platform == 'linux') and path.startswith(r'\\'):
-			folderPath = r""+folderPath.replace('\\\\', '/').replace('\\', '/')
-		return folderPath
+		"""Convert path UNC to linux."""
+		# open file unc from Linux (/HOMERSTATION/_lossLess)
+		# open file unc windows 10 (\\HOMERSTATION\_lossLess)
+		if (platform == "darwin" or platform == 'linux'):
+			if folderPath.startswith(r'\\'):
+				folderPath = r""+folderPath.replace('\\\\', '/').replace('\\', '/')
+		else:
+			if folderPath.startswith(r'/'):
+				folderPath = r""+folderPath.replace('/', '\\\\').replace('/', '\\')
+		return folderPath	
 
 
 if __name__ == '__main__':

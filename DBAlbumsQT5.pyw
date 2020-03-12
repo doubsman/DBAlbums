@@ -650,11 +650,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				else:
 					self.action_CSD.setEnabled(True)
 				# test path database folder for option update
-				self.rootDk = self.Json_params.convertUNC(self.rootDk)
+				self.rootDk = self.convertUNC(self.rootDk)
 				if path.exists(self.rootDk):
 					self.action_UBP.setEnabled(True)
 					self.action_UBN.setEnabled(True)
 				else:
+					qDebug('no path exist : ' + self.rootDk)
 					self.action_UBP.setEnabled(False)
 					self.action_UBN.setEnabled(False)
 					qDebug('no database root path exist :' + self.rootDk)
@@ -763,8 +764,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			self.curAlb = self.tableMdlAlb.getData(self.currow, 'ID_CD')
 			self.albumname = self.tableMdlAlb.getData(self.currow, 'NAME').strip()
 			self.ScoreAlbum = self.tableMdlAlb.getData(self.currow, 'SCORE')
-			self.pathcover = self.tableMdlAlb.getData(self.currow, 'COVER')
-			self.AlbumPath = self.tableMdlAlb.getData(self.currow, 'PATHNAME')
+			self.pathcover = self.convertUNC(self.tableMdlAlb.getData(self.currow, 'COVER'))
+			self.AlbumPath = self.convertUNC(self.tableMdlAlb.getData(self.currow, 'PATHNAME'))
 
 			# fill tracks
 			if self.chb_searchtracks.isChecked() and self.lin_search.text() != '':
@@ -1240,7 +1241,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 							'UPDATE',
 							self.curAlb,
 							self.albumname,
-							self.Json_params.convertUNC(self.AlbumPath)])
+							self.convertUNC(self.AlbumPath)])
 		self.prepareInvent = InventGui(self,
 								self.tableMdlAlb.arraydata,
 								self.tableMdlAlb.myindex,
@@ -1268,9 +1269,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			for ind in listrows:
 				# new name album
 				oldnamealbum = self.tableMdlAlb.getData(ind, 'PATHNAME')
-				oldnamealbum = self.Json_params.convertUNC(oldnamealbum)
+				oldnamealbum = self.convertUNC(oldnamealbum)
 				namealbum = path.basename(oldnamealbum)
-				namealbum = self.Json_params.convertUNC(namealbum)
+				namealbum = self.convertUNC(namealbum)
 				if not(namealbum.startswith('[')):
 					newpropos = '[' +self.tableMdlAlb.getData(ind, 'TAGISRC')+ '] ' + namealbum
 				else:
@@ -1307,7 +1308,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		if listrows is not None:
 			for ind in listrows:
 				pathname = self.tableMdlAlb.getData(ind, 'PATHNAME')
-				pathname = self.Json_params.convertUNC(pathname)
+				pathname = self.convertUNC(pathname)
 				if path.exists(pathname):
 					typeupdate = 'UPDATE'
 				else:
@@ -1338,7 +1339,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			if listrows is not None:
 				for ind in listrows:
 					pathname = self.tableMdlAlb.getData(ind, 'PATHNAME')
-					pathname = self.Json_params.convertUNC(pathname)
+					pathname = self.convertUNC(pathname)
 					# delete Storage
 					if path.exists(pathname):
 						# reinit player for access file
@@ -1426,7 +1427,17 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.dbbase.close()
 			if self.playerAudio.player.state() == QMediaPlayer.PlayingState:
 				self.playerAudio.player.stop()
-			QApplication.closeAllWindows()
+			# close GUI params or GUI Database view or splahscreen
+			if self.viewtblGui:
+				if self.viewtblGui.isVisible():
+					self.viewtblGui.destroy()
+			if self.parametGui:
+				if self.parametGui.isVisible():
+					self.parametGui.destroy()
+			if self.loadingGui:
+				if self.loadingGui.isVisible():
+					self.loadingGui.destroy()
+			#QApplication.closeAllWindows()
 			#QCoreApplication.instance().quit
 			event.accept()
 		else:

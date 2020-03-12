@@ -311,7 +311,7 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 			else:
 				return (self.arraydata[index.row()][self.myindex.index('TAGISRC')]).upper()
 		if index.column() == self.myindex.index('COVER') or index.column() == self.myindex.index('PATHNAME'):
-				return self.parent.Json_params.convertUNC(self.arraydata[index.row()][index.column()])
+				return self.parent.convertUNC(self.arraydata[index.row()][index.column()])
 		return QVariant(self.arraydata[index.row()][index.column()])
 
 	def builListThunbnails(self, new=True, deb=0, fin=100):
@@ -408,7 +408,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 		if index.column() == self.myindex.index('SCORE'):
 			return (self.arraydata[index.row()][index.column()]*'★')
 		if index.column() == self.myindex.index('PATHNAME'):
-				return self.parent.Json_params.convertUNC(self.arraydata[index.row()][index.column()])
+				return self.parent.convertUNC(self.arraydata[index.row()][index.column()])
 		return QVariant(self.arraydata[index.row()][index.column()])
 
 	def getMedias(self):
@@ -421,6 +421,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 				if not index.isValid():
 					continue
 				file = path.join(self.arraydata[index.row()][self.myindex.index('PATHNAME')], self.arraydata[index.row()][self.myindex.index('FILENAME')])
+				file = self.parent.convertUNC(file)
 				listmedia.append(file)
 			return listmedia
 

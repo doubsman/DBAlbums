@@ -5,13 +5,15 @@ from os import path, rename
 from sys import platform
 from json import load, dumps
 from PyQt5.QtCore import QObject, QDateTime
-
+# general Libs
+from LIBFilesProc import FilesProcessing
 
 class JsonParams(QObject):
 	def __init__(self, file_json='DBAlbums.json', parent=None):
 		"""Init invent, build list albums exists in database."""
 		super(JsonParams, self).__init__(parent)
 		self.file_json = file_json
+		self.file_gest = FilesProcessing()
 		self.loadJson()
 
 	def loadJson(self):
@@ -108,7 +110,7 @@ class JsonParams(QObject):
 			racate = listcate[cate]["folder"]
 			mode = listcate[cate]["mode"]
 			racate = path.join(racine, racate)
-			racate = self.convertUNC(racate)
+			racate = self.file_gest.convertUNC(racate)
 			list_pathcollection.append([mstyle, mode, racate, family])
 		return list_pathcollection
 
@@ -160,14 +162,3 @@ class JsonParams(QObject):
 		data_file.close()
 		return oldname, self.file_json
 
-	def convertUNC(self, path):
-		""" convert path UNC to linux."""
-		# open file unc from Linux (/HOMERSTATION/_lossLess)
-		# open file unc windows 10 (\\HOMERSTATION\_lossLess)
-		if (platform == "darwin" or platform == 'linux'):
-			if path.startswith(r'\\'):
-				path = r""+path.replace('\\\\', '/').replace('\\', '/')
-		else:
-			if path.startswith(r'/'):
-				path = r""+path.replace('/', '\\\\').replace('/', '\\')
-		return path	
