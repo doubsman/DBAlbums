@@ -89,6 +89,10 @@ class ViewsDatabaseTablesGUI(QWidget, Ui_ViewTablesDatas):
 	def cancelModifications(self):
 		self.modeltable.revertAll()
 
+	def keyPressEvent(self, event):
+		if event.key() == Qt.Key_Escape:
+			self.closeViewTables()
+
 	def closeViewTables(self):
 		"""Close Windows."""
 		self.modeltable.clear()

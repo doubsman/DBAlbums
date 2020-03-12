@@ -8,6 +8,18 @@ from PyQt5.QtSql import QSqlQueryModel
 from PyQt5.QtWidgets import QWidget
 from Ui_DBLOADING import Ui_LoadingWindow
 
+class AlignmentQSqlQueryModel(QSqlQueryModel):
+	def data(self, item, role):
+		if role == Qt.DisplayRole:
+			val = QSqlQueryModel.data(self, item, Qt.DisplayRole)
+			if isinstance(val, float):
+			 	return '{:.1f}'.format(round(val, 4))
+			else:
+				return val
+		elif role != Qt.DisplayRole:
+			if role == Qt.TextAlignmentRole:
+				if item.column() != 0:
+					return Qt.AlignRight | Qt.AlignVCenter
 
 class DBloadingGui(QWidget, Ui_LoadingWindow):
 	"""Loading."""
@@ -56,23 +68,25 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		else:
 			txt_message += " Base \nlast modified :\n"+basedate[0].replace('T',' ')
 		self.lab_text.setText(title+"\nConnected "+txt_message)
+		self.show()
 		# theme
 		self.applyTheme()
+
 
 	@pyqtSlot()
 	def keyPressEvent(self, event):
 		if event.key() == Qt.Key_Escape or event.key() == Qt.Key_F1:
-			self.hide()
+			self.destroy()
 
 	def buildTab(self, req, tab):
-		model = QSqlQueryModel(self)
+		model = AlignmentQSqlQueryModel(self)
 		model.setQuery(req, self.parent.dbbase)
 		tab.setModel(model)
-		tab.resizeColumnsToContents()
 		tab.verticalHeader().setVisible(False)
 		tab.horizontalHeader().setStretchLastSection(True)
 		tab.verticalHeader().setDefaultSectionSize(self.parent.C_HEIGHT)
 		tab.setFont(QFont(self.parent.FONT_CON, self.parent.FONT_SIZE - 2))
+		tab.resizeColumnsToContents()
 	
 	def chgtLogo(self):
 		self.movielogo.stop()

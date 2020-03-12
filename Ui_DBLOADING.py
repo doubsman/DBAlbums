@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LoadingWindow(object):
     def setupUi(self, LoadingWindow):
         LoadingWindow.setObjectName("LoadingWindow")
-        LoadingWindow.resize(450, 350)
+        LoadingWindow.resize(500, 400)
         LoadingWindow.setStyleSheet("border-radius: 10px;")
         self.verticalLayout = QtWidgets.QVBoxLayout(LoadingWindow)
         self.verticalLayout.setObjectName("verticalLayout")

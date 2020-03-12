@@ -516,6 +516,10 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		self.tableWidget_envt.setStyleSheet(gridstyle)
 		self.tableWidget_category.setStyleSheet(gridstyle)
 
+	def keyPressEvent(self, event):
+		if event.key() == Qt.Key_Escape:
+			self.closeParams()
+
 	def closeParams(self):
 		"""Close Windows."""
 		self.destroy()

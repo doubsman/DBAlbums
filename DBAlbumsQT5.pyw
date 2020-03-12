@@ -279,12 +279,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 							"Create sqlite database...", self.createLocalBase)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'database.png')),
 							"Views Database Tables...", self.openViewsdatas)
-		self.action_IFP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'foobar.png')),
-							"Import Foobar Playlists, Update Score...", self.importFoobar)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'params.png')),
 							"Params Environments Json...", self.openParams)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'folder.png')),
 							"Open Logs Folder...", lambda flog=self.LOGS_PROG: self.folder_open(flog))
+		self.action_IFP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'foobar.png')),
+							"Import Foobar Playlists, Update Score...", self.importFoobar)
 
 		# popup albums
 		self.menua = QMenu(self)
@@ -481,12 +481,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 	def showLoadingGui(self, event=None):
 		"""display splashscreen infos."""
-		# loading Gui
-		if self.loadingGui.isVisible():
-			self.loadingGui.hide()
-		else:
-			self.loadingGui.applyTheme()
-			self.loadingGui.show()
+		self.loadingGui = DBloadingGui(self, self.TITL_PROG)
 
 	def clearFilters(self):
 		"""Clear search, combos."""
@@ -597,13 +592,16 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			self.setCursor(Qt.WaitCursor)
 			# other database
 			if not refresh:
-				# close GUI params or GUI Database view
+				# close GUI params or GUI Database view or splahscreen
 				if self.viewtblGui:
 					if self.viewtblGui.isVisible():
 						self.viewtblGui.destroy()
 				if self.parametGui:
 					if self.parametGui.isVisible():
 						self.parametGui.destroy()
+				if self.loadingGui:
+					if self.loadingGui.isVisible():
+						self.loadingGui.destroy()
 				# init search + grids
 				self.lin_search.textChanged.disconnect()
 				self.lin_search.setText('')
@@ -662,7 +660,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 					qDebug('no database root path exist :' + self.rootDk)
 				# loading splashscreen
 				self.loadingGui = DBloadingGui(self, self.TITL_PROG)
-				self.loadingGui.show()
 				QApplication.processEvents()
 				# last date modifcation base
 				curdate = QTime.currentTime().toString('hh:mm:ss')
@@ -722,7 +719,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 					self.obj.start()
 
 				# end loading
-				self.loadingGui.hide()
+				self.loadingGui.destroy()
 				# display title
 				self.setCursor(Qt.ArrowCursor)
 				self.displayResultSearch()
@@ -1429,7 +1426,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.dbbase.close()
 			if self.playerAudio.player.state() == QMediaPlayer.PlayingState:
 				self.playerAudio.player.stop()
-			QCoreApplication.instance().quit
+			QApplication.closeAllWindows()
+			#QCoreApplication.instance().quit
 			event.accept()
 		else:
 			event.ignore()

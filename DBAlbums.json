@@ -123,7 +123,7 @@
             "base"      : "DBALBUMS",
             "port"      : 1433
         },
-        "LOSSLESS_TEST": {
+        "LOSSLESS_TEST_MYSQL": {
             "raci"      : "D:\\WorkDev\\DBAlbumsTEST",
             "cate"      : "LOSSLESS_CATEGORY",
             "typb"      : "mysql",
