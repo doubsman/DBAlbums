@@ -15,7 +15,7 @@ from sys import platform, argv, exit
 from os import path, getcwd, rename
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
-from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl, QPoint
+from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl, QPoint, QCoreApplication
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QInputDialog, QLineEdit,
 						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QAction)
 from PyQt5.QtMultimedia import QMediaPlayer
@@ -38,7 +38,7 @@ from DBTImports   import InventGui
 from DBParams     import ParamsGui
 from DBFileJson   import JsonParams
 from DBScoring    import ScoreWidget
-from DBTablesView import ViewTablesSqlGUI
+from DBTablesView import ViewsDatabaseTablesGUI
 # general Libs
 from LIBFilesProc import FilesProcessing
 
@@ -130,6 +130,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.w_main = self.WIDT_MAIN
 		# loading
 		self.loadingGui = None
+		self.viewtblGui = None
+		self.parametGui = None
 
 		# font
 		self.fontmini = QFont()
@@ -276,11 +278,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.action_CSD = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'sql.png')),
 							"Create sqlite database...", self.createLocalBase)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'database.png')),
-							"Views Database Tables...", lambda: self.openViewsdatas())
+							"Views Database Tables...", self.openViewsdatas)
 		self.action_IFP = self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'foobar.png')),
 							"Import Foobar Playlists, Update Score...", self.importFoobar)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'params.png')),
-							"Params Environments Json...", lambda: self.openParams())
+							"Params Environments Json...", self.openParams)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'folder.png')),
 							"Open Logs Folder...", lambda flog=self.LOGS_PROG: self.folder_open(flog))
 
@@ -595,6 +597,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			self.setCursor(Qt.WaitCursor)
 			# other database
 			if not refresh:
+				# close GUI params or GUI Database view
+				if self.viewtblGui:
+					if self.viewtblGui.isVisible():
+						self.viewtblGui.destroy()
+				if self.parametGui:
+					if self.parametGui.isVisible():
+						self.parametGui.destroy()
 				# init search + grids
 				self.lin_search.textChanged.disconnect()
 				self.lin_search.setText('')
@@ -708,7 +717,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 					self.lin_search.setCompleter(self.com_autcom)
 					# build list style
 					qDebug('qthread build list style')
-					self.obj = DBPThreadsListStyle(self.envits, self.Json_params, self.BASE_SQLI)
+					self.obj = DBPThreadsListStyle(self, self.envits, self.Json_params, self.BASE_SQLI)
 					self.obj.finished.connect(self.fillListGenres)
 					self.obj.start()
 
@@ -1196,11 +1205,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 	def openParams(self):
 		"""Open Gui PARAMS"""
-		self.dbparams = ParamsGui(self, self.envits, self.FILE__INI)
+		self.parametGui = ParamsGui(self, self.envits, self.FILE__INI)
 
 	def openViewsdatas(self):
-		"""Open Gui PARAMS"""
-		self.dbviewdatas = ViewTablesSqlGUI(self)
+		"""Open Gui views tables datas."""
+		self.viewtblGui = ViewsDatabaseTablesGUI(self)
 
 	def buildInventPython(self, typeupdate):
 		"""Browse folder base for update."""
@@ -1376,7 +1385,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		QMessageBox.information(self,'Create Database SQLite', 'Operation successfull')
 
 	def exportAlbums(self):
-		"""Export file cover or list albums select in grid."""
+		"""Export file cover or list albums select in tableview."""
 		listrows = self.getRowsfromListAlbums()
 		if listrows is not None:
 			filename = QFileDialog.getSaveFileName(self,
@@ -1420,7 +1429,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.dbbase.close()
 			if self.playerAudio.player.state() == QMediaPlayer.PlayingState:
 				self.playerAudio.player.stop()
-			#QCoreApplication.instance().quit
+			QCoreApplication.instance().quit
 			event.accept()
 		else:
 			event.ignore()

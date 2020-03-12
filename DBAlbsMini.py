@@ -8,8 +8,8 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QTableView, QPushButton,
 							QMenu, QLineEdit, QStyle, QAbstractItemView, QCompleter)
 from DBDatabase import ConnectDatabase
 from DBGuiTheme import GuiThemeWidget
-from DBModelAbs import ModelTableAlbumsABS	# model tables
-from DBArtworks import CoverViewGui			# viewer image b64
+from DBModelAbs import ModelTableAlbumsABS
+from DBArtworks import CoverViewGui
 from DBFileJson import JsonParams
 from LIBFilesProc import FilesProcessing
 

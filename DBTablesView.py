@@ -1,43 +1,47 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import (QTableView, QFrame, QVBoxLayout, QHBoxLayout, QMainWindow, 
+from os import path
+from PyQt5.QtWidgets import (QTableView, QVBoxLayout, QHBoxLayout, QWidget, QStyle,
 							QComboBox, QSpacerItem, QSizePolicy, QPushButton, QApplication)
 from PyQt5.QtSql import QSqlQuery, QSqlRelationalTableModel, QSqlRelationalDelegate, QSqlTableModel
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
+from Ui_DBVIEWTBL import Ui_ViewTablesDatas
 
+class ViewsDatabaseTablesGUI(QWidget, Ui_ViewTablesDatas):
+	"""Display GUI Tables Database view and modify datas."""
 
-class ViewTablesSqlGUI(QMainWindow):
- 
 	def __init__(self, parent):
-		super(ViewTablesSqlGUI, self).__init__()
+		super(ViewsDatabaseTablesGUI, self).__init__()
+		self.setupUi(self)
 
 		self.parent = parent
 		self.setWindowIcon(QIcon(self.parent.WINS_ICO))
-		self.setWindowTitle(self.parent.TITL_PROG + ' : View Datas')
+		self.setWindowTitle(self.parent.TITL_PROG + ' : View Database Tables')
 		sizescreen = QApplication.primaryScreen()
-
-		self.resize(sizescreen.size().width(), self.parent.HEIG_MAIN)
-		self.parent.centerWidget(self)
+		tol = 50
+		self.resize(sizescreen.size().width() - tol, self.parent.HEIG_MAIN - tol)
 
 		# buttons
-		self.btnsav = QPushButton('Save')
+		self.btnsav.setIcon(QIcon(path.join(self.parent.RESS_ICOS, 'database.png')))
 		self.btnsav.clicked.connect(self.saveModifications)
-		self.btncan = QPushButton('Cancel')
+		self.btncan.setIcon(QIcon(path.join(self.parent.RESS_ICOS, 'database.png')))
 		self.btncan.clicked.connect(self.cancelModifications)
+		self.btnclo.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
+		self.btnclo.clicked.connect(self.closeViewTables)
 
 		# create combo model
-		self.comboboxlist = QComboBox()
 		self.modelcombo = QSqlTableModel(self)
-		request = QSqlQuery(self.parent.CnxConnect.getrequest('listtables'), self.parent.CnxConnect.qtdbdb)
-		self.modelcombo.setQuery(request)
+		query = QSqlQuery(self.parent.CnxConnect.getrequest('listtables'), self.parent.CnxConnect.qtdbdb)
+		self.modelcombo.setQuery(query)
 		self.modelcombo.select()
+		query.clear
 		self.comboboxlist.setModel(self.modelcombo)
 		self.comboboxlist.setModelColumn(self.modelcombo.fieldIndex("name"))
 		self.comboboxlist.currentIndexChanged.connect(self.fillTableView)
 
-		# # column table to combo
+		# column table to combo exemple
 		# self.comboboxlist = QComboBox()
 		# request = "SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%';"
 		# self.modelcombo = QSqlTableModel(self)
@@ -50,58 +54,45 @@ class ViewTablesSqlGUI(QMainWindow):
 		self.modeltable = QSqlRelationalTableModel(self, self.parent.CnxConnect.qtdbdb)
 		# stratégy user modify
 		self.modeltable.setEditStrategy(QSqlTableModel.OnManualSubmit)
- 		#QSqlTableModel::OnFieldChange	: All changes to the model will be applied immediately to the database.
+		#QSqlTableModel::OnFieldChange	: All changes to the model will be applied immediately to the database.
 		#QSqlTableModel::OnRowChange	: Changes to a row will be applied when the user selects a different row.
 		#QSqlTableModel::OnManualSubmit	: All changes will be cached in the model until either submitAll() or revertAll() is called.
 
 		# apply model in table
-		self.viewtable = QTableView(self)
 		self.viewtable.setAlternatingRowColors(True)
 		self.viewtable.setModel(self.modeltable)
 		self.viewtable.setItemDelegate(QSqlRelationalDelegate(self.viewtable))
 		# columns sort
 		self.viewtable.setSortingEnabled(True)
 
-		# position GUI
-		spacerItem = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-		
-		posco = QHBoxLayout()
-		posco.addWidget(self.comboboxlist)
-		posco.addItem(spacerItem)
-				
-		posbt = QHBoxLayout()
-		posbt.addItem(spacerItem)
-		posbt.addWidget(self.btnsav)
-		posbt.addWidget(self.btncan)
-
-		posit = QVBoxLayout()
-		posit.addItem(posco)
-		posit.addWidget(self.viewtable)
-		posit.addItem(posbt)
-
-		self.setCentralWidget(QFrame())
-		self.centralWidget().setLayout(posit)
-
-		self.show()
+		# display GUI
+		self.parent.centerWidget(self)
 		self.applyTheme()
+		self.show()
 		# display datas
 		self.fillTableView()
-		
 
 	def fillTableView(self):
 		table = self.comboboxlist.currentText()
-		self.modeltable.setTable(table)
-		self.modeltable.select()
-		# ajust size
-		self.viewtable.resizeColumnsToContents()
-		# sort first column DescendingOrder
-		self.modeltable.sort(0, Qt.DescendingOrder) 
+		if table:
+			print('fill')
+			self.modeltable.setTable(table)
+			self.modeltable.select()
+			# ajust size
+			self.viewtable.resizeColumnsToContents()
+			# sort first column DescendingOrder
+			self.modeltable.sort(0, Qt.DescendingOrder)
 
 	def saveModifications(self):
 		self.modeltable.submitAll()
 
 	def cancelModifications(self):
 		self.modeltable.revertAll()
+
+	def closeViewTables(self):
+		"""Close Windows."""
+		self.modeltable.clear()
+		self.modelcombo.clear()
 		self.destroy()
 
 	def applyTheme(self):
