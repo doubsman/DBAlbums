@@ -3,7 +3,7 @@
 
 from os import path
 from PyQt5.QtGui import QFont, QMovie, QIcon
-from PyQt5.QtCore import Qt, pyqtSlot, QDateTime
+from PyQt5.QtCore import Qt, pyqtSlot, QDateTime, QVariant
 from PyQt5.QtSql import QSqlQueryModel
 from PyQt5.QtWidgets import QWidget
 from Ui_DBLOADING import Ui_LoadingWindow
@@ -19,7 +19,7 @@ class AlignmentQSqlQueryModel(QSqlQueryModel):
 		elif role != Qt.DisplayRole:
 			if role == Qt.TextAlignmentRole:
 				if item.column() != 0:
-					return Qt.AlignRight | Qt.AlignVCenter
+					return QVariant(int(Qt.AlignRight | Qt.AlignVCenter))
 
 class DBloadingGui(QWidget, Ui_LoadingWindow):
 	"""Loading."""
