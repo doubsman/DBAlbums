@@ -8,6 +8,7 @@ from PyQt5.QtCore import QObject, QDateTime
 # general Libs
 from LIBFilesProc import FilesProcessing
 
+
 class JsonParams(QObject):
 	def __init__(self, file_json='DBAlbums.json', parent=None):
 		"""Init invent, build list albums exists in database."""

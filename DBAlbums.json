@@ -150,7 +150,7 @@
             "serv"      : "FRACTAL-DB",
             "user"      : "dbalbums",
             "pass"      : "dbalbums2017",
-            "base"      : "DBTEST",
+            "base"      : "DBALBUMSTEST",
             "port"      : 1433
         },
         "MP3_MYSQL": {

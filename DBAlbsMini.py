@@ -53,7 +53,7 @@ class DBAlbumsQT5Mini(QMainWindow, GuiThemeWidget, FilesProcessing):
 		self.btn_style.clicked.connect(lambda: [self.nextTheme(), self.applyTheme()])
 		self.statusBar().addPermanentWidget(self.btn_style)
 
-		self.CnxConnect = ConnectDatabase(self, self.NAME_EVT[self.CURT_EVT], self.BASE_SQLI, self.Json_params, 'dbmini')
+		self.CnxConnect = ConnectDatabase(self, self.NAME_EVT[self.CURT_EVT], self.BASE_SQLI, self.Json_params)
 		self.dbbase = self.CnxConnect.qtdbdb
 		self.modsql = self.CnxConnect.MODE_SQLI
 		self.rootDk = self.CnxConnect.BASE_RAC

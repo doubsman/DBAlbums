@@ -72,7 +72,6 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 		# theme
 		self.applyTheme()
 
-
 	@pyqtSlot()
 	def keyPressEvent(self, event):
 		if event.key() == Qt.Key_Escape or event.key() == Qt.Key_F1:
@@ -80,7 +79,7 @@ class DBloadingGui(QWidget, Ui_LoadingWindow):
 
 	def buildTab(self, req, tab):
 		model = AlignmentQSqlQueryModel(self)
-		model.setQuery(req, self.parent.dbbase)
+		model.setQuery(req, self.parent.CnxConnect.qtdbdb)
 		tab.setModel(model)
 		tab.verticalHeader().setVisible(False)
 		tab.horizontalHeader().setStretchLastSection(True)

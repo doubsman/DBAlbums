@@ -238,8 +238,8 @@ class ProxyModelAlbums(QSortFilterProxyModel):
 
 		if role == Qt.TextAlignmentRole:
 			if orientation == Qt.Horizontal:
-				return QVariant(int(Qt.AlignHCenter|Qt.AlignVCenter))
-			return QVariant(int(Qt.AlignHCenter|Qt.AlignVCenter))
+				return QVariant(int(Qt.AlignHCenter | Qt.AlignVCenter))
+			return QVariant(int(Qt.AlignHCenter | Qt.AlignVCenter))
 
 		if role == Qt.DisplayRole:
 			if orientation == Qt.Horizontal:

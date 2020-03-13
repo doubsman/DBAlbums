@@ -36,10 +36,11 @@ class ViewsDatabaseTablesGUI(QWidget, Ui_ViewTablesDatas):
 		query = QSqlQuery(self.parent.CnxConnect.getrequest('listtables'), self.parent.CnxConnect.qtdbdb)
 		self.modelcombo.setQuery(query)
 		self.modelcombo.select()
-		query.clear
+		print(self.parent.CnxConnect.sqlToArray(self.parent.CnxConnect.getrequest('listtables')))
 		self.comboboxlist.setModel(self.modelcombo)
 		self.comboboxlist.setModelColumn(self.modelcombo.fieldIndex("name"))
 		self.comboboxlist.currentIndexChanged.connect(self.fillTableView)
+		query.clear
 
 		# column table to combo exemple
 		# self.comboboxlist = QComboBox()
@@ -74,14 +75,13 @@ class ViewsDatabaseTablesGUI(QWidget, Ui_ViewTablesDatas):
 
 	def fillTableView(self):
 		table = self.comboboxlist.currentText()
-		if table:
-			print('fill')
-			self.modeltable.setTable(table)
-			self.modeltable.select()
-			# ajust size
-			self.viewtable.resizeColumnsToContents()
-			# sort first column DescendingOrder
-			self.modeltable.sort(0, Qt.DescendingOrder)
+		print('fill : ' + table)
+		self.modeltable.setTable(table)
+		self.modeltable.select()
+		# ajust size
+		self.viewtable.resizeColumnsToContents()
+		# sort first column DescendingOrder
+		self.modeltable.sort(0, Qt.DescendingOrder)
 
 	def saveModifications(self):
 		self.modeltable.submitAll()

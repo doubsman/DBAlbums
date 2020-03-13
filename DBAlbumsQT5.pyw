@@ -128,7 +128,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.sizeTN = self.WIDT_PICM
 		self.h_main = self.HEIG_MAIN
 		self.w_main = self.WIDT_MAIN
-		# loading
+		# GUI's
 		self.loadingGui = None
 		self.viewtblGui = None
 		self.parametGui = None
@@ -632,7 +632,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			if self.boolCnx:
 				self.CnxConnect.closeDatabase()
 			# connect
-			self.CnxConnect = ConnectDatabase(self, self.envits, self.BASE_SQLI, self.Json_params, 'dbmain')
+			self.CnxConnect = ConnectDatabase(self, self.envits, self.BASE_SQLI, self.Json_params)
 			self.CnxConnect.signalchgt.connect(self.updateGaugeBar)
 			self.boolCnx = self.CnxConnect.boolcon
 			self.dbbase = self.CnxConnect.qtdbdb
@@ -644,6 +644,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				# no connect
 				self.updateStatusBar("Connect Failed, please select other environment...")
 			else:
+				qDebug('Connexion environnement : ' + self.envits)
 				# mode sqllite, no menu create base
 				if self.modsql == 'sqlite':
 					self.action_CSD.setEnabled(False)
@@ -655,11 +656,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 					self.action_UBP.setEnabled(True)
 					self.action_UBN.setEnabled(True)
 				else:
-					qDebug('no path exist : ' + self.rootDk)
 					self.action_UBP.setEnabled(False)
 					self.action_UBN.setEnabled(False)
 					qDebug('no database root path exist :' + self.rootDk)
 				# loading splashscreen
+				if self.loadingGui:
+					if self.loadingGui.isVisible():
+						self.loadingGui.destroy()
 				self.loadingGui = DBloadingGui(self, self.TITL_PROG)
 				QApplication.processEvents()
 				# last date modifcation base
@@ -964,7 +967,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		else:
 			self.lin_search.setFocus()
 		# display album
-		#print('onListAlbumsChanged displayAlbum')
 		self.displayAlbum()
 
 	def onListTracksChanged(self):

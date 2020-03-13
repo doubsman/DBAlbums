@@ -12,14 +12,13 @@ from LIBDatabase import LibDatabase
 class ConnectDatabase(LibDatabase):
 	signalchgt = pyqtSignal(int, str)		# signal browse
 
-	def __init__(self, parent, envt, basesqli, jsondataini, connexionName): # = 'qt_sql_default_connection'):
+	def __init__(self, parent, envt, basesqli, jsondataini):
 		"""Init invent, build list albums exists in database."""
 		super(ConnectDatabase, self).__init__(parent)
 		self.parent = parent
-		self.envt = envt					# current environnement
+		self.envt = envt					# current environnement, QT name connection
 		self.basesqli = basesqli			# name base sqllite
 		self.buildbase = False				# build objets in new database
-		self.connexionName = connexionName	# QT name connection
 		self.Json_params = jsondataini		# params Json file ini 
 
 		self.PATH_PROG = path.dirname(path.abspath(__file__))
@@ -33,14 +32,14 @@ class ConnectDatabase(LibDatabase):
 			basename = self.basesqli.format(envt = self.envt)
 			# file exist ?
 			self.buildbase = path.exists(basename)
-			self.openDatabase(self.MODE_SQLI, '', '', '', '', '', basename , connexionName)
+			self.openDatabase(self.MODE_SQLI, '', '', '', '', '', basename , self.envt)
 		else:
 			BASE_SEV = self.group_envt['serv']
 			BASE_USR = self.group_envt['user']
 			BASE_PAS = self.group_envt['pass']
 			BASE_NAM = self.group_envt['base']
 			BASE_PRT = self.group_envt['port']
-			self.openDatabase(self.MODE_SQLI, BASE_SEV, BASE_USR, BASE_PAS, BASE_NAM, BASE_PRT, self.basesqli , connexionName)
+			self.openDatabase(self.MODE_SQLI, BASE_SEV, BASE_USR, BASE_PAS, BASE_NAM, BASE_PRT, self.basesqli , self.envt)
 		# Create Objects in database
 		self.boolcon = self.boolcn
 		self.db = self.qtdbdb
@@ -55,7 +54,8 @@ class ConnectDatabase(LibDatabase):
 		# create objects database
 		self.createObjetsDatabase('sqlite', True, qtdblite)
 		# copy table
-		listtable =  ['ALBUMS', 'TRACKS', 'COVERS', 'FOOBAR']
+		#listtable =  ['ALBUMS', 'TRACKS', 'COVERS', 'FOOBAR']
+		listtable = self.sqlToArray(self.getrequest('listtables'))
 		counter = 1
 		for tablename in listtable:
 			self.signalchgt.emit((counter/len(listtable))*100, 'Copy datas table ' + tablename)
@@ -156,9 +156,9 @@ class ConnectDatabase(LibDatabase):
 			if self.MODE_SQLI == 'sqlite':
 				request = "SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%';"
 			if self.MODE_SQLI == 'mysql':
-				request = "'SELECT * FROM information_schema.tables WHERE table_schema = 'DBALBUMS';"
+				request = "SELECT TABLE_NAME AS 'name' FROM information_schema.tables WHERE TABLE_TYPE = 'BASE TABLE' AND table_schema = 'DBALBUMS';"
 			if self.MODE_SQLI == 'mssql':
-				request = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo';"
+				request = "SELECT TABLE_NAME as 'name' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = 'dbo';"
 		# compatibilité mutli-base	
 		return self.translateRequest(request)
 
