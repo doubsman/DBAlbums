@@ -8,6 +8,7 @@ from PyQt5.QtCore import Qt, QUrl, pyqtSignal
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist#, QMediaMetaData
 from PyQt5.QtWidgets import (QHBoxLayout, QPushButton, QSlider, QStyleOptionSlider,
 							QLabel, QStyle, QWidget, QMessageBox)
+from DBChrono import DBChrono
 
 VERS_PROG = '1.00'
 TITL_PROG = "Player v{v} : ".format(v=VERS_PROG)
@@ -49,6 +50,7 @@ class DBPlayer(QWidget):
 		super(DBPlayer, self).__init__(parent)
 		self.PATH_PROG = path.dirname(path.abspath(__file__))
 		self.RESS_ICOS = path.join(self.PATH_PROG, 'ICO')
+		self.parent = parent
 
 		self.setMaximumSize(16777215, 35)
 		# Init Player
@@ -65,6 +67,8 @@ class DBPlayer(QWidget):
 		# Init GUI
 		self.setLayout(self.addControls())
 		self.infoBox = None
+		# chrono listen one minut 
+		self.MyChrono = DBChrono(0, 10)
 
 	def addControls(self):
 		# buttons
@@ -129,6 +133,8 @@ class DBPlayer(QWidget):
 		return self.controlArea
 
 	def playHandler(self):
+		self.MyChrono.reinit_timer()
+		self.MyChrono.start_timer()		
 		if self.player.state() == QMediaPlayer.PlayingState:
 			self.player.pause()
 			message = '[Paused at %s]' % self.seekSliderLabel1.text()
@@ -153,6 +159,7 @@ class DBPlayer(QWidget):
 				self.signaltxt.emit(self.messtitle)
 
 	def stopHandler(self):
+		self.MyChrono.stop_timer()
 		if self.player.state() == QMediaPlayer.PlayingState:
 			self.stopState = True
 			self.player.stop()
@@ -160,7 +167,7 @@ class DBPlayer(QWidget):
 			self.player.stop()
 		elif self.player.state() == QMediaPlayer.StoppedState:
 			pass
-		if self.player.volume()is not None and self.player.state() == QMediaPlayer.PlayingState:
+		if self.player.volume() is not None and self.player.state() == QMediaPlayer.PlayingState:
 			self.messtitle = '[Stop] ' + self.namemedia
 			self.signaltxt.emit(self.messtitle)
 

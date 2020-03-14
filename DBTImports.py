@@ -85,6 +85,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.MyChrono = DBChrono()
 		self.MyChrono.signalnow.connect(self.updateDisplaytimer)
 		self.MyChrono.start_timer()
+		
 		self.applyTheme()
 		self.show()
 

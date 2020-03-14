@@ -59,8 +59,8 @@ class ArtworksGui(QWidget):
 		self.resize(w, h)
 		self.setWindowIcon(QIcon(self.parent.WINS_ICO))
 		self.setWindowTitle(self.parent.TITL_PROG+" [view ArtWorks] : reading files covers...")
-		self.setStyleSheet('QWidget{background-color: darkgray} '
-							'QLabel{background-color: black;border: 1px solid black;}')
+		#self.setStyleSheet('QWidget{background-color: darkgray} '
+		#					'QLabel{background-color: black;border: 1px solid black;}')
 		
 		# cover default
 		self.mycover = None
@@ -102,6 +102,7 @@ class ArtworksGui(QWidget):
 		layout.setContentsMargins(7, 7, 7, 7)
 		self.setLayout(layout)
 		self.parent.centerWidget(self)
+		self.applyTheme()
 		self.show()
 
 		# build list covers
@@ -176,4 +177,15 @@ class ArtworksGui(QWidget):
 		self.setWindowTitle("create file {name} ".format(name=path.basename(path_cover)))
 		self.mycover.save(path_cover)
 
-
+	def applyTheme(self):
+		"""Apply color Theme to main Gui."""
+		# main
+		mainstyle = 'QWidget{{background-color: {col1};}}' \
+					'QScrollBar:vertical{{width: 14px;}}' \
+					'QScrollBar:horizontal{{height: 14px;}}' 
+		mainstyle = mainstyle.format(col1 = self.parent.listcolors[0],
+									col2 = self.parent.listcolors[1],
+									col3 = self.parent.listcolors[2],
+									col4 = self.parent.listcolors[3], 
+									col5 = self.parent.listcolors[4])
+		self.setStyleSheet(mainstyle)

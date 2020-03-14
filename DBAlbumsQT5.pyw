@@ -111,9 +111,10 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.posrow = 0  		# row tab current album
 		self.curAlb = None		# current ID album
 		self.albumname = None	# current album name
+		self.albumlisten = None	# current listen album name
 		self.curMd5 = None  	# current MD5 album
 		self.pathcover = None	# cover current album
-		self.curTrk = None		# ID current track
+		self.curtrk = None		# ID current track
 		self.homMed = None		# playlist player
 		self.cuplay = None  	# row tab current album player
 		self.rootDk = None		# root column music
@@ -123,6 +124,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.coveral = None		# current cover album
 		self.liststy = None     # list ID_CD | TAG_Genres
 		self.boolCnx = False	# connect database succes
+		self.ScoreTrack = 0		# scoring
+		self.ScoreAlbum = 0		# scoring
+
 		# zoom
 		self.cuzoom = self.COEF_ZOOM
 		self.sizeTN = self.WIDT_PICM
@@ -362,6 +366,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.labelcover.signaladdalbums.connect(self.addeAlbumsDnd)
 		self.playerAudio.signaltxt.connect(self.updateStatusBar)
 		self.playerAudio.signalnum.connect(self.selectPlayingTack)
+		self.playerAudio.MyChrono.signalsto.connect(self.updateScoreTrackListen)
 		self.widgetscoretracks.signalscorenew.connect(self.saveScoreTrack)
 		self.widgetscorealbum.signalscorenew.connect(self.saveScoreAlbum)
 
@@ -1088,7 +1093,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			self.ScoreTrack = score
 			for rowtrk in listrows:
 				self.tableMdlTrk.updateScore(rowtrk, score)
-		self.tableMdlTrk.SortFilterProxy.invalidate()
+			self.tableMdlTrk.SortFilterProxy.invalidate()
+
+	def updateScoreTrackListen(self, score):
+		if self.albumname == self.albumlisten:
+			if score > self.ScoreTrack:
+				print('score :  ', self.curtrk)
+				#self.saveScoreTrack(score)
 
 	def popUpBaseAlbums(self, position):
 		"""Menu Database."""
@@ -1130,7 +1141,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			self.action_VIA.setEnabled(True)
 		else:
 			self.action_VIA.setEnabled(False)
-		# open folder and gui artwork option
+		# pop_up options menu
 		if path.exists(self.AlbumPath):
 			self.action_OPF.setEnabled(True)
 			self.action_UAP.setEnabled(True)
@@ -1151,6 +1162,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		indexes = self.tbl_tracks.selectedIndexes()
 		if len(indexes) > 0:
 			# playing ? reset
+			self.albumlisten = self.albumname
 			indexes = self.tableMdlTrk.SortFilterProxy.mapToSource(indexes[0])
 			self.curtrk = indexes.row()
 			self.homMed = self.tableMdlTrk.getMedias()
@@ -1439,6 +1451,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			if self.loadingGui:
 				if self.loadingGui.isVisible():
 					self.loadingGui.destroy()
+			qDebug('Quit DBAlbums')
 			#QApplication.closeAllWindows()
 			#QCoreApplication.instance().quit
 			event.accept()
