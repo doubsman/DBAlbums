@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# ############################################################################
-# # Audio pyQT5 Player by SFI
-# ############################################################################
+# QWidget Audio pyQT5 Player by SFI
 from os import path
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QUrl, pyqtSignal
@@ -41,7 +39,6 @@ class MySlider(QSlider):
 													sliderMax - sliderMin, opt.upsideDown)
 
 
-# ##################################################################
 # PLAYER PQT5 V2
 class DBPlayer(QWidget):
 	# signal

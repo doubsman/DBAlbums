@@ -202,7 +202,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			if newenvt in self.NAME_EVT:
 				QMessageBox.information(self, 'No Add, Environment', newenvt + ' already present')
 			else:
-				row = len(self.NAME_EVT)
 				# add virgin json var
 				self.Json_params.addEnvt(newenvt)
 				# add category default
@@ -280,7 +279,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 			pass
 
 	def addLineFamily(self):
-		self.Json_params.addFami('family_name')
+		self.Json_params.addFami('<family name>')
 		self.updateFamily()
 
 	def delLineFamily(self):
@@ -310,7 +309,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		else:
 			newvalue = curItem.text()
 		# modify param
-		self.Json_params.modJson(familypa, namepara, newvalue)
+		self.Json_params.modJsonGeneral(familypa, namepara, newvalue)
 
 	def changeEnvironment(self, row, col):
 		"""Modify params envt."""
@@ -321,10 +320,6 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		currenvt = self.comboBox_Envt.currentText()
 		# column name param
 		namepara = self.tableWidget_envt.item(row,0).text()
-		# envt json
-		environt = self.Json_params.getContentMember('environments', currenvt)
-		# old value param
-		oldvalue = environt[namepara]
 		# modify param
 		self.Json_params.modJsonEnvt(currenvt, namepara, newvalue)
 
@@ -338,7 +333,7 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 		# category json
 		category = self.Json_params.getContentMember('categories', self.comboBox_cate.currentText())['folder'+format(row + 1, '03d')]
 		# backup value
-		oldvalue = category[namecolu]
+		# oldvalue = category[namecolu]
 		# modify category
 		self.Json_params.modJsonCate(self.comboBox_cate.currentText(), 'folder'+format(row + 1, '03d'), namecolu, newvalue)
 

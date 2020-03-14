@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from os import path
-from PyQt5.QtWidgets import (QTableView, QVBoxLayout, QHBoxLayout, QWidget, QStyle,
-							QComboBox, QSpacerItem, QSizePolicy, QPushButton, QApplication)
+from PyQt5.QtWidgets import QApplication,  QWidget, QStyle
 from PyQt5.QtSql import QSqlQuery, QSqlRelationalTableModel, QSqlRelationalDelegate, QSqlTableModel
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt

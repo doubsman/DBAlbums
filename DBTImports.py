@@ -6,7 +6,6 @@ from codecs import open
 from PyQt5.QtGui import QFont, QIcon, QColor, QTextCursor, QCursor
 from PyQt5.QtCore import Qt, qDebug, pyqtSignal, pyqtSlot, QDateTime, QTimer
 from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber, QMenu, QStyle, QMessageBox, QTextEdit
-from PyQt5.QtSql import QSqlQuery
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import ThreadAnalyseInvent
 from DBTImpoRUN import ThreadReleaseInvent

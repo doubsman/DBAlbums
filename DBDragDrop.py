@@ -2,9 +2,9 @@
 # coding: utf-8
 
 from os import path
-from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QPushButton
+from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout
 from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtCore import Qt, QSize, pyqtSignal, qDebug
+from PyQt5.QtCore import Qt, QSize, pyqtSignal
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
 
 

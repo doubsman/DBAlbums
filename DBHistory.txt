@@ -3,9 +3,7 @@ DBALbums 2.0
 
 list views with filters backup
 listen score update auto 1 after 1min
-best display time
 thread thumbnail
-thread update
 
 """ DBAlbums History Version : Doubsman dev.
 1.63 ini to json file 
