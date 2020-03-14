@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber, QMenu, QStyle, QM
 from DBModelAbs import ModelTableUpdatesABS
 from DBTImpoANA import ThreadAnalyseInvent
 from DBTImpoRUN import ThreadReleaseInvent
+from DBChrono import DBChrono
 from Ui_DBUPDATE import Ui_UpdateWindows
 
 
@@ -42,7 +43,6 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.actionerror = 0
 		self.selecttrowg = 0
 		self.list_actions = []
-		self.now = 0				# time elapsed
 		
 		font = QFont()
 		font.setFamily("Courier New")
@@ -82,7 +82,9 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		self.tbl_update.verticalHeader().setDefaultSectionSize(self.tableMdlUpd.C_HEIGHT)
 		self.tbl_update.horizontalHeader().setStretchLastSection(True)
 		
-		self.start_timer()
+		self.MyChrono = DBChrono()
+		self.MyChrono.signalnow.connect(self.updateDisplaytimer)
+		self.MyChrono.start_timer()
 		self.applyTheme()
 		self.show()
 
@@ -128,7 +130,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 			else:
 				self.btn_action.setEnabled(True)
 		else:
-			self.stop_timer()
+			self.MyChrono.stop_timer()
 			self.lab_release.setText('no action')
 			self.progressBarrelease.setValue(0)
 			self.btn_quit.setText('Close')
@@ -199,7 +201,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		"""Operations finished."""
 		QApplication.setOverrideCursor(QCursor(Qt.ArrowCursor))
 		self.lab_release.setText('Completed Operations in ' + self.runtime)
-		self.stop_timer()
+		self.MyChrono.stop_timer()
 		if len(self.list_actions) > 0:
 			# create log file
 			self.updateConsole('\n- Completed Operations in ' + self.runtime)
@@ -249,30 +251,10 @@ class InventGui(QWidget, Ui_UpdateWindows):
 	def popUpTreeUpdate(self, position):
 		self.menua.exec_(self.tbl_update.viewport().mapToGlobal(position))
 
-	def start_timer(self):
-		"""Start Chrono."""
-		# Initialize timer
-		self.timer = QTimer()
-		self.now = 0
-		self.timer.timeout.connect(self.tick_timer)
-		# Start timer and update display
-		self.timer.start(1000)
-		self.update_timer()
-
-	def update_timer(self):
-		"""Update chrono display."""
-		hours, seconds =  self.now // 3600, self.now % 3600
-		minutes, seconds = seconds // 60, seconds % 60
-		self.runtime = "%02d:%02d:%02d" % (hours, minutes, seconds)
-		self.lcdTime.display(self.runtime)
-
-	def tick_timer(self):
-		"""Tic tac."""
-		self.now += 1
-		self.update_timer()
-
-	def stop_timer(self):
-		self.timer.stop()
+	def updateDisplaytimer(self, nowdisplay):
+		"""display signal CLass Chrono."""
+		self.runtime = nowdisplay
+		self.lcdTime.display(nowdisplay)
 
 	@pyqtSlot()
 	def closeEvent(self, event):
@@ -294,7 +276,7 @@ class InventGui(QWidget, Ui_UpdateWindows):
 		if runana or runact:
 			response = QMessageBox.question(self, "Confirmation", "Stop Update Database in progress ?", QMessageBox.Yes, QMessageBox.No)
 			if response == QMessageBox.Yes:
-				self.stop_timer()
+				self.MyChrono.stop_timer()
 				if runana:
 					# stop thread
 					self.prepareInvent.stopAnalyse()

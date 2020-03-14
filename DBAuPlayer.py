@@ -41,7 +41,7 @@ class MySlider(QSlider):
 
 # PLAYER PQT5 V2
 class DBPlayer(QWidget):
-	# signal
+	# signals
 	signaltxt = pyqtSignal(str)
 	signalnum = pyqtSignal(int)
 
