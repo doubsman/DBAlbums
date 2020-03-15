@@ -294,7 +294,8 @@ class InventGui(QWidget, Ui_UpdateWindows):
 				event.accept()
 			else:
 				event.ignore()
-		QApplication.setOverrideCursor(QCursor(Qt.ArrowCursor))				
+		QApplication.setOverrideCursor(QCursor(Qt.ArrowCursor))
+		self.MyChrono.timer.stop()
 		event.accept()
 
 	def applyTheme(self):

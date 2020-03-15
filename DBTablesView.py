@@ -35,7 +35,6 @@ class ViewsDatabaseTablesGUI(QWidget, Ui_ViewTablesDatas):
 		query = QSqlQuery(self.parent.CnxConnect.getrequest('listtables'), self.parent.CnxConnect.qtdbdb)
 		self.modelcombo.setQuery(query)
 		self.modelcombo.select()
-		print(self.parent.CnxConnect.sqlToArray(self.parent.CnxConnect.getrequest('listtables')))
 		self.comboboxlist.setModel(self.modelcombo)
 		self.comboboxlist.setModelColumn(self.modelcombo.fieldIndex("name"))
 		self.comboboxlist.currentIndexChanged.connect(self.fillTableView)

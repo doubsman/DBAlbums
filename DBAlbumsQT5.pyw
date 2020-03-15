@@ -15,7 +15,7 @@ from sys import platform, argv, exit
 from os import path, getcwd, rename
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
-from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl, QPoint #, QCoreApplication
+from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl, QPoint, QCoreApplication
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QInputDialog, QLineEdit,
 						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QAction)
 from PyQt5.QtMultimedia import QMediaPlayer
@@ -1439,9 +1439,13 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		if response == QMessageBox.Yes:
 			if self.dbbase:
 				self.dbbase.close()
+			# close chrono
+			if self.playerAudio.MyChrono.timer.isActive():
+				self.playerAudio.MyChrono.timer.stop()
+			# stop player
 			if self.playerAudio.player.state() == QMediaPlayer.PlayingState:
 				self.playerAudio.player.stop()
-			# close GUI params or GUI Database view or splahscreen
+			# close GUIs
 			if self.viewtblGui:
 				if self.viewtblGui.isVisible():
 					self.viewtblGui.destroy()
@@ -1452,8 +1456,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				if self.loadingGui.isVisible():
 					self.loadingGui.destroy()
 			qDebug('Quit DBAlbums')
-			#QApplication.closeAllWindows()
-			#QCoreApplication.instance().quit
+			QApplication.instance().quit()
 			event.accept()
 		else:
 			event.ignore()

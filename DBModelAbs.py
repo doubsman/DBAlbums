@@ -290,7 +290,7 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 			return QVariant() 
 		elif role == Qt.TextColorRole:
 			if index.column() == self.myindex.index('SCORE'):
-				return QVariant(QColor("yellow"))	
+				return QVariant(QColor("yellow"))
 		elif role != Qt.DisplayRole:
 			# TextAlignmentRole
 			# if role == Qt.TextAlignmentRole:
