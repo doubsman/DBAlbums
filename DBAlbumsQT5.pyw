@@ -172,17 +172,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		# buttons
 		self.btn_clearsearch.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
 		
-		# calcul nb lines thumbnails: self.h_main 1200 for 3 lines
-		sizescreen = QApplication.primaryScreen()
-		# tolerance bar start menu windows
-		tol = 50
-		dif = sizescreen.size().height() - self.h_main - tol
-		add = int(dif / self.sizeTN)
-		self.thunnbline = min(self.HEIG_LHUN, self.HEIG_LHUN + add)
-		ret = self.thunnbline - self.HEIG_LHUN
-		self.h_main = self.h_main + (self.sizeTN * ret) #- tol
-		#self.setMinimumSize(QSize(self.w_main, self.h_main))
-		self.resize(self.w_main, self.h_main)
+		# redim f(sizescreen)
+		self.resizeMain()
 
 		# thunbnails list
 		self.thunbnails = DBThunbnails(self, self.sizeTN, self.thunnbline)
@@ -377,6 +368,28 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 		# init connect
 		self.connectEnvt()
+
+	def resizeMain(self):
+		"""adaptation main size funtion screen sie."""
+		sizescreen = QApplication.primaryScreen().size()
+		hsizescreen = sizescreen.height()
+		wsizescreen = sizescreen.width()
+		# width	
+		self.w_main = min(self.w_main, wsizescreen)
+		# height
+		heightnothumb = self.h_main - (self.HEIG_LHUN * self.WIDT_PICM)
+		dif = hsizescreen - heightnothumb
+		add = int(dif / self.WIDT_PICM)
+		self.thunnbline = max(min(self.HEIG_LHUN, add), 1)
+		ret = self.thunnbline - self.HEIG_LHUN
+		self.h_main = min(self.h_main + (self.sizeTN * ret), hsizescreen)
+		qDebug('orignal : ' + str(self.WIDT_MAIN) + 'x' + str(self.HEIG_MAIN))
+		qDebug('screen  : ' + str(wsizescreen) + 'x' + str(hsizescreen))
+		qDebug('redim   : ' + str(self.w_main) + 'x' + str(self.h_main))
+		# satisfy
+		if self.HEIG_LHUN != self.thunnbline:
+			qDebug('Waring: no satisfy parameter value for HEIG_LHUN = ' + str(self.HEIG_LHUN) + ' -> ' + str(self.thunnbline))
+		self.resize(self.w_main, self.h_main)		
 
 	def onTextEdited(self, text):
 		"""Limit delay action on text search changed."""
@@ -684,7 +697,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.tableMdlAlb.signalthubuild.connect(self.onBuild)
 				self.tbl_albums.setModel(self.tableMdlAlb.SortFilterProxy)
 				self.tableMdlAlb.SortFilterProxy.layoutChanged.connect(self.onListAlbumsChanged)
-
 				# build pop-up menu header column name
 				for column in range(self.tableMdlAlb.SortFilterProxy.columnCount()):
 					columnName = self.tableMdlAlb.SortFilterProxy.headerData(column, Qt.Horizontal).value()
@@ -697,7 +709,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 						actn.setChecked(True)
 					actn.triggered.connect(self.resHeaderMenuTriggered)
 					self.resHeaderMenu.addAction(actn)
-
 				qDebug('Fill list albums end')
 				
 				# reinit thumbnail + combos filters
@@ -1079,27 +1090,48 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 	def saveScoreAlbum(self, score):
 		"""Update Score Album."""
-		listrows = self.getRowsfromListAlbums()
-		if listrows is not None:
+		if self.tbl_albums.selectedIndexes() is not None:
 			self.ScoreAlbum = score
-			for rowalb in listrows:
-				self.tableMdlAlb.updateScore(rowalb, score)
-		self.tableMdlAlb.SortFilterProxy.invalidate()
-
+			#self.tbl_albums.currentChanged = None
+			self.saveScore(self.tbl_albums, self.tableMdlAlb, score)
+			#self.tbl_albums.currentChanged = self.onSelectListAlbum
+			#self.widgetscorealbum.scorereinit(score)
+	
 	def saveScoreTrack(self, score):
 		"""Update Score Track."""
-		listrows = self.getRowsfromListTracks()
-		if listrows is not None:
+		if self.tbl_tracks.selectedIndexes() is not None:
 			self.ScoreTrack = score
-			for rowtrk in listrows:
-				self.tableMdlTrk.updateScore(rowtrk, score)
-			self.tableMdlTrk.SortFilterProxy.invalidate()
+			#self.tbl_tracks.currentChanged = None
+			self.saveScore(self.tbl_tracks, self.tableMdlTrk, score)
+			#self.tbl_tracks.currentChanged = self.onSelectTrackChanged 
+			#self.widgetscoretracks.scorereinit(score)
+
+	def saveScore(self, table, model, score):
+		# capture list rows Select
+		listrows = []
+		indexes = table.selectedIndexes()
+		if len(indexes) > 0:
+			for ind in indexes:
+				index = model.SortFilterProxy.mapToSource(ind)
+				if index.row() not in listrows:
+					listrows.append(index.row())
+		# set new score in list lines
+		for rowtable in listrows:
+			model.updateScore(rowtable, score)
+			# maj display modify data select other line
+			index = model.index(abs(rowtable - 1), 0)
+			index = model.SortFilterProxy.mapFromSource(index)
+			table.selectRow(index.row())
+			QApplication.processEvents()			
+			index = model.index(abs(rowtable), 0)
+			index = model.SortFilterProxy.mapFromSource(index)
+			table.selectRow(index.row())
 
 	def updateScoreTrackListen(self, score):
 		if self.albumname == self.albumlisten:
 			if score > self.ScoreTrack:
-				print('score :  ', self.curtrk)
-				#self.saveScoreTrack(score)
+				print('score auto listen :  ', self.curtrk)
+				self.saveScoreTrack(score)
 
 	def popUpBaseAlbums(self, position):
 		"""Menu Database."""
@@ -1172,6 +1204,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	def findPlayAlbum(self):
 		"""Select Album current playing in list."""
 		self.tbl_albums.selectRow(self.cuplay)
+		self.tbl_tracks.selectRow(self.curtrk)
 
 	def getRowsfromListAlbums(self):
 		"""Get ID of line in list."""
@@ -1180,19 +1213,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			listrows = []
 			for ind in indexes:
 				index = self.tableMdlAlb.SortFilterProxy.mapToSource(ind)
-				if index.row() not in listrows:
-					listrows.append(index.row())
-			return listrows
-		else:
-			return None
-
-	def getRowsfromListTracks(self):
-		"""Get ID of line in list."""
-		indexes = self.tbl_tracks.selectedIndexes()
-		if len(indexes) > 0:
-			listrows = []
-			for ind in indexes:
-				index = self.tableMdlTrk.SortFilterProxy.mapToSource(ind)
 				if index.row() not in listrows:
 					listrows.append(index.row())
 			return listrows
@@ -1423,7 +1443,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.folder_open(path.dirname(filename))
 				self.statusBar().showMessage('Export csv list Albums /n Create file csv Sucessfull to :' + filename, 7000)
 			elif extension == '.jpg':
-				# extract base64\mysql to file JPEG
+				# extract blob mysql to file JPEG
 				for ind in listrows:
 					filecover = path.join(path.dirname(filename), self.tableMdlAlb.getData(ind, 'NAME'))
 					extension = ((self.tableMdlAlb.getData(ind, 'COVER'))[-4:]).replace('.', '')

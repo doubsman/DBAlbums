@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from subprocess import call
 from sys import argv, executable
+from os import path
 try:
 	import mutagen
 except ImportError:
@@ -23,11 +24,10 @@ except ImportError:
 
 
 # pip install -r requirements.txt
-call([executable, "-m", "pip", "install", '-r', 'requirements.txt'])
+PATH_PROG = path.dirname(path.abspath(__file__))
+call([executable, "-m", "pip", "install", '-r', path.join(PATH_PROG, 'requirements.txt')])
 # dev
 # pip install pyqt5-tools
-
-from os import path
 from PyQt5.QtCore import (QTime, QtInfoMsg, qDebug, QtWarningMsg, QtCriticalMsg, QtFatalMsg,  qInstallMessageHandler)
 from PyQt5.QtWidgets import QApplication
 from DBAlbumsQT5 import DBAlbumsMainGui
@@ -59,8 +59,6 @@ def qtmymessagehandler(mode, context, message):
 
 
 if __name__ == '__main__':
-	# working directory
-	PATH_PROG = path.dirname(path.abspath(__file__))
 	# debug
 	qInstallMessageHandler(qtmymessagehandler)
 	qDebug('start')

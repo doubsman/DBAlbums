@@ -266,10 +266,10 @@ class ModelTableAlbumsABS(ModelDBAbstract):
 	# columns hidden
 	H_COLNAME = (	'TLabel', 'TISRC')
 	# treeview columns width
-	A_C_WIDTH = (	60, 90, 250, 0, 110,
-					120, 120, 100, 100, 30,
+	A_C_WIDTH = (	60, 90, 270, 0, 130,
+					130, 120, 100, 100, 30,
 					30, 40, 50, 40,	50,
-					30, 60, 77, 77, 250,
+					30, 60, 110, 110, 250,
 					500, 500, 30, 40)
 	C_HEIGHT = 21
 	
@@ -410,7 +410,7 @@ class ModelTableTracksABS(ModelDBAbstract):
 		if index.column() == self.myindex.index('PATHNAME'):
 				return self.parent.convertUNC(self.arraydata[index.row()][index.column()])
 		return QVariant(self.arraydata[index.row()][index.column()])
-
+	
 	def getMedias(self):
 		"""Prepare list media for player audio."""
 		if self.rowCount() > 0:

@@ -31,6 +31,7 @@ class ScoreWidget(QWidget):
 		self.layoutsave = QGridLayout()
 		self.btnsav = QPushButton(self)
 		self.btnsav.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
+		self.btnsav.setStyleSheet("border: none;")
 		self.btnsav.setVisible(False)
 		self.layoutscore = QGridLayout()
 		self.layoutscore.setContentsMargins(0, 0, 0, 0)
@@ -56,12 +57,12 @@ class ScoreWidget(QWidget):
 	
 	def scorereinit(self, score):
 		self.scoreinit = score
-		self.scorechange(score)
+		self.scorechange(score, True)
 
-	def scorechange(self, newscore):
+	def scorechange(self, newscore, init=False):
 		"""Modify button funttion score."""
-		self.btnsav.setToolTip(self.scoredict[newscore])
-		if newscore == 1 and self.scorecure == 1:
+		self.btnsav.setToolTip('Save new score ' + str(newscore) + ' (' + self.scoredict[newscore] + ')')
+		if newscore == 1 and self.scorecure == 1 and not init:
 			newscore = 0
 		if newscore != self.scorecure:
 			for colbut in range(0, self.nbbutton):

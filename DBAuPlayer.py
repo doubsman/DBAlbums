@@ -67,7 +67,7 @@ class DBPlayer(QWidget):
 		# Init GUI
 		self.setLayout(self.addControls())
 		self.infoBox = None
-		# chrono listen one minut 
+		# chrono listen one minut
 		self.MyChrono = DBChrono(0, 60)
 
 	def addControls(self):

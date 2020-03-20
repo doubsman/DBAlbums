@@ -85,24 +85,21 @@ test:
 RASBERRY PI..........................................
 -------------------------------------------------------------------
 pi comme login
-raspberry comme password
-sudo raspi-config
 sudo apt-get install samba samba-common-bin
-sudo apt-get install mysql-client
+
 
 apt-cache search pyqt5
-sudo apt-get update
-sudo apt-get upgrade 
 sudo apt-get install python3-pyqt5
-sudo apt-get install libqt5multimedia5-plugins
-sudo apt-get install libqt5sql5-mysql
+sudo apt-get install python3-pyqt5.qtsql
+sudo apt-get install python3-pyqt5.qtmutlimedia
+
 
 sudo mkdir -p /HOMERSTATION/_LossLess
 sudo chmod 777 -R /HOMERSTATION/_LossLess
 sudi nano /home/pi/.smbhomercred
 chmod 600 /home/pi/.smbhomercred
 
-sudo mount -t cifs -o username=HomerMusic,password=Mus1c4Me //192.168.0.250/_LossLess /HOMERSTATION/_LossLess
+sudo mount -t cifs -o username=HomerMusic,password=Mus1c4Me //192.168.0.50/_LossLess /HOMERSTATION/_LossLess
 
 
 
