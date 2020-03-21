@@ -1092,19 +1092,17 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		"""Update Score Album."""
 		if self.tbl_albums.selectedIndexes() is not None:
 			self.ScoreAlbum = score
-			#self.tbl_albums.currentChanged = None
 			self.saveScore(self.tbl_albums, self.tableMdlAlb, score)
-			#self.tbl_albums.currentChanged = self.onSelectListAlbum
-			#self.widgetscorealbum.scorereinit(score)
 	
 	def saveScoreTrack(self, score):
 		"""Update Score Track."""
 		if self.tbl_tracks.selectedIndexes() is not None:
 			self.ScoreTrack = score
-			#self.tbl_tracks.currentChanged = None
 			self.saveScore(self.tbl_tracks, self.tableMdlTrk, score)
-			#self.tbl_tracks.currentChanged = self.onSelectTrackChanged 
-			#self.widgetscoretracks.scorereinit(score)
+			# contagion score albums
+			if self.tbl_albums.selectedIndexes() is not None and score > self.ScoreAlbum:
+				self.ScoreAlbum = score
+				self.saveScore(self.tbl_albums, self.tableMdlAlb, score)
 
 	def saveScore(self, table, model, score):
 		# capture list rows Select
