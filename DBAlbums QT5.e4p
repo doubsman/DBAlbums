@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project DBAlbums QT5 -->
-<!-- Saved: 2020-03-12, 15:22:39 -->
+<!-- Saved: 2020-04-06, 18:36:15 -->
 <!-- Copyright (C) 2020 doubsman,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -44,6 +44,7 @@
     <Source>LIBDatabase.py</Source>
     <Source>LIBFilesProc.py</Source>
     <Source>Ui_DBALBUMS.py</Source>
+    <Source>Ui_DBCONTROL.py</Source>
     <Source>Ui_DBLOADING.py</Source>
     <Source>Ui_DBPARAMS.py</Source>
     <Source>Ui_DBUPDATE.py</Source>
@@ -52,6 +53,7 @@
   </Sources>
   <Forms>
     <Form>DBALBUMS.ui</Form>
+    <Form>DBCONTROL.ui</Form>
     <Form>DBLOADING.ui</Form>
     <Form>DBPARAMS.ui</Form>
     <Form>DBUPDATE.ui</Form>

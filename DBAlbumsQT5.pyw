@@ -15,7 +15,7 @@ from sys import platform, argv, exit
 from os import path, getcwd, rename
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
-from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl, QPoint, QCoreApplication
+from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl, QPoint
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QInputDialog, QLineEdit,
 						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QAction)
 from PyQt5.QtMultimedia import QMediaPlayer
@@ -39,6 +39,7 @@ from DBParams     import ParamsGui
 from DBFileJson   import JsonParams
 from DBScoring    import ScoreWidget
 from DBTablesView import ViewsDatabaseTablesGUI
+from DBControl    import ControlDatabaseGUI
 # general Libs
 from LIBFilesProc import FilesProcessing
 
@@ -274,6 +275,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 							"Create sqlite database...", self.createLocalBase)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'database.png')),
 							"Views Database Tables...", self.openViewsdatas)
+		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'database.png')),
+							"Control Database Integrity...", self.openControl)							
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'params.png')),
 							"Params Environments Json...", self.openParams)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'folder.png')),
@@ -777,7 +780,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			# select thunbnail
 			thun_index = self.tableMdlAlb.SortFilterProxy.mapFromSource(indexes)
 			self.thunbnails.selectThunbnail(thun_index.row())
-			self.setCursor(Qt.WaitCursor)
 			self.posrow = indexsrc.row()
 			self.currow = indexes.row()
 			self.curAlb = self.tableMdlAlb.getData(self.currow, 'ID_CD')
@@ -852,7 +854,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				self.tbl_tracks.selectRow(0)
 				self.curtrk = 0
 			#self.displaytrack()
-			self.setCursor(Qt.ArrowCursor)
 
 	def displaytrack(self):
 		"""Display info current select track."""
@@ -1240,7 +1241,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	def openViewsdatas(self):
 		"""Open Gui views tables datas."""
 		self.viewtblGui = ViewsDatabaseTablesGUI(self)
-
+	
+	def openControl(self):
+		"""Open Gui views tables datas."""
+		self.controlDatabaseGui = ControlDatabaseGUI(self)
+	
 	def buildInventPython(self, typeupdate):
 		"""Browse folder base for update."""
 		self.prepareInvent = InventGui(self, 
@@ -1304,7 +1309,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 				oldnamealbum = self.convertUNC(oldnamealbum)
 				namealbum = path.basename(oldnamealbum)
 				namealbum = self.convertUNC(namealbum)
-				if not(namealbum.startswith('[')):
+				if not(namealbum.startswith('[')) and self.tableMdlAlb.getData(ind, 'TAGISRC') != '':
 					newpropos = '[' +self.tableMdlAlb.getData(ind, 'TAGISRC')+ '] ' + namealbum
 				else:
 					newpropos = namealbum

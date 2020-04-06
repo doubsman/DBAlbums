@@ -108,7 +108,7 @@ class StringFormatAlbum(QObject):
 				qDebug('no image country : ' + country)
 		# nb cd
 		if nbcd > 1:
-			infosnbcd = ' • ' + snbcd + "x"
+			infosnbcd = ' • ' + snbcd + ' '
 			infosnbcd += '<img style="vertical-align:Bottom;" src="' + path.join(self.parent.RESS_ICOS, 'cdrom.png') + '" height="' + self.heighticon + '">'
 		else:
 			infosnbcd = ''
