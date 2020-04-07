@@ -19,10 +19,34 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QComboBox" name="comboboxlist"/>
+        <widget class="QLabel" name="labelctr">
+         <property name="text">
+          <string>Controls</string>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btngo">
+        <widget class="QComboBox" name="comboboxlistctr"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnctr">
+         <property name="text">
+          <string>Go</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelcor">
+         <property name="text">
+          <string>Corrections</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboboxlistcor"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btncor">
          <property name="text">
           <string>Go</string>
          </property>
@@ -48,6 +72,13 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="btnload">
+         <property name="text">
+          <string>Load Control</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <spacer name="horizontalSpacer_2">
          <property name="orientation">

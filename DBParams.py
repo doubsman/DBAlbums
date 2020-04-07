@@ -183,11 +183,12 @@ class ParamsGui(QWidget, Ui_ParamsJson):
 								getcwd(),
 								"Json (*.json)")
 		file_json = file_json[0]
-		self.Json_params.reloadJson(file_json)
-		self.updateFamily()
-		self.updateGeneral()
-		self.updateEnvt(False)
-		QMessageBox.information(self, 'Load Configuration', 'Configuration succes from :' + file_json)
+		if path.isfile(str(file_json)):
+			self.Json_params.reloadJson(file_json)
+			self.updateFamily()
+			self.updateGeneral()
+			self.updateEnvt(False)
+			QMessageBox.information(self, 'Load Configuration', 'Configuration succes from :' + file_json)
 
 	def getText(self, tittle, text):
 		text, okPressed = QInputDialog.getText(self, tittle, text, QLineEdit.Normal, "")

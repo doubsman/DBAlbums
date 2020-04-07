@@ -37,11 +37,12 @@
         "3"         : "best\\selection"
     },
     "scripts" : {
-        "create_mysql"      : "Create_mysql_database.sql",
-        "create_mssql"      : "Create_mssql_database.sql",
-        "create_sqlite"     : "Create_sqllite_database.sql",
-        "foobar_score"      : "UpdateScore_Playlists_Foobar.sql",
-        "control_integrity" : "Control_database.sql"
+        "create_mysql"         : "Create_mysql_database.sql",
+        "create_mssql"         : "Create_mssql_database.sql",
+        "create_sqlite"        : "Create_sqllite_database.sql",
+        "foobar_score"         : "UpdateScore_Playlists_Foobar.sql",
+        "control_integrity"    : "Control_database.sql",
+        "correction_integrity" : "Correction_database.sql"
     },
     "themes" : {
         "blue"      : ["lightsteelblue", "lavender", "lightgray", "silver", "dodgerblue"],
