@@ -80,6 +80,9 @@ test:
 	mount /HOMERSTATION/_LossLess/
 """
 
+WAVEFORM.............................................
+-------------------------------------------------------------------
+ffmpeg.exe -i D:\WorkDev\MP3TrtFiles\gaiatech.wav -filter_complex "showwavespic=s=800x300=colors=#ad9557:split_channels=1" -frames:v 1 output.png
 
 
 RASBERRY PI..........................................

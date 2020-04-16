@@ -99,13 +99,11 @@ class DBThunbnails(QWidget):
 		self.currow = 0
 		self.curcol = 0
 		
-		#self.setMinimumSize(QSize((self.thunmaxco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
 		self.setMinimumSize(QSize((self.thunminco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
 		self.scrollArea = QScrollArea()
 		self.scrollArea.setContentsMargins(0, 0, 0, 0)
 		self.scrollArea.scrollContentsBy(self.thunwidth, self.thunwidth)
 		self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-		#self.scrollArea.setMinimumSize(QSize((self.thunmaxco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
 		self.scrollArea.setMinimumSize(QSize((self.thunminco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
 		self.scrollArea.setSizeIncrement(QSize(self.thunwidth, self.thunwidth))
 		self.gridthunbnails = QGridLayout()
@@ -132,7 +130,12 @@ class DBThunbnails(QWidget):
 		layout.setContentsMargins(0, 0, 0, 0)
 		layout.addWidget(self.scrollArea)
 		self.setLayout(layout)
-	
+
+	def changeGeometry(self, linetn):
+		self.thunmaxli = linetn
+		self.setMinimumSize(QSize((self.thunminco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
+		self.scrollArea.setMinimumSize(QSize((self.thunminco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
+
 	def endScroobarVertical(self, value):
 		# max scroll + no total display thumbnails + not build thumbail 
 		if value == self.scrollArea.verticalScrollBar().maximum() and self.booladdthub and not(self.isbuilder):

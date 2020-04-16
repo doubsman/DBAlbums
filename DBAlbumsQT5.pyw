@@ -15,7 +15,7 @@ from sys import platform, argv, exit
 from os import path, getcwd, rename
 from csv import writer, QUOTE_ALL
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QDesktopServices
-from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl, QPoint
+from PyQt5.QtCore import Qt, QDir, QTime, QTimer, pyqtSlot, QDateTime, QSize, QRect, qDebug, QUrl, QPointF
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QProgressBar, QFileDialog, QMessageBox, QInputDialog, QLineEdit,
 						QMenu, QCompleter, QStyle, QFrame, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QAction)
 from PyQt5.QtMultimedia import QMediaPlayer
@@ -174,6 +174,9 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.btn_clearsearch.setIcon(self.style().standardIcon(QStyle.SP_DialogCloseButton))
 		
 		# redim f(sizescreen)
+		self.hsizescreen = 0
+		self.wsizescreen = 0
+		self.monitor = 0
 		self.resizeMain()
 
 		# thunbnails list
@@ -374,25 +377,39 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 
 	def resizeMain(self):
 		"""adaptation main size funtion screen sie."""
-		sizescreen = QApplication.primaryScreen().size()
-		hsizescreen = sizescreen.height()
-		wsizescreen = sizescreen.width()
-		# width	
-		self.w_main = min(self.w_main, wsizescreen)
+		# monitor
+		self.monitor = QApplication.desktop().screenNumber(self)
+		sizescreen = QApplication.screens()[self.monitor].size()
+		self.hsizescreen = sizescreen.height() - 50
+		self.wsizescreen = sizescreen.width()
+		# width
+		self.w_main = self.WIDT_MAIN
+		self.w_main = min(self.w_main, self.wsizescreen)
 		# height
+		self.h_main = self.HEIG_MAIN
 		heightnothumb = self.h_main - (self.HEIG_LHUN * self.WIDT_PICM)
-		dif = hsizescreen - heightnothumb
+		dif = self.hsizescreen - heightnothumb
 		add = int(dif / self.WIDT_PICM)
 		self.thunnbline = max(min(self.HEIG_LHUN, add), 1)
 		ret = self.thunnbline - self.HEIG_LHUN
-		self.h_main = min(self.h_main + (self.sizeTN * ret), hsizescreen)
-		qDebug('orignal : ' + str(self.WIDT_MAIN) + 'x' + str(self.HEIG_MAIN))
-		qDebug('screen  : ' + str(wsizescreen) + 'x' + str(hsizescreen))
-		qDebug('redim   : ' + str(self.w_main) + 'x' + str(self.h_main))
+		self.h_main = min(self.h_main + (self.sizeTN * ret), self.hsizescreen)
+		qDebug('Adapt Geometry Main Windows')
+		qDebug('   Screens available : %d' % len(list(QApplication.screens())))
+		qDebug('   Current screen    : %d' % self.monitor)
+		qDebug('   Screen dimension  : %d x %d' % (self.wsizescreen, self.hsizescreen))
+		qDebug('   Demand dimension  : %d x %d' % (self.WIDT_MAIN, self.HEIG_MAIN))
+		qDebug('   Obtain dimension  : %d x %d' % (self.w_main, self.h_main))
+		qDebug('   Thumbnails line   : %d' % self.thunnbline)
 		# satisfy
 		if self.HEIG_LHUN != self.thunnbline:
 			qDebug('Waring: no satisfy parameter value for HEIG_LHUN = ' + str(self.HEIG_LHUN) + ' -> ' + str(self.thunnbline))
-		self.resize(self.w_main, self.h_main)		
+		try:
+			if self.thunbnails is not None:
+				self.thunbnails.changeGeometry(self.thunnbline)
+				self.thunbnails.setMaximumSize(QSize(16777215, self.sizeTN * self.thunnbline))
+		except:
+			pass
+		self.resize(self.w_main, self.h_main)
 
 	def onTextEdited(self, text):
 		"""Limit delay action on text search changed."""
@@ -402,6 +419,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	def resizeEvent(self, event):
 		"""Widget size move."""
 		pass
+
+	@pyqtSlot()
+	def moveEvent(self, event):
+		"""Widget size move."""
+		if self.monitor != QApplication.desktop().screenNumber(self):
+			self.resizeMain()
 
 	@pyqtSlot()
 	def keyPressEvent(self, event):
