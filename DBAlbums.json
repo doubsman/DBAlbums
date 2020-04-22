@@ -64,7 +64,8 @@
             "folder002" : { "style" : "TECHNO",  "mode" : "T", "folder" : "TECHNO", "family" : null },
             "folder003" : { "style" : "TRANCE",  "mode" : "T", "folder" : "TRANCE", "family" : null },
             "folder004" : { "style" : "ROCK",    "mode" : "T", "folder" : "ROCK", "family" : null },
-            "folder005" : { "style" : "REGGAE",  "mode" : "T", "folder" : "REGGAE", "family" : null }
+            "folder005" : { "style" : "REGGAE",  "mode" : "T", "folder" : "REGGAE", "family" : null },
+            "folder006" : { "style" : "AMBIENT",  "mode" : "T", "folder" : "AMBIENT", "family" : null }
         },
         "MP3_CATEGORY": {
             "folder001" : { "style" : "TECHNO",   "mode" : "D", "folder" : "Techno Artists", "family" : "Download" },

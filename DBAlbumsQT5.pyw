@@ -177,11 +177,12 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.hsizescreen = 0
 		self.wsizescreen = 0
 		self.monitor = 0
+		self.thunbnails = None
 		self.resizeMain()
 
 		# thunbnails list
 		self.thunbnails = DBThunbnails(self, self.sizeTN, self.thunnbline)
-		self.thunbnails.setMaximumSize(QSize(16777215, self.sizeTN * self.thunnbline))
+		#self.thunbnails.setMaximumSize(QSize(16777215, self.sizeTN * self.thunnbline))
 		self.horizontalLayout_THU.addWidget(self.thunbnails)
 
 		# scroring
@@ -403,12 +404,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		# satisfy
 		if self.HEIG_LHUN != self.thunnbline:
 			qDebug('Waring: no satisfy parameter value for HEIG_LHUN = ' + str(self.HEIG_LHUN) + ' -> ' + str(self.thunnbline))
-		try:
-			if self.thunbnails is not None:
-				self.thunbnails.changeGeometry(self.thunnbline)
-				self.thunbnails.setMaximumSize(QSize(16777215, self.sizeTN * self.thunnbline))
-		except:
-			pass
+		if self.thunbnails is not None:
+			self.thunbnails.changeGeometry(self.thunnbline)
 		self.resize(self.w_main, self.h_main)
 
 	def onTextEdited(self, text):

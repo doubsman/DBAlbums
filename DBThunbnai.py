@@ -100,6 +100,7 @@ class DBThunbnails(QWidget):
 		self.curcol = 0
 		
 		self.setMinimumSize(QSize((self.thunminco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
+		self.setMaximumSize(QSize(16777215, self.thunbsize * self.thunmaxli))
 		self.scrollArea = QScrollArea()
 		self.scrollArea.setContentsMargins(0, 0, 0, 0)
 		self.scrollArea.scrollContentsBy(self.thunwidth, self.thunwidth)
@@ -135,6 +136,7 @@ class DBThunbnails(QWidget):
 		self.thunmaxli = linetn
 		self.setMinimumSize(QSize((self.thunminco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
 		self.scrollArea.setMinimumSize(QSize((self.thunminco * self.thunwidth) + self.thunmarge ,(self.thunmaxli * self.thunwidth) + self.thunmarge))
+		self.setMaximumSize(QSize(16777215, self.thunbsize * self.thunmaxli))
 
 	def endScroobarVertical(self, value):
 		# max scroll + no total display thumbnails + not build thumbail 
