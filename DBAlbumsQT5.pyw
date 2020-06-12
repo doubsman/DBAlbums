@@ -50,7 +50,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	PATH_PROG = path.dirname(path.abspath(__file__))
 	LOGS_PROG = path.join(PATH_PROG, 'LOG')
 	BASE_SQLI = path.join(PATH_PROG, 'LOC', "DBALBUMS_{envt}.db")
-	RESS_ICOS = path.join(PATH_PROG, 'ICO')
+	RESS_ICOS = path.join(PATH_PROG, 'TMP')
 	RESS_PICT = path.join(PATH_PROG, 'IMG')
 	RESS_TEMP = path.join(PATH_PROG, 'TMP')
 	# Read Json params
@@ -62,6 +62,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 	TITL_PROG = "DBAlbums v{v} (2020)".format(v=VERS_PROG)
 	FLAGS_ZIP = path.join(RESS_PICT, group_dbalbums['flags__zip'])
 	LABEL_ZIP = path.join(RESS_PICT, group_dbalbums['labels_zip'])
+	ICONS_ZIP = path.join(RESS_PICT, group_dbalbums['icones_zip'])
 	WIDT_MAIN = group_dbalbums['wgui_width']
 	HEIG_MAIN = group_dbalbums['wgui_heigh']
 	WIDT_PICM = group_dbalbums['thun_csize']
@@ -265,6 +266,11 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.btn_themecolor.setIcon(self.style().standardIcon(QStyle.SP_DialogResetButton))
 		self.statusbar.addPermanentWidget(self.btn_themecolor)
 
+		# Class Album formmat html
+		self.FormatAlb = StringFormatAlbum(self)
+		# dezip icones tmp
+		self.FormatAlb.Extract_AllFilesToPath(self.ICONS_ZIP, self.RESS_ICOS)
+
 		# popup base
 		self.menub = QMenu(self)
 		self.menub.addAction(QIcon(path.join(self.RESS_ICOS, 'information.png')),
@@ -316,9 +322,6 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		# theme color
 		self.defineThemes(self.THEM_COL, self.Json_params.getMember('themes'))
 		self.applyTheme()
-
-		# Class Album formmat html
-		self.FormatAlb = StringFormatAlbum(self)
 
 		# timer Delay action QLineEdit
 		self.m_typingTimer = QTimer(self)
@@ -1141,7 +1144,7 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 			index = model.index(abs(rowtable - 1), 0)
 			index = model.SortFilterProxy.mapFromSource(index)
 			table.selectRow(index.row())
-			QApplication.processEvents()			
+			QApplication.processEvents()
 			index = model.index(abs(rowtable), 0)
 			index = model.SortFilterProxy.mapFromSource(index)
 			table.selectRow(index.row())

@@ -156,3 +156,11 @@ class StringFormatAlbum(QObject):
 						zip_info.filename = path.basename(zip_info.filename)
 						qDebug('extract (' + my_zip + ') : ' + my_file)
 						zip.extract(zip_info, extractpath)
+
+	def Extract_AllFilesToPath(self, my_zip, extractpath):
+		with ZipFile(my_zip) as zip:
+			for zip_info in zip.infolist():
+				zip_info.filename = path.basename(zip_info.filename)
+				if not path.isfile(path.join(extractpath, zip_info.filename)):
+					qDebug('extract (' + my_zip + ') : ' + zip_info.filename)
+					zip.extract(zip_info, extractpath)

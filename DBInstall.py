@@ -19,6 +19,7 @@ try:
 	import fpl_reader
 except ImportError:
 	#pip install git+https://github.com/rr-/fpl_reader/
+	#pip install git+https://github.com/rr-/fpl_reader/ --upgrade
 	call([executable, "-m", "pip", "install", 'git+https://github.com/rr-/fpl_reader/'])
 	call([executable, "-m", "pip", "install", 'git+https://github.com/rr-/fpl_reader/'])
 

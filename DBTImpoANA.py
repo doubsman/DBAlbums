@@ -166,7 +166,8 @@ class ThreadAnalyseInvent(QThread, FilesProcessing):
 						datebase = datetime.strptime(testalbum[self.list_columns.index('MODIFIED')], date_format)
 					else:
 						datebase = testalbum[self.list_columns.index('MODIFIED')].toPyDateTime()
-					if sizefolder < testalbum[self.list_columns.index('SIZE')] or recentdate > datebase or  testalbum[self.list_columns.index('PATHNAME')] != folder:
+					# size dif or date > last pass or folder exist in database
+					if sizefolder < testalbum[self.list_columns.index('SIZE')] or recentdate > datebase or testalbum[self.list_columns.index('PATHNAME')] != folder:
 						# UPDATE
 						self.alupdate += 1
 						self.list_finaly.append([category, self.numbers, 'UPDATE', testalbum[self.list_columns.index('ID_CD')], path.basename(folder)])
