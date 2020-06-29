@@ -270,6 +270,8 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.FormatAlb = StringFormatAlbum(self)
 		# dezip icones tmp
 		self.FormatAlb.Extract_AllFilesToPath(self.ICONS_ZIP, self.RESS_ICOS)
+		# for combo label
+		self.FormatAlb.Extract_AllFilesToPath(self.LABEL_ZIP, self.RESS_ICOS)
 
 		# popup base
 		self.menub = QMenu(self)
@@ -954,8 +956,15 @@ class DBAlbumsMainGui(QMainWindow, Ui_MainWindow, GuiThemeWidget, FilesProcessin
 		self.com_year.addItems(listyea)
 		listcou = self.tableMdlAlb.SortFilterProxy.listcou
 		listcou.sort(reverse=False)
-		listcou = ['Countries'] + listcou
-		self.com_country.addItems(listcou)
+		self.com_country.addItem('Countries')
+		for cou in listcou:
+			flagfile = cou.split('&')[0].split(',')[0]
+			flagfile = flagfile.strip().encode('ascii', 'ignore').decode('ascii')
+			flagfile = path.join(self.RESS_TEMP, flagfile.replace(' ', '-') + '.png')
+			icon = QIcon(flagfile)
+			self.com_country.addItem(icon, cou)
+		#listcou = ['Countries'] + listcou
+		#self.com_country.addItems(listcou)
 		# set combo
 		if self.tableMdlAlb.SortFilterProxy.filtcate is not None:
 			index = self.com_category.findText(self.tableMdlAlb.SortFilterProxy.filtcate, Qt.MatchFixedString)
