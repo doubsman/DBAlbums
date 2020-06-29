@@ -33,7 +33,7 @@ class MySlider(QSlider):
 		else:
 			sliderLength = sr.height()
 			sliderMin = gr.y()
-			sliderMax = gr.bottom() - sliderLength + 1;
+			sliderMax = gr.bottom() - sliderLength + 1
 		pr = pos - sr.center() + sr.topLeft()
 		p = pr.x() if self.orientation() == Qt.Horizontal else pr.y()
 		return QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,
@@ -49,7 +49,7 @@ class DBPlayer(QWidget):
 	def __init__(self, parent):
 		super(DBPlayer, self).__init__(parent)
 		self.PATH_PROG = path.dirname(path.abspath(__file__))
-		self.RESS_ICOS = path.join(self.PATH_PROG, 'ICO')
+		self.RESS_ICOS = path.join(self.PATH_PROG, 'TMP')
 		self.parent = parent
 
 		self.setMaximumSize(16777215, 35)
